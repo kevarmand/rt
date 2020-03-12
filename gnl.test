@@ -1,0 +1,56 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   gnl.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: karmand <karmand@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/02/19 14:26:30 by karmand           #+#    #+#             */
+/*   Updated: 2020/02/19 14:51:01 by karmand          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "rt.c"
+
+int		ft_read_buff(char *c, t_buffer *p_buff)
+{
+	int r;
+
+	r = 0;
+	if (p_buff->cur == p_buff->max)
+	{
+		r = read(p_buff->fd, &(p_buff->buffer), BUFFER_SIZE);
+		if (r == 0 || r == -1)
+			return (r);
+		p_buff->max = r;
+		p_buff->cur = 0;
+	}
+	*c = p_buff->buffer[p_buff->cur];
+	(p_buff->cur)++;
+	return (1);
+}
+
+int		get_next_line(int fd, char **line)
+{
+	char			c;
+	int				r;
+	static t_buffer	*buff = 0;
+
+	c = 0;
+	r = 0;
+	if (!(buff = buf_create(BUFFER_SIZE)))
+		return (-1);
+	if (line == 0 || !((*line) = malloc(sizeof(char))))
+		return (-1);
+	**line = 0;
+	r = ft_read_buff(&c, buff);
+	while (r == 1 && c != '\n')
+	{
+		if (ft_add_char(line, c))
+			return (-1);
+		r = ft_read_buff(&c, buff);
+	}
+	if (r == 0 || r == -1)
+		buff = buf_dest(buff);
+	return (r);
+}
