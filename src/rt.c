@@ -14,70 +14,83 @@
 
 static int	test_param(int ac, char **av)
 {
-	if (ac < 2 && ac > 3)
-		return (ERROR_ARGUMENT);
-	if (ac == 3 && 0 != ft_strcmp(av[2], "-save"))
-		return (ERROR_ARGUMENT);
-	return (SUCCESS);
+	if (ac == 2)
+		return (SUCCESS);
+	if (ac == 3 && 0 == ft_strcmp(av[2], "-save"))
+		return (SUCCESS);
+	return (ERR_ARG);
 }
 
 static int	open_file(int *fd, char *name)
 {
-	*fd = open(name, O_RDONLY);
-	if (*fd == -1)
-		return (ERROR_OPEN);	
-	return (SUCCESS);
+	char **tab;
+
+	if (!(tab = ft_split(name, ".")))
+		return (free_split(tab) + ERR_EXT);
+	if (split_count(tab) == 2 && 0 == ft_strcmp("rt", tab[1]))
+	{
+		*fd = open(name, O_RDONLY);
+		if (*fd == -1)
+			return (free_split(tab) + ERR_OPEN);
+		return (free_split(tab) + SUCCESS);
+	}
+	return (free_split(tab) + ERR_EXT);
 }
 
-int main(int ac, char **av)
+int			testcast(t_data *data)
 {
-	int err;
-	int fd;
-	t_data data;
+	if (data->test[0] == 0)
+		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr,
+	(data->view)->img_ptr, 0, 0);
+	return (0);
+}
 
+int			ft_mlx_init(t_data *data, char *name)
+{
+	if (ft_init_win(data, name))
+	{
+		error(ERR_MLX);
+		ft_data_exit(data);
+		dist_destroy(&(data->ldist));
+		return (0);
+	}
+	if (ft_init_view(data))
+	{
+		error(ERR_MLX);
+		ft_data_exit(data);
+		dist_destroy(&(data->ldist));
+		mlx_destroy_image(data->mlx_ptr, data->view->img_ptr);
+		return (0);
+	}
+	select_init(data);
+	mlx_hook(data->win_ptr, 33, StructureNotifyMask, &ft_exit, data);
+	mlx_key_hook(data->win_ptr, &key_hook, data);
+	mlx_loop_hook(data->mlx_ptr, &testcast, data);
+	render(data);
+	mlx_loop(data->mlx_ptr);
+	return (0);
+}
+
+int			main(int ac, char **av)
+{
+	int		err;
+	int		fd;
+	t_data	data;
+
+	data_init(&data);
 	if ((err = test_param(ac, av)))
 		return (error(err));
 	if ((err = open_file(&fd, av[1])))
-		return (error(err));
-	data_init(&data);
-
-	//ft_test_circle(&data);
+		return (err_op(err, av[1]));
 	if ((err = parsing(fd, &data)))
-		printf("\n\nError parsing %i\n\n", err);
-	//ft_test_circle(&data);
-
-	printf("parsing reussi : affichage du test post parsing\n");
-	test_data_print(&data);	//Fonction de test
-	
-	//transformation des objets/lumiere/camera
-	if ((err = transform(data.lobj)))
-		printf("\n\nError %i\n\n", err);
-	if ((err = transform_cam(data.lcam, &data)))
-		printf("\n\nError %i\n\n", err);
-	if ((err = transform_light(data.llight)))
-		printf("\n\nError %i\n\n", err);
-
-	printf("Traitement des données reussi");
-/*	
-	//initialisation des de la liste resultat (en fonction des objet)
-	dist_init(&data, &(data.ldist));
-	test_data_print(&data);	//Fonction de test
-	test_print_dist(&(data.ldist));
-	
-	printf("Prepation de la liste distance reussi\n");
-		
-	//test mlx; a pauffiner
-	t_image		image;
-	ft_init_win(&data, av[1]);
-	ft_init_view(&data);
-	
-	//fonction de calcul des rayons
-	cam_gen(&data, (t_cam *)((data.lcam)->obj));	//fonction de test : on choisi une cam un cam
-	
-	mlx_put_image_to_window(data.mlx_ptr, data.win_ptr,
-	data.view->img_ptr, 0, 0);
-	mlx_loop(data.mlx_ptr);
-	if (err != SUCCESS)
-		return (error(err));
-*/	return (0);
+		return (close(fd) + ft_data_exit(&data));
+	close(fd);
+	if (data.lobj == 0 || data.llight == 0 || data.lcam == 0 ||
+		(data.test)[1] == 0 || (data.test)[2] == 0)
+		return (error(ERR_MIN) + ft_data_exit(&data));
+	if (dist_init(&data, &(data.ldist)))
+		return (0);
+	if (ac == 3)
+		return (ft_init_bmp(&data, av[1]));
+	return (ft_mlx_init(&data, av[1]));
 }

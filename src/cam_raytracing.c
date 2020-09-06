@@ -19,28 +19,19 @@ t_color		cam_getcolor(t_data *data, t_cam *c, t_vector *v)
 
 	r.source = c->point;
 	r.dir = *v;
-	//Recherche de lintersection
 	inter_inter(&r, &(data->ldist), -1);
-	//printf ("   objet(%i)-dist = %f  ",r.inter, r.dist);
-	//faut recup la vrai couleur de lobjet.
-	
 	if (r.inter == -1)
 	{
-		//peut etre faire une micro fonction initialisation
 		co.r = 135;
 		co.g = 206;
 		co.b = 235;
 	}
 	else
-	{
-		co = color_switch(data, &r);	
-	}
-	
-	//e ton fait partir 2 rayon ! pour la transparance et un pour la reflexion
-	return (co);	
+		co = color_switch(data, &r);
+	return (co);
 }
 
-int		cam_gen(t_data *data, t_cam *c)
+int			cam_gen(t_data *data, t_cam *c)
 {
 	int			i;
 	int			j;
@@ -58,17 +49,9 @@ int		cam_gen(t_data *data, t_cam *c)
 		{
 			v = vect_vector(&(c->point), &pf);
 			vect_tonorm(&v);
-
-			//test_print_point((t_point *)&v);
-			//printf("      +> i = %i, j = %i    ", i,j);
-			//il nous faut une couleur
 			co = cam_getcolor(data, c, &v);
-			//test_print_color(&co);
 			*(int *)(data->view->addr_ptr + ((j * data->para.res_width + i) *
-			data->view->bpp/8 )) = 256*256*co.r + 256*co.g + co.b;
-
-			//printf("\n");
-			//incrementation
+			data->view->bpp / 8)) = 256 * 256 * co.r + 256 * co.g + co.b;
 			pf = vect_translate(&pf, &(c->vert));
 		}
 	}

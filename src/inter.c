@@ -16,27 +16,14 @@ double		inter_plane(t_point *p, t_vector *v, t_pl *pl)
 {
 	double		a;
 	double		b;
-	
+
 	a = vect_dot(v, &(pl->norm));
 	if (a == 0)
 		return (-1);
-	b = pl->d + vect_dot((t_vector *)p,&(pl->norm));
+	b = pl->d + vect_dot((t_vector *)p, &(pl->norm));
 	return (equa_premier(a, b));
 }
 
-double		inter_circle(t_point *p, t_vector *v, t_ci *ci)
-{
-	double		a;
-	t_vector	vu;
-	
-	a = inter_plane(p,v, (t_pl *)ci);
-	if (a < 0)
-		return (a);
-	vu = vect_vector(p, &(ci->centre));
-	if (vect_norm(&vu) < ci->rayon)
-		return (a);
-	return (-1);
-}
 double		inter_sphere(t_point *p, t_vector *v, t_sp *sp)
 {
 	double		a;
@@ -44,56 +31,37 @@ double		inter_sphere(t_point *p, t_vector *v, t_sp *sp)
 	double		c;
 	t_vector	vt;
 
-	a = vect_dot(v, v);	
+	a = vect_dot(v, v);
 	vt = vect_vector(&(sp->centre), p);
 	b = 2 * vect_dot(v, &vt);
 	c = vect_dot(&vt, &vt) - (sp->rayon) * (sp->rayon);
 	return (equa_second(a, b, c));
 }
 
-int		test_triangle(t_vector *v1, t_vector *v2, t_vector *v)
-{
-	t_vector	p1;
-	t_vector	p2;
-
-	p1 = vect_vect(v1, v);
-	p2 = vect_vect(v, v2);
-	if (vect_dot(&p1, &p2) > 0)
-		return (0);
-	return (1);
-}
-
-double		inter_triangle(t_point *p, t_vector *v, t_tr *tr)
+double		inter_square(t_point *p, t_vector *v, t_sq *sq)
 {
 	double		a;
 	double		b;
-	t_point		m;
-	t_vector	ab;
-	t_vector	ac;
-	t_vector	bc;
-	t_vector	xm;
-	
-	a = vect_dot(v, &(tr->norm));
+	t_vector	u1;
+	t_point		p1;
+
+	a = vect_dot(v, &(sq->norm));
 	if (a == 0)
 		return (-1);
-	b = tr->d + vect_dot((t_vector *)p,&(tr->norm));
-	a = equa_premier(a, b);
-
-	xm = vect_mult(v, a);
-	m = vect_translate(p, &xm);
-	ab = vect_vector(&(tr->p1),&(tr->p2));
-	ac = vect_vector(&(tr->p1),&(tr->p3));
-	bc = vect_vector(&(tr->p2),&(tr->p3));
-	xm = vect_vector(&(tr->p1), &m);
-	if (test_triangle(&ab, &ac, &xm))
+	b = sq->d + vect_dot((t_vector *)p, &(sq->norm));
+	b = equa_premier(a, b);
+	if (b < 0)
 		return (-1);
-	xm = vect_vector(&(tr->p2), &m);
-	if (!test_triangle(&ab, &bc, &xm))
+	u1 = vect_mult(v, b);
+	p1 = vect_translate(p, &u1);
+	u1 = vect_vector(&p1, &(sq->point));
+	a = vect_dot(&u1, &(sq->dir1));
+	if (ft_abs(a) > sq->height)
 		return (-1);
-	xm = vect_vector(&(tr->p3), &m);
-	if (test_triangle(&ac, &bc, &xm))
+	a = vect_dot(&u1, &(sq->dir2));
+	if (ft_abs(a) > sq->height)
 		return (-1);
-	return (a);
+	return (b);
 }
 
 double		inter_switch(t_point *p, t_vector *v, t_plot *pl)
@@ -110,12 +78,11 @@ double		inter_switch(t_point *p, t_vector *v, t_plot *pl)
 	{
 		return (inter_triangle(p, v, (t_tr *)(pl->p)));
 	}
-	if (pl->type == CIRCLE)
-	{
-		return (inter_circle(p, v, (t_ci *)(pl->p)));
-	}
+	if (pl->type == CYLINDER)
+		return (inter_cylinder(p, v, (t_cy *)(pl->p)));
+	if (pl->type == SQUARE)
+		return (inter_square(p, v, (t_sq *)(pl->p)));
 	return (0);
-
 }
 
 int			inter_inter(t_ray *r, t_ldist *l, int j)
@@ -131,12 +98,13 @@ int			inter_inter(t_ray *r, t_ldist *l, int j)
 	while (++i < l->n)
 	{
 		d = inter_switch(&(r->source), &(r->dir), &(l->plot[i]));
-		if (d < dmin && d > 0 && i != j)
+		if (d < dmin && (d > 0.01 || (d > 0 && i != j)))
 		{
 			dmin = d;
 			imin = i;
 		}
 	}
+	i = j;
 	r->inter = imin;
 	r->dist = dmin;
 	return (SUCCESS);

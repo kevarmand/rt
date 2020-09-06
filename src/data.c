@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "rt.h"
+
 void	data_init(t_data *data)
 {
 	data->para.res_width = 0;
@@ -22,10 +23,7 @@ void	data_init(t_data *data)
 	data->lobj = NULL;
 	data->llight = 0;
 	data->lcam = 0;
-
-}
-
-int		data_dest(t_data *data)
-{
-	return (0);
+	(data->test)[0] = 0;
+	(data->test)[1] = 0;
+	(data->test)[2] = 0;
 }

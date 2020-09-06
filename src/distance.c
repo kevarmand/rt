@@ -14,16 +14,16 @@
 
 int		dist_init(t_data *d, t_ldist *p)
 {
-	int n;
-	t_list *l;
-	
+	int		n;
+	t_list	*l;
+
 	l = d->lobj;
 	n = list_count(d->lobj);
 	if (n == 0)
-		return (ERROR_EMPTY_OBJ);
+		return (ERR_EMPTY_OBJ);
 	p->n = n;
 	if (!(p->plot = malloc(sizeof(t_plot) * n)))
-		return (ERROR_MALLOC);
+		return (1 + error(ERR_MALLOC));
 	while (l != 0)
 	{
 		p->plot[n - 1].p = (l->obj);
@@ -33,4 +33,10 @@ int		dist_init(t_data *d, t_ldist *p)
 		n--;
 	}
 	return (SUCCESS);
+}
+
+int		dist_destroy(t_ldist *p)
+{
+	free(p->plot);
+	return (0);
 }
