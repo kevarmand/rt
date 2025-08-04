@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   data.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karmand <karmand@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/10 14:40:51 by karmand           #+#    #+#             */
-/*   Updated: 2020/02/19 17:48:30 by karmand          ###   ########.fr       */
+/*   Updated: 2025/08/04 12:35:23 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,4 +26,5 @@ void	data_init(t_data *data)
 	(data->test)[0] = 0;
 	(data->test)[1] = 0;
 	(data->test)[2] = 0;
+	data->flag_draw = 0;
 }

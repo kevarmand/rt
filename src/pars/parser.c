@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karmand <karmand@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/28 16:16:15 by karmand           #+#    #+#             */
-/*   Updated: 2020/03/05 17:09:10 by karmand          ###   ########.fr       */
+/*   Updated: 2025/08/04 13:32:57 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,11 @@ int		parsing(int fd, t_data *data)
 	int		ret;
 	int		n;
 	int		err;
+	int 	i;
 
 	n = 0;
 	ret = 1;
+	i = 0;
 	while (ret == 1)
 	{
 		ret = get_next_line(fd, &line);

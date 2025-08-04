@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rt.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karmand <karmand@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/10 13:22:08 by karmand           #+#    #+#             */
-/*   Updated: 2020/03/05 23:29:16 by karmand          ###   ########.fr       */
+/*   Updated: 2025/08/04 14:59:15 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 # include <math.h>
 # include "mlx.h"
 # include "keycode.h"
+#include "type.h"
+# include "ui.h"
 
 # include <X11/X.h>
 
@@ -65,203 +67,15 @@
 # define PLUS				1
 # define MOINS				0
 
+# define FLAG_DRAW_UI      0x01  // Redessiner l'interface
+# define FLAG_DRAW_VIEW    0x02  // Recalculer l'image raytracée
+# define FLAG_DRAW_TEXT    0x04  // Redessiner le texte
+# define FLAG_DRAW_ALL     0x07
+
 # define ERR_EMPTY_OBJ		-16
 
 # define ERR_NORM			-300
 
-typedef struct		s_color
-{
-	int				r;
-	int				g;
-	int				b;
-}					t_color;
-
-typedef struct		s_point
-{
-	double			x;
-	double			y;
-	double			z;
-}					t_point;
-
-typedef struct		s_vector
-{
-	double			x;
-	double			y;
-	double			z;
-}					t_vector;
-
-/*
-**	Liste des objet
-*/
-
-typedef enum		e_type
-{
-	SPHERE,
-	PLANE,
-	CYLINDER,
-	TRIANGLE,
-	SQUARE,
-	CAM,
-	LIGHT
-}					t_type;
-
-typedef struct		s_sp
-{
-	t_point			centre;
-	t_color			color;
-	double			rayon;
-}					t_sp;
-
-typedef struct		s_pl
-{
-	t_point			point;
-	t_vector		norm;
-	t_color			color;
-	double			a;
-	double			b;
-	double			c;
-	double			d;
-}					t_pl;
-
-typedef struct		s_cy
-{
-	t_point			point;
-	t_vector		dir;
-	double			rayon;
-	double			height;
-	t_color			color;
-}					t_cy;
-
-typedef struct		s_tr
-{
-	t_point			p1;
-	t_point			p2;
-	t_point			p3;
-	double			a;
-	double			b;
-	double			c;
-	double			d;
-	t_vector		norm;
-	t_color			color;
-}					t_tr;
-
-typedef struct		s_sq
-{
-	t_point			point;
-	t_vector		norm;
-	double			height;
-	t_color			color;
-	t_vector		dir1;
-	t_vector		dir2;
-	double			a;
-	double			b;
-	double			c;
-	double			d;
-}					t_sq;
-
-typedef struct		s_cam
-{
-	t_point			point;
-	t_vector		dir;
-	double			fov;
-	t_vector		hori;
-	t_vector		vert;
-	t_point			first;
-}					t_cam;
-
-typedef struct		s_ray
-{
-	t_point			source;
-	t_vector		dir;
-	int				inter;
-	double			dist;
-}					t_ray;
-
-typedef struct		s_lighting
-{
-	t_point			inter;
-	t_vector		norm;
-	t_color			c_obj;
-	t_color			c_ret;
-}					t_lighting;
-
-typedef struct		s_light
-{
-	t_point			point;
-	double			brightness;
-	t_color			color;
-}					t_light;
-
-/*
-**	fin des list objet
-*/
-
-typedef struct		s_list
-{
-	void			*obj;
-	t_type			type;
-	struct s_list	*next;
-}					t_list;
-
-typedef struct		s_para
-{
-	int				res_width;
-	int				res_height;
-	double			brightness;
-	t_color			color;
-}					t_para;
-
-typedef struct		s_plot
-{
-	void			*p;
-	t_type			type;
-	double			dist;
-}					t_plot;
-
-typedef struct		s_ldist
-{
-	int				n;
-	t_plot			*plot;
-}					t_ldist;
-
-typedef struct		s_image
-{
-	void			*img_ptr;
-	void			*addr_ptr;
-	int				bpp;
-	int				size_l;
-	int				endiant;
-	int				width;
-	int				height;
-}					t_image;
-
-typedef struct		s_select
-{
-	t_list			*obj;
-	t_list			*light;
-	t_list			*cam;
-}					t_select;
-
-/*
-**	pour les test
-**	test[0] echap
-**	test[1]	resolution
-**	test[2]	ambiance
-*/
-
-typedef struct		s_data
-{
-	t_para			para;
-	t_list			*lobj;
-	t_list			*llight;
-	t_list			*lcam;
-	t_select		select;
-	t_ldist			ldist;
-	void			*mlx_ptr;
-	void			*win_ptr;
-	t_image			*view;
-	int				test[3];
-}					t_data;
 
 /*
 **	Fonction de liste chainee
@@ -302,6 +116,9 @@ char				*ft_strjoin(char **arr, char *sep);
 int					free_split(char **arr);
 int					ft_free(void *ptr);
 int					split_count(char **arg);
+char				*ft_strjoin2(const char *s1, const char *s2);
+char				*ft_itoa(int n);
+
 
 /*
 **		Fonction de parsing
@@ -314,6 +131,7 @@ int					pars_color(char *str, t_color *color);
 int					pars_point(char *str, t_point *point);
 int					pars_vector(char *str, t_vector *v);
 
+void				name_lst(t_list *lst);
 /*
 **		fonction d'image
 */
@@ -461,6 +279,13 @@ int					light_init(t_lighting *li, t_plot *plot,
 int					ft_init_view(t_data *data);
 int					ft_init_win(t_data *data, char *name);
 int					ft_init_bmp(t_data *data, char *name);
+
+/***
+ *  Fontion de gestion des evenements
+ */
 int					key_hook(int keycode, t_data *data);
+int					mouse_press(int button, int x, int y, t_data *data);
+int					mouse_release(int button, int x, int y, t_data *data);
+int					mouse_move(int x, int y, t_data *data);
 
 #endif

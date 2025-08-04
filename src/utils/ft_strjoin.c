@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karmand <karmand@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/28 16:16:15 by karmand           #+#    #+#             */
-/*   Updated: 2020/03/05 17:09:10 by karmand          ###   ########.fr       */
+/*   Updated: 2025/08/04 14:21:59 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,5 +53,32 @@ char		*ft_strjoin(char **arr, char *sep)
 				res[n++] = sep[j++];
 	}
 	res[n] = 0;
+	return (res);
+}
+
+char	*ft_strjoin2(const char *s1, const char *s2)
+{
+	char	*res;
+	int		i;
+	int		j;
+
+	if (!s1 || !s2)
+		return (NULL);
+	res = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	if (!res)
+		return (NULL);
+	i = 0;
+	while (s1[i])
+	{
+		res[i] = s1[i];
+		i++;
+	}
+	j = 0;
+	while (s2[j])
+	{
+		res[i + j] = s2[j];
+		j++;
+	}
+	res[i + j] = '\0';
 	return (res);
 }

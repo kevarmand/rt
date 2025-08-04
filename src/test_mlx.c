@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test_mlx.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karmand <karmand@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/03 18:33:55 by karmand           #+#    #+#             */
-/*   Updated: 2020/03/03 18:57:41 by karmand          ###   ########.fr       */
+/*   Updated: 2025/08/01 21:04:43 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int		ft_init_view(t_data *data)
 		data->para.res_width, data->para.res_height)) == NULL)
 		return (ERR_MLX);
 	if ((data->view->addr_ptr = mlx_get_data_addr(data->view->img_ptr,
-		&data->view->bpp, &data->view->size_l, &data->view->endiant)) == NULL)
+		&data->view->bpp, &data->view->size_l, &data->view->endian)) == NULL)
 		return (ERR_MLX);
 	return (SUCCESS);
 }
