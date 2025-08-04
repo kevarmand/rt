@@ -1,18 +1,50 @@
 #include "rt.h"
 
+int	mouse_drag_ui(int rel_x, int rel_y, t_data *data)
+{
+	data->ui.dragging = 1;
+	data->ui.drag_offset_x = rel_x;
+	data->ui.drag_offset_y = rel_y;
+
+	return (1);
+}
+
+int	mouse_click_ui(int rel_x, int rel_y, t_data *data)
+{
+	t_ui		*ui = &(data->ui);
+	t_button	*btn;
+	int			i;
+
+	i = 0;
+	while (i < ui->button_count)
+	{
+		btn = &ui->buttons[i];
+		if (rel_x >= btn->x && rel_x < btn->x + btn->width &&
+			rel_y >= btn->y && rel_y < btn->y + btn->height)
+		{
+			if  (i  == 1)
+				return (mouse_drag_ui(rel_x, rel_y, data));
+			if (btn->on_click)
+			{
+				btn->on_click(data, btn->label);
+				return (1); // bouton trouvé et action exécutée
+			}
+		}
+		i++;
+	}
+	return (0); // aucun bouton cliqué
+}
+
 int	mouse_press(int button, int x, int y, t_data *data)
 {
-	if (button == 1)
+	int	rel_x;
+	int	rel_y;
+	if (button == 1 && data->ui.visible)
 	{
-		int rel_x = x - data->ui.x;
-		int rel_y = y - data->ui.y;
-		if (rel_x >= 0 && rel_x < WIDTH_UI &&
-			rel_y >= 0 && rel_y < UI_HEADER_HEIGHT)
-		{
-			data->ui.dragging = 1;
-			data->ui.drag_offset_x = rel_x;
-			data->ui.drag_offset_y = rel_y;
-		}
+		rel_x = x - data->ui.x;
+		rel_y = y - data->ui.y;
+		if (mouse_click_ui(rel_x, rel_y, data))
+			data->flag_draw = FLAG_DRAW_UI | FLAG_DRAW_TEXT;
 	}
 	return (0);
 }

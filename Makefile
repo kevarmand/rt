@@ -45,6 +45,7 @@ SRCS = \
 			test_mlx.c \
 			UI/button_add.c \
 			UI/button.c \
+			UI/close_ui.c \
 			UI/create_button.c \
 			UI/init.c \
 			UI/print_txt_ui.c \
@@ -60,6 +61,7 @@ SRCS = \
 			utils/vector2.c \
 			utils/vector3.c \
 			utils/vector.c \
+			
 			
 			
 			

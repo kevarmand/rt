@@ -82,9 +82,16 @@ int	draw_rectangle(t_image *img, t_rect *rect)
  */
 void	create_interface(t_data *data)
 {
-	draw_rectangle(&data->ui.img, &(t_rect){UI_COLOR_FOND, WIDTH_UI, HEIGHT_UI, 0, 0});
-	draw_rectangle(&data->ui.img, &(t_rect){UI_COLOR_EXIT, UI_EXIT_W, UI_EXIT_H, UI_EXIT_X, UI_EXIT_Y});
-	draw_rectangle(&data->ui.img, &(t_rect){UI_COLOR_FIELD_BG, WIDTH_UI - 2 * UI_CONTENT_X, HEIGHT_UI - UI_HEADER_HEIGHT - UI_CONTENT_X, UI_CONTENT_X, UI_HEADER_HEIGHT});
+	draw_rectangle(&data->ui.img, &(t_rect){UI_COLOR_FOND,
+		WIDTH_UI, HEIGHT_UI, 0, 0});
+	draw_rectangle(&data->ui.img, &(t_rect){UI_COLOR_EXIT,
+		UI_EXIT_W, UI_EXIT_H, UI_EXIT_X, UI_EXIT_Y});
+	draw_rectangle(&data->ui.img, &(t_rect){UI_COLOR_BORDER,
+		WIDTH_UI - 2 * UI_CONTENT_X, HEIGHT_UI - UI_HEADER_HEIGHT - UI_CONTENT_X, UI_CONTENT_X, UI_HEADER_HEIGHT});
+	draw_rectangle(&data->ui.img, &(t_rect){UI_COLOR_FIELD_BG,
+		WIDTH_UI - 4 * UI_CONTENT_X, 95, 2 * UI_CONTENT_X, 100});
+	draw_rectangle(&data->ui.img, &(t_rect){UI_COLOR_FIELD_BG,
+		WIDTH_UI - 4 * UI_CONTENT_X, 95, 2 * UI_CONTENT_X, 220});
 	// Ajouter les 3 champ ici
 }
 
