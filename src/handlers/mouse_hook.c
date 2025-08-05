@@ -26,7 +26,7 @@ int	mouse_click_ui(int rel_x, int rel_y, t_data *data)
 				return (mouse_drag_ui(rel_x, rel_y, data));
 			if (btn->on_click)
 			{
-				btn->on_click(data, btn->label);
+				btn->on_click(data,0);
 				return (1); // bouton trouvé et action exécutée
 			}
 		}
