@@ -1,7 +1,12 @@
 #ifndef TYPE_H
 # define TYPE_H
 
-# define MAX_UI_BUTTONS 40
+# define MAX_UI_BUTTONS 50
+
+//forward declaration
+struct s_data;
+typedef struct s_data t_data;
+
 
 
 /***
@@ -183,11 +188,18 @@ typedef struct		s_image
 	int				height;
 }					t_image;
 
+typedef enum e_ui_tab {
+	UI_TAB_OBJECT = 0,
+	UI_TAB_LIGHT,
+	UI_TAB_CAMERA
+}	t_ui_tab;
+
 typedef struct		s_select
 {
 	t_list			*obj;
 	t_list			*light;
 	t_list			*cam;
+	int				active_tab;
 }					t_select;
 
 /*
@@ -199,7 +211,7 @@ typedef struct		s_select
 
 typedef struct s_button
 {
-	int		x;           // relatif à l'UI
+	int		x;           
 	int		y;
 	int		width;
 	int		height;
@@ -207,7 +219,7 @@ typedef struct s_button
 	char	*txt;
 	int		color_bg;
 	int		color_txt;
-	void	(*on_click)(void *data, int flag); // action à effectuer
+	void	(*on_click)(t_data *data); // action à effectuer
 }	t_button;
 
 typedef struct s_ui {

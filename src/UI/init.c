@@ -92,7 +92,6 @@ void	create_interface(t_data *data)
 		WIDTH_UI - 4 * UI_CONTENT_X, 95, 2 * UI_CONTENT_X, 100});
 	draw_rectangle(&data->ui.img, &(t_rect){UI_COLOR_FIELD_BG,
 		WIDTH_UI - 4 * UI_CONTENT_X, 95, 2 * UI_CONTENT_X, 220});
-	// Ajouter les 3 champ ici
 }
 
 void	init_ui(t_data *data)
@@ -103,4 +102,13 @@ void	init_ui(t_data *data)
 	draw_all_buttons(&data->ui);
 	draw_escape_cross(&data->ui.img);
 	data->ui.visible = 0;
+}
+
+void	reset_ui(t_data *data)
+{
+	data->ui.button_count = 0;
+	create_interface(data);
+	create_buttons(&data->ui, data);
+	draw_all_buttons(&data->ui);
+	draw_escape_cross(&data->ui.img);
 }

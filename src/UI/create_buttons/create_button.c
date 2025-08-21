@@ -43,37 +43,29 @@ void	add_axis_signs(t_ui *ui, int base_x, int base_y, void (*on_click)(void *, i
 	}
 }
 
-void	create_buttons(t_ui *ui, t_data *data)
+void	create_buttons_general(t_ui *ui, t_data *data)
 {
-	//bouton exit
-	add_button(ui, (t_button){
-		.x = UI_EXIT_X, .y = UI_EXIT_Y,
-		.width = UI_EXIT_W, .height = UI_EXIT_H,
-		.label = 'X', .txt = NULL,
-		.color_bg = UI_COLOR_EXIT, .color_txt = UI_COLOR_TEXT,
-		.on_click = close_ui
-	});
 	//barre de titre
 	add_button(ui, (t_button){
 		.x = 0, .y = 0,
 		.width = WIDTH_UI, .height = UI_HEADER_HEIGHT,
 		.label = 0, .txt = NULL,
-		.color_bg = UI_COLOR_FOND, .color_txt = UI_COLOR_TEXT,
+		.color_bg = UI_COLOR_FOND, .color_txt = NULL,
 		.on_click = NULL
 	});
+	//exit button
 	add_button(ui, (t_button){
-		.x = 60, .y = 40, .width = 70, .height = 16,
-		.label = 0,
-		.txt = (data->select.obj->name),
-		.color_bg = UI_COLOR_ACCENT, .color_txt = UI_COLOR_TEXT,
-		.on_click = NULL,
+		.x = UI_EXIT_X, .y = UI_EXIT_Y,
+		.width = UI_EXIT_W, .height = UI_EXIT_H,
+		.label = 'X', .txt = NULL,
+		.color_bg = UI_COLOR_EXIT, .color_txt = NULL,
+		.on_click = close_ui
 	});
-	add_button(ui, (t_button){
-		.x = 10, .y = 60, .width = 100, .height = 16,
-		.label = 0, .txt = "color",
-		.color_bg = UI_COLOR_FOND, .color_txt = UI_COLOR_TEXT,
-		.on_click = NULL
-	});
+}
+
+void	create_buttons_object_fields(t_ui *ui, t_data *data)
+{
+
 	add_button(ui, (t_button){
 		.x = 10, .y = 100, .width = 180, .height = 16,
 		.label = 0, .txt = UI_LABEL_TRANSLATION,
@@ -94,4 +86,16 @@ void	create_buttons(t_ui *ui, t_data *data)
 
 	add_axis_signs(ui, 10, 130, NULL);
 	add_axis_signs(ui, 10, 250, NULL);
+}
+
+
+
+void	create_buttons(t_ui *ui, t_data *data)
+{
+	create_buttons_general(ui, data);
+	create_tab(ui, data);
+	create_descr(ui, data);
+	//create_buttons_object_fields(ui, data);
+	
+	//bouton
 }

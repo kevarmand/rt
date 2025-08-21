@@ -46,10 +46,11 @@ void	draw_all_buttons(t_ui *ui)
 {
 	int i;
 
-	i = ui->button_count;
-	while (--i >= 0)
+	i = 0;
+	while (i < ui->button_count)
 	{
 		draw_button(&(ui->img), &(ui->buttons[i]));
+		i++;
 	}
 }
 

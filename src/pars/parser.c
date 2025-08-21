@@ -44,11 +44,9 @@ int		parsing(int fd, t_data *data)
 	int		ret;
 	int		n;
 	int		err;
-	int 	i;
 
 	n = 0;
 	ret = 1;
-	i = 0;
 	while (ret == 1)
 	{
 		ret = get_next_line(fd, &line);

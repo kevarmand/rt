@@ -10,57 +10,7 @@ LIB_DIR := ./lib
 
 
 # Liste des sources
-SRCS = \
-			bmp.c \
-			cam_raytracing.c \
-			color.c \
-			data.c \
-			distance.c \
-			error.c \
-			exit.c \
-			handlers/key_hook.c \
-			handlers/mouse_hook.c \
-			handlers/mouse_move.c \
-			handlers/mouse_release.c \
-			init2.c \
-			init.c \
-			inter2.c \
-			inter.c \
-			lighting2.c \
-			lighting.c \
-			modif/normalize.c \
-			modif/resize.c \
-			modif/rotate2.c \
-			modif/rotate.c \
-			modif/translate2.c \
-			modif/translate.c \
-			name_lst.c \
-			pars/parser.c \
-			pars/parser_obj2.c \
-			pars/parser_obj.c \
-			pars/parser_utils.c \
-			render.c \
-			rt.c \
-			select.c \
-			test_mlx.c \
-			UI/button_add.c \
-			UI/button.c \
-			UI/close_ui.c \
-			UI/create_button.c \
-			UI/init.c \
-			UI/print_txt_ui.c \
-			UI/ui.c \
-			utils/equa.c \
-			utils/ft_gnl.c \
-			utils/ft_itoa.c \
-			utils/ft_split.c \
-			utils/ft_strjoin.c \
-			utils/utils2.c \
-			utils/utils.c \
-			utils/utils_list.c \
-			utils/vector2.c \
-			utils/vector3.c \
-			utils/vector.c \
+SRCS = pars/parser_obj.c pars/parser.c pars/parser_obj2.c pars/parser_utils.c cam_raytracing.c color.c UI/button.c UI/ui.c UI/close_ui.c UI/button_add.c UI/print_txt_ui.c UI/init.c UI/create_buttons/create_button.c UI/create_buttons/description_panel.c UI/create_buttons/tab_button.c render.c distance.c data.c init2.c test_mlx.c modif/translate.c modif/rotate.c modif/translate2.c modif/normalize.c modif/resize.c modif/rotate2.c rt.c lighting2.c utils/ft_itoa.c utils/ft_split.c utils/vector.c utils/vector2.c utils/ft_gnl.c utils/utils_list.c utils/ft_strjoin.c utils/equa.c utils/utils.c utils/utils2.c utils/vector3.c inter2.c handlers/mouse_move.c handlers/key_hook.c handlers/mouse_hook.c handlers/mouse_release.c error.c inter.c bmp.c init.c exit.c select.c lighting.c name_lst.c 
 			
 			
 			

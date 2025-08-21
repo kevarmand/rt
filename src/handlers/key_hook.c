@@ -126,6 +126,6 @@ int		key_hook(int keycode, t_data *data)
 	if (err == 2)
 		init_cam(((data->select).cam)->obj, data);
 	if (err)
-		data->flag_draw = FLAG_DRAW_ALL;
+		data->flag_draw = FLAG_DRAW_ALL & ~FLAG_DRAW_RESET_UI;
 	return (SUCCESS);
 }

@@ -1,8 +1,7 @@
 #include "rt.h"
 
-void	close_ui(t_data *data, int flag)
+void	close_ui(t_data *data)
 {
-	(void)flag;
 	if (data->ui.visible)
 	{
 		data->ui.visible = 0;

@@ -40,6 +40,10 @@ static int	open_file(int *fd, char *name)
 
 int			testcast(t_data *data)
 {
+	if (data->flag_draw & FLAG_DRAW_RESET_UI)
+	{
+		reset_ui(data);
+	}
 	if (data->flag_draw & FLAG_DRAW_UI)
 	{
 		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr,
@@ -58,7 +62,6 @@ int			testcast(t_data *data)
 	{
 		print_txt_ui(data);
 	}
-		
 	data->flag_draw = 0;
 	return (0);
 }

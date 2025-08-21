@@ -70,7 +70,8 @@
 # define FLAG_DRAW_UI      0x01  // Redessiner l'interface
 # define FLAG_DRAW_VIEW    0x02  // Recalculer l'image raytracée
 # define FLAG_DRAW_TEXT    0x04  // Redessiner le texte
-# define FLAG_DRAW_ALL     0x07
+# define FLAG_DRAW_RESET_UI 0x08  // Réinitialiser l'interface
+# define FLAG_DRAW_ALL     0x0F  // Redessiner tout
 
 # define ERR_EMPTY_OBJ		-16
 

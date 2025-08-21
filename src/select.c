@@ -17,6 +17,7 @@ int		select_init(t_data *data)
 	(data->select).obj = data->lobj;
 	(data->select).light = data->llight;
 	(data->select).cam = data->lcam;
+	data->select.active_tab = UI_TAB_OBJECT;
 	return (0);
 }
 
