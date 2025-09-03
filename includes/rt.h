@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/10 13:22:08 by karmand           #+#    #+#             */
-/*   Updated: 2025/08/04 14:59:15 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/09/02 15:39:52 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -288,5 +288,17 @@ int					key_hook(int keycode, t_data *data);
 int					mouse_press(int button, int x, int y, t_data *data);
 int					mouse_release(int button, int x, int y, t_data *data);
 int					mouse_move(int x, int y, t_data *data);
+
+
+
+/***
+ * Fonction d init1
+ */
+int	 frame_tick(t_data *data);
+int	render_tick(t_data *data);
+t_color		cam_getcolor(t_data *data, t_cam *c, t_vector *v);
+int	 frame_tick(t_data *data);
+int	render_tile(t_data *data, t_tile *tile, t_cam *cam);
+void	render_begin(t_data *data, t_cam *cam);
 
 #endif

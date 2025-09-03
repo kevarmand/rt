@@ -1,0 +1,10 @@
+{
+	"files.associations": {
+		"rt.h": "c",
+		"ui.h": "c",
+		"stdlib.h": "c",
+		"pthread.h": "c",
+		"stdatomic.h": "c",
+		"render.h": "c"
+	}
+}

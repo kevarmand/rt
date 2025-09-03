@@ -6,12 +6,13 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/10 13:59:23 by karmand           #+#    #+#             */
-/*   Updated: 2025/08/04 16:39:04 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/09/03 17:05:17 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
 #include "ui.h"
+#include "render.h"
 
 static int	test_param(int ac, char **av)
 {
@@ -38,33 +39,6 @@ static int	open_file(int *fd, char *name)
 	return (free_split(tab) + ERR_EXT);
 }
 
-int			testcast(t_data *data)
-{
-	if (data->flag_draw & FLAG_DRAW_RESET_UI)
-	{
-		reset_ui(data);
-	}
-	if (data->flag_draw & FLAG_DRAW_UI)
-	{
-		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr,
-			(data->view)->img_ptr, 0, 0);
-	}
-	if (data->ui.visible && data->flag_draw & FLAG_DRAW_UI)
-	{
-		// on affichge l'interface utilisateur
-		printf("UI is visible at position (%d, %d)\n", data->ui.x, data->ui.y);
-		// on affiche ladresse de limage :
-		printf("UI image address: %p\n", data->ui.img.addr_ptr);
-		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr,
-		(data->ui).img.img_ptr, (data->ui).x, (data->ui).y);
-	}
-	if (data->ui.visible && data->flag_draw & FLAG_DRAW_TEXT)
-	{
-		print_txt_ui(data);
-	}
-	data->flag_draw = 0;
-	return (0);
-}
 
 int			ft_mlx_init(t_data *data, char *name)
 {
@@ -91,18 +65,30 @@ int			ft_mlx_init(t_data *data, char *name)
 	name_lst(data->lobj);
 	name_lst(data->llight);
 	name_lst(data->lcam);
-	init_ui(data);
+	init_ui(data); //+test
+	
+	ren_init(data); //+test
 	
 	mlx_hook(data->win_ptr, 33, StructureNotifyMask, &ft_exit, data);
 	mlx_key_hook(data->win_ptr, &key_hook, data);
-	mlx_loop_hook(data->mlx_ptr, &testcast, data);
+	mlx_loop_hook(data->mlx_ptr, &frame_tick, data);
 	mlx_hook(data->win_ptr, 4, 1L << 2, mouse_press, data);      // ButtonPress
 	mlx_hook(data->win_ptr, 5, 1L << 3, mouse_release, data);    // ButtonRelease
 	mlx_hook(data->win_ptr, 6, 1L << 6, mouse_move, data);       // MotionNotify
-
-	render(data);
+	
+	create_threads((void *)data);
+	//render(data);
+	//lancer les threads de rendu
+	
+	render_begin(data, (t_cam *)(((data->select).cam)->obj));
+	
+	data->view->width = data->para.res_width;
+	data->view->height = data->para.res_height;
 	
 	mlx_loop(data->mlx_ptr);
+
+	
+	
 	return (0);
 }
 

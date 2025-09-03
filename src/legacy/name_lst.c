@@ -51,7 +51,7 @@ void	name_lst(t_list *lst)
 			exit(EXIT_FAILURE);
 		}
 
-		printf("Name: \"%s\", Type: %d\n", lst->name, lst->type);
+		//printf("Name: \"%s\", Type: %d\n", lst->name, lst->type);
 		lst = lst->next;
 		i++;
 

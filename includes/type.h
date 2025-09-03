@@ -2,10 +2,78 @@
 # define TYPE_H
 
 # define MAX_UI_BUTTONS 50
+# define NB_CORE 24
 
+# include <stdatomic.h>
+# include <pthread.h>
+# include <stdint.h>
+
+# include <stdlib.h>
+# include <string.h>
 //forward declaration
 struct s_data;
 typedef struct s_data t_data;
+
+
+struct s_render;
+typedef struct s_render t_render;
+
+struct s_tile;
+typedef struct s_tile t_tile;
+
+struct s_cam;
+typedef struct s_cam t_cam;
+
+/**
+ * struct s_tile - Rendering unit assigned to a worker thread
+ * @buffer:		Pixel buffer for this tile
+ * @id:			Global index of the tile
+ * @pos_x:		Tile position in X (pixels)
+ * @pos_y:		Tile position in Y (pixels)
+ * @camera:		Camera used for rendering this tile
+ * @thread_id:	POSIX thread identifier
+ * @is_done:	Atomic flag, set to 1 when rendering is finished
+ */
+struct  s_tile
+{
+	int			*buffer;
+	int			id;
+	int			pos_x;			// Unused for now
+	int			pos_y;			// Unused for now
+	t_cam		*camera;
+	pthread_t	thread_id;
+	atomic_int	is_done;
+};
+
+/**
+ * struct s_render - Global rendering context
+ * @width:				Output resolution in X (rounded to next multiple of TILE_SIZE)
+ * @height:				Output resolution in Y (rounded to next multiple of TILE_SIZE)
+ * @framebuffer:		HDR framebuffer (temporary int-based, to be replaced by float)
+ * @camera:				Active camera for rendering
+ * @samples_per_pixel:	Number of samples per pixel
+ * @cancel_flag:		Atomic flag to abort rendering
+ * @thread_next_id:		Next thread identifier to assign
+ * @tiles:				Array of per-thread tile structures (size = NB_CORE)
+ * @tiles_bitmap:		Bitset tracking finished tiles
+ * @tiles_total:		Total number of tiles (constant, fixed at init)
+ * @tiles_done:			Number of tiles already completed
+ * @tiles_distributed:	Number of tiles already assigned to workers
+ */
+struct s_render{
+	int			width;
+	int			height;
+	int			*framebuffer;
+	t_cam		*camera;
+	int			samples_per_pixel;		//unused for now
+	atomic_int	cancel_flag;
+	atomic_int	thread_next_id;
+	t_tile		tiles[NB_CORE];
+	uint64_t 	*tiles_bitmap;
+	int			tiles_total;
+	int			tiles_done;
+	int			tiles_distributed;
+};
 
 
 
@@ -248,6 +316,7 @@ typedef struct		s_data
 	t_image			*view;
 	int				test[3];
 	int				flag_draw;
+	t_render		render;
 }					t_data;
 
 #endif
