@@ -1,0 +1,83 @@
+src/
+├── app/                         # colle le moteur à MLX + boucle
+│   ├── main.c
+│   ├── platform_mlx/
+│   │   ├── window.c
+│   │   ├── image.c
+│   │   └── time.c
+│   ├── handlers/                # évènements (ne font que modifier l'état / flags)
+│   │   ├── key_hook.c
+│   │   ├── mouse_hook.c
+│   │   ├── mouse_move.c
+│   │   └── mouse_release.c
+│   ├── tick/                    # cadence, orchestration
+│   │   ├── frame_tick.c
+│   │   └── tile_tick.c
+│   └── ui/
+│       ├── init.c
+│       ├── ui.c
+│       ├── button.c
+│       ├── close_ui.c
+│       ├── print_txt_ui.c
+│       └── create_buttons/
+│           ├── create_button.c
+│           ├── description_panel.c
+│           └── tab_button.c
+│
+├── engine/                      # moteur indépendant de MLX
+│   ├── renderer/
+│   │   ├── render_begin.c
+│   │   ├── dispatch_tile.c
+│   │   ├── render_tile.c
+│   │   ├── tile_to_buffer.c
+│   │   ├── buffer_to_rgba.c     # (ex- buffer_to_mlx.c renommé, sans MLX)
+│   │   ├── reset_tile.c
+│   │   ├── init_render.c
+│   │   ├── tile_utils.c
+│   │   └── thread/
+│   │       ├── pool.c           # (regroupe thread.c/worker_thread.c)
+│   │       └── jobs.c
+│   ├── accel/                   # BVH/KD-tree/AABB (plus tard)
+│   │   └── ...
+│   ├── scene/                   # entités, matériaux, caméras, lights
+│   │   ├── scene.c
+│   │   ├── camera.c
+│   │   ├── material.c
+│   │   └── light.c
+│   ├── shading/                 # BRDF/Phong/texture/bump
+│   │   ├── lighting.c
+│   │   ├── lighting_phong.c     # (ex-lighting2.c)
+│   │   └── color.c
+│   ├── geom/                    # intersecteurs par primitive
+│   │   ├── inter_sphere.c
+│   │   ├── inter_plane.c
+│   │   ├── inter_cylinder.c
+│   │   ├── inter_cone.c
+│   │   └── distance.c
+│   └── math/
+│       ├── vector2.c
+│       ├── vector3.c
+│       ├── matrix.c             # si besoin
+│       └── equa.c
+│
+├── io/                          # entrée/sortie du moteur
+│   ├── bmp.c
+│   ├── parse_rt.c               # (ex-parser.c)
+│   ├── parse_obj.c
+│   ├── parse_utils.c
+│   └── name_list.c              # (ex-name_lst.c)
+│
+├── legacy/                      # tout le vieux code intact
+│   ├── inter_old.c
+│   ├── lighting_old.c
+│   ├── render_old.c
+│   └── ...
+│
+└── common/                      # utilitaires génériques
+├── log.c
+├── error.c
+├── assert.c
+├── gnl.c
+├── str.c  (split/join/itoa...)
+├── mem.c
+└── types.h

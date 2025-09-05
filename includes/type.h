@@ -2,7 +2,7 @@
 # define TYPE_H
 
 # define MAX_UI_BUTTONS 50
-# define NB_CORE 24
+# define NB_CORE 8
 
 # include <stdatomic.h>
 # include <pthread.h>

@@ -20,7 +20,7 @@
 # include <math.h>
 # include "mlx.h"
 # include "keycode.h"
-#include "type.h"
+# include "type.h"
 # include "ui.h"
 
 # include <X11/X.h>

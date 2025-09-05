@@ -41,3 +41,38 @@ int			render_tile(t_data *data, t_tile *tile, t_cam *cam)
 	}
 	return (SUCCESS);
 }
+
+
+/***
+ * Fonction de rendu
+ * dans l'idée j'aimerais avoir cette ossature :
+ *  le nom//paramettre de la fonction sont ok
+ * int			render_tile(t_data *data, t_tile *tile, t_cam *cam)
+{
+	//Block de variables
+
+
+	//fonction d initialisation des valeur necessaire
+	i = -1;
+	while (++i < TILE_SIZE)
+	{
+		j = -1;
+		while (++j < TILE_SIZE)
+		{
+			//calcul de la direction du rayon une sorte de ray_init
+			//ray_init(&r, &cam->point, &v, ...);
+			ray_trace(&r, data, &co);
+			assign_color_to_buffer(tile->buffer, (i + j * TILE_SIZE) * RGB_CHANNELS, &co);
+		}
+	}
+	return (SUCCESS);
+}
+ * ATTENTION je ne veux aps le faire tout de suite je t indique juste ce que je veux faire :
+ *  je n ai pas encore fait le point sur les struct que je vqis qvoir besoin donc pour linstant je touche le moins possible au code
+ * 
+ * Donc la struct ray je la ferai plus tard
+ * la fonction ray_trace le nom me semble significatif mais si tu peux proposer mieux n hésite pas
+ * la fonction assign_color_to_buffer est une fonction facile qui ne nepend que d elimplementation du reste donc pas besoin d epasser du temps dessus
+ */
+
+ 
