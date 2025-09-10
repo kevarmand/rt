@@ -1,0 +1,139 @@
+/* ************************************************************************** */
+/*                                  Material                                  */
+/* ************************************************************************** */
+
+typedef struct s_fresnel {
+	double	n1;         /* indice avant */
+	double	n2;         /* indice après */
+	double	metalness;  /* 0=dielectrique, 1=métal (teinte via F0) */
+	double	F0[3];      /* override de Fresnel à incidence normale (RGB) */
+}	t_fresnel;
+
+typedef struct s_brdf {
+	double	ka;         /* ambiant */
+	double	kd;         /* diffus (Lambert) */
+	double	ks;         /* spéculaire (Blinn/Phong) */
+	double	spec_exp;   /* “shininess”, exposant de Phong/Blinn-Phong */
+	double	roughness;  /* pour microfacette plus tard (optionnel) */
+}	t_brdf;
+
+typedef struct s_material {
+	t_brdf		brdf;
+	t_fresnel	fr;
+	/* sliders “triche” si besoin d’outrepasser Fresnel physique : */
+	double	reflect;   /* facteur miroir direct (en plus de Fresnel) */
+	double	refract;   /* transmission brute (si tu veux créer des effets) */
+}	t_material;
+
+/* ************************************************************************** */
+/*                                  Surface                                   */
+/* ************************************************************************** */
+
+
+typedef enum e_sample_kind { SAMP_COLOR, SAMP_CHECKER, SAMP_TEXTURE } t_sample_kind;
+
+typedef struct s_sampler {
+	t_sample_kind	kind;
+	double			color[3];    /* base color si SAMP_COLOR */
+	void			*tex;        /* handle image si SAMP_TEXTURE */
+	double			scale_u;     /* tiling */
+	double			scale_v;
+}	t_sampler;
+
+typedef struct s_surface {
+	t_sampler	albedo;
+	t_sampler	normalmap;   /* bump/normal : si kind==SAMP_TEXTURE -> normal map */
+	t_sampler	roughness;   /* si tu montes en PBR plus tard */
+}	t_surface;
+
+
+/* ************************************************************************** */
+/*                                  Shapes                                    */
+/* ************************************************************************** */
+
+typedef enum e_shape_type { SH_SPHERE, SH_PLANE, SH_CYL, SH_CONE, SH_TORUS, SH_TRI } t_shape_type;
+
+typedef struct s_sphere { double c[3]; double r; } t_sphere;
+typedef struct s_plane  { double p[3]; double n[3]; } t_plane;
+/* cyl/cone fermés: laisser ça au niveau “object” avec des caps comme shapes distincts */
+typedef struct s_cyl    { double c[3]; double axis[3]; double r; double h; } t_cyl;
+typedef struct s_cone   { double c[3]; double axis[3]; double angle; double h; } t_cone;
+typedef struct s_torus  { double c[3]; double axis[3]; double R; double r; } t_torus;
+typedef struct s_tri    { double p0[3]; double p1[3]; double p2[3]; double n0[3]; double n1[3]; double n2[3]; double uv0[2]; double uv1[2]; double uv2[2]; } t_tri;
+
+typedef struct s_shape t_shape;
+typedef struct s_ray   t_ray;
+typedef struct s_hit   t_hit;
+
+typedef int (*t_isect_fn)(const t_shape*, const t_ray*, t_hit*);
+typedef void (*t_sh_uv_fn)(const t_shape*, const t_hit*, double uv[2]);
+typedef void (*t_sh_frame_fn)(const t_shape*, const t_hit*, double T[3], double B[3]);
+
+struct s_shape {
+	t_shape_type	type;
+	union {
+		t_sphere	sph;
+		t_plane		pl;
+		t_cyl		cy;
+		t_cone		co;
+		t_torus		to;
+		t_tri		tri;
+	} u;
+	t_isect_fn	intersect;
+	t_sh_uv_fn	get_uv;   /* mapping propre à la shape */
+	t_sh_frame_fn get_tb; /* base tangent/bitangent pour normal map */
+	/* optionnel : transform objet->monde (pré-inversée pour ray->objet) */
+	double		o2w[16];	//<-matrice objet->monde
+	double		w2o[16];	//<-matrice monde->objet
+};
+
+
+/* ************************************************************************** */
+/*                                  objects                                   */
+/* ************************************************************************** */
+
+typedef struct s_object {
+	t_shape		*shapes;
+	int			shape_count;
+	t_surface	surf;
+	t_material	mat;
+	/* bounds pour BVH (en world) */
+	double		aabb_min[3];
+	double		aabb_max[3];
+}	t_object;
+
+
+
+
+
+//other
+
+/* ************************************************************************** */
+/*                                Other structs                                */
+/* ************************************************************************** */
+
+typedef struct s_ray {
+	double	o[3];
+	double	d[3];
+	double	tmin;
+	double	tmax;
+}	t_ray;
+
+typedef struct s_hit {
+	double	t;
+	double	p[3];
+	double	n[3];      /* normal géométrique */
+	double	uv[2];     /* si dispo (tri, sphère, cyl, torus…) */
+	t_shape	*sh;       /* pour remonter à l’object/surface/material */
+}	t_hit;
+
+typedef struct s_camera {
+	double	pos[3];
+	double	forward[3];
+	double	right[3];
+	double	up[3];
+	double	fov_deg;    /* horizontale ou verticale, mais sois cohérent */
+	double	aperture;   /* pour DOF plus tard */
+	double	focus_dist;
+	//t_image	image;     /* image de la caméra */
+}	t_camera;

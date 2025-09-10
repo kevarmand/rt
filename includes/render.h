@@ -8,7 +8,7 @@
 
 # define RGB_CHANNELS 3
 
-# define TILE_SIZE 50
+# define TILE_SIZE 100
 
 
 #include "type.h"

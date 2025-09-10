@@ -47,7 +47,7 @@ int	render_tick(t_data *data)
 		// data->render.cam = get_next_cam(data);
 		// if (data->render.cam)
 		// 	render_begin(data);
-		exit(0);
+		//exit(0);
 		data->render.camera = NULL; // on a fini le rendu
 	}
 	return (SUCCESS);
