@@ -23,10 +23,10 @@ SRCS_DIR	:= src
 INCLD_DIR	:= includes
 OBJS_DIR	:= objs
 
-LIBFT_DIR	:= libft
+LIBFT_DIR	:= lib/libft
 LIBFT_A		:= $(LIBFT_DIR)/libft.a
 
-MLX_DIR		:= minilibx-linux            # ← adapte-moi (ex: mlx_linux / minilibx-linux)
+MLX_DIR		:= lib/minilibx            # ← adapte-moi (ex: mlx_linux / minilibx-linux)
 MLX_A		:= $(MLX_DIR)/libmlx.a
 
 # **************************************************************************** #
@@ -157,7 +157,7 @@ $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c
 
 # Convenience
 run: $(NAME)
-	./$(NAME) test3.rt
+	./$(NAME) cat.rt
 
 clean:
 	$(RM) $(OBJS_DIR)
