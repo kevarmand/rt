@@ -5,6 +5,10 @@
 		"stdlib.h": "c",
 		"pthread.h": "c",
 		"stdatomic.h": "c",
-		"render.h": "c"
+		"render.h": "c",
+		"io.h": "c",
+		"stdio.h": "c",
+		"unistd.h": "c",
+		"string.h": "c"
 	}
 }
