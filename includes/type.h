@@ -78,16 +78,16 @@ struct s_render{
 
 
 
-/***
- * t_scene
- */
-typedef struct s_scene
-{
-	t_list	*objects;
-	t_list	*cameras;
-	t_list	*lights;
-	t_para	globals;
-}	t_scene;
+// /***
+//  * t_scene
+//  */
+// typedef struct s_scene
+// {
+// 	t_list	*objects;
+// 	t_list	*cameras;
+// 	t_list	*lights;
+// 	t_para	globals;
+// }	t_scene;
 
 
 /***

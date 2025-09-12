@@ -13,6 +13,7 @@ void	wait_work(atomic_int *tile_done, atomic_int *cancel)
 
 void *worker_thread(void *arg)
 {
+	static _Atomic int count_loop = 0;
 	t_data	*data;
 	t_tile	*tile;
 	int		thread_id;
@@ -27,6 +28,7 @@ void *worker_thread(void *arg)
 		render_tile(data, tile, data->render.camera);
 		atomic_store(&tile->is_done, 1);
 		wait_work(&tile->is_done, &data->render.cancel_flag);
+		printf("thread %d done tile %d/%d\n", thread_id, ++count_loop, data->render.tiles_total);
 	}
 	printf("thread %lu exiting\n", tile->thread_id);
 	return (NULL);
