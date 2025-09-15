@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/28 16:16:15 by karmand           #+#    #+#             */
-/*   Updated: 2025/09/02 15:49:38 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/09/15 16:25:18 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int			cam_gen(t_data *data, t_cam *c)
 			vect_tonorm(&v);
 			co = cam_getcolor(data, c, &v);
 			*(int *)(data->view->addr_ptr + ((j * data->para.res_width + i) *
-			data->view->bpp / 8)) = 256 * 256 * co.r + 256 * co.g + co.b;
+			data->view->bpp / 8)) = 256 * 256 * co.r + 256 * co.g + co.b; //= co.r << 16 | co.g << 8 | co.b;
 			pf = vect_translate(&pf, &(c->vert));
 		}
 	}

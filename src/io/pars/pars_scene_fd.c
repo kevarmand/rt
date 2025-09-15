@@ -4,44 +4,29 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include "io.h"
 
-
-int	pars_scene_fd(int fd, t_data *data)
+int	pars_scene_fd(int fd, t_scene_parsed *scene)
 {
+	char	*line;
 	int		err;
+	t_pars_state	state;
 
-	if (fd < 0)
-		return (ERR_OPEN);
-	data_init(data);
-	if ((err = parsing(fd, data)))
+	err = SUCCESS;
+	pars_ctx_init(&state);
+	while (!err)
 	{
-		ft_data_exit(data);
-		return (err);
+		line = get_next_line(fd);
+		if (!line)
+			break ;
+		state.line_no++;
+		err = pars_line(line, scene, &state);
+		free(line);
+		if (err)
+			return (err);
 	}
-	if ((data->test)[1] == 0)
-		err = ERR_NO_R;
-	else if ((data->test)[2] == 0)
-		err = ERR_NO_A;
-	else if (data->lcam == 0)
-		err = ERR_NO_C;
-	else if (data->lobj == 0)
-		err = ERR_EMPTY_OBJ;
-	if (err)
-	{
-		ft_data_exit(data);
-		return (err);
-	}
+	if (state.depth != 0)
+		return (ERR_CTX_UNBALANCED);
 	return (SUCCESS);
 }
-
-// On defini un structure t_scene provisoire : list chainee
-
-//RAPELE DE LA STRUCT DE T_para
-// typedef struct		s_para
-// {
-// 	int				res_width;
-// 	int				res_height;
-// 	double			brightness;
-// 	t_color			color;
-// }					t_para;
 

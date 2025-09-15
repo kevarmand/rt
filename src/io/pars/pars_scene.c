@@ -7,8 +7,6 @@
 #include "error_codes.h"
 
 
-
-
 int	pars_scene(const char *filename, t_scene *scene)
 {
 	int				fd;

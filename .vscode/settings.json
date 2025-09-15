@@ -9,6 +9,9 @@
 		"io.h": "c",
 		"stdio.h": "c",
 		"unistd.h": "c",
-		"string.h": "c"
+		"string.h": "c",
+		"error_codes.h": "c",
+		"fcntl.h": "c",
+		"cmath": "cpp"
 	}
 }

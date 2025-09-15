@@ -30,4 +30,9 @@
 # define ERR_A_REDEF		-220
 # define ERR_PARS_TYPE		-221
 
+# define ERR_CTX_UNBALANCED	-300
+# define ERR_CTX_UNSUPPORTED -301
+
+# define ERR_PARSE_FLOAT	-400
+
 #endif

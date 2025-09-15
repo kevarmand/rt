@@ -11,6 +11,20 @@
 # define BUFFER_SIZE 1024
 #include "libft.h"
 
+typedef struct s_pars_state {
+	int			line_no;
+	int			depth;
+	const char	*line;
+	int			pos;
+}	t_pars_state;
+
+typedef struct s_scene t_scene;
+
+typedef struct s_tok {
+	const char	*start;
+	int			len;
+}	t_tok;
+
 typedef enum e_pmask
 {
 	PRESENCE_CAM = 1u << 0,
@@ -29,7 +43,7 @@ typedef struct s_scene_parsed
 	t_pmask	presence_mask;
 }	t_scene_parsed;
 
-typedef struct s_elem_options
+typedef struct s_element_options
 {
 	float		ior;
 	float		reflection;
@@ -38,12 +52,17 @@ typedef struct s_elem_options
 	float		diffuse_weight;
 	float		specular_weight;
 	float		ambient_occlusion;
-	float		alpha;
-	//ect ...
+	//etc ...
 }	t_element_options;
 
 typedef enum e_element_type {
-	ELEM_NONE, ELEM_SPHERE, ELEM_PLANE, ELEM_CYLINDER, ELEM_CAMERA, ELEM_LIGHT, ELEM_AMBIENT
+	ELEM_NONE,
+	ELEM_SPHERE,
+	ELEM_PLANE,
+	ELEM_CYLINDER,
+	ELEM_CAMERA,
+	ELEM_LIGHT,
+	ELEM_AMBIENT
 }	t_element_type;
 
 typedef struct s_parsed_sphere
@@ -115,6 +134,95 @@ typedef struct s_parsed_element
  */
 int	pars_scene(const char *filename, t_scene *scene);
 
+/***
+ * @brief Initialize the parsing context state.
+ * @param st Pointer to the parsing state structure to initialize. (no_null)
+ */
+void	pars_ctx_init(t_pars_state *st);
+
+/**
+ * @brief Parse a scene from an open file descriptor into a temporary builder.
+ * @param fd    Open file descriptor to the .rt scene (read-only). (no_null)
+ * @param scene Builder receiving parsed elements (lists, presence mask). (no_null)
+ * @return SUCCESS on success, otherwise a parsing/I-O error code.
+ * @note Does not close @fd. Preconditions are guaranteed by the caller.
+ */
+int	pars_scene_fd(int fd, t_scene_parsed *scene);
+
+
+/**
+ * @brief Parse a single line: read first word span, dispatch by tag.
+ * @note  Braces '{}' unsupported yet (reserved for later).
+ */
+int	pars_line(const char *line, t_scene_parsed *scene, t_pars_state *st);
+
+/**
+ * @brief Get next whitespace-delimited token from st->line as a span.
+ * @param st  Parsing state with current line and position. (no_null)
+ * @param out Output token span (start pointer and length). (no_null)
+ * @return 1 if found, 0 if EOL or comment start.
+ */
+int	pars_next_tok(t_pars_state *st, t_tok *out);
+
+
+/***
+ * @brief Dispatch a token to the appropriate parsing function based on its tag.
+ * @param tag   The token to be dispatched. (no_null)
+ * @param st    The current parsing state. (no_null)
+ * @param scene The scene being constructed. (no_null)
+ * @return Returns 0 on success, or a non-zero error code on failure.
+ */
+int	pars_dispatch_tok(t_tok tag, t_pars_state *st, t_scene_parsed *scene);
+
+/***
+ * @brief Compare a token with a literal string for equality.
+ * @param t   The token to compare. (no_null)
+ * @param lit The literal string to compare against. (no_null)
+ * @return Returns 1 if the token matches the literal, otherwise returns 0.
+ */
+int	pars_tok_eq(t_tok t, const char *lit);
+
+/* ************************************************************************** */
+/*                             UTILS - PARSING                                */
+/* ************************************************************************** */
+
+ /***
+ * @brief Scan a floating-point number from a token span.
+ * @param tok	The token span containing the float representation. (no_null)
+ * @param out_value Pointer to store the parsed float value. (no_null)
+ * @return SUCCESS on successful parse, or ERR_PARSE_FLOAT on failure.
+ * @note The function handles optional leading '+' or '-' signs, integer
+ * and fractional parts, and ensures the value is within a reasonable range.
+ * It does not handle scientific notation (e.g., '1.23e4').
+ */
+int	scan_float(t_tok tok, float *out_value);
+
+/**
+ * @brief Parse a color from a token in the format "R,G,B".
+ * @param tok      The input token containing the color. (no_null)
+ * @param out_rgb  Output array to store the parsed RGB components. (no_null)
+ * @return Returns 0 on success, or a non-zero error code on failure.
+ * @note Each RGB component must be an integer in the range 0-255.
+ */
+int	scan_color(t_tok tok, int out_rgb[3]);
+
+/**
+ * @brief Split a token of the form "key=value" into key and value tokens.
+ * @param tok        The input token to split. (no_null)
+ * @param key_out    Output token for the key part. (no_null)
+ * @param value_out  Output token for the value part. (no_null)
+ * @return 0 on success, or ERR_PARSE_FLOAT if the format is invalid.
+ * @note Both output tokens point into the original token's string.
+ */
+int	scan_option(t_tok tok, t_element_options *opts);
+
+int	scan_opt_ior(t_tok tok, t_element_options *opts);
+int	scan_opt_refraction(t_tok tok, t_element_options *opts);
+int	scan_opt_reflection(t_tok tok, t_element_options *opts);
+int	scan_opt_shininess(t_tok tok, t_element_options *opts);
+int	scan_opt_diffuse(t_tok tok, t_element_options *opts);
+int	scan_opt_specular(t_tok tok, t_element_options *opts);
+int	scan_opt_ambient(t_tok tok, t_element_options *opts);
 
 
 #endif
