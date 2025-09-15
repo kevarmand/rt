@@ -207,7 +207,7 @@ float	prim_centroid_axis(t_primitive *p, int axis)
 {
 	t_vec3f	c;
 
-	prim_centroid(p);
+	c = prim_centroid(p);
 	if (axis == 0)
 		return (c.x);
 	if (axis == 1)
@@ -291,7 +291,7 @@ int	sah_split(t_primpack pck, t_aabb nodebounds, int *axisout)
 		quicksort_indices((t_primpack){pck.p, tmp, 0, 0},
 			0, pck.count - 1, axis);
 		left[0] = prim_bound(&pck.p[tmp[0]]);
-		i = 0;
+		i = 1;
 		while (i < pck.count)
 		{
 			left[i] = bound_merge(left[i - 1], prim_bound(&pck.p[tmp[i]]));
@@ -378,16 +378,16 @@ int	bound_intersect(t_ray r, t_aabb bound, float *near, float *far)
 	float			tmin;
 	float			tmax;
 
-	b.t1x = (bound.min.x = r.origin.x) * r.invdir.x;
-	b.t2x = (bound.max.x = r.origin.x) * r.invdir.x;
+	b.t1x = (bound.min.x - r.origin.x) * r.invdir.x;
+	b.t2x = (bound.max.x - r.origin.x) * r.invdir.x;
 	b.tminx = fminf(b.t1x, b.t2x);
 	b.tmaxx = fmaxf(b.t1x, b.t2x);
-	b.t1y = (bound.min.y = r.origin.y) * r.invdir.y;
-	b.t2y = (bound.max.y = r.origin.y) * r.invdir.y;
+	b.t1y = (bound.min.y - r.origin.y) * r.invdir.y;
+	b.t2y = (bound.max.y - r.origin.y) * r.invdir.y;
 	b.tminy = fminf(b.t1y, b.t2y);
 	b.tmaxy = fmaxf(b.t1y, b.t2y);
-	b.t1z = (bound.min.z = r.origin.z) * r.invdir.z;
-	b.t2z = (bound.max.z = r.origin.z) * r.invdir.z;
+	b.t1z = (bound.min.z - r.origin.z) * r.invdir.z;
+	b.t2z = (bound.max.z - r.origin.z) * r.invdir.z;
 	b.tminz = fminf(b.t1z, b.t2z);
 	b.tmaxz = fmaxf(b.t1z, b.t2z);
 	tmin = fmaxf(fmaxf(b.tminx, b.tminy), b.tminz);

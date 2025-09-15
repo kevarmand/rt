@@ -1,5 +1,9 @@
 # Fichiers objets
 *.o
+*.a
+*.out
+compile_commands.json
+.cache/clangd*
 
 # Fichiers de dépendances (gcc/clang)
 *.d
