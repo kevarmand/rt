@@ -71,20 +71,13 @@ typedef void (*t_sh_frame_fn)(const t_shape*, const t_hit*, double T[3], double 
 
 struct s_shape {
 	t_shape_type	type;
-	union {
-		t_sphere	sph;
-		t_plane		pl;
-		t_cyl		cy;
-		t_cone		co;
-		t_torus		to;
-		t_tri		tri;
-	} u;
-	t_isect_fn	intersect;
-	t_sh_uv_fn	get_uv;   /* mapping propre à la shape */
-	t_sh_frame_fn get_tb; /* base tangent/bitangent pour normal map */
+	void			*data;
 	/* optionnel : transform objet->monde (pré-inversée pour ray->objet) */
-	double		o2w[16];	//<-matrice objet->monde
-	double		w2o[16];	//<-matrice monde->objet
+	// double			o2w[16];	//<-matrice objet->monde
+	// double			w2o[16];	//<-matrice monde->objet
+	
+
+
 };
 
 
@@ -120,9 +113,9 @@ typedef struct s_ray {
 }	t_ray;
 
 typedef struct s_hit {
-	double	t;
-	double	p[3];
-	double	n[3];      /* normal géométrique */
+	double	distance;
+	double	point[3];
+	double	normal[3];      /* normal géométrique */
 	double	uv[2];     /* si dispo (tri, sphère, cyl, torus…) */
 	t_shape	*sh;       /* pour remonter à l’object/surface/material */
 }	t_hit;

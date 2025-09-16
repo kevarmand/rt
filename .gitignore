@@ -4,6 +4,7 @@
 *.out
 compile_commands.json
 .cache/clangd*
+.vscode/*
 
 # Fichiers de dépendances (gcc/clang)
 *.d

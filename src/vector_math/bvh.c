@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bvh.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: norivier <norivier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 20:45:35 by norivier          #+#    #+#             */
-/*   Updated: 2025/09/14 21:59:34 by norivier         ###   ########.fr       */
+/*   Updated: 2025/09/16 18:54:46 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,9 +83,9 @@ t_vec3f	cylinder_centroid(t_cylinder *c)
 	});
 }
 
-t_aabb	torus_bound(t_torus *t)
+t_aabb	torus_bound(t_torus *t) // todo again
 {
-	float	extent;
+	float	extent; 
 	t_aabb	out;
 
 	extent = t->R + t->r;
@@ -264,7 +264,7 @@ int	sah_split(t_primpack pck, t_aabb nodebounds, int *axisout)
 
 	bestaxis = -1;
 	bestindex = -1;
-	bestcost = 1e30f;
+	bestcost = __FLT_MAX__;
 	if (pck.count < 2)
 	{
 		*axisout = 0;
@@ -428,78 +428,78 @@ void print_bvh_tree(const t_bvhnode *nodes, int nodeIndex, int depth) {
     if (n->right != -1) print_bvh_tree(nodes, n->right, depth + 1);
 }
 
-// int main()
-// {
-//     // 1) allocate primitives
-//     t_primitive prims[prim_number];
-//
-//     // triangle
-//     t_triangle *tri = malloc(sizeof(t_triangle));
-//     tri->v0 = (t_vec3f){0,0,0};
-//     tri->v1 = (t_vec3f){1,0,0};
-//     tri->v2 = (t_vec3f){0,1,0};
-//     prims[0].type = PRIM_TRIANGLE;
-//     prims[0].data = tri;
-//
-//     // sphere
-//     t_sphere *s = malloc(sizeof(t_sphere));
-//     s->center = (t_vec3f){2,2,2};
-//     s->radius = 0.5f;
-//     prims[1].type = PRIM_SPHERE;
-//     prims[1].data = s;
-//
-//     // cylinder
-//     t_cylinder *c = malloc(sizeof(t_cylinder));
-//     c->p0 = (t_vec3f){-1,-1,-1};
-//     c->p1 = (t_vec3f){-1,1,-1};
-//     c->radius = 0.2f;
-//     prims[2].type = PRIM_CYLINDER;
-//     prims[2].data = c;
-//
-//     // quad
-//     t_quad *q = malloc(sizeof(t_quad));
-//     q->v0 = (t_vec3f){0,0,1};
-//     q->v1 = (t_vec3f){1,0,1};
-//     q->v2 = (t_vec3f){1,1,1};
-//     q->v3 = (t_vec3f){0,1,1};
-//     prims[3].type = PRIM_QUAD;
-//     prims[3].data = q;
-//
-//     // torus
-//     t_torus *t = malloc(sizeof(t_torus));
-//     t->center = (t_vec3f){3,0,0};
-//     t->R = 1.0f;
-//     t->r = 0.3f;
-//     prims[4].type = PRIM_TORUS;
-//     prims[4].data = t;
-//
-//     // 2) allocate index array
-//     int indices[prim_number] = {0,1,2,3,4};
-//
-//     // 3) allocate BVH node array (max nodes = 2*N-1)
-//     t_bvhnode nodes[2 * prim_number - 1];
-//     int nodecount = 0;
-//
-//     // 4) create primpack
-//     t_primpack pack = {prims, indices, 0, prim_number};
-//
-//     // 5) build BVH
-//     int root = build_bvh(nodes, &nodecount, pack);
-//     if (root == -2)
-//     {
-//         printf("Malloc failed during BVH build!\n");
-//         return 1;
-//     }
-//
-//     // 6) print BVH
-//     printf("BVH built, root = %d, total nodes = %d\n", root, nodecount);
-// 	print_bvh_tree(nodes, root, 0);
-//     // 7) free primitive data
-//     free(tri);
-//     free(s);
-//     free(c);
-//     free(q);
-//     free(t);
-//
-//     return 0;
-// }
+int main()
+{
+    // 1) allocate primitives
+    t_primitive prims[prim_number];
+
+    // triangle
+    t_triangle *tri = malloc(sizeof(t_triangle));
+    tri->v0 = (t_vec3f){0,0,0};
+    tri->v1 = (t_vec3f){1,0,0};
+    tri->v2 = (t_vec3f){0,1,0};
+    prims[0].type = PRIM_TRIANGLE;
+    prims[0].data = tri;
+
+    // sphere
+    t_sphere *s = malloc(sizeof(t_sphere));
+    s->center = (t_vec3f){2,2,2};
+    s->radius = 0.5f;
+    prims[1].type = PRIM_SPHERE;
+    prims[1].data = s;
+
+    // cylinder
+    t_cylinder *c = malloc(sizeof(t_cylinder));
+    c->p0 = (t_vec3f){-1,-1,-1};
+    c->p1 = (t_vec3f){-1,1,-1};
+    c->radius = 0.2f;
+    prims[2].type = PRIM_CYLINDER;
+    prims[2].data = c;
+
+    // quad
+    t_quad *q = malloc(sizeof(t_quad));
+    q->v0 = (t_vec3f){0,0,1};
+    q->v1 = (t_vec3f){1,0,1};
+    q->v2 = (t_vec3f){1,1,1};
+    q->v3 = (t_vec3f){0,1,1};
+    prims[3].type = PRIM_QUAD;
+    prims[3].data = q;
+
+    // torus
+    t_torus *t = malloc(sizeof(t_torus));
+    t->center = (t_vec3f){3,0,0};
+    t->R = 1.0f;
+    t->r = 0.3f;
+    prims[4].type = PRIM_TORUS;
+    prims[4].data = t;
+
+    // 2) allocate index array
+    int indices[prim_number] = {0,1,2,3,4};
+
+    // 3) allocate BVH node array (max nodes = 2*N-1)
+    t_bvhnode nodes[2 * prim_number - 1];
+    int nodecount = 0;
+
+    // 4) create primpack
+    t_primpack pack = {prims, indices, 0, prim_number};
+
+    // 5) build BVH
+    int root = build_bvh(nodes, &nodecount, pack);
+    if (root == -2)
+    {
+        printf("Malloc failed during BVH build!\n");
+        return 1;
+    }
+
+    // 6) print BVH
+    printf("BVH built, root = %d, total nodes = %d\n", root, nodecount);
+	print_bvh_tree(nodes, root, 0);
+    // 7) free primitive data
+    free(tri);
+    free(s);
+    free(c);
+    free(q);
+    free(t);
+
+    return 0;
+}
