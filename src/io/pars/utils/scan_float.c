@@ -72,15 +72,6 @@ static int	scan_optional_dot_and_fraction(
 	return (digits);
 }
 
-/***
- * @brief Scan a floating-point number from a token span.
- * @param tok	The token span containing the float representation. (no_null)
- * @param out_value Pointer to store the parsed float value. (no_null)
- * @return SUCCESS on successful parse, or ERR_PARSE_FLOAT on failure.
- * @note The function handles optional leading '+' or '-' signs, integer
- * and fractional parts, and ensures the value is within a reasonable range.
- * It does not handle scientific notation (e.g., '1.23e4').
- */
 int	scan_float(t_tok tok, float *out_value)
 {
 	int		index_pos;

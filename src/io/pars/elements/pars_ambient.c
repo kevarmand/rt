@@ -1,0 +1,26 @@
+#include "io.h"
+#include "type.h"
+#include "error_codes.h"
+
+int	pars_ambient(t_pars_state *st, t_scene_parsed *scene)
+{
+	t_tok	token;
+	float	brightness;
+	int		rgb[3];
+
+	if (scene->presence_mask & PRESENCE_AMBIENT)
+		return (ERR_PARS_TYPE);
+	if (!pars_next_tok(st, &token)
+		|| scan_float(token, &brightness)
+		|| brightness < 0.0f || brightness > 1.0f)
+		return (ERR_PARS_TYPE);
+	if (!pars_next_tok(st, &token)
+		|| scan_color(token, rgb))
+		return (ERR_PARS_TYPE);
+	scene->globals.brightness = brightness;
+	scene->globals.color[0] = (float)rgb[0] / 255.0f;
+	scene->globals.color[1] = (float)rgb[1] / 255.0f;
+	scene->globals.color[2] = (float)rgb[2] / 255.0f;
+	scene->presence_mask |= PRESENCE_AMBIENT;
+	return (0);
+}

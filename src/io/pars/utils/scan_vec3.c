@@ -5,15 +5,12 @@
 #include <unistd.h>
 #include <stdio.h>
 
-
-/* Couleurs & messages (pas de macros ; tailles via sizeof-1). */
 static const char	g_col_orange[] = "\033[0;33m";
 static const char	g_col_reset[] = "\033[0m";
 static const char	g_warn_prefix[] = "Warning: ";
 static const char	g_msg_range[] = "Vector component out of range [-1,1].\n";
 static const char	g_msg_norm[] = "Normalizing non-unit vector.\n";
-static const char	g_msg_zerolen[] =
-	"Error: Zero-length vector cannot be normalized.\n";
+static const char	g_msg_zerolen[] = "Error: Zero-length vector cannot be normalized.\n";
 
 static void	put_warn_prefix(void)
 {
@@ -65,12 +62,11 @@ static int	normalise_vec(float vec[3])
 	return (SUCCESS);
 }
 
-/* utilise scan_point(t_tok,t[3]) ; warning hors [-1,1], erreur si norme nulle */
-int	scan_vec3(t_tok *tok, float vec[3])
+int	scan_vec3(t_tok tok, float vec[3])
 {
 	float	tmp[3];
 
-	if (scan_point(*tok, tmp))
+	if (scan_point(tok, tmp))
 		return (ERR_PARSE_FLOAT);
 	check_range(tmp);
 	if (normalise_vec(tmp))

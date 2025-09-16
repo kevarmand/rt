@@ -2,8 +2,6 @@
 #include "type.h"
 #include "error_codes.h"
 
-
-/* Lit un entier décimal 0..255, puis consomme une virgule si require_comma=1. */
 static int	scan_uint8_component(
 	t_tok tok, int *index_pos, int *value_out, int require_comma)
 {
@@ -33,13 +31,7 @@ static int	scan_uint8_component(
 	*value_out = value;
 	return (SUCCESS);
 }
-/**
- * @brief Parse a color from a token in the format "R,G,B".
- * @param tok      The input token containing the color. (no_null)
- * @param out_rgb  Output array to store the parsed RGB components. (no_null)
- * @return Returns 0 on success, or a non-zero error code on failure.
- * @note Each RGB component must be an integer in the range 0-255.
- */
+
 int	scan_color(t_tok tok, int out_rgb[3])
 {
 	int	index_pos;

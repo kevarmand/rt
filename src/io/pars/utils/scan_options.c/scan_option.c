@@ -20,14 +20,22 @@ static const t_opt_entry	g_opt_tab[] = {
 	{NULL, NULL}
 };
 
-/**
- * @brief Split a token of the form "key=value" into key and value tokens.
- * @param tok        The input token to split. (no_null)
- * @param key_out    Output token for the key part. (no_null)
- * @param value_out  Output token for the value part. (no_null)
- * @return 0 on success, or ERR_PARSE_FLOAT if the format is invalid.
- * @note Both output tokens point into the original token's string.
- */
+static int	split_key_value(t_tok tok, t_tok *key_tok, t_tok *val_tok)
+{
+	int	index;
+
+	index = 0;
+	while (index < tok.len && tok.start[index] != '=')
+		index++;
+	if (index == 0 || index >= tok.len - 1)
+		return (ERR_PARSE_FLOAT);
+	key_tok->start = tok.start;
+	key_tok->len = index;
+	val_tok->start = tok.start + index + 1;
+	val_tok->len = tok.len - index - 1;
+	return (SUCCESS);
+}
+
 int	scan_option(t_tok tok, t_element_options *opts)
 {
 	t_tok	key_tok;
