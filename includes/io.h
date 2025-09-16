@@ -1,15 +1,23 @@
+#ifndef IO_H
+# define IO_H
+
 # include <stdio.h>
 # include <stdlib.h>
 # include <fcntl.h>
 # include <unistd.h>
 # include <string.h>
 # include "type.h"
+# include "libft.h"
 
-#ifndef IO_H
-# define IO_H
 
 # define BUFFER_SIZE 1024
-#include "libft.h"
+
+typedef enum e_elem_role
+{
+	ELEM_ROLE_NORMAL,
+	ELEM_ROLE_PRIMARY,
+	ELEM_ROLE_EXTRA
+}	t_elem_role;
 
 typedef struct s_pars_state {
 	int			line_no;
@@ -34,12 +42,20 @@ typedef enum e_pmask
 	PRESENCE_LIGHT = 1u << 4
 }	t_pmask;
 
+typedef struct s_param
+{
+	int		res_width;
+	int		res_height;
+	float	brightness;
+	float	color[3];
+}	t_param;
+
 typedef struct s_scene_parsed
 {
 	t_list	*objects;
 	t_list	*cameras;
 	t_list	*lights;
-	t_para	globals;
+	t_param	globals;
 	t_pmask	presence_mask;
 }	t_scene_parsed;
 
@@ -60,6 +76,7 @@ typedef enum e_element_type {
 	ELEM_SPHERE,
 	ELEM_PLANE,
 	ELEM_CYLINDER,
+	ELEM_TRIANGLE,
 	ELEM_CAMERA,
 	ELEM_LIGHT,
 	ELEM_AMBIENT
@@ -96,7 +113,7 @@ typedef struct s_parsed_triangle
 	int				rgb[3];
 }	t_parsed_triangle;
 
-typedef struct s_pars_camera
+typedef struct s_parsed_camera
 {
 	float			position[3];
 	float			orientation[3];
@@ -206,8 +223,45 @@ int	scan_float(t_tok tok, float *out_value);
  */
 int	scan_color(t_tok tok, int out_rgb[3]);
 
+/***
+ * Scan a 3D vector from the token stream.
+ * @param tok  Input token containing the vector in "X,Y,Z" format. (no_null)
+ * @param vec  Output array to store the parsed vector components. (no_null)
+ * @return Returns 0 on success, or a non-zero error code on failure.
+ * @note The function parses the vector components, checks if they are within
+ * the range [-1, 1], and normalizes the vector to unit length if necessary.
+ */
+int	scan_vec3(t_tok tok, float vec[3]);
+
+/***
+ * @brief Scan a 3D point from a token span.
+ * @param tok The token span containing the point representation. (no_null)
+ * @param out_vec Pointer to store the parsed 3D point (array of 3 floats).
+ *  (no_null)
+ * @return SUCCESS on successful parse, or ERR_PARSE_FLOAT on failure.
+ * @note The function expects the point to be in the format "x,y,z"
+ * where x, y, and z are floating-point numbers. 
+ * It does not handle spaces or other delimiters.
+ */
+int	scan_point(t_tok tok, float out_vec[3]);
+
+/* ************************************************************************** */
+/*                        UTILS - OPTIONS PARSING                             */
+/* ************************************************************************** */
+
+/***
+ * Parse options for an element from the token stream.
+ * @param st      The current parsing state. (no_null)
+ * @param options Pointer to the element options structure to populate. (no_null)
+ * @return Returns 0 on success, or a non-zero error code on failure.
+ * @note The function reads tokens until no more valid options are found.
+ * Each option is expected to be in the format "key=value".
+ */
+int	pars_options(t_pars_state *st, t_element_options *options);
+
 /**
  * @brief Split a token of the form "key=value" into key and value tokens.
+ * And dispatch to the appropriate option handler.
  * @param tok        The input token to split. (no_null)
  * @param key_out    Output token for the key part. (no_null)
  * @param value_out  Output token for the value part. (no_null)
@@ -223,6 +277,54 @@ int	scan_opt_shininess(t_tok tok, t_element_options *opts);
 int	scan_opt_diffuse(t_tok tok, t_element_options *opts);
 int	scan_opt_specular(t_tok tok, t_element_options *opts);
 int	scan_opt_ambient(t_tok tok, t_element_options *opts);
+
+
+/* ************************************************************************** */
+/*                             PARSING - OBJECT                               */
+/* ************************************************************************** */
+
+/**
+ * @brief Dispatch the parsing of a token to the appropriate handler function.
+ * @param tag The token representing the element type to parse. (no_null)
+ * @param st  The current parsing state. (no_null)
+ * @param scene The scene structure to populate with parsed data. (no_null)
+ * @return Returns 0 on success, or a non-zero error code on failure.
+ * @note If the token does not match any known element type,
+ * an error code is returned.
+ */
+int	pars_dispatch_tok(t_tok tag, t_pars_state *st, t_scene_parsed *scene);
+
+//For each object type :
+// -take the mandatory parameters from the token stream
+// -call pars_options() to take optional parameters
+
+int	pars_sphere(t_pars_state *st, t_scene_parsed *scene);
+int	pars_plane(t_pars_state *st, t_scene_parsed *scene);
+int	pars_cylinder(t_pars_state *st, t_scene_parsed *scene);
+int	pars_triangle(t_pars_state *st, t_scene_parsed *scene);
+int	pars_camera(t_pars_state *st, t_scene_parsed *scene,
+			t_elem_role role);
+int	pars_light(t_pars_state *st, t_scene_parsed *scene,
+			t_elem_role role);
+int	pars_ambient(t_pars_state *st, t_scene_parsed *scene);
+int	pars_resolution(t_pars_state *st, t_scene_parsed *scene);
+
+/* ************************************************************************** */
+/*                        SCENE BUILDER - OBJECTS                             */
+/* ************************************************************************** */
+
+/***
+ * @brief Register a parsed element into the scene structure.
+ * @param scene The scene structure to populate. (no_null)
+ * @param elem  The parsed element to register. (no_null)
+ * @param role  The role of the element (normal, primary, extra).
+ * @return Returns 0 on success, or a non-zero error code on failure.
+ * @note The function adds the element to the appropriate list in the scene
+ * based on its type and role. It handles memory allocation and ensures
+ * that required elements are present.
+ */
+int	pars_register_element(t_scene_parsed *scene,
+			t_parsed_element *elem, t_elem_role role);
 
 
 #endif

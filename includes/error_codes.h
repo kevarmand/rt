@@ -10,6 +10,7 @@
 # define ERR_OPEN			-4
 # define ERR_MIN			-5
 # define ERR_MALLOC			-100
+# define ERR_ALLOC			-100
 
 # define ERR_MLX			-6
 # define ERR_BMP			-7

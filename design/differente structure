@@ -10,7 +10,7 @@ typedef struct s_fresnel {
 }	t_fresnel;
 
 typedef struct s_brdf {
-	double	ka;         /* ambiant */
+	double	ka;         /* ambient */
 	double	kd;         /* diffus (Lambert) */
 	double	ks;         /* spéculaire (Blinn/Phong) */
 	double	spec_exp;   /* “shininess”, exposant de Phong/Blinn-Phong */

@@ -12,6 +12,8 @@
 		"string.h": "c",
 		"error_codes.h": "c",
 		"fcntl.h": "c",
-		"cmath": "cpp"
+		"cmath": "cpp",
+		"push": "c",
+		"random": "c"
 	}
 }
