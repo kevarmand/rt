@@ -45,12 +45,12 @@ static int	normalise_vec(float vec[3])
 	float	inv_len;
 
 	len2 = vec[0] * vec[0] + vec[1] * vec[1] + vec[2] * vec[2];
-	if (len2 < 1e-20f)
+	if (len2 < __FLT_EPSILON__)
 	{
 		write(2, g_msg_zerolen, sizeof(g_msg_zerolen) - 1);
 		return (ERR_PARSE_FLOAT);
 	}
-	if (fabsf(len2 - 1.0f) >= 1e-6f)
+	if (fabsf(len2 - 1.0f) >= __FLT_EPSILON__)
 	{
 		put_warn_prefix();
 		write(2, g_msg_norm, sizeof(g_msg_norm) - 1);

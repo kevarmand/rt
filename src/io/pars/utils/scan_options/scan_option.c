@@ -28,7 +28,7 @@ static int	split_key_value(t_tok tok, t_tok *key_tok, t_tok *val_tok)
 	while (index < tok.len && tok.start[index] != '=')
 		index++;
 	if (index == 0 || index >= tok.len - 1)
-		return (ERR_PARSE_FLOAT);
+		return (ERR_PARS);
 	key_tok->start = tok.start;
 	key_tok->len = index;
 	val_tok->start = tok.start + index + 1;
@@ -43,7 +43,7 @@ int	scan_option(t_tok tok, t_element_options *opts)
 	int		table_index;
 
 	if (split_key_value(tok, &key_tok, &val_tok))
-		return (ERR_PARSE_FLOAT);
+		return (ERR_PARS);
 	table_index = 0;
 	while (g_opt_tab[table_index].key)
 	{
@@ -51,5 +51,5 @@ int	scan_option(t_tok tok, t_element_options *opts)
 			return (g_opt_tab[table_index].fn(val_tok, opts));
 		table_index++;
 	}
-	return (ERR_PARS_TYPE);
+	return (ERR_PARS);
 }

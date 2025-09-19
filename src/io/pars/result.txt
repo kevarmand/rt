@@ -1,0 +1,1323 @@
+#include "io.h"
+#include "type.h"
+#include "error_codes.h"
+
+int	pars_ambient(t_pars_state *st, t_scene_parsed *scene)
+{
+	t_tok	token;
+	float	brightness;
+	int		rgb[3];
+
+	if (scene->presence_mask & PRESENCE_AMBIENT)
+		return (ERR_PARS_AMBIANT);
+	if (!pars_next_tok(st, &token)
+		|| scan_float(token, &brightness)
+		|| brightness < 0.0f || brightness > 1.0f)
+		return (ERR_PARS_AMBIANT);
+	if (!pars_next_tok(st, &token)
+		|| scan_color(token, rgb))
+		return (ERR_PARS);
+	scene->globals.brightness = brightness;
+	scene->globals.color[0] = (float)rgb[0] / 255.0f;
+	scene->globals.color[1] = (float)rgb[1] / 255.0f;
+	scene->globals.color[2] = (float)rgb[2] / 255.0f;
+	scene->presence_mask |= PRESENCE_AMBIENT;
+	return (SUCCESS);
+}
+#include "io.h"
+#include "type.h"
+#include "error_codes.h"
+
+int	pars_camera(t_pars_state *st, t_scene_parsed *scene, t_elem_role role)
+{
+	t_parsed_element	parsed_element;
+	t_tok				token;
+	float				fov_as_float;
+	int					status;
+
+	ft_bzero(&parsed_element, sizeof(parsed_element));
+	parsed_element.type = ELEM_CAMERA;
+	if (!pars_next_tok(st, &token) || scan_point(token,
+		parsed_element.data.camera.position))
+		return (ERR_PARS);
+	if (!pars_next_tok(st, &token) || scan_vec3(token,
+		parsed_element.data.camera.orientation))
+		return (ERR_PARS);
+	if (!pars_next_tok(st, &token) || scan_float(token,
+		&fov_as_float))
+		return (ERR_PARS);
+	parsed_element.data.camera.fov = (int)fov_as_float;
+	if (parsed_element.data.camera.fov < 1
+		|| parsed_element.data.camera.fov > 179)
+		return (ERR_PARS);
+	status = pars_options(st, &parsed_element.options);
+	if (status != 0)
+		return (ERR_PARS);
+	return (pars_register_element(scene, &parsed_element, role));
+}
+#include "io.h"
+#include "type.h"
+#include "error_codes.h"
+
+int	pars_plane(t_pars_state *st, t_scene_parsed *scene)
+{
+	t_parsed_element	parsed_element;
+	t_tok				token;
+	int					status;
+
+	ft_bzero(&parsed_element, sizeof(parsed_element));
+	parsed_element.type = ELEM_PLANE;
+	if (!pars_next_tok(st, &token) || scan_point(token,
+		parsed_element.data.plane.origin))
+		return (ERR_PARS);
+	if (!pars_next_tok(st, &token) || scan_vec3(token,
+		parsed_element.data.plane.normal))
+		return (ERR_PARS);
+	if (!pars_next_tok(st, &token) || scan_color(token,
+		parsed_element.data.plane.rgb))
+		return (ERR_PARS);
+	status = pars_options(st, &parsed_element.options);
+	if (status != 0)
+		return (ERR_PARS);
+	return (pars_register_element(scene, &parsed_element, ELEM_ROLE_NORMAL));
+}
+
+#include "io.h"
+#include "type.h"
+#include "error_codes.h"
+
+int	pars_light(t_pars_state *st, t_scene_parsed *scene, t_elem_role role)
+{
+	t_parsed_element	parsed_element;
+	t_tok				token;
+	int					status;
+
+	ft_bzero(&parsed_element, sizeof(parsed_element));
+	parsed_element.type = ELEM_LIGHT;
+	if (!pars_next_tok(st, &token) || scan_point(token,
+		parsed_element.data.light.position))
+		return (ERR_PARS_TYPE);
+	if (!pars_next_tok(st, &token) || scan_float(token,
+		&parsed_element.data.light.brightness))
+		return (ERR_PARS_TYPE);
+	if (parsed_element.data.light.brightness < 0.0f
+		|| parsed_element.data.light.brightness > 1.0f)
+		return (ERR_PARS_TYPE);
+	if (!pars_next_tok(st, &token) || scan_color(token,
+		parsed_element.data.light.rgb))
+		return (ERR_PARS_TYPE);
+	status = pars_options(st, &parsed_element.options);
+	if (status != 0)
+		return (ERR_PARS_TYPE);
+	return (pars_register_element(scene, &parsed_element, role));
+}
+#include "io.h"
+#include "type.h"
+#include "error_codes.h"
+
+int	pars_plane(t_pars_state *st, t_scene_parsed *scene)
+{
+	t_parsed_element	parsed;
+	t_tok				token;
+	int					status;
+
+	ft_bzero(&parsed, sizeof(parsed));
+	parsed.type = ELEM_PLANE;
+	if (!pars_next_tok(st, &token) || scan_point(token, parsed.data.plane.origin))
+		return (ERR_PARS_TYPE);
+	if (!pars_next_tok(st, &token) || scan_vec3(token, parsed.data.plane.normal))
+		return (ERR_PARS_TYPE);
+	if (!pars_next_tok(st, &token) || scan_color(token, parsed.data.plane.rgb))
+		return (ERR_PARS_TYPE);
+	status = pars_options(st, &parsed.options);
+	if (status != SUCCESS)
+		return (ERR_PARS_TYPE);
+	status = pars_register_element(&scene->objects, &parsed, ELEM_ROLE_NORMAL);
+	return (status);
+}
+#include "io.h"
+#include "type.h"
+#include "error_codes.h"
+
+int	pars_resolution(t_pars_state *st, t_scene_parsed *scene)
+{
+	t_tok	token;
+	int		width;
+	int		height;
+
+	if (scene->presence_mask & PRESENCE_RESOLUTION)
+		return (ERR_PARS_TYPE);
+	if (!pars_next_tok(st, &token)
+		|| scan_int(token, &width) || width <= 0)
+		return (ERR_PARS_TYPE);
+	if (!pars_next_tok(st, &token)
+		|| scan_int(token, &height) || height <= 0)
+		return (ERR_PARS_TYPE);
+	scene->globals.res_width = width;
+	scene->globals.res_height = height;
+	scene->presence_mask |= PRESENCE_RESOLUTION;
+	return (0);
+}
+#include "io.h"
+#include "type.h"
+#include "error_codes.h"
+
+
+int	pars_sphere(t_pars_state *st, t_scene_parsed *scene)
+{
+	t_parsed_element	parsed_element;
+	t_tok				token;
+	int					status;
+
+	ft_bzero(&parsed_element, sizeof(parsed_element));
+	parsed_element.type = ELEM_SPHERE;
+	if (!pars_next_tok(st, &token) || scan_point(token,
+		parsed_element.data.sphere.center))
+		return (ERR_PARS_TYPE);
+	if (!pars_next_tok(st, &token) || scan_float(token,
+		&parsed_element.data.sphere.diameter))
+		return (ERR_PARS_TYPE);
+	if (parsed_element.data.sphere.diameter <= 0.0f)
+		return (ERR_PARS_TYPE);
+	if (!pars_next_tok(st, &token) || scan_color(token,
+		parsed_element.data.sphere.rgb))
+		return (ERR_PARS_TYPE);
+	status = pars_options(st, &parsed_element.options);
+	if (status != 0)
+		return (ERR_PARS_TYPE);
+	status = pars_register_element(scene, &parsed_element, ELEM_ROLE_NORMAL);
+	return (status);
+}
+#include "io.h"
+#include "type.h"
+#include "error_codes.h"
+
+int	pars_triangle(t_pars_state *st, t_scene_parsed *scene)
+{
+	t_parsed_element	parsed_element;
+	t_tok				token;
+	int					status;
+
+	ft_bzero(&parsed_element, sizeof(parsed_element));
+	parsed_element.type = ELEM_TRIANGLE;
+	if (!pars_next_tok(st, &token) || scan_point(token,
+		parsed_element.data.triangle.vertex1))
+		return (ERR_PARS_TYPE);
+	if (!pars_next_tok(st, &token) || scan_point(token,
+		parsed_element.data.triangle.vertex2))
+		return (ERR_PARS_TYPE);
+	if (!pars_next_tok(st, &token) || scan_point(token,
+		parsed_element.data.triangle.vertex3))
+		return (ERR_PARS_TYPE);
+	if (!pars_next_tok(st, &token) || scan_color(token,
+		parsed_element.data.triangle.rgb))
+		return (ERR_PARS_TYPE);
+	status = pars_options(st, &parsed_element.options);
+	if (status != 0)
+		return (ERR_PARS_TYPE);
+	return (pars_register_element(scene, &parsed_element, ELEM_ROLE_NORMAL));
+}/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/02/28 16:16:15 by karmand           #+#    #+#             */
+/*   Updated: 2025/08/04 13:32:57 by kearmand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "rt.h"
+
+int		parser_check(char **arr, t_data *data)
+{
+	if (arr[0] == 0 || arr[0][0] == '#')
+		return (SUCCESS);
+	if (!ft_strcmp("A", arr[0]))
+		return (pars_a(arr, data));
+	if (!ft_strcmp("R", arr[0]))
+		return (pars_res(arr, data));
+	if (!ft_strcmp("l", arr[0]))
+		return (pars_light(arr, data));
+	if (!ft_strcmp("c", arr[0]))
+		return (pars_cam(arr, data));
+	if (!ft_strcmp("pl", arr[0]))
+		return (pars_pl(arr, data));
+	if (!ft_strcmp("sp", arr[0]))
+		return (pars_sp(arr, data));
+	if (!ft_strcmp("cy", arr[0]))
+		return (pars_cy(arr, data));
+	if (!ft_strcmp("tr", arr[0]))
+		return (pars_tr(arr, data));
+	if (!ft_strcmp("sq", arr[0]))
+		return (pars_sq(arr, data));
+	return (ERR_PARS_TYPE);
+}
+
+int		parsing(int fd, t_data *data)
+{
+	char	*line;
+	char	**arr;
+	int		ret;
+	int		n;
+	int		err;
+
+	n = 0;
+	ret = 1;
+	while (ret == 1)
+	{
+		ret = get_next_line(fd, &line);
+		if (ret == -1)
+			return (1 + error(ERR_MALLOC));
+		arr = ft_split(line, " \t");
+		if (arr == 0)
+			return (ERR_MALLOC + ft_free(line));
+		if ((err = parser_check(arr, data)))
+			return (10 + err2(err, line, n) + ft_free(line) + free_split(arr));
+		free(line);
+		free_split(arr);
+		n++;
+	}
+	return (SUCCESS);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_obj.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: karmand <karmand@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/02/19 16:52:13 by karmand           #+#    #+#             */
+/*   Updated: 2020/03/05 22:59:03 by karmand          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "rt.h"
+
+int		pars_a(char **arr, t_data *data)
+{
+	double	b;
+
+	if ((data->test)[2] != 0)
+		return (ERR_A_REDEF);
+	(data->test)[2] = 1;
+	if (split_count(arr) < 3)
+		return (ERR_A);
+	if (get_double(arr[1], &b) || b < 0 || b > 1)
+		return (ERR_A);
+	data->para.brightness = b;
+	if (pars_color(arr[2], &(data->para.color)))
+		return (ERR_A);
+	return (SUCCESS);
+}
+
+int		pars_res(char **arr, t_data *data)
+{
+	int		n;
+
+	if ((data->test)[1] != 0)
+		return (ERR_R_REDEF);
+	(data->test)[1] = 1;
+	if (split_count(arr) < 3)
+		return (ERR_R);
+	if (get_int(arr[1], &n) || n < 0)
+		return (ERR_R);
+	data->para.res_width = n;
+	if (get_int(arr[2], &n) || n < 0)
+		return (ERR_R);
+	data->para.res_height = n;
+	return (SUCCESS);
+}
+
+int		pars_cam(char **arr, t_data *data)
+{
+	t_cam	*cam;
+
+	if (split_count(arr) < 4)
+		return (ERR_C);
+	if (!(cam = malloc(sizeof(t_cam))))
+		return (error(ERR_MALLOC));
+	if (list_addfront(&(data->lcam), (void *)cam, CAM))
+		return (error(ERR_MALLOC));
+	if (pars_point(arr[1], &(cam->point)))
+		return (ERR_C);
+	if (pars_vector(arr[2], &(cam->dir)))
+		return (ERR_C);
+	if (get_double(arr[3], &(cam->fov)))
+		return (ERR_C);
+	if (cam->fov >= 180 || cam->fov <= 0)
+		return (ERR_C);
+	(cam->fov) *= 0.01745329251;
+	return (init_cam(cam, data));
+}
+
+int		pars_light(char **arr, t_data *data)
+{
+	t_light	*light;
+	double	d;
+
+	if (split_count(arr) < 4)
+		return (ERR_L);
+	if (!(light = malloc(sizeof(t_light))))
+		return (error(ERR_MALLOC));
+	if (list_addfront(&(data->llight), (void *)light, LIGHT))
+		return (error(ERR_MALLOC));
+	if (pars_point(arr[1], &(light->point)))
+		return (ERR_L);
+	if (get_double(arr[2], &d) || d > 1 || d < 0)
+		return (ERR_L);
+	light->brightness = d;
+	if (pars_color(arr[3], &(light->color)))
+		return (ERR_L);
+	return (init_light(light));
+}
+
+int		pars_sp(char **arr, t_data *data)
+{
+	t_sp	*sp;
+
+	if (split_count(arr) < 4)
+		return (ERR_SP);
+	if (!(sp = malloc(sizeof(t_sp))))
+		return (error(ERR_MALLOC));
+	if (list_addfront(&(data->lobj), (void *)sp, SPHERE))
+		return (error(ERR_MALLOC));
+	if (pars_point(arr[1], &(sp->centre)))
+		return (ERR_SP);
+	if (get_double(arr[2], &(sp->rayon)) || sp->rayon <= 0)
+		return (ERR_SP);
+	(sp->rayon) /= 2;
+	if (pars_color(arr[3], &(sp->color)))
+		return (ERR_SP);
+	return (init_sp(sp));
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_obj2.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: karmand <karmand@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/02/19 16:52:13 by karmand           #+#    #+#             */
+/*   Updated: 2020/03/05 22:59:03 by karmand          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "rt.h"
+
+int		pars_pl(char **arr, t_data *data)
+{
+	t_pl	*pl;
+
+	if (split_count(arr) < 4)
+		return (ERR_PL);
+	if (!(pl = malloc(sizeof(t_pl))))
+		return (error(ERR_MALLOC));
+	if ((list_addfront(&(data->lobj), (void *)pl, PLANE)))
+		return (error(ERR_MALLOC));
+	if (pars_point(arr[1], &(pl->point)))
+		return (ERR_PL);
+	if (pars_vector(arr[2], &(pl->norm)))
+		return (ERR_PL);
+	if (pars_color(arr[3], &(pl->color)))
+		return (ERR_PL);
+	return (init_pl(pl));
+}
+
+int		pars_tr(char **arr, t_data *data)
+{
+	t_tr	*tr;
+
+	if (split_count(arr) < 5)
+		return (ERR_TR);
+	if (!(tr = malloc(sizeof(t_tr))))
+		return (error(ERR_MALLOC));
+	if ((list_addfront(&(data->lobj), (void *)tr, TRIANGLE)))
+		return (error(ERR_MALLOC));
+	if (pars_point(arr[1], &(tr->p1)))
+		return (ERR_TR);
+	if (pars_point(arr[2], &(tr->p2)))
+		return (ERR_TR);
+	if (pars_point(arr[3], &(tr->p3)))
+		return (ERR_TR);
+	if (pars_color(arr[4], &(tr->color)))
+		return (ERR_TR);
+	return (init_tr(tr));
+}
+
+int		pars_cy(char **arr, t_data *data)
+{
+	t_cy	*cy;
+
+	if (split_count(arr) < 6)
+		return (ERR_CY);
+	if (!(cy = malloc(sizeof(t_cy))))
+		return (error(ERR_MALLOC));
+	if ((list_addfront(&(data->lobj), (void *)cy, CYLINDER)))
+		return (error(ERR_MALLOC));
+	if (pars_point(arr[1], &(cy->point)))
+		return (ERR_CY);
+	if (pars_vector(arr[2], &(cy->dir)))
+		return (ERR_CY);
+	if (get_double(arr[3], &(cy->rayon)) || (cy->rayon) <= 0)
+		return (ERR_CY);
+	(cy->rayon) /= 2;
+	if (get_double(arr[4], &(cy->height)) || (cy->height) <= 0)
+		return (ERR_CY);
+	if (pars_color(arr[5], &(cy->color)))
+		return (ERR_CY);
+	return (init_cy(cy));
+}
+
+int		pars_sq(char **arr, t_data *data)
+{
+	t_sq	*sq;
+
+	if (split_count(arr) < 5)
+		return (ERR_CY);
+	if (!(sq = malloc(sizeof(t_sq))))
+		return (error(ERR_MALLOC));
+	if ((list_addfront(&(data->lobj), (void *)sq, SQUARE)))
+		return (error(ERR_MALLOC));
+	if (pars_point(arr[1], &(sq->point)))
+		return (ERR_SQ);
+	if (pars_vector(arr[2], &(sq->norm)))
+		return (ERR_SQ);
+	if (get_double(arr[3], &(sq->height)) || (sq->height) <= 0)
+		return (ERR_SQ);
+	if (pars_color(arr[4], &(sq->color)))
+		return (ERR_SQ);
+	return (init_sq(sq));
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_utils.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: karmand <karmand@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/02/28 16:16:15 by karmand           #+#    #+#             */
+/*   Updated: 2020/03/05 17:09:10 by karmand          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "rt.h"
+
+int		get_int(char *str, int *n)
+{
+	int		i;
+	int		sign;
+
+	sign = 1;
+	i = 0;
+	(*n) = 0;
+	if ((*str) && *str == '-')
+	{
+		sign = -1;
+		str++;
+	}
+	while (*str && ft_isdigit(*str) && ++i < 8)
+	{
+		(*n) = (*n) * 10 + (*str) - '0';
+		str++;
+	}
+	if (*str != 0)
+		return (ERROR);
+	(*n) = sign * (*n);
+	return (SUCCESS);
+}
+
+int		get_double(char *str, double *d)
+{
+	int		sign;
+	int		n;
+	char	**deci;
+
+	if (!(deci = ft_split(str, ".")))
+		return (error(ERR_MALLOC));
+	n = split_count(deci);
+	if (n > 2 || n == 0)
+		return (free_split(deci) - 1);
+	if (get_int(deci[0], &n))
+		return (free_split(deci) - 1);
+	sign = 1;
+	if (deci[0][0] == '-')
+		sign = -1;
+	(*d) = (double)n;
+	if (deci[1] == 0)
+		return (free_split(deci));
+	if (get_int(deci[1], &n))
+		return (free_split(deci) - 1);
+	(*d) += ((double)sign * (double)n / (double)m_pow(10, ft_strlen(deci[1])));
+	return (free_split(deci));
+}
+
+int		pars_color(char *str, t_color *color)
+{
+	char	**co;
+	int		n;
+
+	if (!(co = ft_split(str, ",")))
+		return (error(ERR_MALLOC));
+	if (split_count(co) != 3)
+		return (free_split(co) + ERROR);
+	if (get_int(co[0], &n) || n < 0 || n > 255)
+		return (free_split(co) + ERROR);
+	color->r = n;
+	if (get_int(co[1], &n) || n < 0 || n > 255)
+		return (free_split(co) + ERROR);
+	color->g = n;
+	if (get_int(co[2], &n) || n < 0 || n > 255)
+		return (free_split(co) + ERROR);
+	color->b = n;
+	return (free_split(co));
+}
+
+int		pars_point(char *str, t_point *p)
+{
+	char	**po;
+	double	d;
+
+	if (!(po = ft_split(str, ",")))
+		return (error(ERR_MALLOC));
+	if (split_count(po) != 3)
+		return (free_split(po) + ERROR);
+	if (get_double(po[0], &d))
+		return (free_split(po) + ERROR);
+	p->x = d;
+	if (get_double(po[1], &d))
+		return (free_split(po) + ERROR);
+	p->y = d;
+	if (get_double(po[2], &d))
+		return (free_split(po) + ERROR);
+	p->z = d;
+	return (free_split(po));
+}
+
+int		pars_vector(char *str, t_vector *v)
+{
+	char	**ve;
+	double	d;
+
+	if (!(ve = ft_split(str, ",")))
+		return (error(ERR_MALLOC));
+	if (split_count(ve) != 3)
+		return (free_split(ve) + ERROR);
+	if (get_double(ve[0], &d) || d > 1 || d < -1)
+		return (free_split(ve) + ERROR);
+	v->x = d;
+	if (get_double(ve[1], &d) || d > 1 || d < -1)
+		return (free_split(ve) + ERROR);
+	v->y = d;
+	if (get_double(ve[2], &d) || d > 1 || d < -1)
+		return (free_split(ve) + ERROR);
+	v->z = d;
+	free_split(ve);
+	if (v->x == 0 && v->y == 0 && v->z == 0)
+		return (ERROR);
+	return (SUCCESS);
+}
+#include "io.h"
+
+void	pars_ctx_init(t_pars_state *st)
+{
+	st->line_no = 0;
+	st->depth = 0;
+}
+#include "io.h"
+#include "error_codes.h"
+
+typedef int	(*t_pars_handler)(t_pars_state *st, t_scene_parsed *scene);
+
+static int	handle_camera_primary(t_pars_state *st, t_scene_parsed *scene)
+{
+	return (pars_camera(st, scene, ELEM_ROLE_PRIMARY));
+}
+
+static int	handle_camera_extra(t_pars_state *st, t_scene_parsed *scene)
+{
+	return (pars_camera(st, scene, ELEM_ROLE_EXTRA));
+}
+
+static int	handle_light_primary(t_pars_state *st, t_scene_parsed *scene)
+{
+	return (pars_light(st, scene, ELEM_ROLE_PRIMARY));
+}
+
+static int	handle_light_extra(t_pars_state *st, t_scene_parsed *scene)
+{
+	return (pars_light(st, scene, ELEM_ROLE_EXTRA));
+}
+
+typedef struct s_pars_entry {
+	const char		*tag;
+	t_pars_handler	fn;
+}	t_pars_entry;
+
+static const t_pars_entry g_pars_tab[] = {
+	{"A", pars_ambient},
+	{"R", pars_resolution},
+	{"C", handle_camera_primary},
+	{"c", handle_camera_extra},
+	{"L", handle_light_primary},
+	{"l", handle_light_extra},
+	{"sp", pars_sphere},
+	{"tr", pars_triangle},
+	{"pl", pars_plane},
+	{"cy", pars_cylinder},
+	{NULL, NULL}
+};
+
+int	pars_dispatch_tok(t_tok tag, t_pars_state *st, t_scene_parsed *scene)
+{
+	int i;
+
+	i = 0;
+	while (g_pars_tab[i].tag)
+	{
+		if (pars_tok_eq(tag, g_pars_tab[i].tag))
+			return (g_pars_tab[i].fn(st, scene));
+		i++;
+	}
+	return (ERR_PARS);
+}
+# include "io.h"
+# include "error_codes.h"
+
+
+int	pars_init_scene(t_scene_parsed *scene)
+{
+	scene->cameras = NULL;
+	scene->lights = NULL;
+	scene->objects = NULL;
+	scene->globals.res_height = 600;
+	scene->globals.res_width = 800;
+	scene->globals.brightness = 0.1;
+	scene->globals.color[0] = 0.0f;
+	scene->globals.color[1] = 0.0f;
+	scene->globals.color[2] = 0.0f;
+	
+	scene->presence_mask = 0;
+	return (SUCCESS);
+}
+#include "io.h"
+#include "type.h"
+#include "error_codes.h"
+
+int	pars_line(const char *line, t_scene_parsed *scene, t_pars_state *st)
+{
+	t_tok	tag;
+
+	st->line = line;
+	st->pos = 0;
+	if (!pars_next_tok(st, &tag))
+		return (SUCCESS);
+	return (pars_dispatch_tok(tag, st, scene));
+}#include "io.h"
+
+int	pars_next_tok(t_pars_state *st, t_tok *out)
+{
+	int	i;
+
+	i = st->pos;
+	while (st->line[i] == ' ' || st->line[i] == '\t')
+		i++;
+	if (st->line[i] == '\0' || st->line[i] == '\n'
+		|| st->line[i] == '\r' || st->line[i] == '#')
+	{
+		st->pos = i;
+		return (0);
+	}
+	out->start = st->line + i;
+	while (st->line[i] && st->line[i] != ' ' && st->line[i] != '\t'
+		&& st->line[i] != '\n' && st->line[i] != '\r')
+		i++;
+	out->len = i - (int)(out->start - st->line);
+	st->pos = i;
+	return (1);
+}
+
+int	pars_tok_eq(t_tok t, const char *lit)
+{
+	int i;
+
+	i = 0;
+	while (i < t.len && lit[i] && t.start[i] == lit[i])
+		i++;
+	return (i == t.len && lit[i] == '\0');
+}
+#include "io.h"
+#include "error_codes.h"
+#include "type.h"
+
+
+static int	push_copy_to_list(t_list **list_head, const t_parsed_element *element)
+{
+	t_parsed_element	*heap_copy;
+	t_list				*new_node;
+
+	heap_copy = (t_parsed_element *)malloc(sizeof(*heap_copy));
+	if (heap_copy == NULL)
+		return (ERR_ALLOC);
+	*heap_copy = *element;
+	new_node = ft_lstnew(heap_copy);
+	if (new_node == NULL)
+	{
+		free(heap_copy);
+		return (ERR_ALLOC);
+	}
+	ft_lstadd_back(list_head, new_node);
+	return (SUCCESS);
+}
+
+static int	is_object_type(t_element_type type)
+{
+	return (type == ELEM_SPHERE
+		|| type == ELEM_PLANE
+		|| type == ELEM_CYLINDER
+		|| type == ELEM_TRIANGLE);
+}
+
+int	pars_register_element(t_scene_parsed *scene,
+			const t_parsed_element *element,
+			t_elem_role role)
+{
+	if (is_object_type(element->type))
+	{
+		scene->presence_mask |= PRESENCE_OBJECT;
+		return (push_copy_to_list(&scene->objects, element));
+	}
+	if (element->type == ELEM_CAMERA)
+	{
+		if (role == ELEM_ROLE_PRIMARY
+			&& (scene->presence_mask & PRESENCE_CAM))
+			return (ERR_PARS);
+		if (role == ELEM_ROLE_PRIMARY)
+			scene->presence_mask |= PRESENCE_CAM;
+		return (push_copy_to_list(&scene->cameras, element));
+	}
+	if (element->type == ELEM_LIGHT)
+	{
+		if (role == ELEM_ROLE_PRIMARY
+			&& (scene->presence_mask & PRESENCE_LIGHT))
+			return (ERR_PARS);
+		if (role == ELEM_ROLE_PRIMARY)
+			scene->presence_mask |= PRESENCE_LIGHT;
+		return (push_copy_to_list(&scene->lights, element));
+	}
+	return (ERR_PARS);
+}
+#include "io.h"
+#include "type.h"
+#include "libft.h"
+#include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include "error_codes.h"
+
+
+int	pars_scene(const char *filename, t_scene *scene)
+{
+	int				fd;
+	int				err;
+	t_scene_parsed	*scene_parsed;
+
+	fd = open(filename, O_RDONLY);
+	if (fd == -1)
+		return (ERR_OPEN);
+	pars_init_scene(scene_parsed);
+	err = pars_scene_fd(fd, scene_parsed);
+	close(fd);
+	if (err == SUCCESS)
+		err = pars_check_scene(scene_parsed);
+	if (err == SUCCESS)
+		err = pars_convert_scene(scene_parsed, scene);
+	pars_cleanup_scene(scene_parsed);
+	return (err);
+}
+#include "error_codes.h"
+#include "type.h"
+#include "libft.h"
+#include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include "io.h"
+
+int	pars_scene_fd(int fd, t_scene_parsed *scene)
+{
+	char	*line;
+	int		err;
+	t_pars_state	state;
+
+	err = SUCCESS;
+	pars_ctx_init(&state);
+	while (!err)
+	{
+		line = get_next_line(fd);
+		if (!line)
+			break ;
+		state.line_no++;
+		err = pars_line(line, scene, &state);
+		free(line);
+		if (err)
+			return (err);
+	}
+	if (state.depth != 0)
+		return (ERR_CTX_UNBALANCED);
+	return (SUCCESS);
+}
+
+#include "io.h"
+#include "type.h"
+#include "error_codes.h"
+
+/***
+ * Parse options for an element from the token stream.
+ * @param st      The current parsing state. (no_null)
+ * @param options Pointer to the element options structure to populate. (no_null)
+ * @return Returns 0 on success, or a non-zero error code on failure.
+ * @note The function reads tokens until no more valid options are found.
+ * Each option is expected to be in the format "key=value".
+ */
+int	pars_options(t_pars_state *st, t_element_options *options)
+{
+	t_tok	token;
+	int		ret;
+
+	while (pars_next_tok(st, &token))
+	{
+		ret = scan_option(token, options);
+		if (!ret)
+			return (ret);
+	}
+	return (SUCCESS);
+}#include "io.h"
+#include "type.h"
+#include "error_codes.h"
+
+static int	scan_uint8_component(
+	t_tok tok, int *index_pos, int *value_out, int require_comma)
+{
+	int	value;
+	int	digits_read;
+
+	value = 0;
+	digits_read = 0;
+	while (*index_pos < tok.len
+		&& tok.start[*index_pos] >= '0'
+		&& tok.start[*index_pos] <= '9')
+	{
+		value = value * 10 + (tok.start[*index_pos] - '0');
+		if (value > 255)
+			return (ERR_PARS);
+		digits_read++;
+		(*index_pos)++;
+	}
+	if (digits_read == 0)
+		return (ERR_PARS);
+	if (require_comma)
+	{
+		if (*index_pos >= tok.len || tok.start[*index_pos] != ',')
+			return (ERR_PARS);
+		(*index_pos)++;
+	}
+	*value_out = value;
+	return (SUCCESS);
+}
+
+int	scan_color(t_tok tok, int out_rgb[3])
+{
+	int	index_pos;
+
+	index_pos = 0;
+	if (scan_uint8_component(tok, &index_pos, &out_rgb[0], 1))
+		return (ERR_PARS);
+	if (scan_uint8_component(tok, &index_pos, &out_rgb[1], 1))
+		return (ERR_PARS);
+	if (scan_uint8_component(tok, &index_pos, &out_rgb[2], 0))
+		return (ERR_PARS);
+	if (index_pos != tok.len)
+		return (ERR_PARS);
+	return (SUCCESS);
+}
+#include "io.h"
+#include "type.h"
+#include "error_codes.h"
+
+static const double	g_max_abs = 1e10;
+
+static void	scan_sign(t_tok tok, int *index_pos, int *sign_out)
+{
+	*sign_out = 1;
+	if (*index_pos < tok.len)
+	{
+		if (tok.start[*index_pos] == '+'
+			|| tok.start[*index_pos] == '-')
+		{
+			if (tok.start[*index_pos] == '-')
+				*sign_out = -1;
+			(*index_pos)++;
+		}
+	}
+}
+
+static int	scan_integer(t_tok tok, int *index_pos, double *value_io)
+{
+	int		digits_read;
+
+	digits_read = 0;
+	while (*index_pos < tok.len
+		&& tok.start[*index_pos] >= '0'
+		&& tok.start[*index_pos] <= '9')
+	{
+		*value_io = (*value_io * 10.0)
+			+ (double)(tok.start[*index_pos] - '0');
+		digits_read++;
+		(*index_pos)++;
+		if (*value_io > g_max_abs)
+			return (-1);
+	}
+	return (digits_read);
+}
+
+static int	scan_fraction(t_tok tok, int *index_pos, double *value_io)
+{
+	int		digits_read;
+	double	frac_scale;
+
+	digits_read = 0;
+	frac_scale = 0.1;
+	while (*index_pos < tok.len
+		&& tok.start[*index_pos] >= '0'
+		&& tok.start[*index_pos] <= '9')
+	{
+		*value_io += (double)(tok.start[*index_pos] - '0')
+			* frac_scale;
+		digits_read++;
+		frac_scale *= 0.1;
+		(*index_pos)++;
+	}
+	return (digits_read);
+}
+
+static int	scan_optional_dot_and_fraction(
+	t_tok tok, int *index_pos, double *value_io)
+{
+	int	digits;
+
+	digits = 0;
+	if (*index_pos < tok.len && tok.start[*index_pos] == '.')
+	{
+		(*index_pos)++;
+		digits = scan_fraction(tok, index_pos, value_io);
+	}
+	return (digits);
+}
+
+int	scan_float(t_tok tok, float *out_value)
+{
+	int		index_pos;
+	int		sign;
+	int		int_digits;
+	int		frac_digits;
+	double	value;
+
+	index_pos = 0;
+	value = 0.0;
+	scan_sign(tok, &index_pos, &sign);
+	int_digits = scan_integer(tok, &index_pos, &value);
+	if (int_digits < 0)
+		return (ERR_PARSE_FLOAT);
+	frac_digits = scan_optional_dot_and_fraction(tok, &index_pos, &value);
+	if ((int_digits + frac_digits) == 0 || index_pos != tok.len)
+		return (ERR_PARSE_FLOAT);
+	value *= (double)sign;
+	if (value > g_max_abs || value < -g_max_abs)
+		return (ERR_PARSE_FLOAT);
+	*out_value = (float)value;
+	return (SUCCESS);
+}
+#include "io.h"
+#include "type.h"
+#include "error_codes.h"
+
+static int	read_component(
+	t_tok tok, int *index_pos, float *value_out, int require_comma)
+{
+	t_tok	segment;
+	int		start_idx;
+
+	start_idx = *index_pos;
+	while (*index_pos < tok.len && tok.start[*index_pos] != ',')
+		(*index_pos)++;
+	segment.start = tok.start + start_idx;
+	segment.len = *index_pos - start_idx;
+	if (segment.len <= 0 || scan_float(segment, value_out))
+		return (ERR_PARSE_FLOAT);
+	if (require_comma)
+	{
+		if (*index_pos >= tok.len || tok.start[*index_pos] != ',')
+			return (ERR_PARSE_FLOAT);
+		(*index_pos)++;
+	}
+	return (SUCCESS);
+}
+
+int	scan_point(t_tok tok, float out_vec[3])
+{
+	int		index_pos;
+	float	tmp[3];
+
+	index_pos = 0;
+	if (read_component(tok, &index_pos, &tmp[0], 1))
+		return (ERR_PARSE_FLOAT);
+	if (read_component(tok, &index_pos, &tmp[1], 1))
+		return (ERR_PARSE_FLOAT);
+	if (read_component(tok, &index_pos, &tmp[2], 0))
+		return (ERR_PARSE_FLOAT);
+	if (index_pos != tok.len)
+		return (ERR_PARSE_FLOAT);
+	out_vec[0] = tmp[0];
+	out_vec[1] = tmp[1];
+	out_vec[2] = tmp[2];
+	return (SUCCESS);
+}
+#include "type.h"
+#include "io.h"
+#include "error_codes.h"
+#include <math.h>
+#include <unistd.h>
+#include <stdio.h>
+
+static const char	g_col_orange[] = "\033[0;33m";
+static const char	g_col_reset[] = "\033[0m";
+static const char	g_warn_prefix[] = "Warning: ";
+static const char	g_msg_range[] = "Vector component out of range [-1,1].\n";
+static const char	g_msg_norm[] = "Normalizing non-unit vector.\n";
+static const char	g_msg_zerolen[] = "Error: Zero-length vector cannot be normalized.\n";
+
+static void	put_warn_prefix(void)
+{
+	write(2, g_col_orange, sizeof(g_col_orange) - 1);
+	write(2, g_warn_prefix, sizeof(g_warn_prefix) - 1);
+	write(2, g_col_reset, sizeof(g_col_reset) - 1);
+}
+
+static void	check_range(const float vec[3])
+{
+	int	component_index;
+	int	has_out;
+
+	component_index = 0;
+	has_out = 0;
+	while (component_index < 3)
+	{
+		if (vec[component_index] < -1.0f || vec[component_index] > 1.0f)
+			has_out = 1;
+		component_index++;
+	}
+	if (has_out)
+	{
+		put_warn_prefix();
+		write(2, g_msg_range, sizeof(g_msg_range) - 1);
+	}
+}
+
+static int	normalise_vec(float vec[3])
+{
+	float	len2;
+	float	inv_len;
+
+	len2 = vec[0] * vec[0] + vec[1] * vec[1] + vec[2] * vec[2];
+	if (len2 < __FLT_EPSILON__)
+	{
+		write(2, g_msg_zerolen, sizeof(g_msg_zerolen) - 1);
+		return (ERR_PARSE_FLOAT);
+	}
+	if (fabsf(len2 - 1.0f) >= __FLT_EPSILON__)
+	{
+		put_warn_prefix();
+		write(2, g_msg_norm, sizeof(g_msg_norm) - 1);
+		inv_len = 1.0f / sqrtf(len2);
+		vec[0] *= inv_len;
+		vec[1] *= inv_len;
+		vec[2] *= inv_len;
+	}
+	return (SUCCESS);
+}
+
+int	scan_vec3(t_tok tok, float vec[3])
+{
+	float	tmp[3];
+
+	if (scan_point(tok, tmp))
+		return (ERR_PARSE_FLOAT);
+	check_range(tmp);
+	if (normalise_vec(tmp))
+		return (ERR_PARSE_FLOAT);
+	vec[0] = tmp[0];
+	vec[1] = tmp[1];
+	vec[2] = tmp[2];
+	return (SUCCESS);
+}
+#include "io.h"
+#include "type.h"
+#include "error_codes.h"
+
+int	scan_opt_ambient(t_tok tok, t_element_options *opts)
+{
+	float	value;
+
+	if (parse_float(tok, &value))
+		return (ERR_PARSE_FLOAT);
+	if (value < 0.0f || value > 1.0f)
+		return (ERR_PARSE_FLOAT);
+	opts->ambient_occlusion = value;
+	return (0);
+}
+#include "io.h"
+#include "type.h"
+#include "error_codes.h"
+
+int	scan_opt_diffuse(t_tok tok, t_element_options *opts)
+{
+	float	value;
+
+	if (parse_float(tok, &value))
+		return (ERR_PARSE_FLOAT);
+	if (value < 0.0f || value > 1.0f)
+		return (ERR_PARSE_FLOAT);
+	opts->diffuse_weight = value;
+	return (0);
+}
+#include "io.h"
+#include "type.h"
+#include "error_codes.h"
+
+int	scan_opt_ior(t_tok tok, t_element_options *opts)
+{
+	float	value;
+
+	if (parse_float(tok, &value))
+		return (ERR_PARS);
+	if (value < 1.0f)
+		return (ERR_PARS);
+	opts->ior = value;
+	return (SUCCESS);
+}
+#include "io.h"
+#include "type.h"
+#include "error_codes.h"
+
+int	scan_opt_reflection(t_tok tok, t_element_options *opts)
+{
+	float	value;
+
+	if (parse_float(tok, &value))
+		return (ERR_PARSE_FLOAT);
+	if (value < 0.0f || value > 1.0f)
+		return (ERR_PARSE_FLOAT);
+	opts->reflection = value;
+	return (0);
+}
+#include "io.h"
+#include "type.h"
+#include "error_codes.h"
+
+int	scan_opt_refraction(t_tok tok, t_element_options *opts)
+{
+	float	value;
+
+	if (parse_float(tok, &value))
+		return (ERR_PARSE_FLOAT);
+	if (value < 1.0f)
+		return (ERR_PARSE_FLOAT);
+	opts->refraction = value;
+	return (0);
+}
+#include "io.h"
+#include "type.h"
+#include "error_codes.h"
+
+int	scan_opt_shininess(t_tok tok, t_element_options *opts)
+{
+	float	value;
+
+	if (parse_float(tok, &value))
+		return (ERR_PARSE_FLOAT);
+	if (value < 0.0f)
+		return (ERR_PARSE_FLOAT);
+	opts->shininess = value;
+	return (0);
+}
+#include "io.h"
+#include "type.h"
+#include "error_codes.h"
+
+int	scan_opt_specular(t_tok tok, t_element_options *opts)
+{
+	float	value;
+
+	if (parse_float(tok, &value))
+		return (ERR_PARSE_FLOAT);
+	if (value < 0.0f || value > 1.0f)
+		return (ERR_PARSE_FLOAT);
+	opts->specular_weight = value;
+	return (0);
+}
+#include "io.h"
+#include "type.h"
+#include "error_codes.h"
+
+typedef int	(*t_opt_handler)(t_tok, t_element_options *);
+
+typedef struct s_opt_entry {
+	const char		*key;
+	t_opt_handler	fn;
+}	t_opt_entry;
+
+static const t_opt_entry	g_opt_tab[] = {
+	{"ior",          scan_opt_ior},
+	{"refraction",   scan_opt_refraction},
+	{"reflection",   scan_opt_reflection},
+	{"shininess",    scan_opt_shininess},
+	{"diffuse",      scan_opt_diffuse},
+	{"specular",     scan_opt_specular},
+	{"ambient",      scan_opt_ambient},
+	{NULL, NULL}
+};
+
+static int	split_key_value(t_tok tok, t_tok *key_tok, t_tok *val_tok)
+{
+	int	index;
+
+	index = 0;
+	while (index < tok.len && tok.start[index] != '=')
+		index++;
+	if (index == 0 || index >= tok.len - 1)
+		return (ERR_PARS);
+	key_tok->start = tok.start;
+	key_tok->len = index;
+	val_tok->start = tok.start + index + 1;
+	val_tok->len = tok.len - index - 1;
+	return (SUCCESS);
+}
+
+int	scan_option(t_tok tok, t_element_options *opts)
+{
+	t_tok	key_tok;
+	t_tok	val_tok;
+	int		table_index;
+
+	if (split_key_value(tok, &key_tok, &val_tok))
+		return (ERR_PARS);
+	table_index = 0;
+	while (g_opt_tab[table_index].key)
+	{
+		if (pars_tok_eq(key_tok, g_opt_tab[table_index].key))
+			return (g_opt_tab[table_index].fn(val_tok, opts));
+		table_index++;
+	}
+	return (ERR_PARS);
+}

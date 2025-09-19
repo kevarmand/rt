@@ -16,16 +16,16 @@ static int	scan_uint8_component(
 	{
 		value = value * 10 + (tok.start[*index_pos] - '0');
 		if (value > 255)
-			return (ERR_PARSE_FLOAT);
+			return (ERR_PARS);
 		digits_read++;
 		(*index_pos)++;
 	}
 	if (digits_read == 0)
-		return (ERR_PARSE_FLOAT);
+		return (ERR_PARS);
 	if (require_comma)
 	{
 		if (*index_pos >= tok.len || tok.start[*index_pos] != ',')
-			return (ERR_PARSE_FLOAT);
+			return (ERR_PARS);
 		(*index_pos)++;
 	}
 	*value_out = value;
@@ -38,12 +38,12 @@ int	scan_color(t_tok tok, int out_rgb[3])
 
 	index_pos = 0;
 	if (scan_uint8_component(tok, &index_pos, &out_rgb[0], 1))
-		return (ERR_PARSE_FLOAT);
+		return (ERR_PARS);
 	if (scan_uint8_component(tok, &index_pos, &out_rgb[1], 1))
-		return (ERR_PARSE_FLOAT);
+		return (ERR_PARS);
 	if (scan_uint8_component(tok, &index_pos, &out_rgb[2], 0))
-		return (ERR_PARSE_FLOAT);
+		return (ERR_PARS);
 	if (index_pos != tok.len)
-		return (ERR_PARSE_FLOAT);
+		return (ERR_PARS);
 	return (SUCCESS);
 }

@@ -21,5 +21,5 @@ int	pars_options(t_pars_state *st, t_element_options *options)
 		if (!ret)
 			return (ret);
 	}
-	return (0);
+	return (SUCCESS);
 }

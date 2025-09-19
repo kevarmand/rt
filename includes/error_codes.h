@@ -2,7 +2,6 @@
 #define ERROR_CODES_H
 
 
-# define SUCCESS			0
 # define ERROR				-1
 
 # define ERR_ARG			-2
@@ -29,11 +28,28 @@
 # define ERR_SQ				-218
 # define ERR_R_REDEF		-219
 # define ERR_A_REDEF		-220
-# define ERR_PARS_TYPE		-221
+// # define ERR_PARS_TYPE		-221
 
 # define ERR_CTX_UNBALANCED	-300
 # define ERR_CTX_UNSUPPORTED -301
 
 # define ERR_PARSE_FLOAT	-400
+
+typedef enum e_err
+{
+	SUCCESS = 0,
+	/* génériques */
+	ERR_PARS = -200,
+	/* parsing	 */
+	ERR_PARS_COLOR = -201,
+	ERR_PARS_VEC3 = -202,
+	ERR_PARS_POS = -203,
+	ERR_PARS_DIR = -204,
+	ERR_PARS_FOV = -205,
+	ERR_PARS_DIAM = -206,
+	ERR_PARS_AMBIANT = -207,
+
+	ERR__COUNT /* doit rester le dernier pour dimensionner g_errmsg */
+}	t_err;
 
 #endif

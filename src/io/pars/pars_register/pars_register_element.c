@@ -43,7 +43,7 @@ int	pars_register_element(t_scene_parsed *scene,
 	{
 		if (role == ELEM_ROLE_PRIMARY
 			&& (scene->presence_mask & PRESENCE_CAM))
-			return (ERR_PARS_TYPE);
+			return (ERR_PARS);
 		if (role == ELEM_ROLE_PRIMARY)
 			scene->presence_mask |= PRESENCE_CAM;
 		return (push_copy_to_list(&scene->cameras, element));
@@ -52,10 +52,10 @@ int	pars_register_element(t_scene_parsed *scene,
 	{
 		if (role == ELEM_ROLE_PRIMARY
 			&& (scene->presence_mask & PRESENCE_LIGHT))
-			return (ERR_PARS_TYPE);
+			return (ERR_PARS);
 		if (role == ELEM_ROLE_PRIMARY)
 			scene->presence_mask |= PRESENCE_LIGHT;
 		return (push_copy_to_list(&scene->lights, element));
 	}
-	return (ERR_PARS_TYPE);
+	return (ERR_PARS);
 }

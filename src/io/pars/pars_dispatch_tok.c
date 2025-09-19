@@ -53,5 +53,5 @@ int	pars_dispatch_tok(t_tok tag, t_pars_state *st, t_scene_parsed *scene)
 			return (g_pars_tab[i].fn(st, scene));
 		i++;
 	}
-	return (ERR_PARS_TYPE);
+	return (ERR_PARS);
 }
