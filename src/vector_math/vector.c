@@ -32,3 +32,49 @@ extern inline t_vec3f	vec3f_max(t_vec3f a, t_vec3f b)
 		fmaxf(a.z, b.z)
 	});
 }
+
+__attribute__((always_inline))
+extern inline t_vec3f	vec3f_sub(t_vec3f a, t_vec3f b)
+{
+	return ((t_vec3f){
+		a.x - b.x,
+		a.y - b.y,
+		a.z - b.z,
+	});
+}
+
+__attribute__((always_inline))
+extern inline t_vec3f	vec3f_add(t_vec3f a, t_vec3f b)
+{
+	return ((t_vec3f){
+		a.x + b.x,
+		a.y + b.y,
+		a.z + b.z,
+	});
+}
+
+__attribute__((always_inline))
+extern inline t_vec3f	vec3f_scale(t_vec3f a, float s)
+{
+	return ((t_vec3f){
+		a.x * s,
+		a.y * s,
+		a.z * s,
+	});
+}
+
+__attribute__((always_inline))
+extern inline float	vec3f_dot(t_vec3f a, t_vec3f b)
+{
+	return (a.x * b.x + a.y * b.y + a.z * b.z);
+}
+
+__attribute__((always_inline))
+extern inline t_vec3f	vec3f_cross(t_vec3f a, t_vec3f b)
+{
+	return ((t_vec3f){
+		a.y * b.z - a.z * b.y,
+		a.z * b.x - b.z * a.x,
+		a.x * b.y - a.y * b.x,
+	});
+}

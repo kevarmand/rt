@@ -12,189 +12,210 @@
 
 #include "bvh.h"
 #include "vector.h"
+#include <float.h>
 #include <math.h>
 #include <stdlib.h>
+#include "libft.h"
 
-t_aabb	triangle_bound(t_triangle *t)
+__attribute__((always_inline))
+extern inline void	triangle_bound(t_triangle t, t_aabb out)
 {
-	t_aabb	out;
+	t_vec3f	v1;
+	t_vec3f	v2;
 
-	out.min = vec3f_min(vec3f_min(t->v0, t->v1), t->v2);
-	out.max = vec3f_max(vec3f_max(t->v0, t->v1), t->v2);
+	v1 = vec3f_add(t.v0, t.edge1);
+	v2 = vec3f_add(t.v0, t.edge2);
+	out[0] = vec3f_min(vec3f_min(t.v0, v1), v2);
+	out[1] = vec3f_max(vec3f_max(t.v0, v1), v2);
+}
+
+__attribute__((always_inline))
+extern inline t_vec3f	triangle_centroid(t_triangle t)
+{
+	t_vec3f	out;
+	t_vec3f	v1;
+	t_vec3f	v2;
+
+	v1 = vec3f_add(t.v0, t.edge1);
+	v2 = vec3f_add(t.v0, t.edge2);
+	out.x = (t.v0.x + v1.x + v2.x) / 3.0f;
+	out.y = (t.v0.y + v1.y + v2.y) / 3.0f;
+	out.z = (t.v0.z + v1.z + v2.z) / 3.0f;
 	return (out);
 }
 
-t_vec3f	triangle_centroid(t_triangle *t)
+__attribute__((always_inline))
+extern inline void	sphere_bound(t_sphere s, t_aabb out)
 {
-	return ((t_vec3f){
-		(t->v0.x + t->v1.x + t->v2.x) / 3.0f,
-		(t->v0.y + t->v1.y + t->v2.y) / 3.0f,
-		(t->v0.z + t->v1.z + t->v2.z) / 3.0f,
-	});
+	out[0].x = s.center.x - s.radius;
+	out[0].y = s.center.y - s.radius;
+	out[0].z = s.center.z - s.radius;
+	out[1].x = s.center.x + s.radius;
+	out[1].y = s.center.y + s.radius;
+	out[1].z = s.center.z + s.radius;
 }
 
-t_aabb	sphere_bound(t_sphere *s)
+__attribute__((always_inline))
+extern inline t_vec3f	sphere_centroid(t_sphere s)
 {
-	t_aabb	out;
+	return (s.center);
+}
 
-	out.min = (t_vec3f){
-		s->center.x - s->radius,
-		s->center.y - s->radius,
-		s->center.z - s->radius
-	};
-	out.max = (t_vec3f){
-		s->center.x + s->radius,
-		s->center.y + s->radius,
-		s->center.z + s->radius
-	};
+__attribute__((always_inline))
+extern inline void	cylinder_bound(t_cylinder c, t_aabb out)
+{
+	out[0] = vec3f_min(c.p0, c.p1);
+	out[1] = vec3f_max(c.p0, c.p1);
+	out[0].x -= c.radius;
+	out[0].y -= c.radius;
+	out[0].z -= c.radius;
+	out[1].x += c.radius;
+	out[1].y += c.radius;
+	out[1].z += c.radius;
+}
+
+__attribute__((always_inline))
+extern inline t_vec3f	cylinder_centroid(t_cylinder c)
+{
+	t_vec3f	out;
+
+	out.x = (c.p0.x + c.p1.x) / 2.0f;
+	out.y = (c.p0.y + c.p1.y) / 2.0f;
+	out.z = (c.p0.z + c.p1.z) / 2.0f;
 	return (out);
 }
 
-t_vec3f	sphere_centroid(t_sphere *s)
+__attribute__((always_inline))
+extern inline void	torus_bound(t_torus t, t_aabb out)
 {
-	return (s->center);
+	float	extent;
+
+	extent = t.R + t.r;
+	out[0].x = t.center.x - extent;
+	out[0].y = t.center.y - extent;
+	out[0].z = t.center.z - extent;
+	out[1].x = t.center.x + extent;
+	out[1].y = t.center.y + extent;
+	out[1].z = t.center.z + extent;
 }
 
-t_aabb	cylinder_bound(t_cylinder *c)
+__attribute__((always_inline))
+extern inline t_vec3f	torus_centroid(t_torus t)
 {
-	t_aabb	out;
+	return (t.center);
+}
 
-	out.min = vec3f_min(c->p0, c->p1);
-	out.max = vec3f_max(c->p0, c->p1);
-	out.min = (t_vec3f){
-		out.min.x - c->radius,
-		out.min.y - c->radius,
-		out.min.z - c->radius,
-	};
-	out.max = (t_vec3f){
-		out.max.x + c->radius,
-		out.max.y + c->radius,
-		out.max.z + c->radius,
-	};
+__attribute__((always_inline))
+extern inline void	quad_bound(t_quad q, t_aabb out)
+{
+	out[0] = vec3f_min(vec3f_min(q.v0, q.v1), vec3f_min(q.v2, q.v3));
+	out[1] = vec3f_max(vec3f_max(q.v0, q.v1), vec3f_max(q.v2, q.v3));
+}
+
+__attribute__((always_inline))
+extern inline t_vec3f	quad_centroid(t_quad q)
+{
+	t_vec3f	out;
+
+	out.x = (q.v0.x + q.v1.x + q.v2.x + q.v3.x) / 4.0f;
+	out.y = (q.v0.y + q.v1.y + q.v2.y + q.v3.y) / 4.0f;
+	out.z = (q.v0.z + q.v1.z + q.v2.z + q.v3.z) / 4.0f;
 	return (out);
 }
 
-t_vec3f	cylinder_centroid(t_cylinder *c)
-{
-	return ((t_vec3f){
-		(c->p0.x + c->p1.x) / 2.0f,
-		(c->p0.y + c->p1.y) / 2.0f,
-		(c->p0.z + c->p1.z) / 2.0f
-	});
-}
-
-t_aabb	torus_bound(t_torus *t) // todo again
-{
-	float	extent; 
-	t_aabb	out;
-
-	extent = t->R + t->r;
-	out.min = (t_vec3f){
-		t->center.x - extent,
-		t->center.y - extent,
-		t->center.z - extent,
-	};
-	out.max = (t_vec3f){
-		t->center.x + extent,
-		t->center.y + extent,
-		t->center.z + extent,
-	};
-	return (out);
-}
-
-t_vec3f	torus_centroid(t_torus *t)
-{
-	return (t->center);
-}
-
-t_aabb	quad_bound(t_quad *q)
+__attribute__((always_inline))
+extern inline void	prim_bound(t_primitive *p)
 {
 	t_aabb	out;
-
-	out.min = vec3f_min(vec3f_min(q->v0, q->v1), vec3f_min(q->v2, q->v3));
-	out.max = vec3f_max(vec3f_max(q->v0, q->v1), vec3f_max(q->v2, q->v3));
-	return (out);
-}
-
-t_vec3f	quad_centroid(t_quad *q)
-{
-	return ((t_vec3f){
-		(q->v0.x + q->v1.x + q->v2.x + q->v3.x) / 4.0f,
-		(q->v0.y + q->v1.y + q->v2.y + q->v3.y) / 4.0f,
-		(q->v0.z + q->v1.z + q->v2.z + q->v3.z) / 4.0f,
-	});
-}
-
-t_aabb	prim_bound(t_primitive *p)
-{
-	if (p->type == PRIM_TRIANGLE)
-		return (triangle_bound(p->data));
-	else if (p->type == PRIM_SPHERE)
-		return (sphere_bound(p->data));
-	else if (p->type == PRIM_CYLINDER)
-		return (cylinder_bound(p->data));
-	else if (p->type == PRIM_TORUS)
-		return (torus_bound(p->data));
-	else if (p->type == PRIM_QUAD)
-		return (quad_bound(p->data));
-	return ((t_aabb){{0, 0, 0}, {0, 0, 0}});
-}
-
-t_vec3f	prim_centroid(t_primitive *p)
-{
-	t_cylinder	*tmp;
 
 	if (p->type == PRIM_TRIANGLE)
-		return (triangle_centroid(p->data));
+		triangle_bound(p->tr, out);
 	else if (p->type == PRIM_SPHERE)
-		return (sphere_centroid(p->data));
+		sphere_bound(p->sp, out);
 	else if (p->type == PRIM_CYLINDER)
-		return (cylinder_centroid(p->data));
+		cylinder_bound(p->cy, out);
 	else if (p->type == PRIM_TORUS)
-		return (torus_centroid(p->data));
+		torus_bound(p->to, out);
 	else if (p->type == PRIM_QUAD)
-		return (quad_centroid(p->data));
+		quad_bound(p->qu, out);
+	else
+	{
+		out[0] = (t_vec3f){0, 0, 0};
+		out[1] = (t_vec3f){0, 0, 0};
+	}
+	p->bounds[0] = out[0];
+	p->bounds[1] = out[1];
+}
+
+__attribute__((always_inline))
+extern inline t_vec3f	prim_centroid(t_primitive *p)
+{
+	if (p->type == PRIM_TRIANGLE)
+		return (triangle_centroid(p->tr));
+	else if (p->type == PRIM_SPHERE)
+		return (sphere_centroid(p->sp));
+	else if (p->type == PRIM_CYLINDER)
+		return (cylinder_centroid(p->cy));
+	else if (p->type == PRIM_TORUS)
+		return (torus_centroid(p->to));
+	else if (p->type == PRIM_QUAD)
+		return (quad_centroid(p->qu));
 	return ((t_vec3f){0, 0, 0});
 }
 
-t_aabb	bound_merge(t_aabb a, t_aabb b)
+__attribute__((always_inline))
+extern inline void	bound_merge(t_aabb a, t_aabb b, t_aabb out)
 {
-	t_aabb	out;
-
-	out.min = vec3f_min(a.min, b.min);
-	out.max = vec3f_max(a.max, b.max);
-	return (out);
+	out[0] = vec3f_min(a[0], b[0]);
+	out[1] = vec3f_max(a[1], b[1]);
 }
 
-float	bound_area(t_aabb b)
+__attribute__((always_inline))
+extern inline float	bound_area(t_aabb b)
 {
 	t_vec3f	d;
 
-	d.x = b.max.x - b.min.x;
-	d.y = b.max.y - b.min.y;
-	d.z = b.max.z - b.min.z;
-
+	d.x = b[1].x - b[0].x;
+	d.y = b[1].y - b[0].y;
+	d.z = b[1].z - b[0].z;
 	return (2.0f * (d.x * d.y + d.y * d.z + d.z * d.x));
 }
 
-t_aabb	prim_nbound(t_primpack pack)
+__attribute__((always_inline))
+extern inline void	prim_bound_init(t_primpack pack)
 {
-	t_aabb	out;
+	t_primitive	*p;
+	int		i;
+
+	i = 0;
+	while (i < pack.count)
+	{
+		p = &pack.p[pack.indice[pack.start + i]];
+		prim_bound(p);
+		i += 1;
+	}
+}
+
+__attribute__((always_inline))
+extern inline void	prim_nbound(t_primpack pack, t_aabb out)
+{
 	t_aabb	tmp;
 	int		i;
 
-	out = prim_bound(&pack.p[pack.indice[pack.start]]);
+	out[0] = pack.p[pack.indice[pack.start]].bounds[0];
+	out[1] = pack.p[pack.indice[pack.start]].bounds[1];
 	i = 1;
 	while (i < pack.count)
 	{
-		tmp = prim_bound(&pack.p[pack.indice[pack.start + i]]);
-		out = bound_merge(out, tmp);
+		tmp[0] = pack.p[pack.indice[pack.start + i]].bounds[0];
+		tmp[1] = pack.p[pack.indice[pack.start + i]].bounds[1];
+		bound_merge(out, tmp, out);
 		i += 1;
 	}
-	return (out);
 }
 
-void	swap_int(int *a, int *b)
+__attribute__((always_inline))
+extern inline void	swap_int(int *a, int *b)
 {
 	int	tmp;
 
@@ -203,19 +224,33 @@ void	swap_int(int *a, int *b)
 	*b = tmp;
 }
 
-float	prim_centroid_axis(t_primitive *p, int axis)
+__attribute__((always_inline))
+extern inline float	prim_centroid_axis(t_primitive *p, int axis)
 {
-	t_vec3f	c;
-
-	c = prim_centroid(p);
 	if (axis == 0)
-		return (c.x);
+		return (p->centroid.x);
 	if (axis == 1)
-		return (c.y);
-	return (c.z);
+		return (p->centroid.y);
+	return (p->centroid.z);
 }
 
-int	idx_partition(t_primpack pck, int low, int high, int axis)
+extern inline float	prim_centroid_range(t_primpack pck, int axis)
+{
+	float	sum;
+	int		i;
+
+	sum = 0.0f;
+	i = 0;
+	while (i < pck.count)
+	{
+		sum += prim_centroid_axis(&pck.p[pck.indice[pck.start + i]], axis);
+		i += 1;
+	}
+	return (sum / pck.count);
+}
+
+__attribute__((always_inline))
+extern inline int	idx_partition(t_primpack pck, int low, int high, int axis)
 {
 	float	pivot;
 	int		i;
@@ -249,7 +284,7 @@ void	quicksort_indices(t_primpack pck, int low, int high, int axis)
 	}
 }
 
-int	sah_split(t_primpack pck, t_aabb nodebounds, int *axisout)
+int	sah_split(t_primpack pck, int *axisout)
 {
 	int		bestaxis;
 	int		bestindex;
@@ -264,7 +299,7 @@ int	sah_split(t_primpack pck, t_aabb nodebounds, int *axisout)
 
 	bestaxis = -1;
 	bestindex = -1;
-	bestcost = __FLT_MAX__;
+	bestcost = FLT_MAX;
 	if (pck.count < 2)
 	{
 		*axisout = 0;
@@ -282,26 +317,23 @@ int	sah_split(t_primpack pck, t_aabb nodebounds, int *axisout)
 	axis = 0;
 	while (axis < 3)
 	{
-		i = 0;
-		while (i < pck.count)
-		{
-			tmp[i] = pck.indice[pck.start + i];
-			i += 1;
-		}
-		quicksort_indices((t_primpack){pck.p, tmp, 0, 0},
-			0, pck.count - 1, axis);
-		left[0] = prim_bound(&pck.p[tmp[0]]);
+		ft_memcpy(tmp, &pck.indice[pck.start], pck.count * sizeof(int));
+		t_primpack	tmp_pack = {pck.p, tmp, 0, pck.count};
+		quicksort_indices(tmp_pack, 0, pck.count - 1, axis);
+		left[0][0] = pck.p[tmp[0]].bounds[0];
+		left[0][1] = pck.p[tmp[0]].bounds[1];
 		i = 1;
 		while (i < pck.count)
 		{
-			left[i] = bound_merge(left[i - 1], prim_bound(&pck.p[tmp[i]]));
+			bound_merge(left[i - 1], pck.p[tmp[i]].bounds, left[i]);
 			i += 1;
 		}
-		right[pck.count - 1] = prim_bound(&pck.p[tmp[pck.count - 1]]);
+		right[pck.count - 1][0] = pck.p[tmp[pck.count - 1]].bounds[0];
+		right[pck.count - 1][1] = pck.p[tmp[pck.count - 1]].bounds[1];
 		i = pck.count - 2;
 		while (i >= 0)
 		{
-			right[i] = bound_merge(right[i + 1], prim_bound(&pck.p[tmp[i]]));
+			bound_merge(right[i + 1], pck.p[tmp[i]].bounds, right[i]);
 			i -= 1;
 		}
 		i = 1;
@@ -328,12 +360,11 @@ int	sah_split(t_primpack pck, t_aabb nodebounds, int *axisout)
 	free(left);
 	free(right);
 	free(tmp);
-
 	*axisout = bestaxis;
 	return (bestindex);
 }
 
-int	build_bvh(t_bvhnode *nodes, int *nodecount, t_primpack pck)
+int	build_bvh(t_bvhnode *nodes, int *nodecount, t_primpack pck, int parent)
 {
 	int			nodeindex;
 	t_bvhnode	*node;
@@ -344,32 +375,54 @@ int	build_bvh(t_bvhnode *nodes, int *nodecount, t_primpack pck)
 
 	nodeindex = (*nodecount)++;
 	node = &nodes[nodeindex];
-	node->bounds = prim_nbound(pck);
+	prim_nbound(pck, node->bounds);
 	node->start = pck.start;
 	node->count = pck.count;
 	node->left = -1;
 	node->right = -1;
-
+	node->parent = parent;
 	if (pck.count <= LEAF_THRESHOLD)
 		return (nodeindex);
 	axis = 0;
-	mid = sah_split(pck, node->bounds, &axis);
+	mid = sah_split(pck, &axis);
 	if (mid == MALLOC_ERR)
 		return (MALLOC_ERR);
 	if (mid <= 0 || mid >= pck.count)
 		return (nodeindex);
-	left = build_bvh(nodes, nodecount,
-					(t_primpack){pck.p, pck.indice, pck.start, mid});
+	t_primpack	p_left = {pck.p, pck.indice, pck.start, mid};
+	left = build_bvh(nodes, nodecount, p_left, nodeindex);
 	if (left == MALLOC_ERR)
 		return (MALLOC_ERR);
-	right = build_bvh(nodes, nodecount, (t_primpack){pck.p, pck.indice,
-					pck.start + mid, pck.count - mid});
+	t_primpack	p_right = {pck.p, pck.indice, pck.start + mid, pck.count - mid};
+	right = build_bvh(nodes, nodecount, p_right, nodeindex);
 	if (right == MALLOC_ERR)
 		return (MALLOC_ERR);
 	node->left = left;
 	node->right = right;
+	if (prim_centroid_range(p_left, axis) > prim_centroid_range(p_right, axis))
+	{
+		swap_int(&node->left, &node->right);
+	}
 	node->count = 0;
 	return (nodeindex);
+}
+
+t_ray	build_ray(t_vec3f origin, t_vec3f direction)
+{
+	t_ray	out;
+
+	out.origin = origin;
+	out.dir = direction;
+	out.invdir.x = 1.0f / direction.x;
+	out.invdir.y = 1.0f / direction.y;
+	out.invdir.z = 1.0f / direction.z;
+	out.orig_div.x = origin.x * out.invdir.x;
+	out.orig_div.y = origin.y * out.invdir.y;
+	out.orig_div.z = origin.z * out.invdir.z;
+	out.sign[0] = (out.invdir.x < 0);
+	out.sign[1] = (out.invdir.y < 0);
+	out.sign[2] = (out.invdir.z < 0);
+	return (out);
 }
 
 int	bound_intersect(t_ray r, t_aabb bound, float *near, float *far)
@@ -378,32 +431,129 @@ int	bound_intersect(t_ray r, t_aabb bound, float *near, float *far)
 	float			tmin;
 	float			tmax;
 
-	b.t1x = (bound.min.x - r.origin.x) * r.invdir.x;
-	b.t2x = (bound.max.x - r.origin.x) * r.invdir.x;
-	b.tminx = fminf(b.t1x, b.t2x);
-	b.tmaxx = fmaxf(b.t1x, b.t2x);
-	b.t1y = (bound.min.y - r.origin.y) * r.invdir.y;
-	b.t2y = (bound.max.y - r.origin.y) * r.invdir.y;
-	b.tminy = fminf(b.t1y, b.t2y);
-	b.tmaxy = fmaxf(b.t1y, b.t2y);
-	b.t1z = (bound.min.z - r.origin.z) * r.invdir.z;
-	b.t2z = (bound.max.z - r.origin.z) * r.invdir.z;
-	b.tminz = fminf(b.t1z, b.t2z);
-	b.tmaxz = fmaxf(b.t1z, b.t2z);
+	b.tminx = bound[r.sign[0]].x * r.invdir.x - r.orig_div.x;
+	b.tmaxx = bound[1 - r.sign[0]].x * r.invdir.x - r.orig_div.x;
+	b.tminy = bound[r.sign[1]].y * r.invdir.y - r.orig_div.y;
+	b.tmaxy = bound[1 - r.sign[1]].y * r.invdir.y - r.orig_div.y;
+	b.tminz = bound[r.sign[2]].z * r.invdir.z - r.orig_div.z;
+	b.tmaxz = bound[1 - r.sign[2]].z * r.invdir.z - r.orig_div.z;
 	tmin = fmaxf(fmaxf(b.tminx, b.tminy), b.tminz);
 	tmax = fminf(fminf(b.tmaxx, b.tmaxy), b.tmaxz);
 	if (tmax < fmaxf(tmin, 0.0f))
-		return (1);
+		return (0);
 	if (near != NULL)
 		near[0] = tmin;
 	if (far != NULL)
 		far[0] = tmax;
-	return (0);
+	return (1);
 }
 
+// int	prim_inter(t_ray r, t_primitive *p, float *t)
+// {
+// 	if (p->type == PRIM_TRIANGLE)
+// 		return (triangle_centroid(p->tr));
+// 	else if (p->type == PRIM_SPHERE)
+// 		return (sphere_centroid(p->sp));
+// 	else if (p->type == PRIM_CYLINDER)
+// 		return (cylinder_centroid(p->cy));
+// 	else if (p->type == PRIM_TORUS)
+// 		return (torus_centroid(p->to));
+// 	else if (p->type == PRIM_QUAD)
+// 		return (quad_centroid(p->qu));
+// 	return (0);
+// }
+//
+// t_hit	bvh2_parkour(t_ray r, t_bvhnode *nodes, t_primitive *prims, int root)
+// {
+// 	t_hit		out;
+// 	t_bvhnode	*node;
+// 	int			node_id;
+// 	float		tnear;
+// 	float		tfar;
+//
+// 	out = (t_hit){0, FLT_MAX, -1};
+// 	node_id = root;
+// 	while (node_id != -1)
+// 	{
+// 		node = &nodes[node_id];
+//
+// 		// cull if aabb missed or farther than best hit
+// 		if (!bound_intersect(r, node->bounds, &tnear, &tfar) || tnear > out.t)
+// 		{
+// 			while (node_id != -1)
+// 			{
+// 				t_bvhnode	*parent;
+// 				if (node->parent != -1)
+// 					parent = &nodes[node->parent];
+// 				else
+// 					parent = NULL;
+// 				if (parent && node_id == parent->left && parent->right != -1)
+// 				{
+// 					node_id = parent->right; // go to sibling
+// 					break ;
+// 				}
+// 				else // backtrack
+// 				{
+// 					if (parent)
+// 						node_id = parent->parent;
+// 					else
+// 						node_id = -1;
+// 				}
+// 			}
+// 			continue ;
+// 		}
+// 		if (node->left == -1 && node->right == -1) // end leaf
+// 		{
+// 			int	i;
+//
+// 			i = 0;
+// 			while (i < node->count)
+// 			{
+// 				int		prim_id;
+// 				float	t;
+// 				int		hit;
+//
+// 				prim_id = node->start + i;
+// 				t = FLT_MAX;
+// 				hit = prim_inter(r, &prims[prim_id], &t);
+// 				if (hit && t < out.t && t > 0.0f)
+// 				{
+// 					out.hit = 1;
+// 					out.t = t;
+// 					out.prim_id = prim_id;
+// 				}
+// 				i += 1;
+// 			}
+// 			while (node_id != -1)
+// 			{
+// 				t_bvhnode	*parent;
+// 				if (node->parent != -1)
+// 					parent = &nodes[node->parent];
+// 				else
+// 					parent = NULL;
+// 				if (parent && node_id == parent->left && parent->right != -1)
+// 				{
+// 					node_id = parent->right; // go to sibling
+// 					break ;
+// 				}
+// 				else // backtrack
+// 				{
+// 					if (parent)
+// 						node_id = parent->parent;
+// 					else
+// 						node_id = -1;
+// 				}
+// 			}
+// 		}
+// 		else
+// 			node_id = node->left;
+// 	}
+// 	return (out);
+// }
+//
 // TEST BY THE CAT
 #include <stdio.h>
-#define prim_number 5
+#define prim_number 2000
 // ------------------------- example primitives -------------------------
 
 // Recursively print the BVH tree with indentation
@@ -417,8 +567,8 @@ void print_bvh_tree(const t_bvhnode *nodes, int nodeIndex, int depth) {
 
     printf("Node %d: min(%.1f, %.1f, %.1f) max(%.1f, %.1f, %.1f), ",
            nodeIndex,
-           n->bounds.min.x, n->bounds.min.y, n->bounds.min.z,
-           n->bounds.max.x, n->bounds.max.y, n->bounds.max.z);
+           n->bounds[0].x, n->bounds[0].y, n->bounds[0].z,
+           n->bounds[1].x, n->bounds[1].y, n->bounds[1].z);
 
     printf("start=%d, count=%d, left=%d, right=%d\n",
            n->start, n->count, n->left, n->right);
@@ -428,54 +578,46 @@ void print_bvh_tree(const t_bvhnode *nodes, int nodeIndex, int depth) {
     if (n->right != -1) print_bvh_tree(nodes, n->right, depth + 1);
 }
 
+t_triangle	make_triangle(t_vec3f v0, t_vec3f v1, t_vec3f v2)
+{
+	t_triangle	t;
+
+	t.v0 = v0;
+	t.edge1 = vec3f_sub(v1, v0);
+	t.edge2 = vec3f_sub(v2, v0);
+	return (t);
+}
+
+void	fill_prim(t_primitive *p, int len)
+{
+	int	i;
+
+	i = 0;
+	while (i < len)
+	{
+		p[i].type = PRIM_TRIANGLE;
+		t_vec3f v0 = {(float)i, 0.0f, 0.0f};
+		t_vec3f v1 = {(float)i + 0.5f, 1.0f, 0.0f};
+		t_vec3f v2 = {(float)i + 1.0f, 0.0f, 0.0f};
+		p[i].tr = make_triangle(v0, v1, v2);
+		prim_bound(&p[i]);
+		p[i].centroid = prim_centroid(&p[i]);
+		i += 1;
+	}
+}
+
 int main()
 {
     // 1) allocate primitives
     t_primitive prims[prim_number];
-
     // triangle
-    t_triangle *tri = malloc(sizeof(t_triangle));
-    tri->v0 = (t_vec3f){0,0,0};
-    tri->v1 = (t_vec3f){1,0,0};
-    tri->v2 = (t_vec3f){0,1,0};
-    prims[0].type = PRIM_TRIANGLE;
-    prims[0].data = tri;
-
-    // sphere
-    t_sphere *s = malloc(sizeof(t_sphere));
-    s->center = (t_vec3f){2,2,2};
-    s->radius = 0.5f;
-    prims[1].type = PRIM_SPHERE;
-    prims[1].data = s;
-
-    // cylinder
-    t_cylinder *c = malloc(sizeof(t_cylinder));
-    c->p0 = (t_vec3f){-1,-1,-1};
-    c->p1 = (t_vec3f){-1,1,-1};
-    c->radius = 0.2f;
-    prims[2].type = PRIM_CYLINDER;
-    prims[2].data = c;
-
-    // quad
-    t_quad *q = malloc(sizeof(t_quad));
-    q->v0 = (t_vec3f){0,0,1};
-    q->v1 = (t_vec3f){1,0,1};
-    q->v2 = (t_vec3f){1,1,1};
-    q->v3 = (t_vec3f){0,1,1};
-    prims[3].type = PRIM_QUAD;
-    prims[3].data = q;
-
-    // torus
-    t_torus *t = malloc(sizeof(t_torus));
-    t->center = (t_vec3f){3,0,0};
-    t->R = 1.0f;
-    t->r = 0.3f;
-    prims[4].type = PRIM_TORUS;
-    prims[4].data = t;
-
+	fill_prim(prims, prim_number);
     // 2) allocate index array
-    int indices[prim_number] = {0,1,2,3,4};
-
+    int indices[prim_number];
+	for (int i = 0; i < prim_number; i += 1)
+	{
+		indices[i] = i;
+	}
     // 3) allocate BVH node array (max nodes = 2*N-1)
     t_bvhnode nodes[2 * prim_number - 1];
     int nodecount = 0;
@@ -483,23 +625,18 @@ int main()
     // 4) create primpack
     t_primpack pack = {prims, indices, 0, prim_number};
 
+    // 4.5) precompute aabb for each primitive
+    prim_bound_init(pack);
+
     // 5) build BVH
-    int root = build_bvh(nodes, &nodecount, pack);
+    int root = build_bvh(nodes, &nodecount, pack, -1);
     if (root == -2)
     {
         printf("Malloc failed during BVH build!\n");
         return 1;
     }
-
     // 6) print BVH
     printf("BVH built, root = %d, total nodes = %d\n", root, nodecount);
 	print_bvh_tree(nodes, root, 0);
-    // 7) free primitive data
-    free(tri);
-    free(s);
-    free(c);
-    free(q);
-    free(t);
-
     return 0;
 }
