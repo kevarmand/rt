@@ -16,6 +16,7 @@
 # include "vector.h"
 # define MALLOC_ERR -2
 # define LEAF_THRESHOLD 4
+# define EPSILON 1e-6
 
 typedef enum e_primtype
 {
@@ -128,5 +129,17 @@ typedef struct s_aabb_inter
 	float	tminz;
 	float	tmaxz;
 }	t_aabb_inter;
+
+typedef struct s_moller
+{
+	t_vec3f	r_cross_e2;
+	float	det;
+	float	invdet;
+	float	u;
+	float	v;
+	float	t;
+	t_vec3f	s_cross_e1;
+	t_vec3f	s;
+}	t_moller;
 
 #endif // !BVH_H
