@@ -14,7 +14,7 @@ int			render_tile(t_data *data, t_tile *tile, t_cam *cam)
 	int			i;
 	int			j;
 	t_point		pf;
-	t_vector	v;
+	t_vec3	v;
 	t_color		co;
 
 	int			x0, y0;

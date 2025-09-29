@@ -55,10 +55,10 @@
 **	Fonction de liste chainee
 */
 
-int					list_addback(t_list **l, void *p);
-int					list_addfront(t_list **l, void *p, t_type t);
-int					list_count(t_list *l);
-int					list_free(t_list *l);
+int					list_addback(t_objlist **l, void *p);
+int					list_addfront(t_objlist **l, void *p, t_type t);
+int					list_count(t_objlist *l);
+int					list_free(t_objlist *l);
 
 /*
 **		sructure pour intersection.
@@ -103,9 +103,9 @@ int					get_int(char *str, int *n);
 int					get_double(char *str, double *d);
 int					pars_color(char *str, t_color *color);
 int					pars_point(char *str, t_point *point);
-int					pars_vector(char *str, t_vector *v);
+int					pars_vector(char *str, t_vec3 *v);
 
-void				name_lst(t_list *lst);
+void				name_lst(t_objlist *lst);
 /*
 **		fonction d'image
 */
@@ -135,7 +135,7 @@ int					cam_gen(t_data *data, t_cam *c);
 **	FONCTIN DE CHANGEEMENT
 */
 
-t_vector			translate_type(int type);
+t_vec3			translate_type(int type);
 int					translate_plane(t_pl *pl, int type);
 int					translate_sphere(t_sp *sp, int type);
 int					translate_square(t_sq *sq, int type);
@@ -146,7 +146,7 @@ int					translate_switch(int type, t_data *data);
 int					translate_cam(t_cam *cam, int type);
 int					translate_light(t_light *light, int type);
 
-int					rot_vect(t_vector *v, int type);
+int					rot_vect(t_vec3 *v, int type);
 int					rotate_switch(int type, t_data *data);
 int					rotate_cam(t_cam *cam, int type);
 
@@ -162,19 +162,19 @@ int					select_next_cam(t_data *data);
 **			Fonction de vector
 */
 
-void				vect_set(t_vector *v, int x, int y, int z);
-double				vect_norm(t_vector *v);
-void				vect_tonorm(t_vector *v);
-t_vector			vect_vect(t_vector *u, t_vector *v);
-double				vect_dot(t_vector *u, t_vector *v);
+void				vect_set(t_vec3 *v, int x, int y, int z);
+double				vect_norm(t_vec3 *v);
+void				vect_tonorm(t_vec3 *v);
+t_vec3			vect_vect(t_vec3 *u, t_vec3 *v);
+double				vect_dot(t_vec3 *u, t_vec3 *v);
 
-t_point				vect_translate(t_point *p, t_vector *v);
-t_vector			vect_vector(t_point *p1, t_point *p2);
-void				vect_add(t_vector *v1, t_vector *v2);
-void				vect_sub(t_vector *v1, t_vector *v2);
-int					vect_is_col(t_vector *v1, t_vector *v2);
-t_vector			vect_def(double x, double y, double z);
-t_vector			vect_mult(t_vector *v, double x);
+t_point				vect_translate(t_point *p, t_vec3 *v);
+t_vec3			vect_vector(t_point *p1, t_point *p2);
+void				vect_add(t_vec3 *v1, t_vec3 *v2);
+void				vect_sub(t_vec3 *v1, t_vec3 *v2);
+int					vect_is_col(t_vec3 *v1, t_vec3 *v2);
+t_vec3			vect_def(double x, double y, double z);
+t_vec3			vect_mult(t_vec3 *v, double x);
 t_point				vect_set_p(double x, double y, double z);
 
 /*
@@ -220,15 +220,15 @@ double				equa_second(double a, double b, double c);
 */
 
 void				mat_prod(double mr[3][3], double m1[3][3], double m2[3][3]);
-void				mat_prod_vect(t_vector *v, double m[3][3], t_vector *u);
-void				mat_gen_pass(double m[3][3], t_vector *v1, t_vector *v2);
+void				mat_prod_vect(t_vec3 *v, double m[3][3], t_vec3 *u);
+void				mat_gen_pass(double m[3][3], t_vec3 *v1, t_vec3 *v2);
 void				mat_transpose(double r[3][3], double m[3][3]);
 
 /*
 **			Fonction d intersection
 */
-double				inter_triangle(t_point *p, t_vector *v, t_tr *tr);
-double				inter_cylinder(t_point *p, t_vector *v, t_cy *cy);
+double				inter_triangle(t_point *p, t_vec3 *v, t_tr *tr);
+double				inter_cylinder(t_point *p, t_vec3 *v, t_cy *cy);
 int					inter_inter(t_ray *r, t_ldist *l, int i);
 
 /*
@@ -269,7 +269,7 @@ int					mouse_move(int x, int y, t_data *data);
  */
 int	 frame_tick(t_data *data);
 int	render_tick(t_data *data);
-t_color		cam_getcolor(t_data *data, t_cam *c, t_vector *v);
+t_color		cam_getcolor(t_data *data, t_cam *c, t_vec3 *v);
 int	 frame_tick(t_data *data);
 int	render_tile(t_data *data, t_tile *tile, t_cam *cam);
 void	render_begin(t_data *data, t_cam *cam);

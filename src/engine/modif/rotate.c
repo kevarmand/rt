@@ -42,7 +42,7 @@ int		rotate_cam(t_cam *cam, int type)
 
 int		rotate_switch(int type, t_data *data)
 {
-	t_list	*p;
+	t_objlist	*p;
 
 	p = (data->select).obj;
 	if (p->type == PLANE)

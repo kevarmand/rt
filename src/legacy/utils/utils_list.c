@@ -12,13 +12,13 @@
 
 #include "rt.h"
 
-int		list_addback(t_list **l, void *p)
+int		list_addback(t_objlist **l, void *p)
 {
-	t_list	*new;
-	t_list	**cur;
+	t_objlist	*new;
+	t_objlist	**cur;
 
 	cur = l;
-	if (!(new = malloc(sizeof(t_list))))
+	if (!(new = malloc(sizeof(t_objlist))))
 		return (ERR_MALLOC);
 	new->next = 0;
 	new->obj = p;
@@ -28,11 +28,11 @@ int		list_addback(t_list **l, void *p)
 	return (SUCCESS);
 }
 
-int		list_addfront(t_list **l, void *p, t_type t)
+int		list_addfront(t_objlist **l, void *p, t_type t)
 {
-	t_list	*n;
+	t_objlist	*n;
 
-	if (!(n = malloc(sizeof(t_list))))
+	if (!(n = malloc(sizeof(t_objlist))))
 		return (ERR_MALLOC);
 	n->next = *l;
 	n->obj = p;
@@ -41,7 +41,7 @@ int		list_addfront(t_list **l, void *p, t_type t)
 	return (SUCCESS);
 }
 
-int		list_count(t_list *l)
+int		list_count(t_objlist *l)
 {
 	int n;
 
@@ -54,7 +54,7 @@ int		list_count(t_list *l)
 	return (n);
 }
 
-int		list_free(t_list *l)
+int		list_free(t_objlist *l)
 {
 	if (l->next != 0)
 		list_free(l->next);

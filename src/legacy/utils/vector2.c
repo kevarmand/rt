@@ -12,7 +12,7 @@
 
 #include "rt.h"
 
-t_point		vect_translate(t_point *p, t_vector *v)
+t_point		vect_translate(t_point *p, t_vec3 *v)
 {
 	t_point		r;
 
@@ -22,9 +22,9 @@ t_point		vect_translate(t_point *p, t_vector *v)
 	return (r);
 }
 
-t_vector	vect_vector(t_point *p1, t_point *p2)
+t_vec3	vect_vector(t_point *p1, t_point *p2)
 {
-	t_vector	v;
+	t_vec3	v;
 
 	v.x = p2->x - p1->x;
 	v.y = p2->y - p1->y;
@@ -32,21 +32,21 @@ t_vector	vect_vector(t_point *p1, t_point *p2)
 	return (v);
 }
 
-void		vect_add(t_vector *v1, t_vector *v2)
+void		vect_add(t_vec3 *v1, t_vec3 *v2)
 {
 	v1->x += v2->x;
 	v1->y += v2->y;
 	v1->z += v2->z;
 }
 
-void		vect_sub(t_vector *v1, t_vector *v2)
+void		vect_sub(t_vec3 *v1, t_vec3 *v2)
 {
 	v1->x -= v2->x;
 	v1->y -= v2->y;
 	v1->z -= v2->z;
 }
 
-int			vect_is_col(t_vector *v1, t_vector *v2)
+int			vect_is_col(t_vec3 *v1, t_vec3 *v2)
 {
 	double	k;
 

@@ -5,19 +5,16 @@
 int	pars_resolution(t_pars_state *st, t_scene_parsed *scene)
 {
 	t_tok	token;
-	int		width;
-	int		height;
+	float	tmp;
 
 	if (scene->presence_mask & PRESENCE_RESOLUTION)
-		return (ERR_PARS_TYPE);
-	if (!pars_next_tok(st, &token)
-		|| scan_int(token, &width) || width <= 0)
-		return (ERR_PARS_TYPE);
-	if (!pars_next_tok(st, &token)
-		|| scan_int(token, &height) || height <= 0)
-		return (ERR_PARS_TYPE);
-	scene->globals.res_width = width;
-	scene->globals.res_height = height;
+		return (ERR_PARS);
+	if (!pars_next_tok(st, &token) || scan_float(token, &tmp) || tmp <= 0.0f)
+		return (ERR_PARS);
+	scene->globals.res_width = (int)tmp;
+	if (!pars_next_tok(st, &token) || scan_float(token, &tmp) || tmp <= 0.0f)
+		return (ERR_PARS);
+	scene->globals.res_height = (int)tmp;
 	scene->presence_mask |= PRESENCE_RESOLUTION;
-	return (0);
+	return (SUCCESS);
 }

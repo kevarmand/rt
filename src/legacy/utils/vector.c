@@ -12,19 +12,19 @@
 
 #include "rt.h"
 
-void		vect_set(t_vector *v, int x, int y, int z)
+void		vect_set(t_vec3 *v, int x, int y, int z)
 {
 	v->x = x;
 	v->y = y;
 	v->z = z;
 }
 
-double		vect_norm(t_vector *v)
+double		vect_norm(t_vec3 *v)
 {
 	return (sqrt(v->x * v->x + v->y * v->y + v->z * v->z));
 }
 
-void		vect_tonorm(t_vector *v)
+void		vect_tonorm(t_vec3 *v)
 {
 	double	n;
 
@@ -39,14 +39,14 @@ void		vect_tonorm(t_vector *v)
 	v->z /= n;
 }
 
-double		vect_dot(t_vector *u, t_vector *v)
+double		vect_dot(t_vec3 *u, t_vec3 *v)
 {
 	return (u->x * v->x + u->y * v->y + u->z * v->z);
 }
 
-t_vector	vect_vect(t_vector *u, t_vector *v)
+t_vec3	vect_vect(t_vec3 *u, t_vec3 *v)
 {
-	t_vector	w;
+	t_vec3	w;
 
 	w.x = u->y * v->z - u->z * v->y;
 	w.y = u->z * v->x - u->x * v->z;

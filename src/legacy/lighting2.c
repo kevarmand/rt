@@ -35,8 +35,8 @@ int		light_pl(t_lighting *li, t_pl *pl)
 
 int		light_cy(t_lighting *li, t_cy *cy, t_point *p)
 {
-	t_vector	am;
-	t_vector	u;
+	t_vec3	am;
+	t_vec3	u;
 	double		d;
 
 	li->c_obj = cy->color;

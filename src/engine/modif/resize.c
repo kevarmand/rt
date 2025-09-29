@@ -23,7 +23,7 @@ int		resize_double(double *d, int type)
 
 int		resize_switch1(int type, t_data *data)
 {
-	t_list	*p;
+	t_objlist	*p;
 
 	p = (data->select).obj;
 	if (p->type == CYLINDER)
@@ -35,7 +35,7 @@ int		resize_switch1(int type, t_data *data)
 
 int		resize_switch2(int type, t_data *data)
 {
-	t_list	*p;
+	t_objlist	*p;
 
 	p = (data->select).obj;
 	if (p->type == CYLINDER)

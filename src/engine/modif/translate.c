@@ -14,7 +14,7 @@
 
 int			translate_sphere(t_sp *sp, int type)
 {
-	t_vector	v;
+	t_vec3	v;
 
 	v = translate_type(type);
 	sp->centre = vect_translate(&(sp->centre), &v);
@@ -23,7 +23,7 @@ int			translate_sphere(t_sp *sp, int type)
 
 int			translate_plane(t_pl *pl, int type)
 {
-	t_vector	v;
+	t_vec3	v;
 
 	v = translate_type(type);
 	pl->point = vect_translate(&(pl->point), &v);
@@ -33,7 +33,7 @@ int			translate_plane(t_pl *pl, int type)
 
 int			translate_square(t_sq *sq, int type)
 {
-	t_vector	v;
+	t_vec3	v;
 
 	v = translate_type(type);
 	sq->point = vect_translate(&(sq->point), &v);
@@ -45,7 +45,7 @@ int			translate_square(t_sq *sq, int type)
 
 int			translate_cylinder(t_cy *cy, int type)
 {
-	t_vector	v;
+	t_vec3	v;
 
 	v = translate_type(type);
 	cy->point = vect_translate(&(cy->point), &v);
@@ -54,7 +54,7 @@ int			translate_cylinder(t_cy *cy, int type)
 
 int			translate_triangle(t_tr *tr, int type)
 {
-	t_vector	v;
+	t_vec3	v;
 
 	v = translate_type(type);
 	tr->p1 = vect_translate(&(tr->p1), &v);

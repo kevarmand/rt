@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/28 16:16:15 by karmand           #+#    #+#             */
-/*   Updated: 2025/08/04 13:32:57 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/09/24 12:00:25 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int		parser_check(char **arr, t_data *data)
 		return (pars_tr(arr, data));
 	if (!ft_strcmp("sq", arr[0]))
 		return (pars_sq(arr, data));
-	return (ERR_PARS_TYPE);
+	return (ERR_PARS);
 }
 
 int		parsing(int fd, t_data *data)

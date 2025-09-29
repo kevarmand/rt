@@ -15,7 +15,7 @@
 int		dist_init(t_data *d, t_ldist *p)
 {
 	int		n;
-	t_list	*l;
+	t_objlist	*l;
 
 	l = d->lobj;
 	n = list_count(d->lobj);

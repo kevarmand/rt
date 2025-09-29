@@ -14,6 +14,7 @@
 		"fcntl.h": "c",
 		"cmath": "cpp",
 		"push": "c",
-		"random": "c"
+		"random": "c",
+		"libft.h": "c"
 	}
 }

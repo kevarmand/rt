@@ -23,7 +23,7 @@ int		init_light(t_light *l)
 int		init_cam_2(t_cam *c, t_data *data)
 {
 	t_point		p;
-	t_vector	v;
+	t_vec3	v;
 
 	p = c->point;
 	p = vect_translate(&p, &(c->dir));
@@ -37,7 +37,7 @@ int		init_cam_2(t_cam *c, t_data *data)
 
 int		init_cam(t_cam *c, t_data *data)
 {
-	t_vector	v;
+	t_vec3	v;
 
 	v = vect_def(0, 0, 1);
 	if (vect_is_col(&(c->dir), &v))

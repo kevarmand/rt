@@ -12,10 +12,10 @@
 
 #include "rt.h"
 
-int			test_triangle(t_vector *v1, t_vector *v2, t_vector *v)
+int			test_triangle(t_vec3 *v1, t_vec3 *v2, t_vec3 *v)
 {
-	t_vector	p1;
-	t_vector	p2;
+	t_vec3	p1;
+	t_vec3	p2;
 
 	p1 = vect_vect(v1, v);
 	p2 = vect_vect(v, v2);
@@ -24,17 +24,17 @@ int			test_triangle(t_vector *v1, t_vector *v2, t_vector *v)
 	return (0);
 }
 
-double		inter_triangle(t_point *p, t_vector *v, t_tr *tr)
+double		inter_triangle(t_point *p, t_vec3 *v, t_tr *tr)
 {
 	double		a;
 	double		b;
 	t_point		m;
-	t_vector	vec[4];
+	t_vec3	vec[4];
 
 	a = vect_dot(v, &(tr->norm));
 	if (a == 0)
 		return (-1);
-	b = tr->d + vect_dot((t_vector *)p, &(tr->norm));
+	b = tr->d + vect_dot((t_vec3 *)p, &(tr->norm));
 	a = equa_premier(a, b);
 	vec[3] = vect_mult(v, a);
 	m = vect_translate(p, &(vec[3]));
@@ -53,7 +53,7 @@ double		inter_triangle(t_point *p, t_vector *v, t_tr *tr)
 	return (a);
 }
 
-void		inter_cy2(t_vector u[3], double d[5], t_cy *cy, t_point *p)
+void		inter_cy2(t_vec3 u[3], double d[5], t_cy *cy, t_point *p)
 {
 	u[0] = vect_mult(&(cy->dir), d[0]);
 	vect_sub(&(u[1]), &(u[0]));
@@ -67,10 +67,10 @@ void		inter_cy2(t_vector u[3], double d[5], t_cy *cy, t_point *p)
 	d[3] = equa_second(d[0], d[1], d[2]);
 }
 
-double		inter_cylinder(t_point *p, t_vector *v, t_cy *cy)
+double		inter_cylinder(t_point *p, t_vec3 *v, t_cy *cy)
 {
 	double		d[5];
-	t_vector	u[3];
+	t_vec3	u[3];
 	t_point		p1;
 
 	u[1] = *v;

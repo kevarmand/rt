@@ -6,7 +6,7 @@
 
 typedef struct s_ray2 {
 	t_point   origin;
-	t_vector  direction;     /* normalisée */
+	t_vec3  direction;     /* normalisée */
 	int       depth;
 	double    eta;   /* indice milieu courant (1.0 air) */
 }	t_ray;
@@ -15,7 +15,7 @@ typedef struct s_hit {
 	void     *obj;
 	double    distance;
 	t_point   position;
-	t_vector  normal;
+	t_vec3  normal;
 	int       inside;
 }	t_hit;
 

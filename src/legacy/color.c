@@ -37,7 +37,7 @@ int			color_add(t_lighting *li, t_ray *r, t_light *l)
 	return (SUCCESS);
 }
 
-int			color_s2(t_ray *r, t_vector *v, t_lighting *li, t_data *data)
+int			color_s2(t_ray *r, t_vec3 *v, t_lighting *li, t_data *data)
 {
 	int		inter;
 
@@ -53,8 +53,8 @@ int			color_s2(t_ray *r, t_vector *v, t_lighting *li, t_data *data)
 
 t_color		color_switch(t_data *data, t_ray *r)
 {
-	t_list		*l;
-	t_vector	v;
+	t_objlist		*l;
+	t_vec3	v;
 	t_lighting	li;
 	int			inter;
 	double		sign[2];

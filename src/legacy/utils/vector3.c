@@ -12,9 +12,9 @@
 
 #include "rt.h"
 
-t_vector	vect_def(double x, double y, double z)
+t_vec3	vect_def(double x, double y, double z)
 {
-	t_vector	v;
+	t_vec3	v;
 
 	v.x = x;
 	v.y = y;
@@ -22,9 +22,9 @@ t_vector	vect_def(double x, double y, double z)
 	return (v);
 }
 
-t_vector	vect_mult(t_vector *v, double x)
+t_vec3	vect_mult(t_vec3 *v, double x)
 {
-	t_vector r;
+	t_vec3 r;
 
 	r.x = v->x * x;
 	r.y = v->y * x;

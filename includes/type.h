@@ -83,9 +83,9 @@ struct s_render{
 //  */
 // typedef struct s_scene
 // {
-// 	t_list	*objects;
-// 	t_list	*cameras;
-// 	t_list	*lights;
+// 	t_objlist	*objects;
+// 	t_objlist	*cameras;
+// 	t_objlist	*lights;
 // 	t_para	globals;
 // }	t_scene;
 
@@ -116,12 +116,12 @@ typedef struct		s_point
 	double			z;
 }					t_point;
 
-typedef struct		s_vector
+typedef struct		s_vec3
 {
 	double			x;
 	double			y;
 	double			z;
-}					t_vector;
+}					t_vec3;
 
 /*
 **	Liste des objet
@@ -148,7 +148,7 @@ typedef struct		s_sp
 typedef struct		s_pl
 {
 	t_point			point;
-	t_vector		norm;
+	t_vec3		norm;
 	t_color			color;
 	double			a;
 	double			b;
@@ -159,7 +159,7 @@ typedef struct		s_pl
 typedef struct		s_cy
 {
 	t_point			point;
-	t_vector		dir;
+	t_vec3		dir;
 	double			rayon;
 	double			height;
 	t_color			color;
@@ -174,18 +174,18 @@ typedef struct		s_tr
 	double			b;
 	double			c;
 	double			d;
-	t_vector		norm;
+	t_vec3		norm;
 	t_color			color;
 }					t_tr;
 
 typedef struct		s_sq
 {
 	t_point			point;
-	t_vector		norm;
+	t_vec3		norm;
 	double			height;
 	t_color			color;
-	t_vector		dir1;
-	t_vector		dir2;
+	t_vec3		dir1;
+	t_vec3		dir2;
 	double			a;
 	double			b;
 	double			c;
@@ -195,17 +195,17 @@ typedef struct		s_sq
 typedef struct		s_cam
 {
 	t_point			point;
-	t_vector		dir;
+	t_vec3		dir;
 	double			fov;
-	t_vector		hori;
-	t_vector		vert;
+	t_vec3		hori;
+	t_vec3		vert;
 	t_point			first;
 }					t_cam;
 
 typedef struct		s_ray
 {
 	t_point			source;
-	t_vector		dir;
+	t_vec3		dir;
 	int				inter;
 	double			dist;
 }					t_ray;
@@ -213,7 +213,7 @@ typedef struct		s_ray
 typedef struct		s_lighting
 {
 	t_point			inter;
-	t_vector		norm;
+	t_vec3		norm;
 	t_color			c_obj;
 	t_color			c_ret;
 }					t_lighting;
@@ -229,13 +229,13 @@ typedef struct		s_light
 **	fin des list objet
 */
 
-typedef struct		s_list
+typedef struct		s_objlist
 {
 	void			*obj;
 	t_type			type;
 	char			*name;
-	struct s_list	*next;
-}					t_list;
+	struct s_objlist	*next;
+}					t_objlist;
 
 typedef struct		s_para
 {
@@ -277,9 +277,9 @@ typedef enum e_ui_tab {
 
 typedef struct		s_select
 {
-	t_list			*obj;
-	t_list			*light;
-	t_list			*cam;
+	t_objlist			*obj;
+	t_objlist			*light;
+	t_objlist			*cam;
 	int				active_tab;
 }					t_select;
 
@@ -318,9 +318,9 @@ typedef struct s_ui {
 typedef struct		s_data
 {
 	t_para			para;
-	t_list			*lobj;
-	t_list			*llight;
-	t_list			*lcam;
+	t_objlist			*lobj;
+	t_objlist			*llight;
+	t_objlist			*lcam;
 	t_select		select;
 	t_ldist			ldist;
 	t_ui			ui;

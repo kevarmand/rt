@@ -157,6 +157,13 @@ int	pars_scene(const char *filename, t_scene *scene);
  */
 void	pars_ctx_init(t_pars_state *st);
 
+/***
+ * @brief Initialize a t_scene_parsed structure with default values.
+ * @param scene Pointer to the t_scene_parsed structure to initialize. (no_null)
+ * @return Returns SUCCESS on successful initialization.
+ */
+int	pars_init_scene(t_scene_parsed *scene);
+
 /**
  * @brief Parse a scene from an open file descriptor into a temporary builder.
  * @param fd    Open file descriptor to the .rt scene (read-only). (no_null)
@@ -324,7 +331,7 @@ int	pars_resolution(t_pars_state *st, t_scene_parsed *scene);
  * that required elements are present.
  */
 int	pars_register_element(t_scene_parsed *scene,
-			t_parsed_element *elem, t_elem_role role);
+			const t_parsed_element *elem, t_elem_role role);
 
 
 #endif

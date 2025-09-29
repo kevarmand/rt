@@ -12,9 +12,9 @@
 
 #include "rt.h"
 
-t_vector	translate_type(int type)
+t_vec3	translate_type(int type)
 {
-	t_vector	v;
+	t_vec3	v;
 
 	v.x = 0;
 	v.y = 0;
@@ -36,7 +36,7 @@ t_vector	translate_type(int type)
 
 int			translate_light(t_light *light, int type)
 {
-	t_vector	v;
+	t_vec3	v;
 
 	v = translate_type(type);
 	light->point = vect_translate(&(light->point), &v);
@@ -45,7 +45,7 @@ int			translate_light(t_light *light, int type)
 
 int			translate_cam(t_cam *cam, int type)
 {
-	t_vector	v;
+	t_vec3	v;
 
 	v = translate_type(type);
 	cam->point = vect_translate(&(cam->point), &v);
@@ -54,7 +54,7 @@ int			translate_cam(t_cam *cam, int type)
 
 int			translate_switch(int type, t_data *data)
 {
-	t_list	*p;
+	t_objlist	*p;
 
 	p = ((data->select).obj);
 	if (p->type == PLANE)

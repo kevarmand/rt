@@ -12,7 +12,7 @@
 
 #include "rt.h"
 
-void	rot_p2(t_vector *v, int type, t_vector *w)
+void	rot_p2(t_vec3 *v, int type, t_vec3 *w)
 {
 	if (type == AXE_YM)
 	{
@@ -34,9 +34,9 @@ void	rot_p2(t_vector *v, int type, t_vector *w)
 	}
 }
 
-int		rot_vect(t_vector *v, int type)
+int		rot_vect(t_vec3 *v, int type)
 {
-	t_vector	u;
+	t_vec3	u;
 
 	if (type == AXE_XP)
 	{

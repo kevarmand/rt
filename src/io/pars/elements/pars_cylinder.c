@@ -2,25 +2,31 @@
 #include "type.h"
 #include "error_codes.h"
 
-int	pars_plane(t_pars_state *st, t_scene_parsed *scene)
+int	pars_cylinder(t_pars_state *st, t_scene_parsed *scene)
 {
 	t_parsed_element	parsed_element;
 	t_tok				token;
 	int					status;
 
 	ft_bzero(&parsed_element, sizeof(parsed_element));
-	parsed_element.type = ELEM_PLANE;
-	if (!pars_next_tok(st, &token) || scan_point(token,
-		parsed_element.data.plane.origin))
+	parsed_element.type = ELEM_CYLINDER;
+	if (!pars_next_tok(st, &token)
+		|| scan_point(token, parsed_element.data.cylinder.origin))
 		return (ERR_PARS);
-	if (!pars_next_tok(st, &token) || scan_vec3(token,
-		parsed_element.data.plane.normal))
+	if (!pars_next_tok(st, &token)
+		|| scan_vec3(token, parsed_element.data.cylinder.axis))
 		return (ERR_PARS);
-	if (!pars_next_tok(st, &token) || scan_color(token,
-		parsed_element.data.plane.rgb))
+	if (!pars_next_tok(st, &token)
+		|| scan_float(token, &parsed_element.data.cylinder.diameter))
+		return (ERR_PARS);
+	if (!pars_next_tok(st, &token)
+		|| scan_float(token, &parsed_element.data.cylinder.height))
+		return (ERR_PARS);
+	if (!pars_next_tok(st, &token)
+		|| scan_color(token, parsed_element.data.cylinder.rgb))
 		return (ERR_PARS);
 	status = pars_options(st, &parsed_element.options);
-	if (status != 0)
+	if (status != SUCCESS)
 		return (ERR_PARS);
 	return (pars_register_element(scene, &parsed_element, ELEM_ROLE_NORMAL));
 }

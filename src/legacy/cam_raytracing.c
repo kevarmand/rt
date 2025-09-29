@@ -12,7 +12,7 @@
 
 #include "rt.h"
 
-t_color		cam_getcolor(t_data *data, t_cam *c, t_vector *v)
+t_color		cam_getcolor(t_data *data, t_cam *c, t_vec3 *v)
 {
 	t_ray		r;
 	t_color		co;
@@ -36,7 +36,7 @@ int			cam_gen(t_data *data, t_cam *c)
 	int			i;
 	int			j;
 	t_point		pf;
-	t_vector	v;
+	t_vec3	v;
 	t_color		co;
 
 	i = -1;

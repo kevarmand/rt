@@ -12,7 +12,7 @@
 
 #include "rt.h"
 
-double		inter_plane(t_point *p, t_vector *v, t_pl *pl)
+double		inter_plane(t_point *p, t_vec3 *v, t_pl *pl)
 {
 	double		a;
 	double		b;
@@ -20,16 +20,16 @@ double		inter_plane(t_point *p, t_vector *v, t_pl *pl)
 	a = vect_dot(v, &(pl->norm));
 	if (a == 0)
 		return (-1);
-	b = pl->d + vect_dot((t_vector *)p, &(pl->norm));
+	b = pl->d + vect_dot((t_vec3 *)p, &(pl->norm));
 	return (equa_premier(a, b));
 }
 
-double		inter_sphere(t_point *p, t_vector *v, t_sp *sp)
+double		inter_sphere(t_point *p, t_vec3 *v, t_sp *sp)
 {
 	double		a;
 	double		b;
 	double		c;
-	t_vector	vt;
+	t_vec3	vt;
 
 	a = vect_dot(v, v);
 	vt = vect_vector(&(sp->centre), p);
@@ -38,17 +38,17 @@ double		inter_sphere(t_point *p, t_vector *v, t_sp *sp)
 	return (equa_second(a, b, c));
 }
 
-double		inter_square(t_point *p, t_vector *v, t_sq *sq)
+double		inter_square(t_point *p, t_vec3 *v, t_sq *sq)
 {
 	double		a;
 	double		b;
-	t_vector	u1;
+	t_vec3	u1;
 	t_point		p1;
 
 	a = vect_dot(v, &(sq->norm));
 	if (a == 0)
 		return (-1);
-	b = sq->d + vect_dot((t_vector *)p, &(sq->norm));
+	b = sq->d + vect_dot((t_vec3 *)p, &(sq->norm));
 	b = equa_premier(a, b);
 	if (b < 0)
 		return (-1);
@@ -64,7 +64,7 @@ double		inter_square(t_point *p, t_vector *v, t_sq *sq)
 	return (b);
 }
 
-double		inter_switch(t_point *p, t_vector *v, t_plot *pl)
+double		inter_switch(t_point *p, t_vec3 *v, t_plot *pl)
 {
 	if (pl->type == PLANE)
 	{

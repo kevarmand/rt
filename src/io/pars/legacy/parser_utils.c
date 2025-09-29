@@ -103,7 +103,7 @@ int		pars_point(char *str, t_point *p)
 	return (free_split(po));
 }
 
-int		pars_vector(char *str, t_vector *v)
+int		pars_vector(char *str, t_vec3 *v)
 {
 	char	**ve;
 	double	d;

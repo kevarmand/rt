@@ -36,7 +36,7 @@ char	*get_name(t_type type, int i)
 /***
  * faudra peut etre retourner un int pour gerer les erreurs quoi que on peut exit
  */
-void	name_lst(t_list *lst)
+void	name_lst(t_objlist *lst)
 {
 	int i;
 	

@@ -33,7 +33,7 @@ int		init_pl(t_pl *pl)
 
 int		init_sq(t_sq *sq)
 {
-	t_vector	v;
+	t_vec3	v;
 
 	sq->a = sq->norm.x;
 	sq->b = sq->norm.y;
@@ -60,8 +60,8 @@ int		init_sp(t_sp *sp)
 
 int		init_tr(t_tr *tr)
 {
-	t_vector	v1;
-	t_vector	v2;
+	t_vec3	v1;
+	t_vec3	v2;
 
 	v1 = vect_vector(&(tr->p1), &(tr->p2));
 	v2 = vect_vector(&(tr->p1), &(tr->p3));

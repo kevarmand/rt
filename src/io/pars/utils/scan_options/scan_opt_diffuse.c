@@ -6,7 +6,7 @@ int	scan_opt_diffuse(t_tok tok, t_element_options *opts)
 {
 	float	value;
 
-	if (parse_float(tok, &value))
+	if (scan_float(tok, &value))
 		return (ERR_PARSE_FLOAT);
 	if (value < 0.0f || value > 1.0f)
 		return (ERR_PARSE_FLOAT);

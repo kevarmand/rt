@@ -595,7 +595,7 @@ int		pars_point(char *str, t_point *p)
 	return (free_split(po));
 }
 
-int		pars_vector(char *str, t_vector *v)
+int		pars_vector(char *str, t_vec3 *v)
 {
 	char	**ve;
 	double	d;
@@ -752,10 +752,10 @@ int	pars_tok_eq(t_tok t, const char *lit)
 #include "type.h"
 
 
-static int	push_copy_to_list(t_list **list_head, const t_parsed_element *element)
+static int	push_copy_to_list(t_objlist **list_head, const t_parsed_element *element)
 {
 	t_parsed_element	*heap_copy;
-	t_list				*new_node;
+	t_objlist				*new_node;
 
 	heap_copy = (t_parsed_element *)malloc(sizeof(*heap_copy));
 	if (heap_copy == NULL)
