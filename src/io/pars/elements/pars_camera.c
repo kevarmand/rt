@@ -12,13 +12,13 @@ int	pars_camera(t_pars_state *st, t_scene_parsed *scene, t_elem_role role)
 	ft_bzero(&parsed_element, sizeof(parsed_element));
 	parsed_element.type = ELEM_CAMERA;
 	if (!pars_next_tok(st, &token) || scan_point(token,
-		parsed_element.data.camera.position))
+			parsed_element.data.camera.position))
 		return (ERR_PARS);
 	if (!pars_next_tok(st, &token) || scan_vec3(token,
-		parsed_element.data.camera.orientation))
+			parsed_element.data.camera.orientation))
 		return (ERR_PARS);
 	if (!pars_next_tok(st, &token) || scan_float(token,
-		&fov_as_float))
+			&fov_as_float))
 		return (ERR_PARS);
 	parsed_element.data.camera.fov = (int)fov_as_float;
 	if (parsed_element.data.camera.fov < 1

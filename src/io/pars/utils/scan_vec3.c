@@ -10,7 +10,8 @@ static const char	g_col_reset[] = "\033[0m";
 static const char	g_warn_prefix[] = "Warning: ";
 static const char	g_msg_range[] = "Vector component out of range [-1,1].\n";
 static const char	g_msg_norm[] = "Normalizing non-unit vector.\n";
-static const char	g_msg_zerolen[] = "Error: Zero-length vector cannot be normalized.\n";
+static const char	g_msg_zerolen[] = "Error: Zero-length vector cannot\
+	be normalized.\n";
 
 static void	put_warn_prefix(void)
 {

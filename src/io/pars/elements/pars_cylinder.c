@@ -30,4 +30,3 @@ int	pars_cylinder(t_pars_state *st, t_scene_parsed *scene)
 		return (ERR_PARS);
 	return (pars_register_element(scene, &parsed_element, ELEM_ROLE_NORMAL));
 }
-

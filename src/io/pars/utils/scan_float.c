@@ -42,6 +42,7 @@ static int	scan_fraction(t_tok tok, int *index_pos, double *value_io)
 {
 	int		digits_read;
 	double	frac_scale;
+	double	tmp;
 
 	digits_read = 0;
 	frac_scale = 0.1f;
@@ -49,8 +50,8 @@ static int	scan_fraction(t_tok tok, int *index_pos, double *value_io)
 		&& tok.start[*index_pos] >= '0'
 		&& tok.start[*index_pos] <= '9')
 	{
-		*value_io += (double)(tok.start[*index_pos] - '0')
-			* frac_scale;
+		tmp = ((double)(tok.start[*index_pos] - '0')) * (frac_scale);
+		(*value_io) += tmp;
 		digits_read++;
 		frac_scale *= 0.1f;
 		(*index_pos)++;

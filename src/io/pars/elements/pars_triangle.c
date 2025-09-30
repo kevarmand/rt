@@ -11,16 +11,16 @@ int	pars_triangle(t_pars_state *st, t_scene_parsed *scene)
 	ft_bzero(&parsed_element, sizeof(parsed_element));
 	parsed_element.type = ELEM_TRIANGLE;
 	if (!pars_next_tok(st, &token) || scan_point(token,
-		parsed_element.data.triangle.vertex1))
+			parsed_element.data.triangle.vertex1))
 		return (ERR_PARS);
 	if (!pars_next_tok(st, &token) || scan_point(token,
-		parsed_element.data.triangle.vertex2))
+			parsed_element.data.triangle.vertex2))
 		return (ERR_PARS);
 	if (!pars_next_tok(st, &token) || scan_point(token,
-		parsed_element.data.triangle.vertex3))
+			parsed_element.data.triangle.vertex3))
 		return (ERR_PARS);
 	if (!pars_next_tok(st, &token) || scan_color(token,
-		parsed_element.data.triangle.rgb))
+			parsed_element.data.triangle.rgb))
 		return (ERR_PARS);
 	status = pars_options(st, &parsed_element.options);
 	if (status != 0)

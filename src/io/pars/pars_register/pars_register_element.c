@@ -1,13 +1,13 @@
 #include "io.h"
 #include "error_codes.h"
-#include "libft.h"   /* <-- important : t_list + ft_lst* */
+#include "libft.h"
 #include "type.h"
 
-static int  push_copy_to_list(t_list **list_head,
+static int	push_copy_to_list(t_list **list_head,
 				const t_parsed_element *element)
 {
-	t_parsed_element *heap_copy;
-	t_list           *new_node;
+	t_parsed_element	*heap_copy;
+	t_list				*new_node;
 
 	heap_copy = (t_parsed_element *)malloc(sizeof(*heap_copy));
 	if (heap_copy == NULL)
@@ -23,7 +23,7 @@ static int  push_copy_to_list(t_list **list_head,
 	return (SUCCESS);
 }
 
-static int  is_object_type(t_element_type type)
+static int	is_object_type(t_element_type type)
 {
 	return (type == ELEM_SPHERE
 		|| type == ELEM_PLANE
@@ -31,7 +31,7 @@ static int  is_object_type(t_element_type type)
 		|| type == ELEM_TRIANGLE);
 }
 
-int pars_register_element(t_scene_parsed *scene,
+int	pars_register_element(t_scene_parsed *scene,
 			const t_parsed_element *element,
 			t_elem_role role)
 {
@@ -50,7 +50,8 @@ int pars_register_element(t_scene_parsed *scene,
 	}
 	if (element->type == ELEM_LIGHT)
 	{
-		if (role == ELEM_ROLE_PRIMARY && (scene->presence_mask & PRESENCE_LIGHT))
+		if (role == ELEM_ROLE_PRIMARY
+			&& (scene->presence_mask & PRESENCE_LIGHT))
 			return (ERR_PARS);
 		if (role == ELEM_ROLE_PRIMARY)
 			scene->presence_mask |= PRESENCE_LIGHT;
