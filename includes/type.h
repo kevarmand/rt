@@ -220,12 +220,12 @@ typedef struct		s_lighting
 	t_color			c_ret;
 }					t_lighting;
 
-typedef struct		s_light
-{
-	t_point			point;
-	double			brightness;
-	t_color			color;
-}					t_light;
+// typedef struct		s_light
+// {
+// 	t_point			point;
+// 	double			brightness;
+// 	t_color			color;
+// }					t_light;
 
 /*
 **	fin des list objet

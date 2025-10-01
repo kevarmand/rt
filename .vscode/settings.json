@@ -16,6 +16,8 @@
 		"push": "c",
 		"random": "c",
 		"libft.h": "c",
-		"type.h": "c"
+		"type.h": "c",
+		"convert.h": "c",
+		"scene.h": "c"
 	}
 }

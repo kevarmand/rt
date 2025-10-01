@@ -130,7 +130,6 @@ typedef struct s_light
 {
 	t_vec3f position;
 	t_vec3f color;     /* linéaire 0..1 */
-	float   intensity; /* puissance relative */
 }	t_light;
 
 /* --------- Caméra prête pour ray(x,y) ---------
@@ -179,7 +178,6 @@ typedef struct s_scene
 	int     resolution_width;
 	int     resolution_height;
 	t_vec3f ambient_color;     /* 0..1 linéaire */
-	float   ambient_brightness;
 
 	/* Primitives & Objets (BVH) */
 	t_primitive *primitives;
