@@ -13,6 +13,12 @@
 #ifndef VECTOR_H
 # define VECTOR_H 1
 
+# if defined(_MSC_VER)
+#  define FORCEINLINE __forceinline
+# elif defined(__GNUC__) || defined(__clang__)
+#  define FORCEINLINE __attribute__((always_inline))
+# endif
+
 typedef struct s_vec3f		t_vec3f;
 typedef struct s_vec3fsse	t_vec3fsse;
 typedef struct s_vec3favx	t_vec3avx;

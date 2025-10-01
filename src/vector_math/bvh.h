@@ -135,11 +135,16 @@ typedef struct s_moller
 	t_vec3f	r_cross_e2;
 	float	det;
 	float	invdet;
-	float	u;
-	float	v;
-	float	t;
 	t_vec3f	s_cross_e1;
 	t_vec3f	s;
 }	t_moller;
+
+typedef struct s_moller_out
+{
+	float	u;
+	float	v;
+	float	t;
+	t_vec3f	inter;
+}	t_moller_out;
 
 #endif // !BVH_H

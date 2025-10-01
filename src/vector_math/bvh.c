@@ -448,28 +448,31 @@ int	bound_intersect(t_ray r, t_aabb bound, float *near, float *far)
 	return (1);
 }
 
-int	triangle_inter(t_ray r, t_triangle *tr, t_vec3f *outinter)
+__attribute__((always_inline))
+extern inline int	triangle_inter(t_ray r, t_triangle *tr, t_moller_out *out)
 {
 	t_moller	m;
 
 	m.r_cross_e2 = vec3f_cross(r.dir, tr->edge2);
 	m.det = vec3f_dot(tr->edge1, m.r_cross_e2);
+	if (fabsf(m.det) < EPSILON)
+		return (0);
 	m.invdet = 1.f / m.det;
 	m.s = vec3f_sub(r.origin, tr->v0);
-	m.u = m.invdet * vec3f_dot(m.s, m.r_cross_e2);
-	m.s_cross_e1 = vec3f_cross(m.s, tr->edge2);
-	m.v = m.invdet * vec3f_dot(r.dir, m.s_cross_e1);
-	m.t = m.invdet * vec3f_dot(tr->edge2, m.s_cross_e1);
-	if (fabsf(m.det) > EPSILON || (m.u < 0 && fabsf(m.u) > EPSILON) ||
-		(m.u > 1 && fabsf(m.u - 1) > EPSILON) ||
-		(m.v < 0 && fabsf(m.v) > EPSILON) ||
-		(m.u + m.v > 1 && fabsf(m.u + m.v - 1) > EPSILON))
-	{
+	out->u = m.invdet * vec3f_dot(m.s, m.r_cross_e2);
+	if (out->u < -EPSILON || out->u > 1.f + EPSILON)
+			return (0);
+	m.s_cross_e1 = vec3f_cross(m.s, tr->edge1);
+	out->v = m.invdet * vec3f_dot(r.dir, m.s_cross_e1);
+	if (out->v < -EPSILON || out->u + out->v > 1.f + EPSILON)
 		return (0);
+	out->t = m.invdet * vec3f_dot(tr->edge2, m.s_cross_e1);
+	if (out->t > EPSILON)
+	{
+		out->inter = vec3f_add(r.origin, vec3f_scale(r.dir, out->t));
+		return (1);
 	}
-	if (m.t > EPSILON)
-		*outinter = vec3f_add(r.origin, vec3f_scale(r.dir, m.t));
-	return (1);
+	return (0);
 }
 
 // int	prim_inter(t_ray r, t_primitive *p, float *t)
