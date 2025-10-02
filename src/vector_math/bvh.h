@@ -6,7 +6,7 @@
 /*   By: norivier <norivier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 20:01:56 by norivier          #+#    #+#             */
-/*   Updated: 2025/09/14 21:51:12 by norivier         ###   ########.fr       */
+/*   Updated: 2025/10/02 11:35:54 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ typedef enum e_primtype
 	PRIM_SPHERE,
 	PRIM_CYLINDER,
 	PRIM_TORUS,
-	PRIM_QUAD
 }	t_primtype;
 
 typedef struct s_triangle
@@ -32,19 +31,26 @@ typedef struct s_triangle
 	t_vec3f		v0;
 	t_vec3f		edge1;
 	t_vec3f		edge2;
+	t_vec3f		normal;
 }	t_triangle;
 
 typedef struct s_sphere
 {
 	t_vec3f	center;
 	float	radius;
+	float	r_squared;
+	float	inv_r;
 }	t_sphere;
 
 typedef struct s_cylinder
 {
 	t_vec3f	p0;
 	t_vec3f	p1;
+	t_vec3f	axis; // (p1 - p0) / height this is normalized
+	float	height; // ||p1 - p0||
+	float	inv_height;
 	float	radius;
+	float	r_squared;
 }	t_cylinder;
 
 typedef struct s_torus
@@ -53,14 +59,6 @@ typedef struct s_torus
 	float	R;
 	float	r;
 }	t_torus;
-
-typedef struct s_quad
-{
-	t_vec3f	v0;
-	t_vec3f	v1;
-	t_vec3f	v2;
-	t_vec3f	v3;
-}	t_quad;
 
 typedef t_vec3f t_aabb[2];
 
@@ -73,7 +71,6 @@ typedef struct s_primitive
 		t_sphere	sp;
 		t_cylinder	cy;
 		t_torus		to;
-		t_quad		qu;
 	};
 	t_aabb			bounds;
 	t_vec3f			centroid;
@@ -88,12 +85,6 @@ typedef struct s_ray
 	int		sign[3];
 }	t_ray;
 
-typedef struct s_hit
-{
-	int		hit;
-	float	t;
-	int		prim_id;
-}	t_hit;
 
 typedef struct s_bvhnode
 {
@@ -139,12 +130,58 @@ typedef struct s_moller
 	t_vec3f	s;
 }	t_moller;
 
-typedef struct s_moller_out
+typedef struct s_hit
 {
 	float	u;
 	float	v;
 	float	t;
 	t_vec3f	inter;
-}	t_moller_out;
+	t_vec3f	normal;
+	int		prim_id;
+}	t_hit;
+
+typedef struct s_sphere_inter
+{
+	t_vec3f	L;
+	float	b;
+	float	c;
+	float	t;
+	float	t0;
+	float	t1;
+	float	tmin;
+	float	tmax;
+	float	disc;
+	float	disc_sqrt;
+	float	q;
+}	t_sphere_inter;
+
+typedef struct s_cylinder_inter
+{
+	t_vec3f	delta;
+	t_vec3f	d;
+	t_vec3f	delta_proj;
+	float	a;
+	float	b;
+	float	c;
+	float	disc;
+	float	disc_sqrt;
+	float	q;
+	float	t0;
+	float	t1;
+	float	tmin;
+	float	tmax;
+	float	t;
+	float	y;
+	t_vec3f	inter;
+}	t_cylinder_inter;
+
+typedef struct s_equ
+{
+	float	a;
+	float	b;
+	float	c;
+	float	d;
+	float	e;
+}	t_equ;
 
 #endif // !BVH_H

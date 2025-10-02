@@ -6,18 +6,19 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 20:45:35 by norivier          #+#    #+#             */
-/*   Updated: 2025/09/16 18:54:46 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/10/02 12:02:14 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bvh.h"
+#include "types.h"
 #include "vector.h"
 #include <float.h>
 #include <math.h>
 #include <stdlib.h>
 #include "libft.h"
 
-__attribute__((always_inline))
+FORCEINLINE
 extern inline void	triangle_bound(t_triangle t, t_aabb out)
 {
 	t_vec3f	v1;
@@ -29,7 +30,7 @@ extern inline void	triangle_bound(t_triangle t, t_aabb out)
 	out[1] = vec3f_max(vec3f_max(t.v0, v1), v2);
 }
 
-__attribute__((always_inline))
+FORCEINLINE
 extern inline t_vec3f	triangle_centroid(t_triangle t)
 {
 	t_vec3f	out;
@@ -44,7 +45,7 @@ extern inline t_vec3f	triangle_centroid(t_triangle t)
 	return (out);
 }
 
-__attribute__((always_inline))
+FORCEINLINE
 extern inline void	sphere_bound(t_sphere s, t_aabb out)
 {
 	out[0].x = s.center.x - s.radius;
@@ -55,13 +56,13 @@ extern inline void	sphere_bound(t_sphere s, t_aabb out)
 	out[1].z = s.center.z + s.radius;
 }
 
-__attribute__((always_inline))
+FORCEINLINE
 extern inline t_vec3f	sphere_centroid(t_sphere s)
 {
 	return (s.center);
 }
 
-__attribute__((always_inline))
+FORCEINLINE
 extern inline void	cylinder_bound(t_cylinder c, t_aabb out)
 {
 	out[0] = vec3f_min(c.p0, c.p1);
@@ -74,7 +75,7 @@ extern inline void	cylinder_bound(t_cylinder c, t_aabb out)
 	out[1].z += c.radius;
 }
 
-__attribute__((always_inline))
+FORCEINLINE
 extern inline t_vec3f	cylinder_centroid(t_cylinder c)
 {
 	t_vec3f	out;
@@ -85,7 +86,7 @@ extern inline t_vec3f	cylinder_centroid(t_cylinder c)
 	return (out);
 }
 
-__attribute__((always_inline))
+FORCEINLINE
 extern inline void	torus_bound(t_torus t, t_aabb out)
 {
 	float	extent;
@@ -99,31 +100,13 @@ extern inline void	torus_bound(t_torus t, t_aabb out)
 	out[1].z = t.center.z + extent;
 }
 
-__attribute__((always_inline))
+FORCEINLINE
 extern inline t_vec3f	torus_centroid(t_torus t)
 {
 	return (t.center);
 }
 
-__attribute__((always_inline))
-extern inline void	quad_bound(t_quad q, t_aabb out)
-{
-	out[0] = vec3f_min(vec3f_min(q.v0, q.v1), vec3f_min(q.v2, q.v3));
-	out[1] = vec3f_max(vec3f_max(q.v0, q.v1), vec3f_max(q.v2, q.v3));
-}
-
-__attribute__((always_inline))
-extern inline t_vec3f	quad_centroid(t_quad q)
-{
-	t_vec3f	out;
-
-	out.x = (q.v0.x + q.v1.x + q.v2.x + q.v3.x) / 4.0f;
-	out.y = (q.v0.y + q.v1.y + q.v2.y + q.v3.y) / 4.0f;
-	out.z = (q.v0.z + q.v1.z + q.v2.z + q.v3.z) / 4.0f;
-	return (out);
-}
-
-__attribute__((always_inline))
+FORCEINLINE
 extern inline void	prim_bound(t_primitive *p)
 {
 	t_aabb	out;
@@ -136,8 +119,6 @@ extern inline void	prim_bound(t_primitive *p)
 		cylinder_bound(p->cy, out);
 	else if (p->type == PRIM_TORUS)
 		torus_bound(p->to, out);
-	else if (p->type == PRIM_QUAD)
-		quad_bound(p->qu, out);
 	else
 	{
 		out[0] = (t_vec3f){0, 0, 0};
@@ -147,7 +128,7 @@ extern inline void	prim_bound(t_primitive *p)
 	p->bounds[1] = out[1];
 }
 
-__attribute__((always_inline))
+FORCEINLINE
 extern inline t_vec3f	prim_centroid(t_primitive *p)
 {
 	if (p->type == PRIM_TRIANGLE)
@@ -158,19 +139,17 @@ extern inline t_vec3f	prim_centroid(t_primitive *p)
 		return (cylinder_centroid(p->cy));
 	else if (p->type == PRIM_TORUS)
 		return (torus_centroid(p->to));
-	else if (p->type == PRIM_QUAD)
-		return (quad_centroid(p->qu));
 	return ((t_vec3f){0, 0, 0});
 }
 
-__attribute__((always_inline))
+FORCEINLINE
 extern inline void	bound_merge(t_aabb a, t_aabb b, t_aabb out)
 {
 	out[0] = vec3f_min(a[0], b[0]);
 	out[1] = vec3f_max(a[1], b[1]);
 }
 
-__attribute__((always_inline))
+FORCEINLINE
 extern inline float	bound_area(t_aabb b)
 {
 	t_vec3f	d;
@@ -181,7 +160,7 @@ extern inline float	bound_area(t_aabb b)
 	return (2.0f * (d.x * d.y + d.y * d.z + d.z * d.x));
 }
 
-__attribute__((always_inline))
+FORCEINLINE
 extern inline void	prim_bound_init(t_primpack pack)
 {
 	t_primitive	*p;
@@ -196,7 +175,7 @@ extern inline void	prim_bound_init(t_primpack pack)
 	}
 }
 
-__attribute__((always_inline))
+FORCEINLINE
 extern inline void	prim_nbound(t_primpack pack, t_aabb out)
 {
 	t_aabb	tmp;
@@ -214,7 +193,7 @@ extern inline void	prim_nbound(t_primpack pack, t_aabb out)
 	}
 }
 
-__attribute__((always_inline))
+FORCEINLINE
 extern inline void	swap_int(int *a, int *b)
 {
 	int	tmp;
@@ -224,7 +203,7 @@ extern inline void	swap_int(int *a, int *b)
 	*b = tmp;
 }
 
-__attribute__((always_inline))
+FORCEINLINE
 extern inline float	prim_centroid_axis(t_primitive *p, int axis)
 {
 	if (axis == 0)
@@ -234,6 +213,7 @@ extern inline float	prim_centroid_axis(t_primitive *p, int axis)
 	return (p->centroid.z);
 }
 
+FORCEINLINE
 extern inline float	prim_centroid_range(t_primpack pck, int axis)
 {
 	float	sum;
@@ -249,7 +229,7 @@ extern inline float	prim_centroid_range(t_primpack pck, int axis)
 	return (sum / pck.count);
 }
 
-__attribute__((always_inline))
+FORCEINLINE
 extern inline int	idx_partition(t_primpack pck, int low, int high, int axis)
 {
 	float	pivot;
@@ -272,6 +252,7 @@ extern inline int	idx_partition(t_primpack pck, int low, int high, int axis)
 	return (i + 1);
 }
 
+FORCEINLINE
 void	quicksort_indices(t_primpack pck, int low, int high, int axis)
 {
 	int	pi;
@@ -407,12 +388,13 @@ int	build_bvh(t_bvhnode *nodes, int *nodecount, t_primpack pck, int parent)
 	return (nodeindex);
 }
 
+FORCEINLINE
 t_ray	build_ray(t_vec3f origin, t_vec3f direction)
 {
 	t_ray	out;
 
 	out.origin = origin;
-	out.dir = direction;
+	out.dir = vec3f_normalize(direction);
 	out.invdir.x = 1.0f / direction.x;
 	out.invdir.y = 1.0f / direction.y;
 	out.invdir.z = 1.0f / direction.z;
@@ -425,7 +407,9 @@ t_ray	build_ray(t_vec3f origin, t_vec3f direction)
 	return (out);
 }
 
-int	bound_intersect(t_ray r, t_aabb bound, float *near, float *far)
+FORCEINLINE
+extern inline int	bound_intersect(t_ray r, t_aabb bound, float *near,
+	float *far)
 {
 	t_aabb_inter	b;
 	float			tmin;
@@ -448,8 +432,8 @@ int	bound_intersect(t_ray r, t_aabb bound, float *near, float *far)
 	return (1);
 }
 
-__attribute__((always_inline))
-extern inline int	triangle_inter(t_ray r, t_triangle *tr, t_moller_out *out)
+FORCEINLINE
+extern inline int	triangle_inter(t_ray r, t_triangle *tr, t_hit *hit)
 {
 	t_moller	m;
 
@@ -459,20 +443,140 @@ extern inline int	triangle_inter(t_ray r, t_triangle *tr, t_moller_out *out)
 		return (0);
 	m.invdet = 1.f / m.det;
 	m.s = vec3f_sub(r.origin, tr->v0);
-	out->u = m.invdet * vec3f_dot(m.s, m.r_cross_e2);
-	if (out->u < -EPSILON || out->u > 1.f + EPSILON)
+	hit->u = m.invdet * vec3f_dot(m.s, m.r_cross_e2);
+	if (hit->u < -EPSILON || hit->u > 1.f + EPSILON)
 			return (0);
 	m.s_cross_e1 = vec3f_cross(m.s, tr->edge1);
-	out->v = m.invdet * vec3f_dot(r.dir, m.s_cross_e1);
-	if (out->v < -EPSILON || out->u + out->v > 1.f + EPSILON)
+	hit->v = m.invdet * vec3f_dot(r.dir, m.s_cross_e1);
+	if (hit->v < -EPSILON || hit->u + hit->v > 1.f + EPSILON)
 		return (0);
-	out->t = m.invdet * vec3f_dot(tr->edge2, m.s_cross_e1);
-	if (out->t > EPSILON)
+	hit->t = m.invdet * vec3f_dot(tr->edge2, m.s_cross_e1);
+	if (hit->t <= EPSILON)
+		return (0);
+	hit->inter = vec3f_add(r.origin, vec3f_scale(r.dir, hit->t));
+	hit->normal = tr->normal;
+	return (1);
+}
+
+FORCEINLINE
+extern inline int	solve_quadratic(t_equ arg, float roots[])
+{
+	float	disc;
+	float	disc_sqrt;
+	float	q;
+
+	if (fabsf(arg.a) < EPSILON)
 	{
-		out->inter = vec3f_add(r.origin, vec3f_scale(r.dir, out->t));
+		if (fabsf(arg.b) < EPSILON)
+			return (0);
+		roots[0] = -arg.c / arg.b;
 		return (1);
 	}
-	return (0);
+	disc = arg.b * arg.b - 4.0f * arg.a * arg.c;
+	if (disc < 0.0f)
+		return (0);
+	disc_sqrt = sqrtf(disc);
+	q = -0.5f * (arg.b + copysignf(disc_sqrt, arg.b));
+	roots[0] = q / arg.a;
+	roots[1] = arg.c / q;
+	roots[0] = fminf(roots[0], roots[1]);
+	roots[1] = fmaxf(roots[0], roots[1]);
+	if (disc > EPSILON)
+		return (2);
+	return (1);
+}
+
+
+FORCEINLINE
+extern inline void	_sphere_inter(t_ray r, t_sphere *s, t_hit *hit, float t)
+{
+	const float inv_pi = 1.0f / (float)M_PI;
+	const float inv2_pi = 0.5f * inv_pi;
+	float	theta;
+	float	phi;
+
+	hit->t = t;
+	hit->inter = vec3f_add(r.origin, vec3f_scale(r.dir, t));
+	hit->normal = vec3f_scale(vec3f_sub(hit->inter, s->center), s->inv_r);
+	theta = atan2f(hit->normal.z, hit->normal.x);
+	phi = acosf(hit->normal.y);
+	hit->u = (theta + (float)M_PI) * (inv2_pi);
+	hit->v = phi * (inv_pi);
+}
+
+FORCEINLINE
+extern inline int	sphere_inter(t_ray r, t_sphere *s, t_hit *hit)
+{
+	t_sphere_inter	m;
+
+	m.L = vec3f_sub(r.origin, s->center);
+	m.b = 2.0f * vec3f_dot(r.dir, m.L);
+	m.c = vec3f_dot(m.L, m.L) - s->r_squared;
+	if (solve_quadratic((t_equ){1, m.b, m.c, 0, 0},
+			(float []){m.t0, m.t1}) == 0)
+		return (0);
+	if (m.t0 > EPSILON)
+		m.t = m.t0;
+	else if (m.t1 > EPSILON)
+		m.t = m.t1;
+	else
+		m.t = -1.0f;
+	if (m.t < -EPSILON)
+		return (0);
+	_sphere_inter(r, s, hit, m.t);
+	return (1);
+}
+
+FORCEINLINE
+extern inline int	_cylinder_inter(t_ray r, t_cylinder *cl, t_hit *hit,
+	t_cylinder_inter m)
+{
+	const float	inv2_pi = 0.5f / (float)M_PI;
+
+	m.inter = vec3f_add(r.origin, vec3f_scale(r.dir, m.t));
+	m.y = vec3f_dot(vec3f_sub(m.inter, cl->p0), cl->axis);
+	if ( m.y < -EPSILON || m.y > cl->height + EPSILON)
+		return (0);
+	hit->inter = m.inter;
+	hit->normal = vec3f_normalize(vec3f_sub(
+		m.inter,
+		vec3f_add(cl->p0, vec3f_scale(cl->axis, m.y))));
+	hit->t = m.t;
+	hit->u = (atan2f(hit->normal.z, hit->normal.x) + (float)M_PI) * inv2_pi;
+	hit->v = m.y / cl->height;
+	return (1);
+}
+
+FORCEINLINE
+extern inline int	cylinder_inter(t_ray r, t_cylinder *cl, t_hit *hit)
+{
+	t_cylinder_inter	m;
+
+	m.delta = vec3f_sub(r.origin, cl->p0);
+	m.d = vec3f_sub(r.dir, vec3f_scale(cl->axis, vec3f_dot(r.dir, cl->axis)));
+	m.delta_proj = vec3f_sub(m.delta, vec3f_scale(cl->axis, vec3f_dot(m.delta,
+		cl->axis)));
+	m.a = vec3f_dot(m.d, m.d);
+	m.b = 2.0f * vec3f_dot(m.d, m.delta_proj);
+	m.c = vec3f_dot(m.delta_proj, m.delta_proj) - cl->r_squared;
+	if (solve_quadratic((t_equ){m.a, m.b, m.c, 0, 0},
+			(float []){m.t0, m.t1}) == 0)
+		return (0);
+	if (m.t0 > EPSILON)
+		m.t = m.t0;
+	else if (m.t1 > EPSILON)
+		m.t = m.t1;
+	else
+		m.t = -1.0f;
+	if (m.t < -EPSILON)
+		return (0);
+	return (_cylinder_inter(r, cl, hit, m));
+}
+
+FORCEINLINE
+extern inline int	torus_inter(t_ray r, t_torus *t, float *out)
+{
+
 }
 
 // int	prim_inter(t_ray r, t_primitive *p, float *t)
@@ -612,6 +716,7 @@ t_triangle	make_triangle(t_vec3f v0, t_vec3f v1, t_vec3f v2)
 	t.v0 = v0;
 	t.edge1 = vec3f_sub(v1, v0);
 	t.edge2 = vec3f_sub(v2, v0);
+	t.normal = vec3f_normalize(vec3f_cross(t.edge1, t.edge2)); // make sure we both are okay on right hand rule here
 	return (t);
 }
 
