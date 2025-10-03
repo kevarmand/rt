@@ -198,6 +198,10 @@ typedef struct s_scene
 	t_material  *materials;
 	int          material_count;
 
+	/* Surfaces (hors BVH) */
+	t_surface   *surfaces;
+	int          surface_count;
+
 	t_texture   *textures;
 	int          texture_count;
 

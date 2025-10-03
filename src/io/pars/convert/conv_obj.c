@@ -5,7 +5,6 @@
 #include "error_codes.h"
 #include <stdlib.h>
 
-
 static int	init_obj_plane_alloc(t_scene *scene, t_conv_ctx *cx)
 {
 	scene->object_count = cx->object_count;
@@ -31,10 +30,14 @@ static void	copy_plane_data(const t_parsed_element *src, t_plane *dst)
 		+ dst->normal.z * src->data.plane.origin[2]);
 }
 
-static void	copy_object_data(const t_parsed_element *src,
-	t_object *dst, const t_scene_parsed *parsed, t_conv_ctx *cx)
+static void	copy_object_data(const t_parsed_element *src, t_object *dst)
 {
-	
+	if (src->type == ELEM_SPHERE)
+		copy_sphere_to_object(src, dst);
+	else if (src->type == ELEM_CYLINDER)
+		copy_cylinder_to_object(src, dst);
+	else if (src->type == ELEM_TRIANGLE)
+		copy_triangle_to_object(src, dst);
 }
 
 int	conv_obj(t_scene_parsed *parsed, t_scene *scene, t_conv_ctx *cx)
@@ -55,7 +58,7 @@ int	conv_obj(t_scene_parsed *parsed, t_scene *scene, t_conv_ctx *cx)
 		if (elem->type == ELEM_PLANE)
 			copy_plane_data(elem, &scene->planes[i++]);
 		else
-			copy_object_data(lst->content, &scene->objects[j++], parsed, cx);
+			copy_object_data(elem, &scene->objects[j++]);
 		lst = lst->next;
 	}
 	return (SUCCESS);
