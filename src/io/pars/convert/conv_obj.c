@@ -59,6 +59,8 @@ int	conv_obj(t_scene_parsed *parsed, t_scene *scene, t_conv_ctx *cx)
 			copy_plane_data(elem, &scene->planes[i++]);
 		else
 			copy_object_data(elem, &scene->objects[j++]);
+		if (conv_option(scene, elem->options) != SUCCESS)
+			return (ERR_MALLOC);
 		lst = lst->next;
 	}
 	return (SUCCESS);

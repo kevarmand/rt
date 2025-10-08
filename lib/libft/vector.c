@@ -5,74 +5,86 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/21 16:24:14 by kearmand          #+#    #+#             */
-/*   Updated: 2025/05/13 10:00:27 by kearmand         ###   ########.fr       */
+/*   Created: 2025/10/06 10:10:06 by kearmand          #+#    #+#             */
+/*   Updated: 2025/10/06 10:30:04 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include <stdlib.h>
+#include "vector.h"
 
-int	vector_init(t_vector *vec, size_t initial_capacity)
+int	vector_init(t_vector *vector, size_t initial_capacity, size_t element_size)
 {
-	vec->data = (void **)malloc(sizeof(void *) * initial_capacity);
-	if (!vec->data)
+	vector->data = NULL;
+	vector->element_size = element_size;
+	vector->count = 0;
+	vector->capacity = 0;
+	if (initial_capacity == 0)
+		return (0);
+	vector->data = (unsigned char *)malloc(initial_capacity * element_size);
+	if (!vector->data)
 		return (-1);
-	vec->count = 0;
-	vec->capacity = initial_capacity;
+	vector->capacity = initial_capacity;
 	return (0);
 }
 
-void	vector_destroy(t_vector *vec)
+void	vector_destroy(t_vector *vector)
 {
-	if (!vec->data)
-		free(vec->data);
-	vec->data = NULL;
-	vec->count = 0;
-	vec->capacity = 0;
+	if (vector->data)
+		free(vector->data);
+	vector->data = NULL;
+	vector->element_size = 0;
+	vector->count = 0;
+	vector->capacity = 0;
 }
 
-int	vector_push_back(t_vector *vec, void *elem)
+int	vector_remove_stable(t_vector *vector, size_t index)
 {
-	void	**new_data;
-	size_t	new_capacity;
+	size_t	from_off;
+	size_t	to_off;
+	size_t	tail_bytes;
 	size_t	i;
 
-	if (vec->count >= vec->capacity)
+	if (index + 1 < vector->count)
 	{
-		new_capacity = vec->capacity * 2;
-		new_data = malloc(new_capacity * sizeof(void *));
-		if (!new_data)
-			return (-1);
+		from_off = (index + 1) * vector->element_size;
+		to_off = index * vector->element_size;
+		tail_bytes = (vector->count - index - 1) * vector->element_size;
 		i = 0;
-		while (i < vec->count)
+		while (i < tail_bytes)
 		{
-			new_data[i] = vec->data[i];
+			vector->data[to_off + i] = vector->data[from_off + i];
 			i++;
 		}
-		free(vec->data);
-		vec->data = new_data;
-		vec->capacity = new_capacity;
 	}
-	vec->data[vec->count++] = elem;
+	if (vector->count > 0)
+		vector->count--;
 	return (0);
 }
 
-/***
- * @brief Remove an element from the vector at the specified index
- * @param vec The vector to remove from
- * @param index The index of the element to remove
- */
-void	vector_remove(t_vector *vec, size_t index)
+int	vector_remove_swap(t_vector *vector, size_t index)
 {
+	size_t	dst_off;
+	size_t	src_off;
 	size_t	i;
 
-	if (!vec || index >= vec->count)
-		return ;
-	i = index;
-	while (i < vec->count - 1)
+	if (index + 1 < vector->count)
 	{
-		vec->data[i] = vec->data[i + 1];
-		i++;
+		dst_off = index * vector->element_size;
+		src_off = (vector->count - 1) * vector->element_size;
+		i = 0;
+		while (i < vector->element_size)
+		{
+			vector->data[dst_off + i] = vector->data[src_off + i];
+			i++;
+		}
 	}
-	vec->count--;
+	if (vector->count > 0)
+		vector->count--;
+	return (0);
+}
+
+void	vector_clear(t_vector *vector)
+{
+	vector->count = 0;
 }

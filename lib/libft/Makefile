@@ -43,6 +43,8 @@ SRCS	= ft_atoi.c\
 		  hashmap/hashmap_remove.c\
 		  hashmap/hashmap_rehash.c\
 		  vector.c\
+		  vec2.c\
+		  vec3.c\
 		  t_vec_int.c
 
 OBJS	= $(SRCS:.c=.o)

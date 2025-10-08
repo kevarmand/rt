@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 16:53:13 by kearmand          #+#    #+#             */
-/*   Updated: 2025/09/29 16:53:46 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/10/06 10:33:57 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ char		*get_next_line(int fd);
 int			ft_min(int a, int b);
 int			ft_max(int a, int b);
 
-
 /* ************************************************************************** */
 /*                                                                            */
 /*                               LIST                                         */
@@ -84,7 +83,6 @@ void		ft_lstclear(t_list **lst, void (*del)(void*));
 void		ft_lstiter(t_list *lst, void (*f)(void *));
 t_list		*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 
-
 /* ************************************************************************** */
 /*                                                                            */
 /*                               VECTOR                                       */
@@ -93,14 +91,25 @@ t_list		*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 
 typedef struct s_vector
 {
-	void	**data;
-	size_t	count;
-	size_t	capacity;
+	unsigned char	*data;
+	size_t			element_size;
+	size_t			count;
+	size_t			capacity;
 }	t_vector;
 
-int			vector_init(t_vector *vec, size_t initial_capacity);
-void		vector_destroy(t_vector *vec);
-int			vector_push_back(t_vector *vec, void *elem);
+int			vector_init(t_vector *vector, size_t initial_capacity,
+				size_t element_size);
+void		vector_destroy(t_vector *vector);
+void		*vector_data(t_vector *vector);
+size_t		vector_size(t_vector *vector);
+size_t		vector_capacity(t_vector *vector);
+void		*vector_at(t_vector *vector, size_t index);
+int			vector_reserve(t_vector *vector, size_t min_capacity);
+int			vector_push_back(t_vector *vector, const void *element);
+void		*vector_emplace_back(t_vector *vector);
+int			vector_remove_stable(t_vector *vector, size_t index);
+int			vector_remove_swap(t_vector *vector, size_t index);
+void		vector_clear(t_vector *vector);
 
 typedef struct s_vector_int
 {

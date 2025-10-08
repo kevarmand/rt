@@ -112,6 +112,14 @@ typedef struct s_texture
 	void       *pixels;   /* peut rester NULL selon backend */
 }	t_texture;
 
+typedef struct s_surface
+{
+	//pas d index ixi je veux le mapping UV, la couleur de base, etc
+	float		map_uv[6]; /* u0,v0,u1,v1,u2,v2 */
+	t_vec3f		color;    /* 0..1 linéaire */
+	t_vec3f		normal;   /* unitaire */
+}	t_surface;
+
 typedef struct s_material
 {
 	float ambient;     /* ka */

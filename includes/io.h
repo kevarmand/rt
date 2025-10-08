@@ -333,11 +333,5 @@ int	pars_resolution(t_pars_state *st, t_scene_parsed *scene);
 int	pars_register_element(t_scene_parsed *scene,
 			const t_parsed_element *elem, t_elem_role role);
 
-typedef int	(*t_opt_handler)(t_tok, t_element_options *);
-
-typedef struct s_opt_entry {
-	const char		*key;
-	t_opt_handler	fn;
-}	t_opt_entry;
 #endif
 
