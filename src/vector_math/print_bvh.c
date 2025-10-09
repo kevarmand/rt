@@ -31,6 +31,8 @@ typedef struct s_bvhnode {
 #define U_CORNER_R  "\xE2\x94\x90"  /* ┐ */
 #define U_CORNER_BL "\xE2\x94\x94"  /* └ */
 #define U_CORNER_BR "\xE2\x94\x98"  /* ┘ */
+#define U_VLINE_DASH "\xE2\x94\x86"  /* ┆*/
+
 
 #define BLOCK_W 11
 #define HALF_W  (BLOCK_W/2)
@@ -427,8 +429,30 @@ static void print_ids(const int *ids, int n, int term_w)
 }
 
 /* === rendu récursif avec split (équiréparti propre) === */
-static void render_tree_split(const t_bvhnode *nodes, int root_idx, int term_w)
+static void render_tree_split(const t_bvhnode *nodes, int root_idx, int term_w, int dashed)
 {
+	/* si on est dans un sous-arbre (dashed!=0), poser un repère ┆ centré */
+	if (dashed) {
+
+		//afficher une ligne continue de U-HLINE
+		for (int j = 0; j < term_w; j++) {
+			fputs(U_HLINE, stdout);
+		}
+		putchar('\n');
+
+		int cursor = 0;
+		int cx = term_w / 2 + 1;          /* le root d'un sous-arbre est centré */
+		print_until(&cursor, cx);
+		fputs(COLOR_BAR, stdout);
+		fputs(U_VLINE_DASH, stdout);
+		putchar('\n');
+		cursor = 0;
+		print_until(&cursor, cx);
+		fputs(U_VLINE_DASH, stdout);
+		putchar('\n');
+		fputs(COLOR_RESET, stdout);
+	}
+
 	/* Niveau courant (on part de la racine) */
 	int *cur = malloc(sizeof(int));
 	if (!cur) return;
@@ -474,7 +498,7 @@ static void render_tree_split(const t_bvhnode *nodes, int root_idx, int term_w)
 
 		for (int i = 0; i < n_next; i++)
 		{
-			render_tree_split(nodes, next[i], term_w);
+			render_tree_split(nodes, next[i], term_w, 1);
 			putchar('\n');
 		}
 
@@ -493,5 +517,5 @@ void bvh_print_tree(const t_bvhnode *nodes, int root_index, int node_count){
 	}
 	struct winsize w; ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
 	int term_w = (w.ws_col > 0 ? w.ws_col : 120);
-	render_tree_split(nodes, root_index, term_w);
+	render_tree_split(nodes, root_index, term_w, 0);
 }
