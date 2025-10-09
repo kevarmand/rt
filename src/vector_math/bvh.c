@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 20:45:35 by norivier          #+#    #+#             */
-/*   Updated: 2025/10/02 12:02:14 by norivier         ###   ########.fr       */
+/*   Updated: 2025/10/09 13:55:15 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -687,27 +687,27 @@ extern inline int	torus_inter(t_ray r, t_torus *t, float *out)
 #define prim_number 2000
 // ------------------------- example primitives -------------------------
 
-// Recursively print the BVH tree with indentation
-void print_bvh_tree(const t_bvhnode *nodes, int nodeIndex, int depth) {
-    if (nodeIndex < 0) return;
+// // Recursively print the BVH tree with indentation
+// void print_bvh_tree(const t_bvhnode *nodes, int nodeIndex, int depth) {
+//     if (nodeIndex < 0) return;
 
-    const t_bvhnode *n = &nodes[nodeIndex];
+//     const t_bvhnode *n = &nodes[nodeIndex];
 
-    // Indentation based on depth
-    for (int i = 0; i < depth; i++) printf("  ");
+//     // Indentation based on depth
+//     for (int i = 0; i < depth; i++) printf("  ");
 
-    printf("Node %d: min(%.1f, %.1f, %.1f) max(%.1f, %.1f, %.1f), ",
-           nodeIndex,
-           n->bounds[0].x, n->bounds[0].y, n->bounds[0].z,
-           n->bounds[1].x, n->bounds[1].y, n->bounds[1].z);
+//     printf("Node %d: min(%.1f, %.1f, %.1f) max(%.1f, %.1f, %.1f), ",
+//            nodeIndex,
+//            n->bounds[0].x, n->bounds[0].y, n->bounds[0].z,
+//            n->bounds[1].x, n->bounds[1].y, n->bounds[1].z);
 
-    printf("start=%d, count=%d, left=%d, right=%d\n",
-           n->start, n->count, n->left, n->right);
+//     printf("start=%d, count=%d, left=%d, right=%d\n",
+//            n->start, n->count, n->left, n->right);
 
-    // Recurse on children if not a leaf
-    if (n->left != -1)  print_bvh_tree(nodes, n->left, depth + 1);
-    if (n->right != -1) print_bvh_tree(nodes, n->right, depth + 1);
-}
+//     // Recurse on children if not a leaf
+//     if (n->left != -1)  print_bvh_tree(nodes, n->left, depth + 1);
+//     if (n->right != -1) print_bvh_tree(nodes, n->right, depth + 1);
+// }
 
 t_triangle	make_triangle(t_vec3f v0, t_vec3f v1, t_vec3f v2)
 {
@@ -737,6 +737,8 @@ void	fill_prim(t_primitive *p, int len)
 		i += 1;
 	}
 }
+
+void bvh_print_tree(const t_bvhnode *nodes, int root_index, int node_count);
 
 int main()
 {
@@ -769,6 +771,6 @@ int main()
     }
     // 6) print BVH
     printf("BVH built, root = %d, total nodes = %d\n", root, nodecount);
-	print_bvh_tree(nodes, root, 0);
+	bvh_print_tree(nodes, root, nodecount);
     return 0;
 }
