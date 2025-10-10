@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 20:45:35 by norivier          #+#    #+#             */
-/*   Updated: 2025/10/09 13:55:15 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/10/10 11:47:00 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -684,7 +684,7 @@ extern inline int	torus_inter(t_ray r, t_torus *t, float *out)
 //
 // TEST BY THE CAT
 #include <stdio.h>
-#define prim_number 2000
+#define prim_number 51
 // ------------------------- example primitives -------------------------
 
 // // Recursively print the BVH tree with indentation
@@ -720,22 +720,49 @@ t_triangle	make_triangle(t_vec3f v0, t_vec3f v1, t_vec3f v2)
 	return (t);
 }
 
-void	fill_prim(t_primitive *p, int len)
-{
-	int	i;
+// void	fill_prim(t_primitive *p, int len)
+// {
+// 	int	i;
 
-	i = 0;
-	while (i < len)
-	{
-		p[i].type = PRIM_TRIANGLE;
-		t_vec3f v0 = {(float)i, 0.0f, 0.0f};
-		t_vec3f v1 = {(float)i + 0.5f, 1.0f, 0.0f};
-		t_vec3f v2 = {(float)i + 1.0f, 0.0f, 0.0f};
-		p[i].tr = make_triangle(v0, v1, v2);
-		prim_bound(&p[i]);
-		p[i].centroid = prim_centroid(&p[i]);
-		i += 1;
-	}
+// 	i = 0;
+// 	while (i < len)
+// 	{
+// 		p[i].type = PRIM_TRIANGLE;
+// 		t_vec3f v0 = {(float)i, 0.0f, 0.0f};
+// 		t_vec3f v1 = {(float)i + 0.5f, 1.0f, 0.0f};
+// 		t_vec3f v2 = {(float)i + 1.0f, 0.0f, 0.0f};
+// 		p[i].tr = make_triangle(v0, v1, v2);
+// 		prim_bound(&p[i]);
+// 		p[i].centroid = prim_centroid(&p[i]);
+// 		i += 1;
+// 	}
+// }
+
+void fill_prim(t_primitive *p, int len)
+{
+    // Triangles très petits, centrés à des X espacés géométriquement.
+    // Idée: x[0]=0, x[1]=G, x[2]=G*(1+r), x[3]=G*(1+r+r^2), ...
+    // SAH choisira systématiquement i=N-1 (ou i=1) → sous-arbre en chaîne.
+    const float base_gap = 4.0f;   // taille du 1er saut (>> largeur ~1 des triangles)
+    const float ratio    = 1.1f;   // facteur d’augmentation du gap (>1.5 recommandé)
+
+    float x = 0.0f;
+    float gap = base_gap;
+
+    for (int i = 0; i < len; ++i) {
+        t_vec3f v0 = (t_vec3f){ x,     0.0f, 0.0f };
+        t_vec3f v1 = (t_vec3f){ x+0.5f,1.0f, 0.0f };
+        t_vec3f v2 = (t_vec3f){ x+1.0f,0.0f, 0.0f };
+
+        p[i].type   = PRIM_TRIANGLE;
+        p[i].tr     = make_triangle(v0, v1, v2);
+        prim_bound(&p[i]);
+        p[i].centroid = prim_centroid(&p[i]);
+
+        // prépare la position suivante: on “explose” de plus en plus à droite
+        x   += gap;
+        gap *= ratio;
+    }
 }
 
 void bvh_print_tree(const t_bvhnode *nodes, int root_index, int node_count);

@@ -33,6 +33,8 @@ typedef struct s_bvhnode {
 #define U_CORNER_BR "\xE2\x94\x98"  /* ┘ */
 #define U_VLINE_DASH "\xE2\x94\x86"  /* ┆*/
 
+#define COLOR_CHILD_L "\033[38;5;214m"  /* orange */
+#define COLOR_CHILD_R "\033[1;32m"      /* vert   */
 
 #define BLOCK_W 11
 #define HALF_W  (BLOCK_W/2)
@@ -105,10 +107,24 @@ static void fmt4_block(char out[5], float v){
 
 /* === assemblage d’un bloc 11×5 === */
 typedef struct {
-	int   idx, has_left, has_right;
-	int   start_x, center_x;
-	char  l0[64], l1[64], l2[64], l3[64], l4[64];
+    int   idx, has_left, has_right;
+    int   left_idx, right_idx;          /* NEW */
+    int   start_x, center_x;
+    char  l0[64], l1[64], l2[64], l3[64], l4[64], l5[64];  /* NEW l5 */
 } RNode;
+
+static void fmt4_child(char out[5], int idx){
+    if (idx < 0) { memcpy(out, "    ", 4); out[4]='\0'; return; }
+    char tmp[16]; snprintf(tmp, sizeof(tmp), "#%d", idx);
+    int len = (int)strlen(tmp);
+    if (len >= 4) { memcpy(out, tmp + (len-4), 4); out[4]='\0'; return; }
+    /* right-align in width 4 */
+    int pad = 4 - len;
+    for (int i=0; i<pad; ++i) out[i] = ' ';
+    memcpy(out+pad, tmp, len);
+    out[4]='\0';
+}
+
 
 static void build_block_11(RNode *rn, const t_bvhnode *nd, int index){
 	char xmin[5],xmax[5],ymin[5],ymax[5],zmin[5],zmax[5];
@@ -177,6 +193,20 @@ static RNode *layout_level(
 		if (start > term_w - BLOCK_W) start = term_w - BLOCK_W;
 		rn->start_x  = start;
 		rn->center_x = start + HALF_W;
+		
+		char L[5], R[5];
+		rn->left_idx  = nd->left;   // <-- manquait
+		rn->right_idx = nd->right;  // <-- manquait
+
+		fmt4_child(L, rn->left_idx);
+		fmt4_child(R, rn->right_idx);
+		/* | #### #### |  -> 1 + 4 + 1 + 4 + 1 = 11 colonnes */
+		snprintf(rn->l5, sizeof(rn->l5),
+				COLOR_BAR U_VLINE COLOR_RESET
+				COLOR_CHILD_L "%s" COLOR_RESET " "
+				COLOR_CHILD_R "%s" COLOR_RESET
+				COLOR_BAR U_VLINE COLOR_RESET,
+				L, R);
 	}
 
 	if (out_n_cur) *out_n_cur = n_cur;
@@ -241,6 +271,15 @@ static void draw_level_blocks(const RNode *level, int n_cur)
 	}
 	putchar('\n');
 
+	/* Ligne 5 (enfants) */
+	cursor = 0;
+	for (int i = 0; i < n_cur; i++) {
+		print_until(&cursor, level[i].start_x);
+		fputs(level[i].l5, stdout);
+		cursor += BLOCK_W;
+	}
+	putchar('\n');
+
 	/* Ligne 4 */
 	cursor = 0;
 	for (int i = 0; i < n_cur; i++) {
@@ -249,6 +288,9 @@ static void draw_level_blocks(const RNode *level, int n_cur)
 		cursor += BLOCK_W;
 	}
 	putchar('\n');
+
+
+
 }
 
 
@@ -325,18 +367,23 @@ static void draw_connectors(
 
 /* === impression d’un niveau + calcul du prochain (layout séparé du draw) === */
 static int render_level(
-	const t_bvhnode *nodes,
-	const int *cur_idx, int n_cur,
-	int term_w,
-	int **out_next_idx, int *out_n_next,
-	int **out_next_centers /* à libérer par l'appelant */
-){
+    const t_bvhnode *nodes,
+    const int *cur_idx, int n_cur,
+    int term_w,
+    const int *centers_in,                 /* NEW: centres imposés pour CE niveau (peut être NULL) */
+    int **out_next_idx, int *out_n_next,
+    int **out_next_centers)
+{
 	if (n_cur <= 0) { *out_next_idx=NULL; *out_n_next=0; *out_next_centers=NULL; return 0; }
 
 	/* 1) centres du niveau courant */
 	int *centers = (int*)malloc(sizeof(int)*n_cur);
 	if (!centers){ *out_next_idx=NULL; *out_n_next=0; *out_next_centers=NULL; return 0; }
-	centers_for_width(n_cur, term_w, centers);
+	if (centers_in) {
+		memcpy(centers, centers_in, sizeof(int)*n_cur);
+	} else {
+		centers_for_width(n_cur, term_w, centers);
+	}
 
 	/* 2) layout du niveau (aucun print) */
 	RNode *level = layout_level(nodes, cur_idx, n_cur, term_w, centers, NULL);
@@ -352,10 +399,76 @@ static int render_level(
 	collect_children(nodes, level, n_cur, &next_idx, &n_next);
 
 	int *next_centers = NULL;
-	if (n_next > 0){
-		next_centers = (int*)malloc(sizeof(int)*n_next);
-		if (next_centers) centers_for_width(n_next, term_w, next_centers);
-	}
+	if (n_next > 0) {
+		next_centers = (int*)malloc(sizeof(int) * n_next);
+		if (!next_centers) { free(level); free(next_idx);
+			*out_next_idx=NULL; *out_n_next=0; *out_next_centers=NULL; return 0; }
+
+		int k = 0; /* remplit dans l'ordre compact: left puis right si présents */
+		for (int i = 0; i < n_cur; ++i) {
+			const int hasL = level[i].has_left;
+			const int hasR = level[i].has_right;
+			if (!(hasL || hasR)) continue;
+
+			/* territoire horizontal du parent i : bornes entre milieux avec voisins */
+			int lb = (i == 0)
+				? 0
+				: (level[i-1].center_x + level[i].center_x) / 2;
+			int rb = (i == n_cur - 1)
+				? (term_w - 1)
+				: (level[i].center_x + level[i+1].center_x) / 2;
+			if (rb < lb) { int t = lb; lb = rb; rb = t; }
+
+			const int px = level[i].center_x;
+
+			/* borne globale pour un bloc entier dans [lb, rb] */
+			int g_min = lb;
+			int g_max = rb - (BLOCK_W - 1);
+			if (g_max < g_min) g_max = g_min;
+
+			if (hasL) {
+				/* moitié gauche : [lb .. px-1] → centre = milieu de cette moitié */
+				int target = lb + (px - lb) / 2;
+				int s = target - HALF_W;
+
+				/* force "à gauche du parent" pour le bloc complet */
+				int max_L = (px - 1) - HALF_W;      /* centre ≤ px-1 ⇒ start ≤ px-1-HALF_W */
+				int min_L = g_min;
+				if (max_L < min_L) max_L = min_L;   /* pas la place → on colle */
+
+				if (s < min_L) s = min_L;
+				if (s > max_L) s = max_L;
+
+				/* clamp global de sécurité */
+				if (s < 0) s = 0;
+				if (s > term_w - BLOCK_W) s = term_w - BLOCK_W;
+
+				next_centers[k++] = s + HALF_W;
+			}
+
+			if (hasR) {
+				/* moitié droite : [px+1 .. rb] → centre = milieu de cette moitié */
+				int target = px + (rb - px) / 2;
+				int s = target - HALF_W;
+
+				/* force "à droite du parent" pour le bloc complet */
+				int min_R = (px + 1) - HALF_W;      /* centre ≥ px+1 ⇒ start ≥ px+1-HALF_W */
+				int max_R = g_max;
+				if (min_R > max_R) min_R = max_R;   /* pas la place → on colle */
+
+				if (s < min_R) s = min_R;
+				if (s > max_R) s = max_R;
+
+				/* clamp global de sécurité */
+				if (s < 0) s = 0;
+				if (s > term_w - BLOCK_W) s = term_w - BLOCK_W;
+
+				next_centers[k++] = s + HALF_W;
+			}
+		}
+}
+
+
 
 	/* 5) draw des connecteurs en utilisant next_centers (si présents) */
 	if (next_centers) draw_connectors(nodes, level, n_cur, next_centers, n_next);
@@ -369,63 +482,33 @@ static int render_level(
 	return n_next;
 }
 
-/* === Impression des IDs (centrés, sans chevauchement, sans dépassement) === */
-static void print_ids(const int *ids, int n, int term_w)
+/* Imprime des IDs exactement aux centres donnés (sans recalc global) */
+static void print_ids_at_centers(const int *ids, const int *centers, int n, int term_w)
 {
-	int i = 0;
-	while (i < n) {
-		int want = n - i;                 /* nombre restant */
-		if (want <= 0) break;
+    int cursor = 0;
+    int prev_end = -1;
 
-		for (;;) {
-			int m = want;                 /* on essaie de tout mettre sur la ligne */
-			int ok = 1;
+    for (int i = 0; i < n; ++i) {
+        char out[32];
+        snprintf(out, sizeof(out), COLOR_NODE "[#%d]" COLOR_RESET, ids[i]);
+        int w = visual_length(out);
 
-			/* on stocke les starts calculés EXACTEMENT comme on imprimera */
-			/* borne haute: au pire on ne peut jamais mettre plus que term_w/2 items
-			(largeur mini ≈ 2 : '[]'), donc ce buffer statique suffit largement. */
-			int starts[1024];
-			if (m > 1024) m = 1024;
+        /* start centré sur centers[i] */
+        int start = centers[i] - w / 2;
 
-			int prev_end = -1;
-			for (int k = 0; k < m; ++k) {
-				char tmp[32];
-				snprintf(tmp, sizeof(tmp), COLOR_NODE "[#%d]" COLOR_RESET, ids[i + k]);
-				int w = visual_length(tmp);
+        /* éviter chevauchement avec le précédent */
+        if (start < prev_end + 1) start = prev_end + 1;
 
-				/* centre équiréparti, puis ajustement pour éviter le chevauchement */
-				int c = (int)lround((double)(k + 1) * (double)term_w / (double)(m + 1));
-				int start = c - w / 2;
-				if (start < prev_end + 1) start = prev_end + 1;
-				if (start < 0) start = 0;
+        /* clamp global */
+        if (start < 0) start = 0;
+        if (start > term_w - w) start = term_w - w;
 
-				int end = start + w;
-				if (end > term_w) { ok = 0; break; }
-
-				starts[k] = start;
-				prev_end = end - 1;
-			}
-
-			if (ok) {
-				/* on imprime avec ces positions-là, donc pas de wrap surprise */
-				int cursor = 0;
-				for (int k = 0; k < m; ++k) {
-					char out[32];
-					snprintf(out, sizeof(out), COLOR_NODE "[#%d]" COLOR_RESET, ids[i + k]);
-					print_until(&cursor, starts[k]);
-					fputs(out, stdout);
-					cursor = starts[k] + visual_length(out);
-				}
-				putchar('\n');
-				i += m;
-				break;
-			} else {
-				/* ça ne tient pas: on réduit le nombre d'items sur la ligne */
-				want--;
-				if (want <= 0) { putchar('\n'); return; }
-			}
-		}
-	}
+        print_until(&cursor, start);
+        fputs(out, stdout);
+        prev_end = start + w - 1;
+        cursor   = prev_end + 1;
+    }
+    putchar('\n');
 }
 
 /* === rendu récursif avec split (équiréparti propre) === */
@@ -459,53 +542,47 @@ static void render_tree_split(const t_bvhnode *nodes, int root_idx, int term_w, 
 	cur[0] = root_idx;
 	int n_cur = 1;
 
+	int *centers_in = NULL;  /* NEW: centres imposés pour le niveau courant */
+
+	int n_slots = 1;
 	while (n_cur > 0)
 	{
 		int *next = NULL;
 		int *next_centers = NULL;
 		int n_next = 0;
 
-		/* --- 1) Dessiner le niveau courant --- */
 		render_level(nodes, cur, n_cur, term_w,
-								&next, &n_next, &next_centers);
+					centers_in,                 /* NEW */
+					&next, &n_next, &next_centers);
 
-		free(cur);
-		cur = NULL;
+		free(cur);        cur = NULL;
+		free(centers_in); centers_in = NULL;     /* NEW: ceux qu'on vient d'utiliser */
 
-		/* --- 2) Si pas d’enfants : fin de parcours --- */
-		if (n_next == 0)
-		{
-			free(next_centers);
-			free(next);
-			break;
-		}
+		if (n_next == 0) { free(next_centers); free(next); break; }
 
-		/* --- 3) Évaluer si le prochain niveau tient dans la largeur --- */
 		int nmax = max_equispaced_nodes_that_fit(term_w);
 
-		if (n_next <= nmax)
+		n_slots *= 2;
+		if (n_slots <= nmax)               /* ✅ on teste la CAPACITÉ, pas le réel */
 		{
-			/* → On continue à plat : le niveau suivant tient */
-			cur = next;
-			n_cur = n_next;
-			free(next_centers);
+			cur = next; n_cur = n_next;
+			centers_in = next_centers;     /* on impose ces centres au niveau suivant */
 			continue;
 		}
-
-		/* --- 4) Sinon, split visuel : on affiche les IDs et on descend récursivement --- */
-		print_ids(next, n_next, term_w);
+		/* split visuel */
+		print_ids_at_centers(next, next_centers, n_next, term_w);
 		putchar('\n');
-
-		for (int i = 0; i < n_next; i++)
-		{
+		for (int i = 0; i < n_next; i++) {
 			render_tree_split(nodes, next[i], term_w, 1);
 			putchar('\n');
 		}
-
 		free(next_centers);
 		free(next);
-		break; /* on sort après le split */
+		break;
 	}
+	free(centers_in); /* sécurité */
+	free(cur);
+
 }
 
 
