@@ -1,24 +1,6 @@
 {
 	"files.associations": {
-		"rt.h": "c",
-		"ui.h": "c",
-		"stdlib.h": "c",
-		"pthread.h": "c",
-		"stdatomic.h": "c",
-		"render.h": "c",
-		"io.h": "c",
-		"stdio.h": "c",
-		"unistd.h": "c",
-		"string.h": "c",
-		"error_codes.h": "c",
-		"fcntl.h": "c",
-		"cmath": "cpp",
-		"push": "c",
-		"random": "c",
 		"libft.h": "c",
-		"type.h": "c",
-		"convert.h": "c",
-		"scene.h": "c",
-		"mat_getidx.C": "cpp"
+		"error_codes.h": "c"
 	}
 }
