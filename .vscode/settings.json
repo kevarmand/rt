@@ -18,6 +18,7 @@
 		"libft.h": "c",
 		"type.h": "c",
 		"convert.h": "c",
-		"scene.h": "c"
+		"scene.h": "c",
+		"mat_getidx.C": "cpp"
 	}
 }
