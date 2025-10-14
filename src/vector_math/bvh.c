@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 20:45:35 by norivier          #+#    #+#             */
-/*   Updated: 2025/10/10 11:47:00 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/10/14 13:16:27 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -684,7 +684,7 @@ extern inline int	torus_inter(t_ray r, t_torus *t, float *out)
 //
 // TEST BY THE CAT
 #include <stdio.h>
-#define prim_number 51
+#define prim_number 250
 // ------------------------- example primitives -------------------------
 
 // // Recursively print the BVH tree with indentation

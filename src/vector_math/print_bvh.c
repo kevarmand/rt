@@ -81,29 +81,104 @@ static int max_equispaced_nodes_that_fit(int term_w){
 	return (m < 1) ? 1 : m;
 }
 
-/* === format 4 caractères (k/M) === */
+/* === format 4 caractères (k/M/G/T) === */
 static void fmt4_block(char out[5], float v){
-	int neg = (v < 0.0f); float a = neg ? -v : v;
-	if (a < 1000.0f){ int n=(int)lroundf(a); char b[8];
-		snprintf(b,sizeof(b),"%s%3d",neg?"-":" ",n);
-		if (n==0 && neg) snprintf(b,sizeof(b),"   0");
-		memcpy(out,b,4); out[4]='\0'; return; }
-	if (a < 10000.0f){ int k=(int)(a/1000.0f); if (k>99) k=99;
-		int d=(int)lroundf((a-k*1000.0f)/100.0f); if (d>9) d=9;
-		out[0]=neg?'-':(k>=10? (char)('0'+(k/10)%10):' ');
-		out[1]=(char)('0'+(k%10)); out[2]='k'; out[3]=(char)('0'+d); out[4]='\0'; return; }
-	if (a < 1000000.0f){ int k=(int)lroundf(a/1000.0f); if (k>999) k=999; char b[8];
-		if (neg) snprintf(b,sizeof(b),"-%2dk",k); else snprintf(b,sizeof(b),"%3dk",k);
-		memcpy(out,b,4); out[4]='\0'; return; }
-	if (a < 10000000.0f){ int M=(int)(a/1000000.0f); if (M>99) M=99;
-		int d=(int)lroundf((a-M*1000000.0f)/100000.0f); if (d>9) d=9;
-		out[0]=neg?'-':(M>=10?(char)('0'+(M/10)%10):' ');
-		out[1]=(char)('0'+(M%10)); out[2]='M'; out[3]=(char)('0'+d); out[4]='\0'; return; }
-	if (a < 1000000000.0f){ int M=(int)lroundf(a/1000000.0f); if (M>999) M=999; char b[8];
-		if (neg) snprintf(b,sizeof(b),"-%2dM",M); else snprintf(b,sizeof(b),"%3dM",M);
-		memcpy(out,b,4); out[4]='\0'; return; }
-	memcpy(out,"inf ",4); out[4]='\0';
+	int neg = (v < 0.0f);
+	float a = neg ? -v : v;
+
+	/* 0 .. 999 : entier sur 3 colonnes (espace/-, puis 3 chiffres) */
+	if (a < 1000.0f){
+		int n = (int)lroundf(a);
+		char b[8];
+		snprintf(b, sizeof(b), "%s%3d", neg ? "-" : " ", n);
+		if (n == 0 && neg) snprintf(b, sizeof(b), "   0");
+		memcpy(out, b, 4); out[4] = '\0'; return;
+	}
+
+	/* 1.0k .. 9.9k : " kd" */
+	if (a < 10000.0f){
+		int k = (int)(a / 1000.0f); if (k > 99) k = 99;
+		int d = (int)lroundf((a - k * 1000.0f) / 100.0f); if (d > 9) d = 9;
+		out[0] = neg ? '-' : (k >= 10 ? (char)('0' + (k/10)%10) : ' ');
+		out[1] = (char)('0' + (k % 10));
+		out[2] = 'k';
+		out[3] = (char)('0' + d);
+		out[4] = '\0'; return;
+	}
+
+	/* 10.0k .. 999k : " xxk" */
+	if (a < 1000000.0f){
+		int k = (int)lroundf(a / 1000.0f); if (k > 999) k = 999;
+		char b[8];
+		if (neg) snprintf(b, sizeof(b), "-%2dk", k);
+		else     snprintf(b, sizeof(b), "%3dk", k);
+		memcpy(out, b, 4); out[4] = '\0'; return;
+	}
+
+	/* 1.0M .. 9.9M : " Md" */
+	if (a < 10000000.0f){
+		int M = (int)(a / 1000000.0f); if (M > 99) M = 99;
+		int d = (int)lroundf((a - M * 1000000.0f) / 100000.0f); if (d > 9) d = 9;
+		out[0] = neg ? '-' : (M >= 10 ? (char)('0' + (M/10)%10) : ' ');
+		out[1] = (char)('0' + (M % 10));
+		out[2] = 'M';
+		out[3] = (char)('0' + d);
+		out[4] = '\0'; return;
+	}
+
+	/* 10M .. 999M : " xxM" */
+	if (a < 1000000000.0f){
+		int M = (int)lroundf(a / 1000000.0f); if (M > 999) M = 999;
+		char b[8];
+		if (neg) snprintf(b, sizeof(b), "-%2dM", M);
+		else     snprintf(b, sizeof(b), "%3dM", M);
+		memcpy(out, b, 4); out[4] = '\0'; return;
+	}
+
+	/* 1.0G .. 9.9G : " Gd" */
+	if (a < 10000000000.0f){ /* 1e9 .. <1e10 */
+		int G = (int)(a / 1000000000.0f); if (G > 99) G = 99;
+		int d = (int)lroundf((a - G * 1000000000.0f) / 100000000.0f); if (d > 9) d = 9;
+		out[0] = neg ? '-' : (G >= 10 ? (char)('0' + (G/10)%10) : ' ');
+		out[1] = (char)('0' + (G % 10));
+		out[2] = 'G';
+		out[3] = (char)('0' + d);
+		out[4] = '\0'; return;
+	}
+
+	/* 10G .. 999G : " xxG" */
+	if (a < 1000000000000.0f){ /* < 1e12 */
+		int G = (int)lroundf(a / 1000000000.0f); if (G > 999) G = 999;
+		char b[8];
+		if (neg) snprintf(b, sizeof(b), "-%2dG", G);
+		else     snprintf(b, sizeof(b), "%3dG", G);
+		memcpy(out, b, 4); out[4] = '\0'; return;
+	}
+
+	/* 1.0T .. 9.9T : " Td" */
+	if (a < 10000000000000.0f){ /* 1e12 .. <1e13 */
+		int T = (int)(a / 1000000000000.0f); if (T > 99) T = 99;
+		int d = (int)lroundf((a - T * 1000000000000.0f) / 100000000000.0f); if (d > 9) d = 9;
+		out[0] = neg ? '-' : (T >= 10 ? (char)('0' + (T/10)%10) : ' ');
+		out[1] = (char)('0' + (T % 10));
+		out[2] = 'T';
+		out[3] = (char)('0' + d);
+		out[4] = '\0'; return;
+	}
+
+	/* 10T .. 999T : " xxT" */
+	if (a < 1000000000000000.0f){ /* < 1e15 */
+		int T = (int)lroundf(a / 1000000000000.0f); if (T > 999) T = 999;
+		char b[8];
+		if (neg) snprintf(b, sizeof(b), "-%2dT", T);
+		else     snprintf(b, sizeof(b), "%3dT", T);
+		memcpy(out, b, 4); out[4] = '\0'; return;
+	}
+
+	/* au-delà : saturation */
+	memcpy(out, "inf ", 4); out[4] = '\0';
 }
+
 
 /* === assemblage d’un bloc 11×5 === */
 typedef struct {
