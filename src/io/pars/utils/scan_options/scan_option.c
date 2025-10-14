@@ -16,6 +16,9 @@ static const t_opt_entry	g_opt_tab[] = {{"ior", scan_opt_ior},
 {"diffuse", scan_opt_diffuse},
 {"specular", scan_opt_specular},
 {"ambient", scan_opt_ambient},
+{"bump", scan_opt_bump},
+{"texture", scan_opt_texture},
+{"uv", scan_opt_uv},
 {NULL, NULL}
 };
 

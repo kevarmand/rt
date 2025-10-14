@@ -18,7 +18,7 @@ int	pars_options(t_pars_state *st, t_element_options *options)
 	while (pars_next_tok(st, &token))
 	{
 		ret = scan_option(token, options);
-		if (!ret)
+		if (ret != SUCCESS)
 			return (ret);
 	}
 	return (SUCCESS);

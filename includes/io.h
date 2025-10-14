@@ -10,6 +10,13 @@
 # include "libft.h"
 
 
+typedef struct s_vec3f
+{
+	float	x;
+	float	y;
+	float	z;
+}	t_vec3f;
+
 # define BUFFER_SIZE 1024
 
 typedef enum e_elem_role
@@ -68,7 +75,10 @@ typedef struct s_element_options
 	float		diffuse_weight;
 	float		specular_weight;
 	float		ambient_occlusion;
-	//etc ...
+	float	 	uv[6];
+	int			uv_mod;
+	char		*texture_path;
+	char		*bumpmap_path;
 }	t_element_options;
 
 typedef enum e_element_type {
@@ -284,6 +294,9 @@ int	scan_opt_shininess(t_tok tok, t_element_options *opts);
 int	scan_opt_diffuse(t_tok tok, t_element_options *opts);
 int	scan_opt_specular(t_tok tok, t_element_options *opts);
 int	scan_opt_ambient(t_tok tok, t_element_options *opts);
+int	scan_opt_bump(t_tok tok, t_element_options *opts);
+int	scan_opt_texture(t_tok tok, t_element_options *opts);
+int	scan_opt_uv(t_tok tok, t_element_options *opts);
 
 
 /* ************************************************************************** */
@@ -334,4 +347,3 @@ int	pars_register_element(t_scene_parsed *scene,
 			const t_parsed_element *elem, t_elem_role role);
 
 #endif
-
