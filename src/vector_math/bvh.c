@@ -17,6 +17,17 @@
 #include <math.h>
 #include <stdlib.h>
 #include "libft.h"
+#include "rt_math.h"
+
+#define RCP_2 0x1p-1f
+#define RCP_3 0x1.555556p-2f
+#define RCP_4 0x1p-2f
+#define RCP_8 0x1p-3f
+#define RCP_9 0x1.c71c72p-4f
+#define RCP_16 0x1p-4f
+#define RCP_256 0x1p-8f
+#define THREE_OVER_8 0x1.8p-2f
+#define THREE_OVER_256 0x1.8p-2f
 
 FORCEINLINE
 extern inline void	triangle_bound(t_triangle t, t_aabb out)
@@ -164,7 +175,7 @@ FORCEINLINE
 extern inline void	prim_bound_init(t_primpack pack)
 {
 	t_primitive	*p;
-	int		i;
+	int			i;
 
 	i = 0;
 	while (i < pack.count)
@@ -197,6 +208,16 @@ FORCEINLINE
 extern inline void	swap_int(int *a, int *b)
 {
 	int	tmp;
+
+	tmp = *a;
+	*a = *b;
+	*b = tmp;
+}
+
+FORCEINLINE
+extern inline void	swap_float(float *a, float *b)
+{
+	float	tmp;
 
 	tmp = *a;
 	*a = *b;
@@ -320,8 +341,8 @@ int	sah_split(t_primpack pck, int *axisout)
 		i = 1;
 		while (i < pck.count)
 		{
-			cost = bound_area(left[i - 1]) * i +
-				bound_area(right[i]) * (pck.count - i);
+			cost = bound_area(left[i - 1]) * i
+				+ bound_area(right[i]) * (pck.count - i);
 			if (cost < bestcost)
 			{
 				bestcost = cost;
@@ -445,7 +466,7 @@ extern inline int	triangle_inter(t_ray r, t_triangle *tr, t_hit *hit)
 	m.s = vec3f_sub(r.origin, tr->v0);
 	hit->u = m.invdet * vec3f_dot(m.s, m.r_cross_e2);
 	if (hit->u < -EPSILON || hit->u > 1.f + EPSILON)
-			return (0);
+		return (0);
 	m.s_cross_e1 = vec3f_cross(m.s, tr->edge1);
 	hit->v = m.invdet * vec3f_dot(r.dir, m.s_cross_e1);
 	if (hit->v < -EPSILON || hit->u + hit->v > 1.f + EPSILON)
@@ -459,15 +480,22 @@ extern inline int	triangle_inter(t_ray r, t_triangle *tr, t_hit *hit)
 }
 
 FORCEINLINE
+extern inline void	sortf2(float *a, float *b)
+{
+	if (*a > *b)
+		swap_float(a, b);
+}
+
+FORCEINLINE
 extern inline int	solve_quadratic(t_equ arg, float roots[])
 {
 	float	disc;
 	float	disc_sqrt;
 	float	q;
 
-	if (fabsf(arg.a) < EPSILON)
+	if (fabsf(arg.a) < (float)EPSILON)
 	{
-		if (fabsf(arg.b) < EPSILON)
+		if (fabsf(arg.b) < (float)EPSILON)
 			return (0);
 		roots[0] = -arg.c / arg.b;
 		return (1);
@@ -479,21 +507,160 @@ extern inline int	solve_quadratic(t_equ arg, float roots[])
 	q = -0.5f * (arg.b + copysignf(disc_sqrt, arg.b));
 	roots[0] = q / arg.a;
 	roots[1] = arg.c / q;
-	roots[0] = fminf(roots[0], roots[1]);
-	roots[1] = fmaxf(roots[0], roots[1]);
+	sortf2(&roots[0], &roots[1]);
 	if (disc > EPSILON)
 		return (2);
 	return (1);
 }
 
+FORCEINLINE
+extern inline void	sortf3(float *a, float *b, float *c)
+{
+	if (*a > *b)
+		swap_float(a, b);
+	if (*b > *c)
+		swap_float(b, c);
+	if (*a > *b)
+		swap_float(a, b);
+}
+
+FORCEINLINE
+extern inline void	sortf4(float *a, float *b, float *c, float *d)
+{
+	if (*a > *b)
+		swap_float(a, b);
+	if (*c > *d)
+		swap_float(c, d);
+	if (*a > *c)
+		swap_float(a, c);
+	if (*b > *d)
+		swap_float(b, d);
+	if (*b > *c)
+		swap_float(b, c);
+}
+
+FORCEINLINE
+extern inline int	solve_cubic(t_equ arg, float roots[])
+{
+	float	inv_a;
+	float	third_b;
+	float	b_square_3;
+	float	half_q;
+	float	third_p;
+	float	p;
+	float	q;
+	float	disc;
+	float	disc_sqrt;
+	float	t1;
+	float	t2;
+	float	r;
+	float	r2;
+	float	phi;
+
+	if (fabsf(arg.a) < EPSILON)
+		return (solve_quadratic((t_equ){arg.b, arg.c, arg.d, 0, 0}, roots));
+	inv_a = ft_rcpf(arg.a);
+	arg.b *= inv_a;
+	arg.c *= inv_a;
+	arg.d *= inv_a;
+	third_b = arg.b * RCP_3;
+	b_square_3 = arg.b * third_b;
+	p = arg.c - b_square_3;
+	q = (2.0f * b_square_3 * arg.b * RCP_9)
+		- (arg.b * arg.c * RCP_3) + arg.d;
+	half_q = q * 0.5f;
+	third_p = p * RCP_3;
+	disc = half_q * half_q + third_p * third_p * third_p;
+	if (disc > 0.0f)
+	{
+		disc_sqrt = sqrtf(disc);
+		t1 = -half_q + disc_sqrt;
+		t2 = -half_q - disc_sqrt;
+		roots[0] = copysignf(cbrtf(fabsf(t1)), t1)
+			+ copysignf(cbrtf(fabsf(t2)), t2) - third_b;
+		return (1);
+	}
+	else
+	{
+		r = sqrtf(-third_p);
+		phi = acosf(fmaxf(fminf(-half_q / (r * r * r), 1.0f), -1.0f));
+		r2 = 2.0f * r;
+		roots[0] = r2 * cosf(phi * RCP_3) - third_b;
+		roots[1] = r2 * cosf((phi + 2.0f * (float)M_PI) * RCP_3) - third_b;
+		roots[2] = r2 * cosf((phi + 4.0f * (float)M_PI) * RCP_3) - third_b;
+		sortf3(&roots[0], &roots[1], &roots[2]);
+		return (3);
+	}
+}
+
+// perfect only norme left ?
+FORCEINLINE
+extern inline int	solve_quartic(t_equ arg, float roots[])
+{
+	float	inv_a;
+	float	b2;
+	float	b3;
+	float	b4;
+	float	p;
+	float	q;
+	float	r;
+	float	z;
+	float	u;
+	float	disc;
+	float	v;
+	int		n;
+	int		i;
+	float	substitute;
+
+	if (fabsf(arg.a) < EPSILON)
+		return (solve_cubic((t_equ){arg.b, arg.c, arg.d, arg.e, 0}, roots));
+	inv_a = ft_rcpf(arg.a);
+	arg.b *= inv_a;
+	arg.c *= inv_a;
+	arg.d *= inv_a;
+	arg.e *= inv_a;
+	b2 = arg.b * arg.b;
+	b3 = arg.b * b2;
+	b4 = b2 * b2;
+	p = arg.c - THREE_OVER_8 * b2; // c - ab2/8
+	q = RCP_8 * b3 - (RCP_2 * arg.b * arg.c) + arg.d; // b3/8 - bc/2 + d
+	r = -THREE_OVER_256 * b4 + RCP_16 * b2 * arg.c
+		- RCP_4 * arg.b * arg.d + arg.e; // -3b4/256 + b2c/16 - bd/4 + e
+	// z3 - z2p/2 - rz + (rp/2 - q2/8) one root;
+	(void)solve_cubic((t_equ){1.0f, -RCP_2 * p, -r,
+		-RCP_2 * r * p - RCP_8 * q * q, 0}, roots);
+	z = roots[0];
+	u = sqrtf(fmaxf(2.0f * z - p, 0.0f));
+	disc = -4.0f * z * z + 4.0f * r + (q * q) / (u * u);
+	if (fabsf(u) < EPSILON || fabsf(disc) < EPSILON)
+		v = 0.0f;
+	else
+		v = -q / (2.0f * u);
+	n = solve_quadratic((t_equ){1.0f, u, z - v, 0, 0}, roots);
+	n += solve_quadratic((t_equ){1.0f, -u, z + v, 0, 0}, roots + n);
+	substitute = arg.b * RCP_4;
+	i = 0;
+	while (i < n)
+	{
+		roots[i] -= substitute; // x = y - b/4
+		i += 1;
+	}
+	if (n == 2)
+		sortf2(&roots[0], &roots[1]);
+	else if (n == 3)
+		sortf3(&roots[0], &roots[1], &roots[2]);
+	else if (n == 4)
+		sortf4(&roots[0], &roots[1], &roots[2], &roots[3]);
+	return (n);
+}
 
 FORCEINLINE
 extern inline void	_sphere_inter(t_ray r, t_sphere *s, t_hit *hit, float t)
 {
-	const float inv_pi = 1.0f / (float)M_PI;
-	const float inv2_pi = 0.5f * inv_pi;
-	float	theta;
-	float	phi;
+	const float	inv_pi = 1.0f / (float)M_PI;
+	const float	inv2_pi = 0.5f * inv_pi;
+	float		theta;
+	float		phi;
 
 	hit->t = t;
 	hit->inter = vec3f_add(r.origin, vec3f_scale(r.dir, t));
@@ -513,7 +680,7 @@ extern inline int	sphere_inter(t_ray r, t_sphere *s, t_hit *hit)
 	m.b = 2.0f * vec3f_dot(r.dir, m.L);
 	m.c = vec3f_dot(m.L, m.L) - s->r_squared;
 	if (solve_quadratic((t_equ){1, m.b, m.c, 0, 0},
-			(float []){m.t0, m.t1}) == 0)
+		(float []){m.t0, m.t1}) == 0)
 		return (0);
 	if (m.t0 > EPSILON)
 		m.t = m.t0;
@@ -535,12 +702,12 @@ extern inline int	_cylinder_inter(t_ray r, t_cylinder *cl, t_hit *hit,
 
 	m.inter = vec3f_add(r.origin, vec3f_scale(r.dir, m.t));
 	m.y = vec3f_dot(vec3f_sub(m.inter, cl->p0), cl->axis);
-	if ( m.y < -EPSILON || m.y > cl->height + EPSILON)
+	if (m.y < -EPSILON || m.y > cl->height + EPSILON)
 		return (0);
 	hit->inter = m.inter;
 	hit->normal = vec3f_normalize(vec3f_sub(
-		m.inter,
-		vec3f_add(cl->p0, vec3f_scale(cl->axis, m.y))));
+				m.inter,
+				vec3f_add(cl->p0, vec3f_scale(cl->axis, m.y))));
 	hit->t = m.t;
 	hit->u = (atan2f(hit->normal.z, hit->normal.x) + (float)M_PI) * inv2_pi;
 	hit->v = m.y / cl->height;
@@ -555,12 +722,12 @@ extern inline int	cylinder_inter(t_ray r, t_cylinder *cl, t_hit *hit)
 	m.delta = vec3f_sub(r.origin, cl->p0);
 	m.d = vec3f_sub(r.dir, vec3f_scale(cl->axis, vec3f_dot(r.dir, cl->axis)));
 	m.delta_proj = vec3f_sub(m.delta, vec3f_scale(cl->axis, vec3f_dot(m.delta,
-		cl->axis)));
+					cl->axis)));
 	m.a = vec3f_dot(m.d, m.d);
 	m.b = 2.0f * vec3f_dot(m.d, m.delta_proj);
 	m.c = vec3f_dot(m.delta_proj, m.delta_proj) - cl->r_squared;
 	if (solve_quadratic((t_equ){m.a, m.b, m.c, 0, 0},
-			(float []){m.t0, m.t1}) == 0)
+		(float []){m.t0, m.t1}) == 0)
 		return (0);
 	if (m.t0 > EPSILON)
 		m.t = m.t0;
@@ -574,9 +741,80 @@ extern inline int	cylinder_inter(t_ray r, t_cylinder *cl, t_hit *hit)
 }
 
 FORCEINLINE
-extern inline int	torus_inter(t_ray r, t_torus *t, float *out)
+extern inline t_vec3f	mat3x3_mulv(t_mat3x3 m, t_vec3f v)
 {
+	t_vec3f	res;
 
+	res.x = m.m[0][0] * v.x + m.m[0][1] * v.y + m.m[0][2] * v.z;
+	res.y = m.m[1][0] * v.x + m.m[1][1] * v.y + m.m[1][2] * v.z;
+	res.z = m.m[2][0] * v.x + m.m[2][1] * v.y + m.m[2][2] * v.z;
+	return (res);
+}
+
+FORCEINLINE
+extern inline t_mat3x3	mat3x3_transpose(t_mat3x3 m)
+{
+	t_mat3x3	t;
+
+	t.m[0][0] = m.m[0][0];
+	t.m[0][1] = m.m[1][0];
+	t.m[0][2] = m.m[2][0];
+	t.m[1][0] = m.m[0][1];
+	t.m[1][1] = m.m[1][1];
+	t.m[1][2] = m.m[2][1];
+	t.m[2][0] = m.m[0][2];
+	t.m[2][1] = m.m[1][2];
+	t.m[2][2] = m.m[2][2];
+	return (t);
+}
+//etc... build mat from euler angles maybe
+
+// rough start need to precompute a lot of things
+FORCEINLINE
+extern inline int	torus_inter(t_ray r, t_torus *t, t_hit *hit)
+{
+	t_ray	r_local;
+	t_vec3f	p;
+	float	m, k;
+	t_equ	eq;
+	float	roots[4];
+	int		nroots;
+	float	tmin;
+	t_vec3f	hit_local, normal_local;
+	float	tmp;
+
+	r_local.origin = mat3x3_mulv(t->inv_basis, vec3f_sub(r.origin, t->center));
+	r_local.dir    = mat3x3_mulv(t->inv_basis, r.dir);
+	p = r_local.origin;
+	m = vec3f_dot(r_local.dir, r_local.dir);
+	k = vec3f_dot(p, p) + t->R * t->R - t->r * t->r;
+	eq.a = m * m;
+	eq.b = 4.0f * m * vec3f_dot(p, r_local.dir);
+	eq.c = 2.0f * m * k + 4.0f * vec3f_dot(p, r_local.dir) * vec3f_dot(p, r_local.dir)
+		- 4.0f * t->R * t->R * (r_local.dir.x * r_local.dir.x + r_local.dir.y * r_local.dir.y);
+	eq.d = 4.0f * vec3f_dot(p, r_local.dir) * k
+		- 8.0f * t->R * t->R * (p.x * r_local.dir.x + p.y * r_local.dir.y);
+	eq.e = k * k - 4.0f * t->R * t->R * (p.x * p.x + p.y * p.y);
+	nroots = solve_quartic(eq, roots);
+	if (nroots == 0)
+		return 0;
+	tmin = -1.0f;
+	for (int i = 0; i < nroots; ++i)
+		if (roots[i] > EPSILON && (tmin < 0.0f || roots[i] < tmin))
+			tmin = roots[i];
+	if (tmin < 0.0f)
+		return 0;
+	hit_local = vec3f_add(r_local.origin, vec3f_scale(r_local.dir, tmin));
+	p = hit_local;
+	tmp = vec3f_dot(p, p) + t->R * t->R - t->r * t->r;
+	normal_local.x = 4.0f * p.x * tmp - 8.0f * t->R * t->R * p.x;
+	normal_local.y = 4.0f * p.y * tmp - 8.0f * t->R * t->R * p.y;
+	normal_local.z = 4.0f * p.z * tmp;
+	normal_local = vec3f_normalize(normal_local);
+	hit->t = tmin;
+	hit->inter = vec3f_add(t->center, mat3x3_mulv(t->basis, hit_local));
+	hit->normal = vec3f_normalize(mat3x3_mulv(t->basis, normal_local));
+	return 1;
 }
 
 // int	prim_inter(t_ray r, t_primitive *p, float *t)

@@ -53,11 +53,21 @@ typedef struct s_cylinder
 	float	r_squared;
 }	t_cylinder;
 
+typedef struct s_mat3x3
+{
+	float	m[3][3];
+}	t_mat3x3;
+
 typedef struct s_torus
 {
 	t_vec3f	center;
+	t_vec3f	rot;
 	float	R;
 	float	r;
+	float	r_square;
+	float	R_square;
+	t_mat3x3	basis;
+	t_mat3x3	inv_basis;
 }	t_torus;
 
 typedef t_vec3f t_aabb[2];
