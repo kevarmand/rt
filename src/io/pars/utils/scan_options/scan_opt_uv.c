@@ -2,59 +2,66 @@
 #include "type.h"
 #include "error_codes.h"
 
-static int	find_char_in_tok(t_tok tok, char c)
+static int	read_f32_segment(
+	t_tok tok, int *index_pos, float *out_value, int require_comma)
 {
-	int	index;
+	t_tok	seg;
+	int		start;
 
-	index = 0;
-	while (index < tok.len)
+	start = *index_pos;
+	while (*index_pos < tok.len && tok.start[*index_pos] != ',')
+		(*index_pos)++;
+	seg.start = tok.start + start;
+	seg.len = *index_pos - start;
+	if (seg.len <= 0 || scan_float(seg, out_value))
+		return (ERR_PARSE_FLOAT);
+	if (require_comma)
 	{
-		if (tok.start[index] == c)
-			return (index);
-		index++;
+		if (*index_pos >= tok.len || tok.start[*index_pos] != ',')
+			return (ERR_PARSE_FLOAT);
+		(*index_pos)++;
 	}
-	return (-1);
+	return (SUCCESS);
+}
+
+static int	copy_floats_to_opts(
+	t_element_options *opts, float *src, int count, int *uv_mod)
+{
+	int	i;
+
+	if (count == 3)
+		*uv_mod = 1;
+	else if (count == 6)
+		*uv_mod = 2;
+	else
+		return (ERR_PARSE_FLOAT);
+	i = 0;
+	while (i < count)
+	{
+		opts->uv[i] = src[i];
+		i++;
+	}
+	return (SUCCESS);
 }
 
 int	scan_opt_uv(t_tok tok, t_element_options *opts)
 {
-	int		sep;
-	t_tok	a;
-	t_tok	b;
-	float	tmp[3];
-	int		i;
+	int		index;
+	int		pos;
+	float	tmp[6];
 
-	sep = find_char_in_tok(tok, ';');
-	if (sep < 0)
+	pos = 0;
+	index = 0;
+	while (index < 6)
 	{
-		if (scan_point(tok, tmp))
+		if (read_f32_segment(tok, &pos, &tmp[index], 0))
+			break ;
+		index++;
+		if (pos == tok.len)
+			break ;
+		if (tok.start[pos] != ',')
 			return (ERR_PARSE_FLOAT);
-		opts->uv[0] = tmp[0];
-		opts->uv[1] = tmp[1];
-		opts->uv[2] = tmp[2];
-		opts->uv_mod = 1;
-		return (SUCCESS);
+		pos++;
 	}
-	a.start = tok.start;
-	a.len = sep;
-	b.start = tok.start + sep + 1;
-	b.len = tok.len - sep - 1;
-	if (scan_point(a, tmp))
-		return (ERR_PARSE_FLOAT);
-	i = 0;
-	while (i < 3)
-	{
-		opts->uv[i] = tmp[i];
-		i++;
-	}
-	if (scan_point(b, tmp))
-		return (ERR_PARSE_FLOAT);
-	i = 0;
-	while (i < 3)
-	{
-		opts->uv[3 + i] = tmp[i];
-		i++;
-	}
-	opts->uv_mod = 2;
-	return (SUCCESS);
+	return (copy_floats_to_opts(opts, tmp, index, &opts->uv_mod));
 }

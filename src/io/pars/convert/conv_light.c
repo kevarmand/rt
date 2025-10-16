@@ -13,32 +13,40 @@ static void vec3f_from_float3(const float src[3], t_vec3f *dst)
 	dst->z = src[2];
 }
 
-static void	copy_data_light(const t_parsed_light *src, t_light *dst)
-{
-	vec3f_from_float3(src->position, &dst->position);
-	rgb8_to_linear_vec(src->rgb, &dst->color);
-	dst->color.x *= src->brightness;
-	dst->color.y *= src->brightness;
-	dst->color.z *= src->brightness;
-}
 
-int	conv_light(const t_scene_parsed *parsed, t_scene *scene, t_conv_ctx *cx)
+int	conv_lights_to_ctx(const t_scene_parsed *parsed, t_conv_ctx *cx)
 {
-	t_list	*lst;
-	int		i;
+	t_list		*list_node;
+	t_light		light_tmp;
 
-	scene->light_count = cx->light_count;
-	scene->lights = malloc(sizeof(t_light) * scene->light_count);
-	if (!scene->lights)
+	if (vector_reserve(&cx->light_v, cx->light_count) != SUCCESS)
 		return (ERR_MALLOC);
-	ft_memset(scene->lights, 0, sizeof(t_light) * scene->light_count);
-	lst = parsed->lights;
-	i = 0;
-	while (lst)
+	list_node = parsed->lights;
+	while (list_node)
 	{
-		copy_data_light(lst->content, &scene->lights[i]);
-		lst = lst->next;
-		i++;
+		light_from_parsed(list_node->content, &light_tmp);
+		if (vector_push_back(&cx->light_v, &light_tmp) != SUCCESS)
+			return (ERR_MALLOC);
+		list_node = list_node->next;
 	}
 	return (SUCCESS);
 }
+
+/* Préconditions:
+   - cx->light_v contient exactement cx->light_count éléments de type t_light
+   - scene est vierge côté lights
+*/
+
+int	finalize_lights(const t_conv_ctx *cx, t_scene *scene)
+{
+	const int	count = vector_size(&cx->light_v);
+	const void	*src_ptr = vector_data(&cx->light_v);
+
+	scene->light_count = count;
+	scene->lights = malloc(sizeof(t_light) * count);
+	if (!scene->lights)
+		return (ERR_MALLOC);
+	ft_memcpy(scene->lights, src_ptr, sizeof(t_light) * count);
+	return (SUCCESS);
+}
+

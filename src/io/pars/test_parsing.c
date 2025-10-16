@@ -138,6 +138,28 @@ static void print_lights(const t_list *head)
 		element_index += 1;
 	}
 }
+static void	print_options_numbers(const t_element_options *o)
+{
+	printf("  options:\n");
+	printf("    ior=%.6f reflection=%.6f refraction=%.6f shininess=%.6f\n",
+		o->ior, o->reflection, o->refraction, o->shininess);
+	printf("    diffuse=%.6f specular=%.6f ambient=%.6f\n",
+		o->diffuse_weight, o->specular_weight, o->ambient_occlusion);
+	printf("    uv_mod=%d uv=[%.6f %.6f %.6f %.6f %.6f %.6f]\n",
+		o->uv_mod, o->uv[0], o->uv[1], o->uv[2], o->uv[3], o->uv[4], o->uv[5]);
+}
+
+static void	print_options_paths(const t_element_options *o)
+{
+	printf("    texture=%s\n", o->texture_path ? o->texture_path : "(null)");
+	printf("    bump   =%s\n", o->bumpmap_path ? o->bumpmap_path : "(null)");
+}
+
+static void	print_options(const t_element_options *o)
+{
+	print_options_numbers(o);
+	print_options_paths(o);
+}
 
 static void print_objects(const t_list *head)
 {
@@ -152,6 +174,7 @@ static void print_objects(const t_list *head)
 	{
 		element = (const t_parsed_element *)current_node->content;
 		print_object_elem(element, element_index);
+		print_options(&element->options);
 		current_node = current_node->next;
 		element_index += 1;
 	}

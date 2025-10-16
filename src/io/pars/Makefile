@@ -40,7 +40,9 @@ SRCS := \
 	./utils/scan_options/scan_opt_reflection.c \
 	./utils/scan_options/scan_opt_refraction.c \
 	./utils/scan_options/scan_opt_shininess.c \
-	./utils/scan_options/scan_opt_specular.c
+	./utils/scan_options/scan_opt_specular.c \
+	./utils/scan_options/scan_opt_texture.c \
+	./utils/scan_options/scan_opt_uv.c \
 
 OBJS := $(SRCS:.c=.o)
 
