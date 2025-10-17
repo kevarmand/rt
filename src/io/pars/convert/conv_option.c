@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/06 10:40:46 by kearmand          #+#    #+#             */
-/*   Updated: 2025/10/16 13:53:23 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/10/17 15:11:33 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,24 +16,85 @@
 #include <stdlib.h>
 #include "libft.h"
 #include "scene.h"
+#include "convert.h"
 
-
-// on creer un vector d option et une hashmap ( en creeant des clefs unique, afin de parser rapidement )
-// la ou t_option est une structure qui contiens toutes les options, dans l objet final on va avoir un index vers un tableau de t_materialet de t_surface
-// ou chaque element de ce tableau est unique ( pas de duplication d option )
-
-int	conv_option(t_scene *scene, t_element_options *options)
+static int	resolve_texture_ids(t_conv_ctx *cx, t_element_options *opt,
+			t_opt_ids *ids)
 {
-	//0. si il y  a des texture ( abedo ou bumpmap ) on doit les ajouter et recuperer leur index)
-	
-	//1. generer une clef unique pour cette option
+	if (intern_texture(cx, &opt->texture_path, &ids->albedo) != SUCCESS)
+		return (ERR_MALLOC);
+	if (intern_texture(cx, &opt->bumpmap_path, &ids->normal) != SUCCESS)
+		return (ERR_MALLOC);
+	return (SUCCESS);
+}
 
-	//2. chercher dans la hashmap si cette clef existe deja
-	
-	//3. si oui, retourner l index
-	//4. si non, creer un nouveau material, l ajouter au vector et a la hashmap
-	
-	//5. faire les surfaces aussi
+static void	build_material_from_opt(const t_element_options *opt,
+			const t_opt_ids *ids, t_material *m)
+{
+	m->ambient = opt->ambient_occlusion;
+	m->diffuse = opt->diffuse_weight;
+	m->specular = opt->specular_weight;
+	m->shininess = opt->shininess;
+	m->reflection = opt->reflection;
+	m->refraction = opt->refraction;
+	m->ior = opt->ior;
+	m->texture_albedo_id = ids->albedo;
+	m->texture_normal_id = ids->normal;
+}
 
-	return (0);
+static int	build_and_intern_material(t_conv_ctx *cx,
+			const t_element_options *opt, const t_opt_ids *ids,
+			t_index *out_mat)
+{
+	t_material	m;
+
+	build_material_from_opt(opt, ids, &m);
+	return (intern_material(cx, &m, out_mat));
+}
+
+static void	build_surface_from_opt(const t_element_options *opt, t_surface *s)
+{
+	int	i;
+
+	i = 0;
+	while (i < 6)
+	{
+		s->map_uv[i] = opt->uv[i];
+		i++;
+	}
+	s->color.x = 1.0f;
+	s->color.y = 1.0f;
+	s->color.z = 1.0f;
+	s->normal.x = 0.0f;
+	s->normal.y = 0.0f;
+	s->normal.z = 1.0f;
+	mat4_identity(s->w2o);
+	mat4_identity(s->o2w);
+}
+
+static int	build_and_intern_surface(t_conv_ctx *cx,
+			const t_element_options *opt, t_index *out_surf)
+{
+	t_surface	s;
+
+	build_surface_from_opt(opt, &s);
+	return (intern_surface(cx, &s, opt->uv_mod, out_surf));
+}
+
+int	conv_option_primitive(t_primitive *prim, t_element_options *opt,
+			t_conv_ctx *cx)
+{
+	t_opt_ids	ids;
+	t_index		mat_id;
+	t_index		surf_id;
+
+	if (resolve_texture_ids(cx, opt, &ids) != SUCCESS)
+		return (ERR_MALLOC);
+	if (build_and_intern_material(cx, opt, &ids, &mat_id) != SUCCESS)
+		return (ERR_MALLOC);
+	if (build_and_intern_surface(cx, opt, &surf_id) != SUCCESS)
+		return (ERR_MALLOC);
+	prim->material_id = mat_id;
+	prim->surface_id = surf_id;
+	return (SUCCESS);
 }

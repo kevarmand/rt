@@ -3,6 +3,13 @@
 
 #include "libft.h"
 
+
+typedef struct s_opt_ids
+{
+	t_index	albedo;
+	t_index	normal;
+}	t_opt_ids;
+
 typedef struct s_conv_ctx
 {
 	int		width;
@@ -20,7 +27,7 @@ typedef struct s_conv_ctx
 	//on va stocker les hasmap/vecteur ici : on fera une conversion propre a la fin
 
 	//texture
-	t_vector	tex_v;\
+	t_vector	tex_v;
 	t_hashmap	tex_m;
 
 	//material
