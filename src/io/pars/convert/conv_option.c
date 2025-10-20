@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/06 10:40:46 by kearmand          #+#    #+#             */
-/*   Updated: 2025/10/17 15:11:33 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/10/20 15:43:14 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,12 @@
 #include "libft.h"
 #include "scene.h"
 #include "convert.h"
+
+typedef struct s_opt_ids
+{
+	t_index	albedo;
+	t_index	normal;
+}	t_opt_ids;
 
 static int	resolve_texture_ids(t_conv_ctx *cx, t_element_options *opt,
 			t_opt_ids *ids)
@@ -80,19 +86,22 @@ static int	build_and_intern_surface(t_conv_ctx *cx,
 	build_surface_from_opt(opt, &s);
 	return (intern_surface(cx, &s, opt->uv_mod, out_surf));
 }
+int	intern_texture(t_conv_ctx *cx, char **path, t_index *out_id);
 
 int	conv_option_primitive(t_primitive *prim, t_element_options *opt,
-			t_conv_ctx *cx)
+			t_conv_ctx *cx, t_vec3f *color)
 {
 	t_opt_ids	ids;
 	t_index		mat_id;
 	t_index		surf_id;
 
-	if (resolve_texture_ids(cx, opt, &ids) != SUCCESS)
+	if (intern_texture(cx, &opt->texture_path, &ids.albedo) != SUCCESS)
 		return (ERR_MALLOC);
-	if (build_and_intern_material(cx, opt, &ids, &mat_id) != SUCCESS)
+	if (intern_texture(cx, &opt->bumpmap_path, &ids.normal) != SUCCESS)
 		return (ERR_MALLOC);
-	if (build_and_intern_surface(cx, opt, &surf_id) != SUCCESS)
+	if (intern_material(cx, opt, &ids, &mat_id) != SUCCESS)
+		return (ERR_MALLOC);
+	if (intern_surface(cx, opt, &surf_id, color) != SUCCESS)
 		return (ERR_MALLOC);
 	prim->material_id = mat_id;
 	prim->surface_id = surf_id;

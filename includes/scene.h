@@ -116,6 +116,7 @@ typedef struct s_surface
 {
 	//pas d index ixi je veux le mapping UV, la couleur de base, etc
 	float		map_uv[6]; /* u0,v0,u1,v1,u2,v2 OU px py pz, rx ry rz*/
+	int			uv_mod;
 	t_vec3f		color;    /* 0..1 linéaire */
 	t_vec3f		normal;   /* unitaire */
 	float		w2o[16];  /* world to object matrix */

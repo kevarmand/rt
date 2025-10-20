@@ -43,6 +43,7 @@ SRCS := \
 	./utils/scan_options/scan_opt_specular.c \
 	./utils/scan_options/scan_opt_texture.c \
 	./utils/scan_options/scan_opt_uv.c \
+	./convert/conv_option.c \
 
 OBJS := $(SRCS:.c=.o)
 

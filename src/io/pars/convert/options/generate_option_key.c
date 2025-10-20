@@ -41,7 +41,13 @@ static void	write_float_to_key(float value, char *key, int *index)
 	*index += 8;
 }
 
-void	generate_option_key(const t_element_options *opts, char *key)
+typedef struct s_opt_ids
+{
+	t_index	albedo;
+	t_index	normal;
+}	t_opt_ids;
+
+void	generate_option_key(const t_element_options *opts, char *key, t_opt_ids *ids)
 {
 	int	write_index;
 
@@ -59,5 +65,9 @@ void	generate_option_key(const t_element_options *opts, char *key)
 		write_float_to_key(opts->specular_weight, key, &write_index);
 	if (write_index < KEY_SIZE - 8)
 		write_float_to_key(opts->ambient_occlusion, key, &write_index);
+	if (write_index < KEY_SIZE - 8)
+		write_float_to_key((float)ids->albedo, key, &write_index);
+	if (write_index < KEY_SIZE - 8)
+		write_float_to_key((float)ids->normal, key, &write_index);
 	key[write_index] = '\0';
 }
