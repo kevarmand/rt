@@ -49,16 +49,6 @@ typedef struct s_conv_ctx
 	//object
 	t_vector	obj_v;
 
-
-
-
-	int		prim_w;
-	int		obj_w;
-	int		plane_w;
-	int		light_w;
-	int		cam_w;
-	int		mat_w;
-	int		tex_w;
 }	t_conv_ctx;
 
 #endif

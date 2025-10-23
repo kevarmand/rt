@@ -202,14 +202,14 @@ typedef struct s_scene
 	t_index      bvh_root_id; /* SCENE_ID_NONE si vide */
 
 	/* Plans infinis (hors BVH) */
-	t_plane     *planes;
+	t_primitive     *planes;
 	int          plane_count;
 
 	/* Matériaux / Textures */
 	t_material  *materials;
 	int          material_count;
 
-	/* Surfaces (hors BVH) */
+	/* Surfaces */
 	t_surface   *surfaces;
 	int          surface_count;
 

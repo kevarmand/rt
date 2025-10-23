@@ -57,33 +57,65 @@ static double triangle_area(vec3 A, vec3 B, vec3 C){
 
 // Incenter (weights by side lengths) and inradius r = 2*Area / (a+b+c)
 static void in_sphere(vec3 A, vec3 B, vec3 C, vec3 *center, double *radius){
-    double a = vlen(vsub(B,C));
-    double b = vlen(vsub(C,A));
-    double c = vlen(vsub(A,B));
+    vec3 AB = vsub(B,A), AC = vsub(C,A);
+    double a = vlen(vsub(B,C)); // |BC|
+    double b = vlen(vsub(C,A)); // |CA|
+    double c = vlen(vsub(A,B)); // |AB|
     double per = a + b + c;
-    if (per <= 1e-12){ *center = A; *radius = 0.0; return; }
-    *center = vscale(A, a/per);
-    *center = vadd(*center, vscale(B, b/per));
-    *center = vadd(*center, vscale(C, c/per));
-    double area = triangle_area(A,B,C);
-    *radius = (per > 0.0) ? (2.0 * area / per) : 0.0;
+
+    if (per <= 1e-15){
+        *center = A;
+        *radius = 0.0;
+        return;
+    }
+
+    // Incentre (poids = longueurs opposées)
+    vec3 num = vadd( vscale(A,a), vadd( vscale(B,b), vscale(C,c) ) );
+    *center = vscale(num, 1.0 / per);
+
+    // Inrayon r = 2*Area / perimeter
+    double area2 = vlen( vcross(AB, AC) ); // = 2*Area
+    *radius = area2 / per;
 }
 
-// Circumcenter (weights by squared side lengths) and R = a*b*c / (4*Area)
+
+// Centre et rayon de la sphère circonscrite du triangle ABC.
+// Renvoie centre=A et rayon=0 si triangle dégénéré.
 static void circum_sphere(vec3 A, vec3 B, vec3 C, vec3 *center, double *radius){
-    double a = vlen(vsub(B,C));
-    double b = vlen(vsub(C,A));
-    double c = vlen(vsub(A,B));
-    double a2 = a*a, b2 = b*b, c2 = c*c;
-    double s = a2 + b2 + c2;
-    if (s <= 1e-18){ *center = A; *radius = 0.0; return; }
-    *center = vscale(A, a2/s);
-    *center = vadd(*center, vscale(B, b2/s));
-    *center = vadd(*center, vscale(C, c2/s));
-    double area = triangle_area(A,B,C);
-    if (area <= 1e-18){ *radius = 0.0; }
-    else *radius = (a * b * c) / (4.0 * area);
+    vec3 u = vsub(B, A);
+    vec3 v = vsub(C, A);
+    vec3 n = vcross(u, v);
+
+    double n2 = vdot(n, n);                // ||n||^2
+    if (n2 <= 1e-18){                      // triangle quasi-colinéaire
+        *center = A;
+        *radius = 0.0;
+        return;
+    }
+
+    double u2 = vdot(u, u);                // ||u||^2
+    double v2 = vdot(v, v);                // ||v||^2
+
+    // term1 = ||u||^2 * (v x n)
+    vec3 term1 = vcross(v, n);
+    term1 = vscale(term1, u2);
+
+    // term2 = ||v||^2 * (n x u)
+    vec3 term2 = vcross(n, u);
+    term2 = vscale(term2, v2);
+
+    vec3 num = vadd(term1, term2);
+    vec3 offs = vscale(num, 1.0 / (2.0 * n2));
+    *center = vadd(A, offs);
+
+    // Rayon via a*b*c / (4A)
+    double a = vlen(vsub(B, C));
+    double b = vlen(vsub(C, A));
+    double c = vlen(vsub(A, B));
+    double area2 = vlen(n);                // = 2*A
+    *radius = (a * b * c) / (2.0 * area2); // car 4A = 2*|n|
 }
+
 
 static void make_output_names(const char *in,
                               char *out_circ, size_t cap_circ,
@@ -146,12 +178,12 @@ int main(int argc, char **argv){
         vec3 ccir; double rcir;
         in_sphere(A,B,C, &cin, &rin);
         circum_sphere(A,B,C, &ccir, &rcir);
-		rin*=2.0; // Écrire les diamètres
+		rin*=3; // Écrire les diamètres
         // Écrire les sphères (rayon, pas diamètre)
         // Format: sp x,y,z rayon R,G,B
-        fprintf(fins,  "sp %.6f,%.6f,%.6f %.6f %d,%d,%d\n",
+        fprintf(fins,  "sp %.2f,%.2f,%.2f %.2f %d,%d,%d\n",
                 cin.x,cin.y,cin.z, rin, R,G,Bc);
-        fprintf(fcirc, "sp %.6f,%.6f,%.6f %.6f %d,%d,%d\n",
+        fprintf(fcirc, "sp %.2f,%.2f,%.2f %.2f %d,%d,%d\n",
                 ccir.x,ccir.y,ccir.z, rcir, R,G,Bc);
     }
 

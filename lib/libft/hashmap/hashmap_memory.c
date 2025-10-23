@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:54:03 by kearmand          #+#    #+#             */
-/*   Updated: 2025/04/21 13:03:17 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/10/23 14:15:17 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,9 @@ void	hashmap_destroy(t_hashmap *map, void (*destroy)(void *))
 			i++;
 		}
 		free(map->nodes);
+		map->nodes = NULL;
+		map->capacity = 0;
+		map->count = 0;
 	}
 	free(map);
 }

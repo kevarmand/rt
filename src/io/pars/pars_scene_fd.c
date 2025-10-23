@@ -29,4 +29,3 @@ int	pars_scene_fd(int fd, t_scene_parsed *scene)
 		return (ERR_CTX_UNBALANCED);
 	return (SUCCESS);
 }
-

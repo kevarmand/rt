@@ -2,6 +2,7 @@
 	"files.associations": {
 		"libft.h": "c",
 		"error_codes.h": "c",
-		"convert.h": "c"
+		"convert.h": "c",
+		"vector.h": "c"
 	}
 }
