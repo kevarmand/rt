@@ -6,7 +6,7 @@
 /*   By: norivier <norivier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 20:01:56 by norivier          #+#    #+#             */
-/*   Updated: 2025/10/02 11:35:54 by norivier         ###   ########.fr       */
+/*   Updated: 2025/10/31 05:31:21 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 # include "vector.h"
 # define MALLOC_ERR -2
 # define LEAF_THRESHOLD 4
-# define EPSILON 1e-6
 
 typedef enum e_primtype
 {
@@ -26,12 +25,20 @@ typedef enum e_primtype
 	PRIM_TORUS,
 }	t_primtype;
 
+typedef struct s_mat3x3
+{
+	float	m[3][3];
+}	t_mat3x3;
+
 typedef struct s_triangle
 {
 	t_vec3f		v0;
 	t_vec3f		edge1;
 	t_vec3f		edge2;
 	t_vec3f		normal;
+	t_vec3f		rot;
+	t_mat3x3	basis;
+	t_mat3x3	inv_basis;
 }	t_triangle;
 
 typedef struct s_sphere
@@ -40,6 +47,9 @@ typedef struct s_sphere
 	float	radius;
 	float	r_squared;
 	float	inv_r;
+	t_vec3f	rot;
+	t_mat3x3	basis;
+	t_mat3x3	inv_basis;
 }	t_sphere;
 
 typedef struct s_cylinder
@@ -51,12 +61,11 @@ typedef struct s_cylinder
 	float	inv_height;
 	float	radius;
 	float	r_squared;
+	t_vec3f	rot;
+	t_mat3x3	basis;
+	t_mat3x3	inv_basis;
 }	t_cylinder;
 
-typedef struct s_mat3x3
-{
-	float	m[3][3];
-}	t_mat3x3;
 
 typedef struct s_torus
 {
@@ -165,26 +174,6 @@ typedef struct s_sphere_inter
 	float	q;
 }	t_sphere_inter;
 
-typedef struct s_cylinder_inter
-{
-	t_vec3f	delta;
-	t_vec3f	d;
-	t_vec3f	delta_proj;
-	float	a;
-	float	b;
-	float	c;
-	float	disc;
-	float	disc_sqrt;
-	float	q;
-	float	t0;
-	float	t1;
-	float	tmin;
-	float	tmax;
-	float	t;
-	float	y;
-	t_vec3f	inter;
-}	t_cylinder_inter;
-
 typedef struct s_equ
 {
 	float	a;
@@ -194,4 +183,23 @@ typedef struct s_equ
 	float	e;
 }	t_equ;
 
+// AABB
+void	prim_bound(t_primitive *p);
+void	prim_nbound(t_primpack pack, t_aabb out);
+void	bound_merge(t_aabb a, t_aabb b, t_aabb out);
+float	bound_area(t_aabb b);
+void	prim_bound_init(t_primpack pack);
+int		bound_intersect(t_ray r, t_aabb bound, float *near, float *far);
+// Sorting
+void	swap_int(int *a, int *b);
+void	swap_float(float *a, float *b);
+// the 3 following functions are kinda not needed not sure how important is it to sort the roots
+void	sortf2(float *a, float *b);
+void	sortf3(float *a, float *b, float *c);
+void	sortf4(float *a, float *b, float *c, float *d);
+// Equations
+int		solve_quadratic(t_equ arg, float roots[]);
+int		solve_quartic(t_equ arg, float roots[]);
+// Inter math
+t_vec3f	mat3x3_mulv(t_mat3x3 m, t_vec3f v);
 #endif // !BVH_H
