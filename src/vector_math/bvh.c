@@ -684,7 +684,7 @@ extern inline int	torus_inter(t_ray r, t_torus *t, float *out)
 //
 // TEST BY THE CAT
 #include <stdio.h>
-#define prim_number 250
+#define prim_number 200000
 // ------------------------- example primitives -------------------------
 
 // // Recursively print the BVH tree with indentation
@@ -744,7 +744,7 @@ void fill_prim(t_primitive *p, int len)
     // Idée: x[0]=0, x[1]=G, x[2]=G*(1+r), x[3]=G*(1+r+r^2), ...
     // SAH choisira systématiquement i=N-1 (ou i=1) → sous-arbre en chaîne.
     const float base_gap = 4.0f;   // taille du 1er saut (>> largeur ~1 des triangles)
-    const float ratio    = 1.1f;   // facteur d’augmentation du gap (>1.5 recommandé)
+    const float ratio    = 1.0f;   // facteur d’augmentation du gap (>1.5 recommandé)
 
     float x = 0.0f;
     float gap = base_gap;
@@ -770,17 +770,17 @@ void bvh_print_tree(const t_bvhnode *nodes, int root_index, int node_count);
 int main()
 {
     // 1) allocate primitives
-    t_primitive prims[prim_number];
+    t_primitive *prims = malloc(sizeof(*prims) * prim_number);
     // triangle
 	fill_prim(prims, prim_number);
     // 2) allocate index array
-    int indices[prim_number];
+    int *indices = malloc(sizeof(*indices) * prim_number);
 	for (int i = 0; i < prim_number; i += 1)
 	{
 		indices[i] = i;
 	}
     // 3) allocate BVH node array (max nodes = 2*N-1)
-    t_bvhnode nodes[2 * prim_number - 1];
+    t_bvhnode *nodes = malloc(sizeof(*nodes) * (2 * prim_number - 1));
     int nodecount = 0;
 
     // 4) create primpack
@@ -798,6 +798,6 @@ int main()
     }
     // 6) print BVH
     printf("BVH built, root = %d, total nodes = %d\n", root, nodecount);
-	bvh_print_tree(nodes, root, nodecount);
+	// bvh_print_tree(nodes, root, nodecount);
     return 0;
 }

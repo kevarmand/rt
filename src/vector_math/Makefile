@@ -1,7 +1,7 @@
 # === Config ===
 NAME        := bvh_test
 CC          := cc
-CFLAGS      := -Wall -Wextra -MMD -MP -lm
+CFLAGS      := -Wall -Wextra -MMD -MP -lm -O2 -ffast-math -march=native
 INCS        := -I. -I../../includes
 LIBS        := ../../lib/libft/libft.a
 
