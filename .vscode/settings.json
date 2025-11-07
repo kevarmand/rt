@@ -3,6 +3,7 @@
 		"libft.h": "c",
 		"error_codes.h": "c",
 		"convert.h": "c",
-		"vector.h": "c"
+		"vector.h": "c",
+		"scene.h": "c"
 	}
 }

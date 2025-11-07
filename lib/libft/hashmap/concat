@@ -1,0 +1,503 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   hashmap.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/20 17:49:32 by kearmand          #+#    #+#             */
+/*   Updated: 2025/04/21 13:42:04 by kearmand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef HASHMAP_H
+# define HASHMAP_H
+
+/*
+** Hashmap implementation using open addressing with Robin Hood hashing
+** and backward shift deletion for removals. Provides efficient insertions,
+** lookups, and deletions with good cache performance.
+** Hashfonction is based on FNV-1a hash function.
+*/
+
+# include <stddef.h>
+# include <string.h>
+
+typedef struct s_hashnode
+{
+	char				*key;
+	void				*value;
+	size_t				distance;
+}	t_hashnode;
+
+typedef struct s_hashmap
+{
+	t_hashnode			*nodes;
+	size_t				capacity;
+	size_t				count;
+}	t_hashmap;
+
+/***
+ * Hashmap functions
+ */
+
+t_hashmap	*hashmap_create(size_t initial_capacity);
+void		*hashmap_get(t_hashmap *map, const char *key);
+int			hashmap_insert(t_hashmap *map, const char *key, void *value);
+int			hashmap_remove(t_hashmap *map, const char *key);
+void		hashmap_destroy(t_hashmap *map, void (*destroy)(void *));
+
+#endif
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   hashmap_get.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/20 19:12:31 by kearmand          #+#    #+#             */
+/*   Updated: 2025/04/21 13:03:04 by kearmand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "libft.h"
+
+size_t		hash_function(const char *key, size_t capacity);
+
+/***
+ * @brief Retrieve a value by its key from the hashmap.
+ * @param map The hashmap to search.
+ * @param key The key to look for.
+ * @return The value associated with the key, or NULL if not found.
+ */
+void	*hashmap_get(t_hashmap *map, const char *key)
+{
+	size_t	index;
+
+	if (!map || !key)
+		return (NULL);
+	index = hash_function(key, map->capacity);
+	while (map->nodes[index].key)
+	{
+		if (ft_strcmp(map->nodes[index].key, key) == 0)
+			return (map->nodes[index].value);
+		index = (index + 1) % map->capacity;
+	}
+	return (NULL);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   hashmap_hashf.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/20 18:45:06 by kearmand          #+#    #+#             */
+/*   Updated: 2025/04/21 13:03:08 by kearmand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "libft.h"
+
+/***
+ * @brief Give the hash of a key
+ * @param key the key to hash
+ * @param capacity the capacity of the hashmap
+ * @note the hash is calculated using the FNV-1a hash function
+ * @return the hash of the key
+ */
+size_t	hash_function(const char *key, size_t capacity)
+{
+	size_t		hash;
+	size_t		i;
+
+	hash = 14695981039346656037UL;
+	i = 0;
+	while (key[i])
+	{
+		hash ^= (unsigned char)key[i];
+		hash *= 1099511628211UL;
+		i++;
+	}
+	return (hash % capacity);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   hashmap_insert.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/20 18:27:44 by kearmand          #+#    #+#             */
+/*   Updated: 2025/04/21 13:03:14 by kearmand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "libft.h"
+#include <stdlib.h>
+
+size_t		hash_function(const char *key, size_t capacity);
+static int	need_rehash(t_hashmap *map);
+static int	prepare_new_node(t_hashnode *node, const char *key, void *value);
+static void	swap_nodes(t_hashnode *a, t_hashnode *b);
+int			robinhood_probe(t_hashmap *map, t_hashnode new_node);
+int			hashmap_rehash(t_hashmap *map);
+
+/***
+ * @brief Insert a key-value pair into the hashmap
+ * @param map the hashmap to insert into
+ * @param key the key to insert
+ * @param value the value to insert
+ * @return 0 on success, -1 on failure
+*/
+int	hashmap_insert(t_hashmap *map, const char *key, void *value)
+{
+	t_hashnode	new_node;
+
+	if (!map || !key)
+		return (-1);
+	if (need_rehash(map) && hashmap_rehash(map) == -1)
+		return (-1);
+	if (prepare_new_node(&new_node, key, value) == -1)
+		return (-1);
+	return (robinhood_probe(map, new_node));
+}
+
+/***
+ * @brief Check if the hashmap needs to be rehashed
+ */
+static int	need_rehash(t_hashmap *map)
+{
+	return (map->count * 10 >= map->capacity * 7);
+}
+
+/***
+ * @brief Prepare a new node for insertion
+ */
+static int	prepare_new_node(t_hashnode *node, const char *key, void *value)
+{
+	node->key = ft_strdup(key);
+	if (!node->key)
+		return (-1);
+	node->value = value;
+	node->distance = 0;
+	return (0);
+}
+
+/***
+ * @brief Swap two nodes
+ */
+static void	swap_nodes(t_hashnode *a, t_hashnode *b)
+{
+	t_hashnode	tmp;
+
+	tmp = *a;
+	*a = *b;
+	*b = tmp;
+}
+
+/***
+ * @brief Insert a new node into the hashmap using Robin Hood hashing
+ * @param map the hashmap to insert into
+ * @param new_node the new node to insert
+ * @return 0 on success, -1 on failure
+ */
+int	robinhood_probe(t_hashmap *map, t_hashnode new_node)
+{
+	size_t	index;
+
+	index = hash_function(new_node.key, map->capacity);
+	while (map->nodes[index].key)
+	{
+		if (ft_strcmp(map->nodes[index].key, new_node.key) == 0)
+		{
+			free(map->nodes[index].key);
+			map->nodes[index] = new_node;
+			return (0);
+		}
+		if (new_node.distance > map->nodes[index].distance)
+		{
+			swap_nodes(&new_node, &map->nodes[index]);
+		}
+		index = (index + 1) % map->capacity;
+		new_node.distance++;
+	}
+	map->nodes[index] = new_node;
+	map->count++;
+	return (0);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   hashmap_memory.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/20 17:54:03 by kearmand          #+#    #+#             */
+/*   Updated: 2025/10/23 14:15:17 by kearmand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "libft.h"
+#include <stdlib.h>
+
+/***
+ * @brief Create a new hashmap with the specified initial capacity.
+ */
+t_hashmap	*hashmap_create(size_t initial_capacity)
+{
+	t_hashmap	*map;
+
+	map = (t_hashmap *)malloc(sizeof(t_hashmap));
+	if (!map)
+		return (NULL);
+	map->nodes = (t_hashnode *)ft_calloc(initial_capacity, sizeof(t_hashnode));
+	if (!map->nodes)
+	{
+		free(map);
+		return (NULL);
+	}
+	map->capacity = initial_capacity;
+	map->count = 0;
+	return (map);
+}
+
+/***
+ * @brief destroy the hashmap and free all its nodes
+ * @param map the hashmap to destroy
+ * @param destroy a function to destroy the value of each node
+ * @note if destroy is NULL, the value will not be destroyed
+ */
+void	hashmap_destroy(t_hashmap *map, void (*destroy)(void *))
+{
+	size_t	i;
+
+	if (!map)
+		return ;
+	if (map->nodes)
+	{
+		i = 0;
+		while (i < map->capacity)
+		{
+			if (map->nodes[i].key)
+			{
+				free(map->nodes[i].key);
+				if (destroy && map->nodes[i].value)
+					destroy(map->nodes[i].value);
+			}
+			i++;
+		}
+		free(map->nodes);
+		map->nodes = NULL;
+		map->capacity = 0;
+		map->count = 0;
+	}
+	free(map);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   hashmap_rehash.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/20 19:07:27 by kearmand          #+#    #+#             */
+/*   Updated: 2025/04/21 13:03:20 by kearmand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "libft.h"
+#include <stdlib.h>
+
+int			robinhood_probe(t_hashmap *map, t_hashnode new_node);
+size_t		hash_function(const char *key, size_t capacity);
+static int	allocate_new_table(t_hashmap *map);
+static void	reinsert_old_nodes(t_hashmap *map, t_hashnode *old_nodes,
+				size_t old_capacity);
+
+/***
+ * @brief Rehash the hashmap when the load factor is too high.
+ * @param map The hashmap to rehash.
+ * @return 0 on success, -1 on failure.
+ */
+int	hashmap_rehash(t_hashmap *map)
+{
+	t_hashnode	*old_nodes;
+	size_t		old_capacity;
+
+	old_nodes = map->nodes;
+	old_capacity = map->capacity;
+	if (allocate_new_table(map) == -1)
+	{
+		map->nodes = old_nodes;
+		return (-1);
+	}
+	reinsert_old_nodes(map, old_nodes, old_capacity);
+	free(old_nodes);
+	return (0);
+}
+
+/***
+ * @brief Allocate a new table with double the previous capacity.
+ * @param map The hashmap to update.
+ * @return 0 on success, -1 on failure.
+ */
+static int	allocate_new_table(t_hashmap *map)
+{
+	t_hashnode	*new_nodes;
+
+	new_nodes = (t_hashnode *)ft_calloc(map->capacity * 2, sizeof(t_hashnode));
+	if (!new_nodes)
+		return (-1);
+	map->nodes = new_nodes;
+	map->capacity *= 2;
+	map->count = 0;
+	return (0);
+}
+
+/***
+ * @brief Reinsert old nodes into the new table.
+ * @param map The new hashmap.
+ * @param old_nodes The old array of nodes.
+ * @param old_capacity The capacity of the old array.
+ */
+static void	reinsert_old_nodes(t_hashmap *map, t_hashnode *old_nodes,
+	size_t old_capacity)
+{
+	size_t		i;
+	t_hashnode	new_node;
+
+	i = 0;
+	while (i < old_capacity)
+	{
+		if (old_nodes[i].key)
+		{
+			new_node = old_nodes[i];
+			new_node.distance = 0;
+			robinhood_probe(map, new_node);
+		}
+		i++;
+	}
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   hashmap_remove.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/20 19:14:45 by kearmand          #+#    #+#             */
+/*   Updated: 2025/04/21 13:03:26 by kearmand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "libft.h"
+#include <stdlib.h>
+
+size_t		hash_function(const char *key, size_t capacity);
+static void	compact_after_removal(t_hashmap *map, size_t index);
+
+/***
+ * @brief Remove a key-value pair from the hashmap
+ * @param map The hashmap to remove from
+ * @param key The key to remove
+ * @return 0 on success, -1 if not found
+ */
+int	hashmap_remove(t_hashmap *map, const char *key)
+{
+	size_t	index;
+
+	if (!map || !key)
+		return (-1);
+	index = hash_function(key, map->capacity);
+	while (map->nodes[index].key)
+	{
+		if (ft_strcmp(map->nodes[index].key, key) == 0)
+		{
+			free(map->nodes[index].key);
+			map->nodes[index].key = NULL;
+			map->nodes[index].value = NULL;
+			map->nodes[index].distance = 0;
+			map->count--;
+			compact_after_removal(map, index);
+			return (0);
+		}
+		index = (index + 1) % map->capacity;
+	}
+	return (-1);
+}
+
+/***
+ * @brief Compact the cluster after a removal to maintain probing invariants
+ * @param map The hashmap to compact
+ * @param index The index where the deletion happened
+ */
+static void	compact_after_removal(t_hashmap *map, size_t index)
+{
+	size_t	next;
+
+	next = (index + 1) % map->capacity;
+	while (map->nodes[next].key && map->nodes[next].distance > 0)
+	{
+		map->nodes[next].distance--;
+		map->nodes[index] = map->nodes[next];
+		map->nodes[next].key = NULL;
+		map->nodes[next].value = NULL;
+		map->nodes[next].distance = 0;
+		index = next;
+		next = (next + 1) % map->capacity;
+	}
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   hasmap_init.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/23 15:10:37 by kearmand          #+#    #+#             */
+/*   Updated: 2025/10/23 15:12:08 by kearmand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "libft.h"
+
+/***
+ * @brief Initialize a hashmap with a given initial capacity.
+ * @param map The hashmap to initialize.
+ * @param initial_capacity The initial capacity of the hashmap.
+ * @return 0 on success, -1 on failure.
+*/
+
+int	hashmap_init(t_hashmap *map, size_t initial_capacity)
+{
+	map->nodes = (t_hashnode *)ft_calloc(initial_capacity, sizeof(t_hashnode));
+	if (!map->nodes)
+		return (-1);
+	map->capacity = initial_capacity;
+	map->count = 0;
+	return (0);
+}
+
+void	hashmap_free_nodes(t_hashmap *map, void (*destroy)(void *))
+{
+	size_t	i;
+
+	if (!map || !map->nodes)
+		return ;
+	i = 0;
+	while (i < map->capacity)
+	{
+		if (map->nodes[i].key)
+		{
+			free(map->nodes[i].key);
+			if (destroy && map->nodes[i].value)
+				destroy(map->nodes[i].value);
+		}
+		i++;
+	}
+	free(map->nodes);
+	map->nodes = NULL;
+	map->capacity = 0;
+	map->count = 0;
+}

@@ -277,13 +277,16 @@ typedef enum e_ui_tab {
 	UI_TAB_CAMERA
 }	t_ui_tab;
 
-typedef struct		s_select
+typedef int t_index;
+
+/* --------- Sélection courante (indices; pas de pointeurs) --------- */
+typedef struct s_select
 {
-	t_objlist			*obj;
-	t_objlist			*light;
-	t_objlist			*cam;
-	int				active_tab;
-}					t_select;
+	t_index active_camera_id;
+	t_index hovered_object_id;
+	t_index hovered_primitive_id;
+	t_index hovered_light_id;
+}	t_select;
 
 /*
 **	pour les test

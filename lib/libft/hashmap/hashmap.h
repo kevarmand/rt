@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:49:32 by kearmand          #+#    #+#             */
-/*   Updated: 2025/04/21 13:42:04 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/10/24 14:00:30 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,10 @@ typedef struct s_hashmap
  */
 
 t_hashmap	*hashmap_create(size_t initial_capacity);
+t_hashmap	*hashmap_init(t_hashmap *map, size_t initial_capacity);
 void		*hashmap_get(t_hashmap *map, const char *key);
 int			hashmap_insert(t_hashmap *map, const char *key, void *value);
 int			hashmap_remove(t_hashmap *map, const char *key);
 void		hashmap_destroy(t_hashmap *map, void (*destroy)(void *));
-
+void 		hashmap_free_nodes(t_hashmap *map, void (*destroy)(void *));
 #endif

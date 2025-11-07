@@ -77,11 +77,16 @@ typedef struct s_primitive
 		t_sphere   sp;
 		t_cylinder cy;
 		t_torus    to;
-	} geo;
-	t_index     object_id;    /* SCENE_ID_NONE si non applicable */
+	};
 	t_index     material_id;  /* SCENE_ID_NONE si défaut global */
 	t_index     surface_id;   /* Submesh/material slot si besoin, sinon NONE */
 }	t_primitive;
+
+typedef struct s_priminfo
+{
+	t_aabb			bounds;
+	t_vec3f			centroid;
+}	t_priminfo;
 
 /* --------- Objets logiques (groupent des primitives contiguës) --------- */
 typedef struct s_object
@@ -156,7 +161,7 @@ typedef struct s_camera
 	t_vec3f p0;        /* centre du pixel (0,0) en monde */
 	t_vec3f dx;        /* +1 px X (droite) */
 	t_vec3f dy;        /* +1 px Y (bas) */
-	float   fov_deg;   /* vertical */
+	float   fov_deg;   /* horizontal */
 	float   aspect;    /* width / height */
 }	t_camera;
 
@@ -173,14 +178,7 @@ typedef struct s_bvh_node
 	int     prim_count;    /* utilisé si feuille */
 }	t_bvh_node;
 
-/* --------- Sélection courante (indices; pas de pointeurs) --------- */
-typedef struct s_select
-{
-	t_index active_camera_id;
-	t_index hovered_object_id;
-	t_index hovered_primitive_id;
-	t_index hovered_light_id;
-}	t_select;
+
 
 /* --------- Scène finale immuable --------- */
 typedef struct s_scene
@@ -193,9 +191,6 @@ typedef struct s_scene
 	/* Primitives & Objets (BVH) */
 	t_primitive *primitives;
 	int          primitive_count;
-
-	t_object    *objects;
-	int          object_count;
 
 	t_bvh_node  *bvh_nodes;
 	int          bvh_node_count;
