@@ -13,12 +13,13 @@
 #ifndef VECTOR_H
 # define VECTOR_H 1
 
-typedef struct s_vec3f
-{
-	float	x;
-	float	y;
-	float	z;
-}	t_vec3f;
+# if defined(__clang__)
+typedef float t_vec4f __attribute__((ext_vector_type(4)));
+# elif defined (__GNUC__)
+typedef float t_vec4f __attribute__((vector_size(sizeof(float) * 4)));
+# endif
+
+typedef t_vec4f t_vec3f;
 
 t_vec3f	vec3f_min(t_vec3f a, t_vec3f b);
 t_vec3f	vec3f_max(t_vec3f a, t_vec3f b);

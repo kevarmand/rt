@@ -10,66 +10,74 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <math.h>
 #include "vector.h"
 #include "types.h"
-#include "math.h"
 #include "rt_math.h"
-#include <math.h>
 
+#if defined (__clang__)
+FORCEINLINE
+extern inline t_vec3f	vec3f_min(t_vec3f a, t_vec3f b)
+{
+	return (__builtin_elementwise_min(a, b));
+}
+#else
 FORCEINLINE
 extern inline t_vec3f	vec3f_min(t_vec3f a, t_vec3f b)
 {
 	return ((t_vec3f){
 		fminf(a.x, b.x),
 		fminf(a.y, b.y),
-		fminf(a.z, b.z)
+		fminf(a.z, b.z),
+		0.0f
 	});
 }
+#endif
 
+#if defined (__clang__)
+FORCEINLINE
+extern inline t_vec3f	vec3f_max(t_vec3f a, t_vec3f b)
+{
+	return (__builtin_elementwise_max(a, b));
+}
+#else
 FORCEINLINE
 extern inline t_vec3f	vec3f_max(t_vec3f a, t_vec3f b)
 {
 	return ((t_vec3f){
 		fmaxf(a.x, b.x),
 		fmaxf(a.y, b.y),
-		fmaxf(a.z, b.z)
+		fmaxf(a.z, b.z),
+		0.0f
 	});
 }
+#endif
 
 FORCEINLINE
 extern inline t_vec3f	vec3f_sub(t_vec3f a, t_vec3f b)
 {
-	return ((t_vec3f){
-		a.x - b.x,
-		a.y - b.y,
-		a.z - b.z,
-	});
+	return (a - b);
 }
 
 FORCEINLINE
 extern inline t_vec3f	vec3f_add(t_vec3f a, t_vec3f b)
 {
-	return ((t_vec3f){
-		a.x + b.x,
-		a.y + b.y,
-		a.z + b.z,
-	});
+	return (a + b);
 }
 
 FORCEINLINE
 extern inline t_vec3f	vec3f_scale(t_vec3f a, float s)
 {
-	return ((t_vec3f){
-		a.x * s,
-		a.y * s,
-		a.z * s,
-	});
+	return (a * (t_vec3f){s, s, s, 0});
 }
 
 FORCEINLINE
 extern inline float	vec3f_dot(t_vec3f a, t_vec3f b)
 {
-	return (a.x * b.x + a.y * b.y + a.z * b.z);
+	t_vec3f	tmp;
+
+	tmp = a * b;
+	return (tmp.x + tmp.y + tmp.z);
 }
 
 FORCEINLINE

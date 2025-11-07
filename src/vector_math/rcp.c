@@ -12,7 +12,6 @@
 
 #include "types.h"
 #include <immintrin.h>
-#include <xmmintrin.h>
 
 #if defined(__SSE__)
 

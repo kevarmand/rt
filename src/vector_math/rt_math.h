@@ -12,7 +12,6 @@
 
 #ifndef RT_MATH_H
 # define RT_MATH_H 1
-# include "vector.h"
 
 #define EPSILON 0x1.0c6f7ap-20f
 #define RCP_2 0x1p-1f
