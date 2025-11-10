@@ -6,11 +6,10 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/06 10:40:46 by kearmand          #+#    #+#             */
-/*   Updated: 2025/10/20 15:43:14 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/10 17:30:44 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "rt.h"
 #include "io.h"
 #include "error_codes.h"
 #include <stdlib.h>

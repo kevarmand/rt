@@ -5,22 +5,14 @@
  * (Aucun lien MLX/UI ici; parsing et build font la validation)
  * ============================================================ */
 
+
+# include "vector.h"
 /* Indice uniforme pour référencer les éléments de la scène. */
 typedef int t_index;
 
 typedef enum e_scene_id {
 	SCENE_ID_NONE = -1
 }	t_scene_id;
-
-/* --------- Vecteurs de base ---------
- * t_vec3f = base mathématique float32
- * (Si tu as déjà un vec3 centralisé, garde ce typedef identique)
- */
-typedef struct s_vec3f {
-	float x;
-	float y;
-	float z;
-}	t_vec3f;
 
 /* AABB utilitaire (min,max) — utilisé par les nœuds BVH et les objets. */
 typedef t_vec3f t_aabb[2];
@@ -218,7 +210,7 @@ typedef struct s_scene
 	/* Caméras */
 	t_camera    *cameras;
 	int          camera_count;
-	
+
 }	t_scene;
 
 /* --------- Notes de design ---------

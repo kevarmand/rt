@@ -1,5 +1,4 @@
 #include "io.h"
-#include "rt.h"
 #include "error_codes.h"
 #include "scene.h"
 

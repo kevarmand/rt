@@ -13,8 +13,13 @@ static void vec3f_from_float3(const float src[3], t_vec3f *dst)
 	dst->z = src[2];
 }
 
+void light_from_parsed(t_parsed_light *src, t_light *dst)
+{
+	vec3f_from_float3(src->position, &dst->position);
+	rgb8_to_linear_vec(src->rgb, &dst->color);
+}
 
-int	conv_lights_to_ctx(const t_scene_parsed *parsed, t_conv_ctx *cx)
+int	conv_lights_to_ctx(t_scene_parsed *parsed, t_conv_ctx *cx)
 {
 	t_list		*list_node;
 	t_light		light_tmp;
@@ -37,7 +42,7 @@ int	conv_lights_to_ctx(const t_scene_parsed *parsed, t_conv_ctx *cx)
    - scene est vierge côté lights
 */
 
-int	finalize_lights(const t_conv_ctx *cx, t_scene *scene)
+int	finalize_lights(t_conv_ctx *cx, t_scene *scene)
 {
 	const int	count = vector_size(&cx->light_v);
 	const void	*src_ptr = vector_data(&cx->light_v);
