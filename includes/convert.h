@@ -3,6 +3,7 @@
 
 #include "libft.h"
 
+typedef int t_index;
 
 typedef struct s_opt_ids
 {

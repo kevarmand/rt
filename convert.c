@@ -178,7 +178,7 @@ int main(int argc, char **argv){
         vec3 ccir; double rcir;
         in_sphere(A,B,C, &cin, &rin);
         circum_sphere(A,B,C, &ccir, &rcir);
-		rin*=1; // Écrire les diamètres
+		rin*=2.5; // Écrire les diamètres
         // Écrire les sphères (rayon, pas diamètre)
         // Format: sp x,y,z rayon R,G,B
         fprintf(fins,  "sp %.2f,%.2f,%.2f %.2f %d,%d,%d\n",

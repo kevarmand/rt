@@ -61,7 +61,10 @@ SRCS := \
 	./main_test_io.c\
 	./scene_load_pipeline.c\
 	./build/build_scene_from_ctx.c\
-	./print_test_scene.c
+	./print_test_scene.c\
+	../../engine/math/vector.c\
+	../../engine/math/rsqrt.c\
+	../../engine/io/rcp.c
 
 OBJS := $(addprefix $(OBJ_DIR)/, $(SRCS:.c=.o))
 

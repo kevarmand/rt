@@ -2,12 +2,7 @@
 #ifndef COLOR_H
 # define COLOR_H
 # include <stddef.h>
-
-typedef struct	s_vec3f {
-	float x;
-	float y;
-	float z;
-}	t_vec3f;
+# include "vector.h"
 
 float	srgb8_to_linear(int c);
 int		linear_to_srgb8(float x);

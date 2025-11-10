@@ -45,7 +45,7 @@ int	conv_cameras_to_ctx(const t_scene_parsed *parsed, t_conv_ctx *cx)
    - scene est vierge côté cameras
 */
 
-int	finalize_cameras(const t_conv_ctx *cx, t_scene *scene)
+int	finalize_cameras(t_conv_ctx *cx, t_scene *scene)
 {
 	const int	count = vector_size(&cx->cam_v);
 	const void	*src_ptr = vector_data(&cx->cam_v);

@@ -4,6 +4,12 @@
 		"error_codes.h": "c",
 		"convert.h": "c",
 		"vector.h": "c",
-		"scene.h": "c"
+		"scene.h": "c",
+		"math.h": "c",
+		"immintrin.h": "c",
+		"x86gprintrin.h": "c",
+		"attributes.h": "c",
+		"rt_math.h": "c",
+		"io.h": "c"
 	}
 }

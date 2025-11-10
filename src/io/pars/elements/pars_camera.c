@@ -1,6 +1,7 @@
 #include "io.h"
 #include "type.h"
 #include "error_codes.h"
+#include "vector.h"
 
 int	pars_camera(t_pars_state *st, t_scene_parsed *scene, t_elem_role role)
 {

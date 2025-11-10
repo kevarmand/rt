@@ -218,9 +218,7 @@ typedef struct s_scene
 	/* Caméras */
 	t_camera    *cameras;
 	int          camera_count;
-
-	/* Sélection (UI/inspection) */
-	t_select     select_state;
+	
 }	t_scene;
 
 /* --------- Notes de design ---------

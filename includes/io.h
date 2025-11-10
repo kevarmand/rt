@@ -9,14 +9,6 @@
 # include "type.h"
 # include "libft.h"
 
-
-typedef struct s_vec3f
-{
-	float	x;
-	float	y;
-	float	z;
-}	t_vec3f;
-
 # define BUFFER_SIZE 1024
 
 typedef enum e_elem_role
