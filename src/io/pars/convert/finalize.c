@@ -6,11 +6,11 @@
 #include "convert.h"
 
 
-static int	finalize_prim_array(const t_vector *vec,
+static int	finalize_prim_array(t_vector *vec,
 			t_primitive **out_array, int *out_count)
 {
-	const int	count = vector_size(vec);
-	const void	*src_ptr = vector_data(vec);
+	int		count = vector_size(vec);
+	void	*src_ptr = vector_data(vec);
 
 	*out_count = count;
 	*out_array = NULL;
@@ -23,10 +23,10 @@ static int	finalize_prim_array(const t_vector *vec,
 	return (SUCCESS);
 }
 
-int	finalize_primitives(const t_conv_ctx *cx, t_scene *scene)
+int	finalize_primitives(t_conv_ctx *cx, t_scene *scene)
 {
 	if (finalize_prim_array(&cx->obj_v,
-			&scene->objects, &scene->object_count) != SUCCESS)
+			&scene->primitives, &scene->primitive_count) != SUCCESS)
 		return (ERR_MALLOC);
 	if (finalize_prim_array(&cx->plane_v,
 			&scene->planes, &scene->plane_count) != SUCCESS)

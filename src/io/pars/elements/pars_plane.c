@@ -16,7 +16,7 @@ int	pars_plane(t_pars_state *st, t_scene_parsed *scene)
 	if (!pars_next_tok(st, &token) || scan_vec3(token,
 			parsed.data.plane.normal))
 		return (ERR_PARS);
-	if (!pars_next_tok(st, &token) || scan_color(token, parsed.data.plane.rgb))
+	if (!pars_next_tok(st, &token) || scan_color(token, parsed.rgb))
 		return (ERR_PARS);
 	status = pars_options(st, &parsed.options);
 	if (status != SUCCESS)

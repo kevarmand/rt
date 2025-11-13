@@ -5,6 +5,15 @@
 #include "error_codes.h"
 #include <stdlib.h>
 
+//on fait les forward declarations pour eviter les warnings
+int	copy_triangle_to_primitive(const t_parsed_element *src, t_primitive *dst);
+int	copy_sphere_to_primitive(const t_parsed_element *src, t_primitive *dst);
+int	copy_cylinder_to_primitive(const t_parsed_element *src, t_primitive *dst);
+int	copy_plane_to_primitive(const t_parsed_element *src, t_primitive *dst);
+
+int	conv_option_primitive(t_primitive *prim, t_element_options *opt,
+			t_conv_ctx *cx, int *color);
+
 static int	init_primitives(t_conv_ctx *cx)
 {
 	if (vector_reserve(&cx->obj_v, cx->object_count) != SUCCESS)
@@ -14,17 +23,7 @@ static int	init_primitives(t_conv_ctx *cx)
 	return (SUCCESS);
 }
 
-static void	copy_plane_data(const t_parsed_element *src, t_plane *dst)
-{
-	dst->normal.x = src->data.plane.normal[0];
-	dst->normal.y = src->data.plane.normal[1];
-	dst->normal.z = src->data.plane.normal[2];
-	dst->d = -(dst->normal.x * src->data.plane.origin[0]
-		+ dst->normal.y * src->data.plane.origin[1]
-		+ dst->normal.z * src->data.plane.origin[2]);
-}
-
-static void	object_from_parsed(const t_parsed_element *src, t_primitive *dst)
+static void	object_from_parsed(t_parsed_element *src, t_primitive *dst)
 {
 	if (src->type == ELEM_TRIANGLE)
 		copy_triangle_to_primitive(src, dst);
@@ -37,12 +36,12 @@ static void	object_from_parsed(const t_parsed_element *src, t_primitive *dst)
 }
 	
 
-static int	conv_push_elem_to_ctx(const t_parsed_element *elem, t_conv_ctx *cx)
+static int	conv_push_elem_to_ctx(t_parsed_element *elem, t_conv_ctx *cx)
 {
 	t_primitive		prim_tmp;
 
 	object_from_parsed(elem, &prim_tmp);
-	conv_option_primitive(&prim_tmp, elem->options);
+	conv_option_primitive(&prim_tmp, &elem->options, cx, elem->rgb); //tester le retour
 	if (elem->type != ELEM_PLANE)
 	{
 		if (vector_push_back(&cx->obj_v, &prim_tmp) != SUCCESS)
@@ -55,10 +54,10 @@ static int	conv_push_elem_to_ctx(const t_parsed_element *elem, t_conv_ctx *cx)
 }
 
 
-int	conv_prims_to_ctx(const t_scene_parsed *parsed, t_conv_ctx *cx)
+int	conv_prims_to_ctx(t_scene_parsed *parsed, t_conv_ctx *cx)
 {
-	t_list				*node;
-	const t_parsed_element	*elem;
+	t_list					*node;
+	t_parsed_element		*elem;
 
 	if (init_primitives(cx) != SUCCESS)
 		return (ERR_MALLOC);

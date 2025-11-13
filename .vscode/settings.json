@@ -10,6 +10,9 @@
 		"x86gprintrin.h": "c",
 		"attributes.h": "c",
 		"rt_math.h": "c",
-		"io.h": "c"
+		"io.h": "c",
+		"cmath": "c",
+		"stdio.h": "c",
+		"type.h": "c"
 	}
 }

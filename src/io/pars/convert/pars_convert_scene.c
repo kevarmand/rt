@@ -5,6 +5,13 @@
 #include <stdlib.h>
 #include <string.h>
 
+//forward declarations
+int	conv_camera(t_scene_parsed *parsed, t_scene *scene, t_conv_ctx *cx);
+int	conv_light(t_scene_parsed *parsed, t_scene *scene, t_conv_ctx *cx);
+int	conv_obj(t_scene_parsed *parsed, t_scene *scene, t_conv_ctx *cx);
+void	conv_globals(t_scene_parsed *parsed, t_scene *scene);
+void	conv_count_all(const t_scene_parsed *parsed, t_conv_ctx *cx);
+
 int	pars_convert_scene(t_scene_parsed *parsed, t_scene *scene)
 {
 	t_conv_ctx	cx;

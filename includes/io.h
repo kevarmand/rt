@@ -88,14 +88,12 @@ typedef struct s_parsed_sphere
 {
 	float			center[3];
 	float			diameter;
-	int				rgb[3];
 }	t_parsed_sphere;
 
 typedef struct s_parsed_plane
 {
 	float			origin[3];
 	float			normal[3];
-	int				rgb[3];
 }	t_parsed_plane;
 
 typedef struct s_parsed_cylinder
@@ -104,7 +102,6 @@ typedef struct s_parsed_cylinder
 	float			axis[3];
 	float			diameter;
 	float			height;
-	int				rgb[3];
 }	t_parsed_cylinder;
 
 typedef struct s_parsed_triangle
@@ -112,7 +109,6 @@ typedef struct s_parsed_triangle
 	float			vertex1[3];
 	float			vertex2[3];
 	float			vertex3[3];
-	int				rgb[3];
 }	t_parsed_triangle;
 
 typedef struct s_parsed_camera
@@ -141,6 +137,7 @@ typedef struct s_parsed_element
 		t_parsed_camera		camera;
 		t_parsed_light		light;
 	}	data;
+	int						rgb[3];
 }	t_parsed_element;
 
 
@@ -151,7 +148,7 @@ typedef struct s_parsed_element
  * with the parsed data.
  * @return Returns 0 on success, or a non-zero error code on failure.
  */
-int	pars_scene(const char *filename, t_scene *scene);
+int	pars_scene(const char *filename, t_conv_ct *cx);
 
 /***
  * @brief Initialize the parsing context state.

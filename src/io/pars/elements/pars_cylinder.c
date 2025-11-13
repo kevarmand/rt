@@ -23,7 +23,7 @@ int	pars_cylinder(t_pars_state *st, t_scene_parsed *scene)
 		|| scan_float(token, &parsed_element.data.cylinder.height))
 		return (ERR_PARS);
 	if (!pars_next_tok(st, &token)
-		|| scan_color(token, parsed_element.data.cylinder.rgb))
+		|| scan_color(token, parsed_element.rgb))
 		return (ERR_PARS);
 	status = pars_options(st, &parsed_element.options);
 	if (status != SUCCESS)

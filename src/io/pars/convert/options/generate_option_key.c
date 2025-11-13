@@ -1,6 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   generate_option_key.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/12 13:23:25 by kearmand          #+#    #+#             */
+/*   Updated: 2025/11/13 16:20:48 by kearmand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "io.h"
 #include "error_codes.h"
 #include "scene.h"
+#include <math.h>
 
 #define KEY_SIZE 128
 
@@ -46,24 +59,24 @@ typedef struct s_opt_ids
 	t_index	normal;
 }	t_opt_ids;
 
-void	generate_option_key(const t_element_options *opts, char *key, t_opt_ids *ids)
+void	generate_option_key(t_material *mat, char *key, t_opt_ids *ids)
 {
 	int	write_index;
 
 	write_index = 0;
-	write_float_to_key(opts->ior, key, &write_index);
+	write_float_to_key(mat->ior, key, &write_index);
 	if (write_index < KEY_SIZE - 8)
-		write_float_to_key(opts->reflection, key, &write_index);
+		write_float_to_key(mat->reflection, key, &write_index);
 	if (write_index < KEY_SIZE - 8)
-		write_float_to_key(opts->refraction, key, &write_index);
+		write_float_to_key(mat->refraction, key, &write_index);
 	if (write_index < KEY_SIZE - 8)
-		write_float_to_key(opts->shininess, key, &write_index);
+		write_float_to_key(mat->shininess, key, &write_index);
 	if (write_index < KEY_SIZE - 8)
-		write_float_to_key(opts->diffuse_weight, key, &write_index);
+		write_float_to_key(mat->diffuse, key, &write_index);
 	if (write_index < KEY_SIZE - 8)
-		write_float_to_key(opts->specular_weight, key, &write_index);
+		write_float_to_key(mat->specular, key, &write_index);
 	if (write_index < KEY_SIZE - 8)
-		write_float_to_key(opts->ambient_occlusion, key, &write_index);
+		write_float_to_key(mat->ambient, key, &write_index);
 	if (write_index < KEY_SIZE - 8)
 		write_float_to_key((float)ids->albedo, key, &write_index);
 	if (write_index < KEY_SIZE - 8)

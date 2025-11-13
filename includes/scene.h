@@ -23,7 +23,8 @@ typedef enum e_primtype
 	PRIM_TRIANGLE = 0,
 	PRIM_SPHERE   = 1,
 	PRIM_CYLINDER = 2,
-	PRIM_TORUS    = 3
+	PRIM_TORUS    = 3,
+	PRIM_PLANE   = 4
 	/* PRIM_PLANE non listé ici: plans traités hors BVH. */
 }	t_primtype;
 
@@ -57,6 +58,16 @@ typedef struct s_torus
 	float   r;      /* petit rayon (rayon du tube) */
 }	t_torus;
 
+/* --------- Plans “infini” (hors BVH) ---------
+ * Motif fréquent: peu de plans par scène, non découpables proprement.
+ * On les teste systématiquement après la traversée BVH.
+ */
+typedef struct s_plane
+{
+	t_vec3f normal; /* unitaire */
+	float   d;      /* plan: dot(normal, X) + d = 0 */
+}	t_plane;
+
 /* Primitive finale (runtime): compacte, sans AABB/centroid.
  * Les AABB/centroids existent côté builder (structures “info”) pour le BVH,
  * pas ici. Intersection ne nécessite pas ces champs.
@@ -69,6 +80,7 @@ typedef struct s_primitive
 		t_sphere   sp;
 		t_cylinder cy;
 		t_torus    to;
+		t_plane    pl;
 	};
 	t_index     material_id;  /* SCENE_ID_NONE si défaut global */
 	t_index     surface_id;   /* Submesh/material slot si besoin, sinon NONE */
@@ -89,15 +101,7 @@ typedef struct s_object
 	t_aabb      bounds;   /* AABB agrégée de l’objet (min,max) */
 }	t_object;
 
-/* --------- Plans “infini” (hors BVH) ---------
- * Motif fréquent: peu de plans par scène, non découpables proprement.
- * On les teste systématiquement après la traversée BVH.
- */
-typedef struct s_plane
-{
-	t_vec3f normal; /* unitaire */
-	float   d;      /* plan: dot(normal, X) + d = 0 */
-}	t_plane;
+
 
 /* --------- Matériaux / Textures (simplifiés, extensibles) --------- */
 typedef struct s_texture

@@ -1,15 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   intern_material.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/12 13:23:38 by kearmand          #+#    #+#             */
+/*   Updated: 2025/11/13 16:22:06 by kearmand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "io.h"
 #include "error_codes.h"
 #include <stdlib.h>
 #include "libft.h"
 #include "scene.h"
 #include "convert.h"
-
-typedef struct s_opt_ids
-{
-	t_index	albedo;
-	t_index	normal;
-}	t_opt_ids;
 
 void	generate_option_key(const t_element_options *opts, char *key, t_opt_ids *ids);
 // intern_material(cx, opt, &ids, &mat_id);
@@ -41,16 +47,16 @@ static int	material_build(const t_element_options *m,
 }
 
 int	intern_material(t_conv_ctx *cx,
-		const t_element_options *mat, t_opt_ids *ids, t_index *out_mat)
+		t_element_options *opt, t_opt_ids *ids, t_index *out_mat)
 {
 	t_material	new_mat;
 	char		key[256];
 	int			idx;
 
-	generate_option_key(mat, key, ids);
+	generate_option_key(opt, key, ids);
 	if (material_hit(cx, key, out_mat))
 		return (SUCCESS);
-	if (material_build(mat, ids, &new_mat) != SUCCESS)
+	if (material_build(opt, ids, &new_mat) != SUCCESS)
 		return (ERR_MALLOC);
 	idx = vector_push_back(&cx->mat_v, &new_mat);
 	if (idx < 0)

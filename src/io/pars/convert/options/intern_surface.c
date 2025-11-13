@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   intern_surface.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/12 13:23:52 by kearmand          #+#    #+#             */
+/*   Updated: 2025/11/12 16:51:01 by kearmand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "convert.h"
 #include "io.h"
 #include "error_codes.h"
@@ -9,7 +21,7 @@
 //intern_surface
 
 int	intern_surface(t_conv_ctx *cx,
-		const t_element_options *opt, t_index *out_surf, int *color)
+		t_element_options *opt, t_index *out_surf, int *color)
 {
 	t_surface	new_surf;
 	int			index;

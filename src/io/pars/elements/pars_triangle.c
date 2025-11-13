@@ -20,7 +20,7 @@ int	pars_triangle(t_pars_state *st, t_scene_parsed *scene)
 			parsed_element.data.triangle.vertex3))
 		return (ERR_PARS);
 	if (!pars_next_tok(st, &token) || scan_color(token,
-			parsed_element.data.triangle.rgb))
+			parsed_element.rgb))
 		return (ERR_PARS);
 	status = pars_options(st, &parsed_element.options);
 	if (status != 0)

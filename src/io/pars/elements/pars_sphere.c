@@ -19,7 +19,7 @@ int	pars_sphere(t_pars_state *st, t_scene_parsed *scene)
 	if (parsed_element.data.sphere.diameter <= 0.0f)
 		return (ERR_PARS);
 	if (!pars_next_tok(st, &token) || scan_color(token,
-			parsed_element.data.sphere.rgb))
+			parsed_element.rgb))
 		return (ERR_PARS);
 	status = pars_options(st, &parsed_element.options);
 	if (status != 0)

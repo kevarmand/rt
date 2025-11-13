@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   intern_texture.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/12 13:24:01 by kearmand          #+#    #+#             */
+/*   Updated: 2025/11/12 15:46:45 by kearmand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "scene.h"
 #include "convert.h"
 #include "io.h"
@@ -39,7 +51,9 @@ static int	texture_emplace(t_conv_ctx *cx, char **path, t_index *out_id)
 
 	init_default_texture(&new_tex);
 	new_tex.path = *path;
-	index = vector_push_back(&cx->tex_v, &new_tex);
+	if (vector_push_back(&cx->tex_v, &new_tex) != SUCCESS)
+		return (ERR_MALLOC);
+	index = vector_size(&cx->tex_v) - 1;
 	if (index < 0)
 		return (ERR_MALLOC);
 	*path = NULL;
