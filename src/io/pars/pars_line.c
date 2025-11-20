@@ -1,6 +1,7 @@
 #include "io.h"
 #include "type.h"
-#include "error_codes.h"
+#include "errors.h"
+#include "parsing_internal.h"
 
 int	pars_line(const char *line, t_scene_parsed *scene, t_pars_state *st)
 {

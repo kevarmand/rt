@@ -1,6 +1,7 @@
 #include "io.h"
 #include "type.h"
-#include "error_codes.h"
+#include "errors.h"
+#include "../parsing_internal.h"
 
 int	pars_triangle(t_pars_state *st, t_scene_parsed *scene)
 {

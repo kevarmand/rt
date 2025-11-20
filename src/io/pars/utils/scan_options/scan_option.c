@@ -6,13 +6,14 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 16:36:14 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/05 16:40:27 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/20 14:23:55 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "io.h"
 #include "type.h"
-#include "error_codes.h"
+#include "errors.h"
+#include "../../parsing_internal.h"
 
 typedef int					(*t_opt_handler)(t_tok, t_element_options *);
 

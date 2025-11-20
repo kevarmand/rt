@@ -1,7 +1,8 @@
 #include "io.h"
-#include "error_codes.h"
+#include "errors.h"
 #include "libft.h"
-#include "type.h"
+#include "../parsing_internal.h"
+#include "scene.h"
 
 static int	push_copy_to_list(t_list **list_head,
 				const t_parsed_element *element)

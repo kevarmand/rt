@@ -6,12 +6,12 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/06 10:40:46 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/12 16:55:04 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/19 15:39:04 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "io.h"
-#include "error_codes.h"
+#include "errors.h"
 #include <stdlib.h>
 #include "libft.h"
 #include "scene.h"

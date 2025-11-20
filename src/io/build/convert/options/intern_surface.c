@@ -6,13 +6,13 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 13:23:52 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/12 16:51:01 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/20 14:56:20 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "convert.h"
+#include "../convert.h"
 #include "io.h"
-#include "error_codes.h"
+#include "errors.h"
 #include <stdlib.h>
 #include "libft.h"
 #include "scene.h"

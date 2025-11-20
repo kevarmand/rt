@@ -1,6 +1,7 @@
 #include "io.h"
 #include "type.h"
-#include "error_codes.h"
+#include "errors.h"
+#include "../../parsing_internal.h"
 
 static int	read_f32_segment(
 	t_tok tok, int *index_pos, float *out_value, int require_comma)

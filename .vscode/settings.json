@@ -1,7 +1,7 @@
 {
 	"files.associations": {
 		"libft.h": "c",
-		"error_codes.h": "c",
+		"error.h": "c",
 		"convert.h": "c",
 		"vector.h": "c",
 		"scene.h": "c",
@@ -13,6 +13,16 @@
 		"io.h": "c",
 		"cmath": "c",
 		"stdio.h": "c",
-		"type.h": "c"
+		"type.h": "c",
+		"errors.h": "c",
+		"new_rt.h": "c",
+		"rt.h": "c",
+		"parsing_internal.h": "c",
+		"ui.h": "c",
+		"string.h": "c",
+		"stdlib.h": "c",
+		"fcntl.h": "c",
+		"unistd.h": "c",
+		"ui_settings.h": "c"
 	}
 }

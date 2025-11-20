@@ -1,10 +1,9 @@
-#include "rt.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "io.h"
 #include "libft.h"
-#include "error_codes.h"
+#include "errors.h"
 #include "scene.h"
 
 

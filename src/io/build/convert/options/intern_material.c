@@ -6,16 +6,17 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 13:23:38 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/13 16:22:06 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/20 14:56:09 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "io.h"
-#include "error_codes.h"
+#include "errors.h"
 #include <stdlib.h>
 #include "libft.h"
 #include "scene.h"
-#include "convert.h"
+#include "../convert.h"
+#include <stdint.h>
 
 void	generate_option_key(const t_element_options *opts, char *key, t_opt_ids *ids);
 // intern_material(cx, opt, &ids, &mat_id);

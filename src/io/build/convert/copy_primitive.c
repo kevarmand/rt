@@ -1,5 +1,5 @@
 #include "io.h"
-#include "error_codes.h"
+#include "errors.h"
 #include <stdlib.h>
 #include "scene.h"
 
@@ -50,11 +50,12 @@ int	copy_cylinder_to_primitive(const t_parsed_element *src, t_primitive *dst)
 int	copy_plane_to_primitive(const t_parsed_element *src, t_primitive *dst)
 {
 	dst->type = PRIM_PLANE;
-	dst->pl.normal.x = src->data.plane.normal[0];
-	dst->pl.normal.y = src->data.plane.normal[1];
-	dst->pl.normal.z = src->data.plane.normal[2];
-	dst->pl.d = -(dst->pl.normal.x * src->data.plane.origin[0]
-		+ dst->pl.normal.y * src->data.plane.origin[1]
-		+ dst->pl.normal.z * src->data.plane.origin[2]);
+	dst->pl.normal = ((t_vec3f){
+		src->data.plane.normal[0],
+		src->data.plane.normal[1],
+		src->data.plane.normal[2]});
+	dst->pl.d = -(dst->pl.normal[0] * src->data.plane.origin[0]
+		+ dst->pl.normal[1] * src->data.plane.origin[1]
+		+ dst->pl.normal[2] * src->data.plane.origin[2]);
 	return (SUCCESS);
 }

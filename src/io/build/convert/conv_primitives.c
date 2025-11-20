@@ -2,7 +2,7 @@
 #include "scene.h"
 #include "convert.h"
 #include "io.h"
-#include "error_codes.h"
+#include "errors.h"
 #include <stdlib.h>
 
 //on fait les forward declarations pour eviter les warnings
@@ -36,7 +36,7 @@ static void	object_from_parsed(t_parsed_element *src, t_primitive *dst)
 }
 	
 
-static int	conv_push_elem_to_ctx(t_parsed_element *elem, t_conv_ctx *cx)
+static int	push_elem_to_ctx(t_parsed_element *elem, t_conv_ctx *cx)
 {
 	t_primitive		prim_tmp;
 
@@ -54,7 +54,7 @@ static int	conv_push_elem_to_ctx(t_parsed_element *elem, t_conv_ctx *cx)
 }
 
 
-int	conv_prims_to_ctx(t_scene_parsed *parsed, t_conv_ctx *cx)
+int	conv_primitives(t_scene_parsed *parsed, t_conv_ctx *cx)
 {
 	t_list					*node;
 	t_parsed_element		*elem;
@@ -65,7 +65,7 @@ int	conv_prims_to_ctx(t_scene_parsed *parsed, t_conv_ctx *cx)
 	while (node)
 	{
 		elem = node->content;
-		if (conv_push_elem_to_ctx(elem, cx) != SUCCESS)
+		if (push_elem_to_ctx(elem, cx) != SUCCESS)
 			return (ERR_MALLOC);
 		node = node->next;
 	}

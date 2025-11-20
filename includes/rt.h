@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/10 13:22:08 by karmand           #+#    #+#             */
-/*   Updated: 2025/09/11 13:18:13 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/19 15:39:04 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # include "ui.h"
 
 # include <X11/X.h>
-# include "error_codes.h"
+# include "errors.h"
 
 # define VITESSE_TRANSLAT	3
 # define VITESSE_ROTATION	0.3

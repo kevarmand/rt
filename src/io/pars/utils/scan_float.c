@@ -1,6 +1,7 @@
 #include "io.h"
 #include "type.h"
-#include "error_codes.h"
+#include "errors.h"
+#include "../parsing_internal.h"
 
 static const double	g_max_abs = 1e10;
 

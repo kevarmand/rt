@@ -18,7 +18,7 @@ void	create_buttons(t_ui *ui, t_data *data);
 void	draw_escape_cross(t_image *img);
 void	put_pixel_to_image(t_image *img, int x, int y, int color);
 void	close_ui(t_data *data);
-int     add_button(t_ui *ui, t_button btn);
+int		add_button(t_ui *ui, t_button btn);
 
 void	reset_ui(t_data *data);
 

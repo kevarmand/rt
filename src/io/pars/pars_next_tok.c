@@ -1,4 +1,5 @@
 #include "io.h"
+#include "parsing_internal.h"
 
 int	pars_next_tok(t_pars_state *st, t_tok *out)
 {

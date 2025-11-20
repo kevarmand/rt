@@ -6,15 +6,16 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 13:24:01 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/12 15:46:45 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/20 14:56:34 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "scene.h"
-#include "convert.h"
+#include "../convert.h"
 #include "io.h"
-#include "error_codes.h"
+#include "errors.h"
 #include <stdlib.h>
+#include <stdint.h>
 #include "libft.h"
 
 void	cleanup_str(char **s)

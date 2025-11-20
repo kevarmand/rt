@@ -6,14 +6,15 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 13:23:25 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/13 16:20:48 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/20 14:55:32 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "io.h"
-#include "error_codes.h"
+#include "errors.h"
 #include "scene.h"
 #include <math.h>
+#include <stdint.h>
 
 #define KEY_SIZE 128
 

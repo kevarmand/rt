@@ -1,5 +1,5 @@
 #include "io.h"
-#include "error_codes.h"
+#include "errors.h"
 #include <stdlib.h>
 #include "libft.h"
 #include "scene.h"

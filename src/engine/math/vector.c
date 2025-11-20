@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 20:38:58 by norivier          #+#    #+#             */
-/*   Updated: 2025/11/10 15:43:01 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/20 21:42:22 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,4 +100,13 @@ FORCEINLINE
 extern inline t_vec3f	vec3f_normalize(t_vec3f a)
 {
 	return (vec3f_scale(a, ft_rsqrtf(vec3f_dot(a, a))));
+}
+
+FORCEINLINE
+extern inline void	vec3f_load3(t_vec3f *dst, const float src[3])
+{
+	(*dst)[0] = src[0];
+	(*dst)[1] = src[1];
+	(*dst)[2] = src[2];
+	(*dst)[3] = 0.0f;
 }

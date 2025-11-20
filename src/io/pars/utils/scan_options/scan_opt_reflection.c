@@ -1,6 +1,7 @@
 #include "io.h"
 #include "type.h"
-#include "error_codes.h"
+#include "errors.h"
+#include "../../parsing_internal.h"
 
 int	scan_opt_reflection(t_tok tok, t_element_options *opts)
 {

@@ -1,29 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstclear_bonus.c                                :+:      :+:    :+:   */
+/*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/05 17:31:29 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/20 16:39:13 by kearmand         ###   ########.fr       */
+/*   Created: 2025/11/19 14:52:55 by kearmand          #+#    #+#             */
+/*   Updated: 2025/11/19 15:51:57 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "errors.h"
 #include "libft.h"
 
-void	ft_lstclear(t_list **list, void (*del)(void *))
+int	print_error(int err, const char *msg)
 {
-	t_list	*current_node;
-	t_list	*next_node;
+	ft_puststr_fd("Error : ", 2);
+	ft_putstr_fd(msg, 2);
+	ft_putstr_fd("\n", 2);
+	return (err);
+}
 
-	current_node = *list;
-	while (current_node != NULL)
-	{
-		next_node = current_node->next;
-		del(current_node->content);
-		free(current_node);
-		current_node = next_node;
-	}
-	*list = NULL;
+int	error_at(int err, const char *file, int line)
+{
+	ft_putstr_fd("Error at ", 2);
+	ft_putstr_fd(file, 2);
+	ft_putstr_fd(":", 2);
+	ft_putnbr_fd(line, 2);
+	ft_putstr_fd("\n", 2);
+	return (err);
 }

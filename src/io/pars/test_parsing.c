@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include "io.h"
 #include "libft.h"
-#include "error_codes.h"
+#include "errors.h"
 
 /* Préconditions :
    - argv[1] pointe vers un fichier .rt lisible
@@ -65,13 +65,13 @@ static void print_object_elem(const t_parsed_element *e, int index)
 	{
 		print_vec3("center", e->data.sphere.center);
 		printf("  diameter=%.6f\n", e->data.sphere.diameter);
-		print_rgb("rgb", e->data.sphere.rgb);
+		print_rgb("rgb", e->rgb);
 	}
 	else if (e->type == ELEM_PLANE)
 	{
 		print_vec3("origin", e->data.plane.origin);
 		print_vec3("normal", e->data.plane.normal);
-		print_rgb("rgb", e->data.plane.rgb);
+		print_rgb("rgb", e->rgb);
 	}
 	else if (e->type == ELEM_CYLINDER)
 	{
@@ -79,14 +79,14 @@ static void print_object_elem(const t_parsed_element *e, int index)
 		print_vec3("axis", e->data.cylinder.axis);
 		printf("  diameter=%.6f height=%.6f\n",
 			e->data.cylinder.diameter, e->data.cylinder.height);
-		print_rgb("rgb", e->data.cylinder.rgb);
+		print_rgb("rgb", e->rgb);
 	}
 	else if (e->type == ELEM_TRIANGLE)
 	{
 		print_vec3("A", e->data.triangle.vertex1);
 		print_vec3("B", e->data.triangle.vertex2);
 		print_vec3("C", e->data.triangle.vertex3);
-		print_rgb("rgb", e->data.triangle.rgb);
+		print_rgb("rgb", e->rgb);
 	}
 }
 
@@ -185,17 +185,7 @@ static void *return_ptr(void *p)
 	return (p);
 }
 
-static void free_parsed_element(void *payload)
-{
-	free(return_ptr(payload));
-}
 
-static void clear_scene_lists(t_scene_parsed *scene)
-{
-	ft_lstclear(&scene->objects, free_parsed_element);
-	ft_lstclear(&scene->cameras, free_parsed_element);
-	ft_lstclear(&scene->lights, free_parsed_element);
-}
 
 static void print_scene(const t_scene_parsed *scene)
 {
@@ -207,22 +197,3 @@ static void print_scene(const t_scene_parsed *scene)
 	printf("====================\n");
 }
 
-int main(int argc, char **argv)
-{
-	t_scene_parsed	scene_builder;
-	int				file_desc;
-	int				status;
-	(void)argc;
-
-	pars_init_scene(&scene_builder);
-	file_desc = open(argv[1], O_RDONLY);
-	if (file_desc == -1)
-		return (2);
-	status = pars_scene_fd(file_desc, &scene_builder);
-	close(file_desc);
-	if (status != SUCCESS)
-		return (status);
-	print_scene(&scene_builder);
-	clear_scene_lists(&scene_builder);
-	return (0);
-}

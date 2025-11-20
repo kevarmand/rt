@@ -1,29 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstclear_bonus.c                                :+:      :+:    :+:   */
+/*   check_args.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/05 17:31:29 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/20 16:39:13 by kearmand         ###   ########.fr       */
+/*   Created: 2025/11/19 16:18:45 by kearmand          #+#    #+#             */
+/*   Updated: 2025/11/19 16:19:34 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "errors.h"
 
-void	ft_lstclear(t_list **list, void (*del)(void *))
+int	check_args(int argc, char **argv)
 {
-	t_list	*current_node;
-	t_list	*next_node;
+	char	*filename;
+	size_t	len;
 
-	current_node = *list;
-	while (current_node != NULL)
+	if (argc != 2)
 	{
-		next_node = current_node->next;
-		del(current_node->content);
-		free(current_node);
-		current_node = next_node;
+		print_error("Usage: ./rt <scene_file>", ERR_INVALID_ARGS);
+		return (ERR_INVALID_ARGS);
 	}
-	*list = NULL;
+	filename = argv[1];
+	len = strlen(filename);
+	if (len < 4 || strcmp(filename + len - 3, ".rt") != 0)
+	{
+		print_error("Scene file must have a .rt extension",  ERR_INVALID_ARGS);
+		return (ERR_INVALID_ARGS);
+	}
+	return (SUCCESS);
 }

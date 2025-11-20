@@ -1,6 +1,7 @@
 #include "io.h"
 #include "type.h"
-#include "error_codes.h"
+#include "errors.h"
+#include "../parsing_internal.h"
 
 static int	scan_uint8_component(
 	t_tok tok, int *index_pos, int *value_out, int require_comma)

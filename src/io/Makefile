@@ -49,7 +49,7 @@ SRCS := \
 	./pars/convert/options/intern_texture.c\
 	./pars/convert/options/intern_material.c\
 	./pars/convert/options/intern_surface.c\
-	./pars/pars_ctx_init.c\
+	./pars/pars_state_init.c\
 	./pars/pars_dispatch_tok.c\
 	./pars/pars_init_scene.c\
 	./pars/pars_line.c\

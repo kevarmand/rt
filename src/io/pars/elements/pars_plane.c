@@ -1,6 +1,7 @@
 #include "io.h"
 #include "type.h"
-#include "error_codes.h"
+#include "errors.h"
+#include "../parsing_internal.h"
 
 int	pars_plane(t_pars_state *st, t_scene_parsed *scene)
 {
@@ -8,7 +9,7 @@ int	pars_plane(t_pars_state *st, t_scene_parsed *scene)
 	t_tok				token;
 	int					status;
 
-	ft_bzero(&parsed, sizeof(parsed));
+	init_parsed_element(&parsed);
 	parsed.type = ELEM_PLANE;
 	if (!pars_next_tok(st, &token) || scan_point(token,
 			parsed.data.plane.origin))

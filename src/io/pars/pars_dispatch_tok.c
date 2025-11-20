@@ -1,5 +1,7 @@
 #include "io.h"
-#include "error_codes.h"
+#include "errors.h"
+#include "parsing_internal.h"
+
 
 typedef int	(*t_pars_handler)(t_pars_state *st, t_scene_parsed *scene);
 

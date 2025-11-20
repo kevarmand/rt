@@ -1,5 +1,5 @@
-#ifndef ERROR_CODES_H
-#define ERROR_CODES_H
+#ifndef ERRORS_H
+#define ERRORS_H
 
 
 # define ERROR				-1
@@ -39,6 +39,8 @@ typedef enum e_err
 {
 	SUCCESS = 0,
 	/* génériques */
+	ERR_GENERIC = -1,
+	ERR_INVALID_ARGS = -100,
 	ERR_PARS = -200,
 	/* parsing	 */
 	ERR_PARS_COLOR = -201,
@@ -51,5 +53,23 @@ typedef enum e_err
 
 	ERR__COUNT /* doit rester le dernier pour dimensionner g_errmsg */
 }	t_err;
+
+
+/***
+ * print an error message corresponding to the error code
+ * @param err_code the error code
+ * @param msg the message to print
+ * @return the error code
+ */
+int	print_error(t_err err_code, const char *msg);
+
+/***
+ * print an error message with file and line number
+ * @param err the error code
+ * @param file the file name
+ * @param line the line number
+ * @return the error code
+ */
+int	error_at(int err, const char *file, int line);
 
 #endif

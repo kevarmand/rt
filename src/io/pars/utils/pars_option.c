@@ -1,6 +1,7 @@
 #include "io.h"
 #include "type.h"
-#include "error_codes.h"
+#include "errors.h"
+#include "../parsing_internal.h"
 
 /***
  * Parse options for an element from the token stream.

@@ -6,7 +6,6 @@
 # include <fcntl.h>
 # include <unistd.h>
 # include <string.h>
-# include "type.h"
 # include "libft.h"
 
 # define BUFFER_SIZE 1024
@@ -18,19 +17,9 @@ typedef enum e_elem_role
 	ELEM_ROLE_EXTRA
 }	t_elem_role;
 
-typedef struct s_pars_state {
-	int			line_no;
-	int			depth;
-	const char	*line;
-	int			pos;
-}	t_pars_state;
-
 typedef struct s_scene t_scene;
-
-typedef struct s_tok {
-	const char	*start;
-	int			len;
-}	t_tok;
+typedef struct s_tok t_tok;
+typedef struct s_pars_state t_pars_state;
 
 typedef enum e_pmask
 {
@@ -148,13 +137,13 @@ typedef struct s_parsed_element
  * with the parsed data.
  * @return Returns 0 on success, or a non-zero error code on failure.
  */
-int	pars_scene(const char *filename, t_conv_ct *cx);
+int	pars_scene(const char *filename, t_scene_parsed *scene);
 
 /***
  * @brief Initialize the parsing context state.
  * @param st Pointer to the parsing state structure to initialize. (no_null)
  */
-void	pars_ctx_init(t_pars_state *st);
+void	pars_state_init(t_pars_state *st);
 
 /***
  * @brief Initialize a t_scene_parsed structure with default values.
@@ -164,14 +153,12 @@ void	pars_ctx_init(t_pars_state *st);
 int	pars_init_scene(t_scene_parsed *scene);
 
 /**
- * @brief Parse a scene from an open file descriptor into a temporary builder.
- * @param fd    Open file descriptor to the .rt scene (read-only). (no_null)
+ * @brief Parse a scene from a file into a temporary builder.
+ * @param filename The path to the scene file to be parsed. (no_null)
  * @param scene Builder receiving parsed elements (lists, presence mask). (no_null)
  * @return SUCCESS on success, otherwise a parsing/I-O error code.
- * @note Does not close @fd. Preconditions are guaranteed by the caller.
  */
-int	pars_scene_fd(int fd, t_scene_parsed *scene);
-
+int	pars_scene(const char *filename, t_scene_parsed *scene);
 
 /**
  * @brief Parse a single line: read first word span, dispatch by tag.

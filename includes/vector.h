@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:47:11 by norivier          #+#    #+#             */
-/*   Updated: 2025/11/10 15:30:59 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/20 21:41:45 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,5 +29,6 @@ t_vec3f	vec3f_scale(t_vec3f a, float s);
 t_vec3f	vec3f_add(t_vec3f a, t_vec3f b);
 t_vec3f	vec3f_sub(t_vec3f a, t_vec3f b);
 t_vec3f	vec3f_normalize(t_vec3f a);
+void	vec3f_load3(t_vec3f *dst, const float src[3]);
 
 #endif // !VECTOR_H

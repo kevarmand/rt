@@ -1,16 +1,16 @@
 #include "scene.h"
 #include "convert.h"
 #include "io.h"
-#include "error_codes.h"
+#include "errors.h"
 #include <stdlib.h>
 #include <string.h>
 #include "color.h"
 
 static void vec3f_from_float3(const float src[3], t_vec3f *dst)
 {
-	dst->x = src[0];
-	dst->y = src[1];
-	dst->z = src[2];
+	dst[0] = src[0];
+	dst[1] = src[1];
+	dst[2] = src[2];
 }
 
 void light_from_parsed(t_parsed_light *src, t_light *dst)
@@ -19,7 +19,7 @@ void light_from_parsed(t_parsed_light *src, t_light *dst)
 	rgb8_to_linear_vec(src->rgb, &dst->color);
 }
 
-int	conv_lights_to_ctx(t_scene_parsed *parsed, t_conv_ctx *cx)
+int	conv_lights(t_scene_parsed *parsed, t_conv_ctx *cx)
 {
 	t_list		*list_node;
 	t_light		light_tmp;

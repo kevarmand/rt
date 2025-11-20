@@ -1,9 +1,10 @@
 #include "type.h"
 #include "io.h"
-#include "error_codes.h"
+#include "errors.h"
 #include <math.h>
 #include <unistd.h>
 #include <stdio.h>
+#include "../parsing_internal.h"
 
 static const char	g_col_orange[] = "\033[0;33m";
 static const char	g_col_reset[] = "\033[0m";

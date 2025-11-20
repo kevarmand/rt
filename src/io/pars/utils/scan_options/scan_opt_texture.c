@@ -1,6 +1,7 @@
 #include "io.h"
 #include "type.h"
-#include "error_codes.h"
+#include "errors.h"
+#include "../../parsing_internal.h"
 
 static char	*dup_tok_str(t_tok tok)
 {
