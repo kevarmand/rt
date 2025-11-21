@@ -1,32 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   equa.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/19 14:52:55 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/21 14:15:55 by kearmand         ###   ########.fr       */
+/*   Created: 2020/02/29 18:36:20 by karmand           #+#    #+#             */
+/*   Updated: 2025/11/21 22:18:45 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "errors.h"
-#include "libft.h"
-
-int	print_error(int err, const char *msg)
+double	equa_premier(double a, double b)
 {
-	ft_putstr_fd("Error : ", 2);
-	ft_putstr_fd(msg, 2);
-	ft_putstr_fd("\n", 2);
-	return (err);
+	return (-b / a);
 }
 
-int	error_at(int err, const char *file, int line)
+double	equa_second(double a, double b, double c)
 {
-	ft_putstr_fd("Error at ", 2);
-	ft_putstr_fd(file, 2);
-	ft_putstr_fd(":", 2);
-	ft_putnbr_fd(line, 2);
-	ft_putstr_fd("\n", 2);
-	return (err);
+	double	d;
+	double	x1;
+	double	x2;
+
+	d = b * b - 4 * a * c;
+	if (a == 0)
+		return (-c / b);
+	if (d < 0)
+		return (-1);
+	d = sqrt(d);
+	x1 = (-b - d) / (2 * a);
+	x2 = (-b + d) / (2 * a);
+	if (x1 < 0)
+		return (x2);
+	else if (x1 < x2 && x1 > 0.001)
+		return (x1);
+	return (x2);
 }

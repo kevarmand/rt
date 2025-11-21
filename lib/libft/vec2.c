@@ -6,12 +6,12 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/06 10:28:10 by kearmand          #+#    #+#             */
-/*   Updated: 2025/10/06 10:30:46 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/21 16:24:13 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "vector.h"
 #include <stdlib.h>
+#include "libft.h"
 
 static int	vector_grow(t_vector *vector, size_t min_capacity)
 {

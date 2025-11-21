@@ -19,9 +19,9 @@ int	pars_ambient(t_pars_state *st, t_scene_parsed *scene)
 		|| scan_color(token, rgb))
 		return (ERR_PARS);
 	scene->globals.brightness = brightness;
-	scene->globals.color[0] = (float)rgb[0] / 255.0f;
-	scene->globals.color[1] = (float)rgb[1] / 255.0f;
-	scene->globals.color[2] = (float)rgb[2] / 255.0f;
+	scene->globals.color[0] = (float)rgb[0];
+	scene->globals.color[1] = (float)rgb[1];
+	scene->globals.color[2] = (float)rgb[2];
 	scene->presence_mask |= PRESENCE_AMBIENT;
 	return (SUCCESS);
 }

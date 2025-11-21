@@ -10,7 +10,7 @@ NAME 			:= miniRT
 # **************************************************************************** #
 
 CC			:= cc
-CFLAGS		:= -Wall -Wextra -pthread -ffast-math -fno-math-errno -Ofast -march=native
+CFLAGS		:= -Wall -Wextra -Werror -pthread -ffast-math -fno-math-errno -Ofast -march=native
 DEP_FLAGS	:= -MMD -MP
 AR			:= ar rcs
 RM			:= rm -rf
@@ -26,7 +26,7 @@ OBJS_DIR	:= objs
 LIBFT_DIR	:= lib/libft
 LIBFT_A		:= $(LIBFT_DIR)/libft.a
 
-MLX_DIR		:= lib/minilibx            # ← adapte-moi (ex: mlx_linux / minilibx-linux)
+MLX_DIR		:= lib/minilibx
 MLX_A		:= $(MLX_DIR)/libmlx.a
 
 # **************************************************************************** #
@@ -57,58 +57,63 @@ LDFLAGS     := $(MLX_LINKS) $(LIBFT_LINKS)
 # NB: les chemins ci-dessous sont RELATIFS à $(SRCS_DIR), comme dans ton message.
 
 SRCS = \
-			io/pars/elements/pars_ambient.c \
-			io/pars/elements/pars_camera.c \
-			io/pars/elements/pars_cylinder.c \
-			io/pars/elements/pars_light.c \
-			io/pars/elements/pars_plane.c \
-			io/pars/elements/pars_resolution.c \
-			io/pars/elements/pars_sphere.c \
-			io/pars/elements/pars_triangle.c \
-			io/pars/pars_register/pars_register_element.c \
-			io/pars/utils/scan_options/scan_opt_ambient.c \
-			io/pars/utils/scan_options/scan_opt_diffuse.c \
-			io/pars/utils/scan_options/scan_opt_ior.c \
-			io/pars/utils/scan_options/scan_opt_reflection.c \
-			io/pars/utils/scan_options/scan_opt_refraction.c \
-			io/pars/utils/scan_options/scan_opt_shininess.c \
-			io/pars/utils/scan_options/scan_opt_specular.c \
-			io/pars/utils/scan_options/scan_option.c \
-			io/pars/utils/scan_options/scan_opt_uv.c \
-			io/pars/utils/scan_options/scan_opt_texture.c \
-			io/pars/utils/pars_option.c \
-			io/pars/utils/scan_color.c \
-			io/pars/utils/scan_float.c \
-			io/pars/utils/scan_point.c \
-			io/pars/utils/scan_vec3.c \
-			io/pars/pars_state_init.c \
-			io/pars/pars_dispatch_tok.c \
-			io/pars/pars_init_scene.c \
-			io/pars/pars_line.c \
-			io/pars/pars_next_tok.c \
-			io/pars/pars_scene.c \
-			io/pars/test_parsing.c \
-			io/pars/free_parsed_scene.c \
-			io/main_test_io.c \
-			io/build/convert/conv_camera.c \
-			io/build/convert/conv_count_all.c \
-			io/build/convert/conv_globals.c \
-			io/build/convert/conv_light.c \
-			io/build/convert/conv_option.c \
-			io/build/convert/pars_convert_scene.c \
-			io/build/convert/copy_primitive.c \
-			io/build/convert/conv_primitive.c \
-			io/build/convert/finalize.c \
-			io/build/convert/options/generate_option_key.c \
-			io/build/convert/options/intern_texture.c \
-			io/build/convert/options/intern_material.c \
-			io/build/convert/options/intern_surface.c \
-			io/load_scene.c \
-			color/color.c \
-			error.c \
-			check_args.c \
-			main.c \
-			print_test_scene.c
+	main.c \
+	print_test_scene.c \
+	check_args.c \
+	error.c \
+	color/color.c \
+	engine/math/vector.c\
+	engine/math/rsqrt.c \
+	engine/math/rcp.c \
+	io/build/assemble_scene.c \
+	io/build/build_scene.c \
+	io/build/conv_ctx_lifetime.c \
+	io/build/convert/conv_build_ctx.c \
+	io/build/convert/conv_cameras.c \
+	io/build/convert/conv_count_all.c \
+	io/build/convert/conv_globals.c \
+	io/build/convert/conv_lights.c \
+	io/build/convert/conv_option.c \
+	io/build/convert/conv_primitives.c \
+	io/build/convert/copy_primitive.c \
+	io/build/convert/options/generate_option_key.c \
+	io/build/convert/options/intern_material.c \
+	io/build/convert/options/intern_surface.c \
+	io/build/convert/options/intern_texture.c \
+	io/load_scene.c \
+	io/pars/elements/pars_ambient.c \
+	io/pars/elements/pars_camera.c \
+	io/pars/elements/pars_cylinder.c \
+	io/pars/elements/pars_light.c \
+	io/pars/elements/pars_plane.c \
+	io/pars/elements/pars_resolution.c \
+	io/pars/elements/pars_sphere.c \
+	io/pars/elements/pars_triangle.c \
+	io/pars/pars_dispatch_tok.c \
+	io/pars/pars_line.c \
+	io/pars/pars_next_tok.c \
+	io/pars/pars_scene.c \
+	io/pars/pars_register/pars_register_element.c \
+	io/pars/utils/pars_option.c \
+	io/pars/utils/scan_color.c \
+	io/pars/utils/scan_float.c \
+	io/pars/utils/scan_options/scan_opt_ambient.c \
+	io/pars/utils/scan_options/scan_opt_diffuse.c \
+	io/pars/utils/scan_options/scan_option.c \
+	io/pars/utils/scan_options/scan_opt_ior.c \
+	io/pars/utils/scan_options/scan_opt_reflection.c \
+	io/pars/utils/scan_options/scan_opt_refraction.c \
+	io/pars/utils/scan_options/scan_opt_shininess.c \
+	io/pars/utils/scan_options/scan_opt_specular.c \
+	io/pars/utils/scan_options/scan_opt_texture.c \
+	io/pars/utils/scan_options/scan_opt_uv.c \
+	io/pars/utils/scan_point.c \
+	io/pars/utils/scan_vec3.c \
+	io/parsed_scene_lifetime.c \
+	io/pars/test_parsing.c\
+	test/test_ctx.c \
+
+
 
 
 # **************************************************************************** #

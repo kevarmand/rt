@@ -5,18 +5,17 @@
 #include <stdlib.h>
 #include <string.h>
 #include "color.h"
+#include "vector.h"
 
-static void vec3f_from_float3(const float src[3], t_vec3f *dst)
+
+void light_from_parsed(t_parsed_element *src, t_light *dst)
 {
-	dst[0] = src[0];
-	dst[1] = src[1];
-	dst[2] = src[2];
+	vec3f_load3(&dst->position, src->data.light.position);
+	rgb8_to_linear_vec(src->data.light.rgb, &dst->color);
 }
-
-void light_from_parsed(t_parsed_light *src, t_light *dst)
+static void	reset_light(t_light *light)
 {
-	vec3f_from_float3(src->position, &dst->position);
-	rgb8_to_linear_vec(src->rgb, &dst->color);
+	memset(light, 0, sizeof(t_light));
 }
 
 int	conv_lights(t_scene_parsed *parsed, t_conv_ctx *cx)
@@ -29,6 +28,7 @@ int	conv_lights(t_scene_parsed *parsed, t_conv_ctx *cx)
 	list_node = parsed->lights;
 	while (list_node)
 	{
+		reset_light(&light_tmp);
 		light_from_parsed(list_node->content, &light_tmp);
 		if (vector_push_back(&cx->light_v, &light_tmp) != SUCCESS)
 			return (ERR_MALLOC);
@@ -36,22 +36,3 @@ int	conv_lights(t_scene_parsed *parsed, t_conv_ctx *cx)
 	}
 	return (SUCCESS);
 }
-
-/* Préconditions:
-   - cx->light_v contient exactement cx->light_count éléments de type t_light
-   - scene est vierge côté lights
-*/
-
-int	finalize_lights(t_conv_ctx *cx, t_scene *scene)
-{
-	const int	count = vector_size(&cx->light_v);
-	const void	*src_ptr = vector_data(&cx->light_v);
-
-	scene->light_count = count;
-	scene->lights = malloc(sizeof(t_light) * count);
-	if (!scene->lights)
-		return (ERR_MALLOC);
-	ft_memcpy(scene->lights, src_ptr, sizeof(t_light) * count);
-	return (SUCCESS);
-}
-

@@ -1,32 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   shade_hit.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/19 14:52:55 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/21 14:15:55 by kearmand         ###   ########.fr       */
+/*   Created: 2025/11/21 21:21:27 by kearmand          #+#    #+#             */
+/*   Updated: 2025/11/21 21:21:36 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "errors.h"
-#include "libft.h"
+#include "engine.h"
+#include "scene.h"
 
-int	print_error(int err, const char *msg)
+int	shade_hit(t_scene *scene, t_hit *hit, t_vec3f *color_out)
 {
-	ft_putstr_fd("Error : ", 2);
-	ft_putstr_fd(msg, 2);
-	ft_putstr_fd("\n", 2);
-	return (err);
-}
-
-int	error_at(int err, const char *file, int line)
-{
-	ft_putstr_fd("Error at ", 2);
-	ft_putstr_fd(file, 2);
-	ft_putstr_fd(":", 2);
-	ft_putnbr_fd(line, 2);
-	ft_putstr_fd("\n", 2);
-	return (err);
+	//Pour l'instant on met une couleur fixe pour tester
+	(void)scene;
+	(void)hit;
+	(*color_out)[0] = 1.0f; //rouge
+	(*color_out)[1] = 0.0f;
+	(*color_out)[2] = 0.0f;
+	return (0);
 }

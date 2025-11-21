@@ -130,27 +130,11 @@ typedef struct s_parsed_element
 }	t_parsed_element;
 
 
-/**
- * @brief Parse a scene from a file and populate the provided t_scene structure.
- * @param filename The path to the scene file to be parsed. (no_null)
- * @param scene A pointer to a t_scene structure to be populated 
- * with the parsed data.
- * @return Returns 0 on success, or a non-zero error code on failure.
- */
-int	pars_scene(const char *filename, t_scene_parsed *scene);
+/* ************************************************************************** */
+/*                             PARSING - SCENE                                */
+/* ************************************************************************** */
 
-/***
- * @brief Initialize the parsing context state.
- * @param st Pointer to the parsing state structure to initialize. (no_null)
- */
-void	pars_state_init(t_pars_state *st);
 
-/***
- * @brief Initialize a t_scene_parsed structure with default values.
- * @param scene Pointer to the t_scene_parsed structure to initialize. (no_null)
- * @return Returns SUCCESS on successful initialization.
- */
-int	pars_init_scene(t_scene_parsed *scene);
 
 /**
  * @brief Parse a scene from a file into a temporary builder.
@@ -159,6 +143,23 @@ int	pars_init_scene(t_scene_parsed *scene);
  * @return SUCCESS on success, otherwise a parsing/I-O error code.
  */
 int	pars_scene(const char *filename, t_scene_parsed *scene);
+
+/***
+ * @brief Load a scene from a file into the final scene structure.
+ * @param path       The path to the scene file to be loaded. (no_null)
+ * @param out_scene  The scene structure to populate with loaded data. (no_null)
+ * 
+ */
+int	load_scene(const char *path, t_scene *out_scene);
+
+/***
+ * @brief Build the final scene from the parsed scene data.
+ * @param scene      The final scene structure to populate. (no_null)
+ * @param parsed     The parsed scene data. (no_null)
+ * @return SUCCESS on success, error code on failure
+ */
+int build_scene(t_scene *scene, t_scene_parsed *parsed);
+
 
 /**
  * @brief Parse a single line: read first word span, dispatch by tag.

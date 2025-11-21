@@ -180,14 +180,8 @@ static void print_objects(const t_list *head)
 	}
 }
 
-static void *return_ptr(void *p)
-{
-	return (p);
-}
 
-
-
-static void print_scene(const t_scene_parsed *scene)
+void print_scene2(const t_scene_parsed *scene)
 {
 	printf("=== parsed scene ===\n");
 	print_globals(&scene->globals);

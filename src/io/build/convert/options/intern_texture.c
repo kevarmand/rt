@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 13:24:01 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/20 14:56:34 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/21 14:45:02 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static int	texture_hit(t_conv_ctx *cx, char **path, t_index *out_id)
 {
 	void	*found;
 
-	found = hashmap_get(&cx->tex_m, *path);
+	found = hashmap_get(cx->tex_m, *path);
 	if (!found)
 		return (0);
 	cleanup_str(path);
@@ -58,7 +58,7 @@ static int	texture_emplace(t_conv_ctx *cx, char **path, t_index *out_id)
 	if (index < 0)
 		return (ERR_MALLOC);
 	*path = NULL;
-	if (hashmap_insert(&cx->tex_m, new_tex.path,
+	if (hashmap_insert(cx->tex_m, new_tex.path,
 			(void *)(intptr_t)(index + 1)) < 0)
 		return (ERR_MALLOC);
 	*out_id = index;

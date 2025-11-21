@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 14:49:35 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/20 19:59:14 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/21 17:30:21 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,7 @@ int build_scene(t_scene *scene, t_scene_parsed *parsed)
 	init_ctx(&ctx);
 	status = conv_build_ctx(parsed, &ctx);
 	if (status == SUCCESS)
-		status = conv_build_scene(&ctx, scene);
+		status = assemble_scene(&ctx, scene);
 	free_ctx(&ctx);
-	if (status == SUCCESS)
-		finalize_scene(scene);
 	return (status);
 }

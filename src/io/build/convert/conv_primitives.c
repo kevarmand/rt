@@ -41,7 +41,8 @@ static int	push_elem_to_ctx(t_parsed_element *elem, t_conv_ctx *cx)
 	t_primitive		prim_tmp;
 
 	object_from_parsed(elem, &prim_tmp);
-	conv_option_primitive(&prim_tmp, &elem->options, cx, elem->rgb); //tester le retour
+	if (conv_option_primitive(&prim_tmp, &elem->options, cx, elem->rgb))
+		return (ERR_MALLOC);
 	if (elem->type != ELEM_PLANE)
 	{
 		if (vector_push_back(&cx->obj_v, &prim_tmp) != SUCCESS)
@@ -59,9 +60,14 @@ int	conv_primitives(t_scene_parsed *parsed, t_conv_ctx *cx)
 	t_list					*node;
 	t_parsed_element		*elem;
 
+	write(1, "1- Converting primitives...\n", 29);
 	if (init_primitives(cx) != SUCCESS)
 		return (ERR_MALLOC);
+	write(1, "2- Converting primitives...\n", 29);
+	if (parsed == NULL)
+		write(1, "test ?\n", 7);
 	node = parsed->objects;
+	write(1, "Converting primitives...\n", 26);
 	while (node)
 	{
 		elem = node->content;

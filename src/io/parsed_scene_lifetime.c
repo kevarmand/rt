@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 17:33:50 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/20 18:27:09 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/21 15:13:13 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ void free_parsed_element(void *obj)
 	t_parsed_element	*elem;
 
 	elem = (t_parsed_element *)obj;
+	if (!elem)
+		return ;
 	path = elem->options.texture_path;
 	if (path)
 		free(path);
@@ -47,7 +49,7 @@ void	init_parsed_scene(t_scene_parsed *parsed)
 	parsed->globals.res_height = 600;
 	parsed->globals.res_width = 800;
 	parsed->globals.brightness = 0.4f;
-	parsed->globals.color[0] = 0.0f;
+	parsed->globals.color[0] = 0.2f;
 	parsed->globals.color[1] = 0.0f;
 	parsed->globals.color[2] = 0.0f;
 	parsed->presence_mask = 0;

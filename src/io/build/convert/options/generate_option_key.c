@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 13:23:25 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/20 14:55:32 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/21 10:20:01 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ typedef struct s_opt_ids
 	t_index	normal;
 }	t_opt_ids;
 
-void	generate_option_key(t_material *mat, char *key, t_opt_ids *ids)
+void	generate_option_key(t_material *mat, char *key)
 {
 	int	write_index;
 
@@ -79,8 +79,8 @@ void	generate_option_key(t_material *mat, char *key, t_opt_ids *ids)
 	if (write_index < KEY_SIZE - 8)
 		write_float_to_key(mat->ambient, key, &write_index);
 	if (write_index < KEY_SIZE - 8)
-		write_float_to_key((float)ids->albedo, key, &write_index);
+		write_float_to_key((float)mat->texture_albedo_id, key, &write_index);
 	if (write_index < KEY_SIZE - 8)
-		write_float_to_key((float)ids->normal, key, &write_index);
+		write_float_to_key((float)mat->texture_normal_id, key, &write_index);
 	key[write_index] = '\0';
 }

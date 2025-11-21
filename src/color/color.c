@@ -34,14 +34,14 @@ int linear_to_srgb8(float x)
 
 void rgb8_to_linear_vec(const int rgb[3], t_vec3f *out)
 {
-	out->x = srgb8_to_linear(rgb[0]);
-	out->y = srgb8_to_linear(rgb[1]);
-	out->z = srgb8_to_linear(rgb[2]);
+	(*out)[0] = srgb8_to_linear(rgb[0]);
+	(*out)[1] = srgb8_to_linear(rgb[1]);
+	(*out)[2] = srgb8_to_linear(rgb[2]);
 }
 
 void linear_to_rgb8_vec(const t_vec3f *lin, int rgb_out[3])
 {
-	rgb_out[0] = linear_to_srgb8(lin->x);
-	rgb_out[1] = linear_to_srgb8(lin->y);
-	rgb_out[2] = linear_to_srgb8(lin->z);
+	rgb_out[0] = linear_to_srgb8((*lin)[0]);
+	rgb_out[1] = linear_to_srgb8((*lin)[1]);
+	rgb_out[2] = linear_to_srgb8((*lin)[2]);
 }

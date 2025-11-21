@@ -48,6 +48,9 @@ typedef struct s_conv_ctx
 
 typedef struct s_scene_parsed t_scene_parsed;
 typedef struct s_scene t_scene;
+typedef struct s_primitive t_primitive;
+typedef struct s_element_options t_element_options;
+typedef struct s_material t_material;
 
 
 /* ************************************************************************ */
@@ -84,7 +87,7 @@ int	conv_build_ctx(t_scene_parsed *parsed, t_conv_ctx *ctx);
  * @note Preconditions: cx is fully populated
  * and scene is empty
  */
-int	conv_build_scene(t_conv_ctx *cx, t_scene *scene);
+int	assemble_scene(t_conv_ctx *cx, t_scene *scene);
 
 
 /* ************************************************************************** */
@@ -98,6 +101,80 @@ int	conv_build_scene(t_conv_ctx *cx, t_scene *scene);
  * @return SUCCESS on success, error code on failure
  */
 int conv_cameras(t_scene_parsed *parsed, t_conv_ctx *cx);
+
+/***
+ * Convert lights from parsed scene to conversion context
+ * @param parsed The parsed scene data
+ * @param cx The conversion context to populate
+ * @return SUCCESS on success, error code on failure
+ */
+int	conv_lights(t_scene_parsed *parsed, t_conv_ctx *cx);
+
+/***
+ * Convert primitives from parsed scene to conversion context
+ * @param parsed The parsed scene data
+ * @param cx The conversion context to populate
+ * @return SUCCESS on success, error code on failure
+ */
+int	conv_primitives(t_scene_parsed *parsed, t_conv_ctx *cx);
+
+
+/* ************************************************************************** */
+/*					    CONVERT - Internal option                             */
+/* ************************************************************************** */
+
+/***
+ * Convert element options to primitive properties
+ * @param prim The primitive to populate
+ * @param opt The element options to convert
+ * @param cx The conversion context
+ * @param color The RGB color array
+ * @return SUCCESS on success, error code on failure
+ */
+int	conv_option_primitive(t_primitive *prim, t_element_options *opt,
+			t_conv_ctx *cx, int *color);
+
+/***
+ * Intern a texture into the conversion context
+ * Add the path in a hashmap for avoiding duplicates
+ * @param cx The conversion context
+ * @param path The texture file path
+ * @param out_tex The output texture index
+ * @return SUCCESS on success, error code on failure
+ */
+int	intern_texture(t_conv_ctx *cx, char **path, t_index *out_tex);
+
+/***
+ * Intern a material into the conversion context
+ * Add the material in a hashmap for avoiding duplicates
+ * @param cx The conversion context
+ * @param opt The element options
+ * @param ids The texture indices for the material
+ * @param out_mat The output material index
+ * @return SUCCESS on success, error code on failure
+ */
+int	intern_material(t_conv_ctx *cx, t_element_options *opt,
+			t_opt_ids *ids, t_index *out_mat);
+
+/***
+ * Intern a surface into the conversion context
+ * Add the surface in a hashmap for avoiding duplicates
+ * @param cx The conversion context
+ * @param opt The element options
+ * @param out_surf The output surface index
+ * @param color The RGB color array
+ * @return SUCCESS on success, error code on failure
+ */
+int	intern_surface(t_conv_ctx *cx, t_element_options *opt,
+			t_index *out_surf, int *color);
+
+/***
+ * Generate a unique key for material options
+ * @param mat The material options
+ * @param key The output key buffer (at least 256 bytes)
+ * @return void
+ */
+void	generate_option_key(t_material *mat, char *key);
 
 /* ************************************************************************** */
 /*                        CONVERT - CTX LIFETIME                              */

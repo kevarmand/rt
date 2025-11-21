@@ -1,32 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   scene_hit.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/19 14:52:55 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/21 14:15:55 by kearmand         ###   ########.fr       */
+/*   Created: 2025/11/21 21:25:56 by kearmand          #+#    #+#             */
+/*   Updated: 2025/11/21 21:47:11 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "errors.h"
-#include "libft.h"
+#include "engine.h"
 
-int	print_error(int err, const char *msg)
+int scene_hit(t_scene *scene, const t_ray *ray, t_hit *out_hit)
 {
-	ft_putstr_fd("Error : ", 2);
-	ft_putstr_fd(msg, 2);
-	ft_putstr_fd("\n", 2);
-	return (err);
-}
+	int hit;
+	
+	//parcourir tout les primitives de la scene et tester lintersection 
+	//on commence par les plans ( rapide a test et peuxx couper )
+	//puis les autres primitives
 
-int	error_at(int err, const char *file, int line)
-{
-	ft_putstr_fd("Error at ", 2);
-	ft_putstr_fd(file, 2);
-	ft_putstr_fd(":", 2);
-	ft_putnbr_fd(line, 2);
-	ft_putstr_fd("\n", 2);
-	return (err);
+	hit = inter_planes(scene, ray, out_hit);
+	hit |= inter_primitives(scene, ray, out_hit);
+	return (hit);
 }

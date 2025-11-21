@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/06 10:40:46 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/19 15:39:04 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/21 09:28:05 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,6 @@
 #include "scene.h"
 #include "convert.h"
 
-//forward declarations
-int	intern_texture(t_conv_ctx *cx, char **path, t_index *out_id);
-int	intern_material(t_conv_ctx *cx,
-		t_element_options *mat, t_opt_ids *ids, t_index *out_mat);
-int	intern_surface(t_conv_ctx *cx,
-		t_element_options *opt, t_index *out_surf, int *color);
-				
 int	conv_option_primitive(t_primitive *prim, t_element_options *opt,
 			t_conv_ctx *cx, int *color)
 {

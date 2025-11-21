@@ -7,14 +7,14 @@
 #include <string.h>
 #include "vector.h"
 
-static void	cam_from_parsed(const t_parsed_camera *src, t_camera *dst)
+static void	cam_from_parsed(const t_parsed_element *src, t_camera *dst)
 {
-	vec3f_load3(&dst->origin, src->position);
-	vec3f_load3(&dst->forward, src->orientation);
-	dst->fov_deg = src->fov;
+	vec3f_load3(&dst->origin, src->data.camera.position);
+	vec3f_load3(&dst->forward, src->data.camera.orientation);
+	dst->fov_deg = (float)src->data.camera.fov;
 }
 
-int	conv_cameras(const t_scene_parsed *parsed, t_conv_ctx *cx)
+int	conv_cameras(t_scene_parsed *parsed, t_conv_ctx *cx)
 {
 	t_list		*list_node;
 	t_camera	camera_tmp;
@@ -29,23 +29,5 @@ int	conv_cameras(const t_scene_parsed *parsed, t_conv_ctx *cx)
 			return (ERR_MALLOC);
 		list_node = list_node->next;
 	}
-	return (SUCCESS);
-}
-
-/* Préconditions:
-   - cx->cam_v contient exactement cx->camera_count éléments de type t_camera
-   - scene est vierge côté cameras
-*/
-
-int	finalize_cameras(t_conv_ctx *cx, t_scene *scene)
-{
-	const int	count = vector_size(&cx->cam_v);
-	const void	*src_ptr = vector_data(&cx->cam_v);
-
-	scene->camera_count = count;
-	scene->cameras = malloc(sizeof(t_camera) * count);
-	if (!scene->cameras)
-		return (ERR_MALLOC);
-	ft_memcpy(scene->cameras, src_ptr, sizeof(t_camera) * count);
 	return (SUCCESS);
 }

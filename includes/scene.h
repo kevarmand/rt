@@ -106,11 +106,11 @@ typedef struct s_object
 /* --------- Matériaux / Textures (simplifiés, extensibles) --------- */
 typedef struct s_texture
 {
-	const char *path;     /* chemin normalisé; pixels résolus au build */
-	int         width;
-	int         height;
-	int         channels;
-	void       *pixels;   /* peut rester NULL selon backend */
+	char	*path;     /* chemin normalisé; pixels résolus au build */
+	int		width;
+	int		height;
+	int		channels;
+	void	*pixels;   /* peut rester NULL selon backend */
 }	t_texture;
 
 typedef struct s_surface
