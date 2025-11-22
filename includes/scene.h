@@ -46,9 +46,11 @@ typedef struct s_sphere
 
 typedef struct s_cylinder
 {
-	t_vec3f p0;     /* base de l’axe */
-	t_vec3f p1;     /* sommet de l’axe */
-	float   radius;
+	t_vec3f	base;       // point de départ de l’axe
+	t_vec3f	axis;       // unitaire
+	float	height;     // longueur
+	float	radius;     // rayon
+	float	radius_sq;  // rayon^2
 }	t_cylinder;
 
 typedef struct s_torus
@@ -142,6 +144,7 @@ typedef struct s_light
 {
 	t_vec3f position;
 	t_vec3f color;     /* linéaire 0..1 */
+	float   intensity;
 }	t_light;
 
 /* --------- Caméra prête pour ray(x,y) ---------

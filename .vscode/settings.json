@@ -25,6 +25,7 @@
 		"unistd.h": "c",
 		"ui_settings.h": "c",
 		"color.h": "c",
-		"stddef.h": "c"
+		"stddef.h": "c",
+		"stdatomic.h": "c"
 	}
 }

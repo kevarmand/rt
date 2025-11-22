@@ -12,6 +12,7 @@ void light_from_parsed(t_parsed_element *src, t_light *dst)
 {
 	vec3f_load3(&dst->position, src->data.light.position);
 	rgb8_to_linear_vec(src->data.light.rgb, &dst->color);
+	dst->intensity = src->data.light.brightness;
 }
 static void	reset_light(t_light *light)
 {

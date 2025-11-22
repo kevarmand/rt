@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 20:38:58 by norivier          #+#    #+#             */
-/*   Updated: 2025/11/20 21:42:22 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/22 17:12:08 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,4 +109,10 @@ extern inline void	vec3f_load3(t_vec3f *dst, const float src[3])
 	(*dst)[1] = src[1];
 	(*dst)[2] = src[2];
 	(*dst)[3] = 0.0f;
+}
+
+FORCEINLINE
+extern inline float	vec3f_length(t_vec3f a)
+{
+	return (sqrtf(vec3f_dot(a, a)));
 }

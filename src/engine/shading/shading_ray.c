@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 21:10:33 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/21 22:34:56 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/22 17:54:17 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,14 @@ static void	reset_hit(t_hit *hit)
 	hit->primitive_id = -1;
 }
 
-int shading_ray(t_scene *scene, t_ray *ray, t_vec3f *color_out)
+int shading_ray(const t_scene *scene, t_ray *ray, t_vec3f *color_out)
 {
 	t_hit	hit;
 
 	reset_hit(&hit);
 	if (scene_hit(scene, ray, &hit))
 	{
+		hit_build_geometry(scene, ray, &hit);
 		shade_hit(scene, &hit, color_out);//peut etre regarder lerreur si un jour y en a une 
 	}
 	else

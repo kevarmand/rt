@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 18:08:04 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/21 21:45:57 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/22 17:56:56 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,23 +37,45 @@ typedef struct s_hit {
 
 
 typedef struct s_scene t_scene;
+typedef struct s_primitive t_primitive;
+typedef struct s_plane t_plane;
+typedef struct s_sphere t_sphere;
+typedef struct s_cylinder t_cylinder;
+typedef struct s_triangle t_triangle;
+typedef struct s_torus t_torus;
 
 /* ************************************************************************** */
 /*								INTERSECTION								  */
 /* ************************************************************************** */
 
+int equa_second(double a, double b, double c);
+
 int scene_hit(const t_scene *scene, const t_ray *ray, t_hit *out_hit);
 
+int	inter_plane(const t_plane *plane, const t_ray *ray, float *dist);
 
+int	inter_sphere(const t_sphere *sphere, const t_ray *ray, float *dist);
+
+int	inter_cylinder(const t_cylinder *cylinder, const t_ray *ray, float *dist);
+
+int	inter_triangle(const t_triangle *triangle, const t_ray *ray, float *dist);
+
+int	inter_torus(const t_torus *torus, const t_ray *ray, float *dist);
+
+int	scene_is_occluded(const t_scene *scene, const t_ray *ray, float max_dist);
 
 /* ************************************************************************** */
 /*  							Shading									  	  */
 /* ************************************************************************** */
 
 
-int	shading_ray(t_scene *scene, t_ray *ray, t_vec3f *color_out);
+int	shading_ray(const t_scene *scene, t_ray *ray, t_vec3f *color_out);
 
-int	shade_hit(t_scene *scene, t_hit *hit, t_vec3f *color_out);
+int	shade_hit(const t_scene *scene, t_hit *hit, t_vec3f *color_out);
 
+void	shade_lights(const t_scene *scene, const t_hit *hit, t_vec3f *color);
+void	hit_build_geometry(const t_scene *scene, const t_ray *ray, t_hit *hit);
+
+void	shade_ambient(const t_scene *scene, const t_hit *hit, t_vec3f *color);
 
 #endif

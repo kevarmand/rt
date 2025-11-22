@@ -6,21 +6,80 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 21:25:56 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/21 21:47:11 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/22 14:29:27 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "engine.h"
+#include "scene.h"
 
-int scene_hit(t_scene *scene, const t_ray *ray, t_hit *out_hit)
+static void	hit_try_update(t_hit *hit, t_hit_kind kind,
+			int primitive_index, float distance)
 {
-	int hit;
-	
-	//parcourir tout les primitives de la scene et tester lintersection 
-	//on commence par les plans ( rapide a test et peuxx couper )
-	//puis les autres primitives
+	if (distance <= 0.0f)
+		return ;
+	if (distance >= hit->t)
+		return ;
+	hit->t = distance;
+	hit->primitive_id = primitive_index;
+	hit->kind = kind;
+}
 
-	hit = inter_planes(scene, ray, out_hit);
-	hit |= inter_primitives(scene, ray, out_hit);
-	return (hit);
+//dispatcher d'intersection selon le type de primitive
+static int	inter_primitive(const t_primitive *primitive,
+			const t_ray *ray, float *out_distance)
+{
+	if (primitive->type == PRIM_SPHERE)
+		return (inter_sphere(&primitive->sp, ray, out_distance));
+	else if (primitive->type == PRIM_CYLINDER)
+		return (inter_cylinder(&primitive->cy, ray, out_distance));
+	else if (primitive->type == PRIM_TRIANGLE)
+		return (inter_triangle(&primitive->tr, ray, out_distance));
+	else if (primitive->type == PRIM_TORUS)
+		return (inter_torus(&primitive->to, ray, out_distance));
+	return (0);
+}
+
+
+static void	scene_hit_primitives(const t_scene *scene,
+			const t_ray *ray, t_hit *out_hit)
+{
+	int		primitive_index;
+	float	hit_distance;
+
+	primitive_index = 0;
+	while (primitive_index < scene->primitive_count)
+	{
+		if (inter_primitive(&scene->primitives[primitive_index],
+				ray, &hit_distance))
+			hit_try_update(out_hit, HIT_PRIMITIVE,
+				primitive_index, hit_distance);
+		primitive_index++;
+	}
+}
+
+static void	scene_hit_planes(const t_scene *scene,
+			const t_ray *ray, t_hit *out_hit)
+{
+	int		plane_index;
+	float	hit_distance;
+
+	plane_index = 0;
+	while (plane_index < scene->plane_count)
+	{
+		if (inter_plane(&scene->planes[plane_index].pl,
+				ray, &hit_distance))
+			hit_try_update(out_hit, HIT_PLANE,
+				plane_index, hit_distance);
+		plane_index++;
+	}
+}
+
+int	scene_hit(const t_scene *scene, const t_ray *ray, t_hit *out_hit)
+{
+	scene_hit_planes(scene, ray, out_hit);
+	scene_hit_primitives(scene, ray, out_hit);
+	if (out_hit->kind == HIT_NONE)
+		return (0);
+	return (1);
 }

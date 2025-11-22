@@ -33,20 +33,33 @@ int	copy_sphere_to_primitive(const t_parsed_element *src, t_primitive *dst)
 	return (SUCCESS);
 }
 
-int	copy_cylinder_to_primitive(const t_parsed_element *src, t_primitive *dst)
+int	conv_cylinder_to_primitive(const t_parsed_element *src, t_primitive *dst)
 {
+	t_vec3f	center;
+	t_vec3f	axis;
+	float	height;
+	float	radius;
+
 	dst->type = PRIM_CYLINDER;
-	dst->cy.p0 = ((t_vec3f){
+	center = (t_vec3f){
 		src->data.cylinder.origin[0],
 		src->data.cylinder.origin[1],
-		src->data.cylinder.origin[2]});
-	dst->cy.p1 = ((t_vec3f){
-		src->data.cylinder.origin[0] + src->data.cylinder.axis[0] * src->data.cylinder.height,
-		src->data.cylinder.origin[1] + src->data.cylinder.axis[1] * src->data.cylinder.height,
-		src->data.cylinder.origin[2] + src->data.cylinder.axis[2] * src->data.cylinder.height});
-	dst->cy.radius = (src->data.cylinder.diameter / 2.0f);
+		src->data.cylinder.origin[2]};
+	axis = (t_vec3f){
+		src->data.cylinder.axis[0],
+		src->data.cylinder.axis[1],
+		src->data.cylinder.axis[2]};
+	axis = vec3f_normalize(axis);
+	height = src->data.cylinder.height;
+	radius = src->data.cylinder.diameter * 0.5f;
+	dst->cy.axis = axis;
+	dst->cy.height = height;
+	dst->cy.radius = radius;
+	dst->cy.radius_sq = radius * radius;
+	dst->cy.base = vec3f_sub(center, vec3f_scale(axis, 0.5f * height));
 	return (SUCCESS);
 }
+
 int	copy_plane_to_primitive(const t_parsed_element *src, t_primitive *dst)
 {
 	dst->type = PRIM_PLANE;
