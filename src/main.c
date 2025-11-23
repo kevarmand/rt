@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 16:20:19 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/21 16:18:41 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/23 12:33:29 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@ int main(int argc, char **argv)
 	if (status == SUCCESS)
 		status = load_scene(argv[1], &data.scene);
 	//En commentaire pour linstant car non implementer
-	// if (status == SUCCESS)
-	// 	status = run_app(&data);
+	if (status == SUCCESS)
+		status = run_app(&data);
 	//test_provisoire :
 	if (status == SUCCESS)
 	 	print_scene(&data.scene);

@@ -2,16 +2,57 @@
 # define RENDER_H
 
 # include <stdint.h>
-# include "rt.h"
 # include "pthread.h"
 # include <stdatomic.h>
+# include "rt_config.h"
 
-# define RGB_CHANNELS 3
+typedef struct s_data t_data;
 
-# define TILE_SIZE 100
+typedef struct s_tile
+{
+	int			id;
+	int			x;
+	int			y;
+	t_vec3f		*hdr_pixels;
+	t_cam_view	*cam_view;
+	atomic_int	is_done;
+}	t_tile;
+
+typedef struct s_worker
+{
+	pthread_t	thread_id;
+	t_tile		tile;
+	atomic_int	has_job;
+	t_data		*data;
+}	t_worker;
 
 
-#include "type.h"
+typedef struct s_render
+{
+	int			width;
+	int			height;
+
+	t_worker	*workers;
+	int			worker_count;
+	int			workers_created;
+
+	/* bitmap des tiles globales à faire (id, done, etc.) */
+	uint64_t	*tiles_bitmap;
+	int			tiles_total;
+	atomic_int	tiles_dispatched;
+	atomic_int	tiles_done;
+
+	int			*rgb_front;
+	int			*rgb_back;
+	atomic_int	rgb_ready;
+	atomic_int	rgb_busy;
+
+	pthread_t	manager_thread;
+	int			manager_created;
+	atomic_int	cancel_flag;
+}	t_render;
+
+
 
 
 

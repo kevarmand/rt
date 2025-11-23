@@ -204,13 +204,6 @@ typedef struct		s_cam
 	t_point			first;
 }					t_cam;
 
-typedef struct		s_ray
-{
-	t_point			source;
-	t_vec3		dir;
-	int				inter;
-	double			dist;
-}					t_ray;
 
 typedef struct		s_lighting
 {

@@ -3,7 +3,8 @@
 
 
 # define ERROR				-1
-
+# define ERR_INTERNAL		-1
+# define ERR_THREAD			-2
 # define ERR_ARG			-2
 # define ERR_EXT			-3
 # define ERR_OPEN			-4

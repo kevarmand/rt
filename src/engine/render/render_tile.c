@@ -1,78 +1,62 @@
 #include "render.h"
-#include "rt.h"
+//SURTOUT PAS INCLURE RT.H ICI
+#include "engine.h"
+#include "scene.h"
+#include "rt_config.h"
+#include "new_rt.h"
+#include "errors.h"
 
-
-void assign_color_to_buffer(int *buf, int index, const t_color *co)
+static void	build_ray_for_pixel(const t_cam_view *view,
+			int img_x, int img_y, t_ray *ray)
 {
-	buf[index] = co->r;
-	buf[index + 1] = co->g;
-	buf[index + 2] = co->b;
+	t_vec3f	offset_x;
+	t_vec3f	offset_y;
+	t_vec3f	pixel_pos;
+	t_vec3f	dir;
+
+	offset_x = vec3f_scale(view->dx, (float)img_x);
+	offset_y = vec3f_scale(view->dy, (float)img_y);
+	pixel_pos = vec3f_add(view->p0, offset_x);
+	pixel_pos = vec3f_add(pixel_pos, offset_y);
+	dir = vec3f_sub(pixel_pos, view->origin);
+	dir = vec3f_normalize(dir);
+	ray->origin = view->origin;
+	ray->dir = dir;
 }
 
-int			render_tile(t_data *data, t_tile *tile, t_cam *cam)
+
+static int	calcul_pixel_color(t_data *data, const t_cam_view *view,
+			int img_x, int img_y, t_vec3f *out_color)
 {
-	int			i;
-	int			j;
-	t_point		pf;
-	t_vec3	v;
-	t_color		co;
+	t_ray	ray;
 
-	int			x0, y0;
+	build_ray_for_pixel(view, img_x, img_y, &ray);
+	return (shade_ray(&data->scene, &ray, out_color));
+}
 
+int	render_tile(t_data *data, t_tile *tile)
+{
+	const t_cam_view	*view;
+	t_vec3f				color;
+	int					local_y;
+	int					local_x;
+	int					index;
 
-	tile_index_to_pos(tile->id, data->para.res_width, &x0, &y0);
-	i = -1;
-	while (++i < data->para.res_width)
+	view = tile->cam_view;
+	local_y = 0;
+	index = -1;
+	while (local_y < TILE_SIZE)
 	{
-		v = vect_mult(&(cam->hori), i);
-		pf = vect_translate(&(cam->first), &v);
-		j = -1;
-		while (++j < data->para.res_height)
+		local_x = 0;
+		while (local_x < TILE_SIZE)
 		{
-			v = vect_vector(&(cam->point), &pf);
-			vect_tonorm(&v);
-			if (i >= x0 && i < x0 + TILE_SIZE && j >= y0 && j < y0 + TILE_SIZE)
-			{
-				co = cam_getcolor(data, cam, &v);
-				assign_color_to_buffer(tile->buffer, (i - x0 + (j - y0) * TILE_SIZE) * RGB_CHANNELS, &co);
-			}
-			pf = vect_translate(&pf, &(cam->vert));
+			calcul_pixel_color(data, view,
+				tile->x + local_x, tile->y + local_y, &color);
+			index++;
+			tile->hdr_pixels[index] = color;
+			local_x++;
 		}
+		local_y++;
 	}
 	return (SUCCESS);
 }
-
-
-/***
- * Fonction de rendu
- * dans l'idée j'aimerais avoir cette ossature :
- *  le nom//paramettre de la fonction sont ok
- * int			render_tile(t_data *data, t_tile *tile, t_cam *cam)
-{
-	//Block de variables
-
-
-	//fonction d initialisation des valeur necessaire
-	i = -1;
-	while (++i < TILE_SIZE)
-	{
-		j = -1;
-		while (++j < TILE_SIZE)
-		{
-			//calcul de la direction du rayon une sorte de ray_init
-			//ray_init(&r, &cam->point, &v, ...);
-			ray_trace(&r, data, &co);
-			assign_color_to_buffer(tile->buffer, (i + j * TILE_SIZE) * RGB_CHANNELS, &co);
-		}
-	}
-	return (SUCCESS);
-}
- * ATTENTION je ne veux aps le faire tout de suite je t indique juste ce que je veux faire :
- *  je n ai pas encore fait le point sur les struct que je vqis qvoir besoin donc pour linstant je touche le moins possible au code
- * 
- * Donc la struct ray je la ferai plus tard
- * la fonction ray_trace le nom me semble significatif mais si tu peux proposer mieux n hésite pas
- * la fonction assign_color_to_buffer est une fonction facile qui ne nepend que d elimplementation du reste donc pas besoin d epasser du temps dessus
- */
-
- 

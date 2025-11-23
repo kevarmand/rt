@@ -26,6 +26,10 @@
 		"ui_settings.h": "c",
 		"color.h": "c",
 		"stddef.h": "c",
-		"stdatomic.h": "c"
+		"stdatomic.h": "c",
+		"render.h": "c",
+		"rt_config.h": "c",
+		"display.h": "c",
+		"engine.h": "c"
 	}
 }

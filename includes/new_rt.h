@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 15:10:50 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/22 18:59:45 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/23 19:22:21 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,16 @@
 # define NEW_RT_H
 
 # include "scene.h"
+# include "engine.h"
+# include "display.h"
 //# include "ui.h"
+
 
 typedef struct s_data
 {
 	t_scene		scene;
-//	t_mlx		mlx;
-//	t_ui		ui;
+	t_engine	engine;
+	t_display	display;
 }	t_data;
 /***
  * check the arguments given to the program
@@ -74,99 +77,4 @@ typedef struct s_ui {
 	int		button_count;
 }	t_ui;
 
-
-
-typedef struct s_display
-{
-	t_ui		ui;
-	
-}	t_display;
-
-typedef struct s_framebuffer
-{
-	int		width;
-	int		height;
-	int		*pixels; /* RGB8 ou float selon ton choix */
-}	t_framebuffer;
-
-typedef struct s_cam_view
-{
-	const t_camera	*src;
-	t_vec3f	origin;
-	t_vec3f	forward;
-	t_vec3f	right;
-	t_vec3f	up;
-	t_vec3f	p0;
-	t_vec3f	dx;
-	t_vec3f	dy;
-	t_framebuffer	buffer;
-	int		dirty;
-}	t_cam_view;
-
-
-typedef struct s_engine
-{
-	int			width;
-	int			height;
-	t_cam_view	*cam_views;
-
-	//Les flag dont je parlais :
-	int			active_cam;
-	int			render_mode;
-	int			samples_per_pixel;
-
-	/* pas plus tard maintenant threads, tiles, stats, etc */
-	
-}	t_engine;
-
-/**
- * struct s_tile - Rendering unit assigned to a worker thread
- * @buffer:		Pixel buffer for this tile
- * @id:			Global index of the tile
- * @pos_x:		Tile position in X (pixels)
- * @pos_y:		Tile position in Y (pixels)
- * @camera:		Camera used for rendering this tile
- * @thread_id:	POSIX thread identifier
- * @is_done:	Atomic flag, set to 1 when rendering is finished
- */
-struct  s_tile
-{
-	int			*buffer;
-	int			id;
-	int			pos_x;			// Unused for now
-	int			pos_y;			// Unused for now
-	t_cam		*camera;
-	pthread_t	thread_id;
-	atomic_int	is_done;
-};
-
-/**
- * struct s_render - Global rendering context
- * @width:				Output resolution in X (rounded to next multiple of TILE_SIZE)
- * @height:				Output resolution in Y (rounded to next multiple of TILE_SIZE)
- * @framebuffer:		HDR framebuffer (temporary int-based, to be replaced by float)
- * @camera:				Active camera for rendering
- * @samples_per_pixel:	Number of samples per pixel
- * @cancel_flag:		Atomic flag to abort rendering
- * @thread_next_id:		Next thread identifier to assign
- * @tiles:				Array of per-thread tile structures (size = NB_CORE)
- * @tiles_bitmap:		Bitset tracking finished tiles
- * @tiles_total:		Total number of tiles (constant, fixed at init)
- * @tiles_done:			Number of tiles already completed
- * @tiles_distributed:	Number of tiles already assigned to workers
- */
-struct s_render{
-	int			width;
-	int			height;
-	int			*framebuffer;
-	t_cam		*camera;
-	int			samples_per_pixel;		//unused for now
-	atomic_int	cancel_flag;
-	atomic_int	thread_next_id;
-	t_tile		tiles[NB_CORE];
-	uint64_t 	*tiles_bitmap;
-	int			tiles_total;
-	int			tiles_done;
-	int			tiles_distributed;
-};
 

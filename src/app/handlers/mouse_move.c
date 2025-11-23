@@ -1,4 +1,17 @@
-#include "rt.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   mouse_move.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/23 19:18:14 by kearmand          #+#    #+#             */
+/*   Updated: 2025/11/23 20:08:17 by kearmand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "new_rt.h"
+#include "display.h"
 
 int	mouse_move(int x, int y, t_data *data)
 {
@@ -7,12 +20,12 @@ int	mouse_move(int x, int y, t_data *data)
 	int max_x;
 	int max_y;
 
-	if (data->ui.dragging)
+	if (data->display.ui.dragging)
 	{
-		new_x = x - data->ui.drag_offset_x;
-		new_y = y - data->ui.drag_offset_y;
-		max_x = data->para.res_width - WIDTH_UI;
-		max_y = data->para.res_height - HEIGHT_UI;
+		new_x = x - data->display.ui.drag_offset_x;
+		new_y = y - data->display.ui.drag_offset_y;
+		max_x = data->engine.width - data->display.ui.img.width;
+		max_y = data->engine.height - data->display.ui.img.height;
 		if (new_x < 0)
 			new_x = 0;
 		else if (new_x > max_x)
@@ -21,9 +34,9 @@ int	mouse_move(int x, int y, t_data *data)
 			new_y = 0;
 		else if (new_y > max_y)
 			new_y = max_y;
-		data->ui.x = new_x;
-		data->ui.y = new_y;
-		data->flag_draw |= FLAG_DRAW_UI;
+		data->display.ui.x = new_x;
+		data->display.ui.y = new_y;
+		data->display.flag |= DF_UI;
 	}
 	return (0);
 }

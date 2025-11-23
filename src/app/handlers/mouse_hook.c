@@ -1,16 +1,29 @@
-#include "rt.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   mouse_hook.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/23 19:18:09 by kearmand          #+#    #+#             */
+/*   Updated: 2025/11/23 20:07:55 by kearmand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "new_rt.h"
+#include "display.h"
 
 int	mouse_drag_ui(int rel_x, int rel_y, t_data *data)
 {
-	data->ui.dragging = 1;
-	data->ui.drag_offset_x = rel_x;
-	data->ui.drag_offset_y = rel_y;
+	data->display.ui.dragging = 1;
+	data->display.ui.drag_offset_x = rel_x;
+	data->display.ui.drag_offset_y = rel_y;
 	return (1);
 }
 
 int	mouse_click_ui(int rel_x, int rel_y, t_data *data)
 {
-	t_ui		*ui = &(data->ui);
+	t_ui		*ui = &(data->display.ui);
 	t_button	*btn;
 	int			i;
 
@@ -39,12 +52,12 @@ int	mouse_press(int button, int x, int y, t_data *data)
 {
 	int	rel_x;
 	int	rel_y;
-	if (button == 1 && data->ui.visible)
+	if (button == 1 && data->display.ui.visible)
 	{
-		rel_x = x - data->ui.x;
-		rel_y = y - data->ui.y;
+		rel_x = x - data->display.ui.x;
+		rel_y = y - data->display.ui.y;
 		if (mouse_click_ui(rel_x, rel_y, data))
-			data->flag_draw |= FLAG_DRAW_UI | FLAG_DRAW_TEXT;
+			data->display.flag |= DF_UI | DF_TEXT;
 	}
 	return (0);
 }

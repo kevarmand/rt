@@ -1,26 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mouse_release.c                                    :+:      :+:    :+:   */
+/*   rt_config.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/23 19:18:17 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/23 20:08:35 by kearmand         ###   ########.fr       */
+/*   Created: 2025/11/23 17:07:05 by kearmand          #+#    #+#             */
+/*   Updated: 2025/11/23 18:46:46 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "new_rt.h"
-#include "display.h"
+#ifndef RT_CONFIG_H
+# define RT_CONFIG_H
 
-int	mouse_release(int button, int x, int y, t_data *data)
-{
-	(void)x;
-	(void)y;
-	if (button == 1 && data->display.ui.dragging)
-	{
-		data->display.ui.dragging = 0;
-		data->display.flag |= DF_TEXT;
-	}
-	return (0);
-}
+# define RT_NAME "RayTraceur 2999.7"
+
+# define TILE_SIZE 16
+# define MAX_WORKER_THREADS 16
+# define RGB_CHANNELS 3
+# define EPSILON 0.00001f
+
+#endif

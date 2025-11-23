@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 18:08:04 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/22 17:56:56 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/23 15:13:26 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,42 @@
 # define ENGINE_H
 
 #include "vector.h"
+#include "scene.h"
+#include "render.h"
+
+typedef struct s_cam_view
+{
+	const t_camera	*src;
+	t_vec3f			origin;
+	t_vec3f			forward;
+	t_vec3f			right;
+	t_vec3f			up;
+	t_vec3f			p0;
+	t_vec3f			dx;
+	t_vec3f			dy;
+
+	t_vec3f			*hdr_buffer;
+	int				hdr_width;
+	int				hdr_height;
+	int				is_dirty;
+}	t_cam_view;
+
+
+typedef struct s_engine
+{
+	int				width;
+	int				height;
+
+	int				render_mode;
+	int				samples_per_pixel;
+
+	int				active_cam;
+	int				cam_count;
+	t_cam_view		*cam_views;
+
+	t_render		render;
+}	t_engine;
+
 
 typedef struct s_ray {
 	t_vec3f	origin;
@@ -34,7 +70,6 @@ typedef struct s_hit {
 	t_vec3f		normal;
 	int			primitive_id;
 }	t_hit;
-
 
 typedef struct s_scene t_scene;
 typedef struct s_primitive t_primitive;

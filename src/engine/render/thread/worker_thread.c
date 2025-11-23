@@ -2,34 +2,40 @@
 #include "render.h"
 #include "rt.h"
 #include <stdatomic.h>
+#include "new_rt.h"
+#include <unistd.h>
+#include "engine.h"
 
-
-
-void	wait_work(atomic_int *tile_done, atomic_int *cancel)
+static void	wait_for_job(atomic_int *has_job, atomic_int *cancel_flag)
 {
-	while (atomic_load(tile_done) == 1 && atomic_load(cancel) == 0)
-		usleep(999);//Parce au on adore les magic number
+	while (atomic_load(has_job) == 0
+		&& atomic_load(cancel_flag) == 0)
+		usleep(100);
 }
 
-void *worker_thread(void *arg)
+static void	wait_tile_consumed(atomic_int *is_done, atomic_int *cancel_flag)
 {
-	static _Atomic int count_loop = 0;
-	t_data	*data;
-	t_tile	*tile;
-	int		thread_id;
+	while (atomic_load(is_done) == 1
+		&& atomic_load(cancel_flag) == 0)
+		usleep(100);
+}
 
-	data = (t_data *)arg;
-	thread_id = atomic_fetch_add(&data->render.thread_next_id, 1);
-	tile = &data->render.tiles[thread_id];
-	//debug on verifie que le trhead est lancer printf
-	wait_work(&tile->is_done, &data->render.cancel_flag);
-	while (atomic_load(&data->render.cancel_flag) == 0)
+void	*worker_thread(void *arg)
+{
+	t_worker	*worker;
+	t_data		*data;
+	t_render	*render;
+
+	worker = (t_worker *)arg;
+	data = worker->data;
+	render = &data->engine.render;
+	wait_for_job(&worker->has_job, &render->cancel_flag);
+	while (atomic_load(&render->cancel_flag) == 0)
 	{
-		render_tile(data, tile, data->render.camera);
-		atomic_store(&tile->is_done, 1);
-		wait_work(&tile->is_done, &data->render.cancel_flag);
-		printf("thread %d done tile %d/%d\n", thread_id, ++count_loop, data->render.tiles_total);
+		render_tile(data, &worker->tile, worker->tile.cam_view);
+		atomic_store(&worker->tile.is_done, 1);
+		wait_tile_consumed(&worker->tile.is_done, &render->cancel_flag);
+		wait_for_job(&worker->has_job, &render->cancel_flag);
 	}
-	printf("thread %lu exiting\n", tile->thread_id);
 	return (NULL);
 }
