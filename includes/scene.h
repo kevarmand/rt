@@ -156,12 +156,7 @@ typedef struct s_camera
 	t_vec3f origin;    /* O */
 	t_vec3f forward;   /* F unitaire */
 	t_vec3f right;     /* R unitaire */
-	t_vec3f up;        /* U unitaire */
-	t_vec3f p0;        /* centre du pixel (0,0) en monde */
-	t_vec3f dx;        /* +1 px X (droite) */
-	t_vec3f dy;        /* +1 px Y (bas) */
 	float   fov_deg;   /* horizontal */
-	float   aspect;    /* width / height */
 }	t_camera;
 
 /* --------- BVH (runtime) ---------

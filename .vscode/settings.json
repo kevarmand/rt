@@ -30,6 +30,7 @@
 		"render.h": "c",
 		"rt_config.h": "c",
 		"display.h": "c",
-		"engine.h": "c"
+		"engine.h": "c",
+		"bitmap.h": "c"
 	}
 }

@@ -5,51 +5,108 @@
 # include "pthread.h"
 # include <stdatomic.h>
 # include "rt_config.h"
+# include "vector.h"
+# include "bitmap.h"
+#include "engine.h"
 
 typedef struct s_data t_data;
 
+typedef struct s_render_view
+{
+	t_vec3f	origin;
+	t_vec3f	forward;
+	t_vec3f	right;
+	t_vec3f	up;
+	t_vec3f	p0;
+	t_vec3f	dx;
+	t_vec3f	dy;
+	float	fov_deg;
+	int		frame_seq;
+}	t_render_view;
+
 typedef struct s_tile
 {
-	int			id;
-	int			x;
-	int			y;
-	t_vec3f		*hdr_pixels;
-	t_cam_view	*cam_view;
-	atomic_int	is_done;
+	int		tile_id;
+	int		pixel_x;
+	int		pixel_y;
+	int		pixel_width;
+	int		pixel_height;
+	t_vec3f	*hdr_pixels;
 }	t_tile;
+
+typedef enum e_worker_state
+{
+	WORKER_IDLE,
+	WORKER_BUSY,
+	WORKER_DONE
+}	t_worker_state;
 
 typedef struct s_worker
 {
-	pthread_t	thread_id;
-	t_tile		tile;
-	atomic_int	has_job;
-	t_data		*data;
+	pthread_t		thread_id;
+	t_tile			tile;
+	t_render_view	local_view;
+	atomic_int		worker_state;
 }	t_worker;
+
+typedef struct s_workers
+{
+	t_worker	*array;
+	int			count;
+}	t_workers;
+
+typedef struct s_tileset
+{
+	int			tile_width;
+	int			tile_height;
+	int			tiles_per_row;
+	int			tiles_per_col;
+	int			tiles_total;
+	int			tiles_active;
+	int			tiles_done;
+	t_bitmap	tile_state;
+}	t_tileset;
+
+typedef struct s_display_mailbox
+{
+	int			*rgb_pixels;
+	int			tile_count;
+	int			tiles_done;
+	atomic_int	snapshot_ready;
+
+	t_camera	cam;
+	atomic_int	request_ready;
+}	t_display_mailbox;
+
+typedef struct s_mgr
+{
+	pthread_t		thread_id;
+	int				render_in_progress;
+
+	t_tileset		tileset;
+	int				*rgb_buffer;
+	t_vec3f			*hdr_buffer;
+	t_render_view	render_view;
+}	t_mgr;
+
+typedef struct s_display_thread
+{
+	int			*front_pixels;
+	t_camera	current_cam;
+}	t_display_thread;
 
 
 typedef struct s_render
 {
-	int			width;
-	int			height;
+	int					width;
+	int					height;
 
-	t_worker	*workers;
-	int			worker_count;
-	int			workers_created;
+	t_workers			workers;     // pool de workers
+	t_mgr				manager;     // thread "Karen"
+	t_display_mailbox	mailbox;     // partagé manager <-> mlx_thread
+	t_display_thread	display;     // état local du thread MLX
+	atomic_int			cancel_flag;  // ou stop_requested
 
-	/* bitmap des tiles globales à faire (id, done, etc.) */
-	uint64_t	*tiles_bitmap;
-	int			tiles_total;
-	atomic_int	tiles_dispatched;
-	atomic_int	tiles_done;
-
-	int			*rgb_front;
-	int			*rgb_back;
-	atomic_int	rgb_ready;
-	atomic_int	rgb_busy;
-
-	pthread_t	manager_thread;
-	int			manager_created;
-	atomic_int	cancel_flag;
 }	t_render;
 
 
@@ -172,4 +229,5 @@ void	*worker_thread(void *data);
  */
 int		create_threads(t_data *data);
 
-#endif // RENDER_H
+
+#endif

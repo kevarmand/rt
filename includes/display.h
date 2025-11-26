@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 12:27:50 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/23 20:02:47 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/26 14:45:46 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,14 @@ typedef struct s_image
 	int		height;
 }	t_image;
 
+typedef struct s_frame
+{
+	t_vec3f			*hdr_pixels; // buffer calcul interne
+	int				width;
+	int				height;
+	int				samples;
+	int				is_dirty;
+}	t_frame;
 
 typedef struct s_display
 {
@@ -34,6 +42,7 @@ typedef struct s_display
 	void	*win;
 	t_image	main_img;
 	t_ui	ui;
+	t_frame	*frame;//tableau de frame une par cam
 
 	int		flag;
 }	t_display;

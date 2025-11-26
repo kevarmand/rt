@@ -6,7 +6,9 @@
 #include "new_rt.h"
 #include "errors.h"
 
-static void	build_ray_for_pixel(const t_cam_view *view,
+#include "rt.h"
+
+static void	build_ray_for_pixel(const t_render_view *view,
 			int img_x, int img_y, t_ray *ray)
 {
 	t_vec3f	offset_x;
@@ -24,8 +26,7 @@ static void	build_ray_for_pixel(const t_cam_view *view,
 	ray->dir = dir;
 }
 
-
-static int	calcul_pixel_color(t_data *data, const t_cam_view *view,
+static int	calcul_pixel_color(t_data *data, const t_render_view *view,
 			int img_x, int img_y, t_vec3f *out_color)
 {
 	t_ray	ray;
@@ -34,29 +35,29 @@ static int	calcul_pixel_color(t_data *data, const t_cam_view *view,
 	return (shade_ray(&data->scene, &ray, out_color));
 }
 
-int	render_tile(t_data *data, t_tile *tile)
+int	render_tile(t_data *data, t_tile *tile, const t_render_view *view)
 {
-	const t_cam_view	*view;
-	t_vec3f				color;
-	int					local_y;
-	int					local_x;
-	int					index;
+	t_vec3f	color;
+	int		local_y;
+	int		local_x;
+	int		index;
 
-	view = tile->cam_view;
 	local_y = 0;
-	index = -1;
-	while (local_y < TILE_SIZE)
+	index = 0;
+	while (local_y < tile->pixel_height)
 	{
 		local_x = 0;
-		while (local_x < TILE_SIZE)
+		while (local_x < tile->pixel_width)
 		{
 			calcul_pixel_color(data, view,
-				tile->x + local_x, tile->y + local_y, &color);
-			index++;
+				tile->pixel_x + local_x,
+				tile->pixel_y + local_y, &color);
 			tile->hdr_pixels[index] = color;
+			index++;
 			local_x++;
 		}
 		local_y++;
 	}
 	return (SUCCESS);
 }
+

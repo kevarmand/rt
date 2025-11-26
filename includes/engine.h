@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 18:08:04 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/23 15:13:26 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/26 15:24:17 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,22 +17,6 @@
 #include "scene.h"
 #include "render.h"
 
-typedef struct s_cam_view
-{
-	const t_camera	*src;
-	t_vec3f			origin;
-	t_vec3f			forward;
-	t_vec3f			right;
-	t_vec3f			up;
-	t_vec3f			p0;
-	t_vec3f			dx;
-	t_vec3f			dy;
-
-	t_vec3f			*hdr_buffer;
-	int				hdr_width;
-	int				hdr_height;
-	int				is_dirty;
-}	t_cam_view;
 
 
 typedef struct s_engine
@@ -44,8 +28,8 @@ typedef struct s_engine
 	int				samples_per_pixel;
 
 	int				active_cam;
+	int				shadow_cam;
 	int				cam_count;
-	t_cam_view		*cam_views;
 
 	t_render		render;
 }	t_engine;

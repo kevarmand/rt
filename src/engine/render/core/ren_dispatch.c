@@ -1,56 +1,63 @@
 #include <stdint.h>
 #include <limits.h>	
+#include "render.h"
 
-static int	tile_is_done(uint64_t *done_bitmap, int tile_id)
+static int	gcd_int(int left, int right)
 {
-	int	word;
-	int	bit;
+	int	tmp;
 
-	bit = tile_id % 64;
-	word = tile_id / 64;
-	return ((done_bitmap[word] >> bit) & 1);
+	while (right != 0)
+	{
+		tmp = left % right;
+		left = right;
+		right = tmp;
+	}
+	return (left);
 }
 
-static void	tile_mark_done(uint64_t *done_bitmap, int tile_id)
-{
-	int	word;
-	int	bit;
-
-	word = tile_id / 64;
-	bit = tile_id % 64;
-	done_bitmap[word] |= ((uint64_t)1 << bit);
-}
-
-static uint32_t	rng_next32(uint32_t *state)
+static uint32_t	rng_xorshift(uint32_t *s)
 {
 	uint32_t	x;
 
-	x = *state;
+	x = *s;
 	x ^= x << 13;
 	x ^= x >> 17;
 	x ^= x << 5;
-	*state = x;
+	*s = x;
 	return (x);
 }
 
-int	ren_dispatch(uint64_t *done_bitmap, int tile_count,
-					int *tile_distributed)
+static int	dispatch(int tile_count)
 {
-	static uint32_t	state = 0xCAFEBABE;
-	int				tile_id;
+	static int			k = 0;
+	static int			step = -1;
+	static uint32_t		rng = 0xCAFEBABE;
 
-	if (*tile_distributed >= tile_count)
-		return (-1);
-	tile_id = (int)(rng_next32(&state) % tile_count);
-	while (1)
+	if (tile_count <= 0)
 	{
-		if (!tile_is_done(done_bitmap, tile_id))
-		{
-			tile_mark_done(done_bitmap, tile_id);
-			(*tile_distributed)++;
-			return (tile_id);
-		}
-		tile_id = (tile_id + 1) % tile_count;
+		k = 0;
+		step = -1;
+		return (0);
 	}
-	return (-1);
+	if (step < 0)
+	{
+		step = (int)(rng_xorshift(&rng) % tile_count);
+		if ((step & 1) == 0)
+			step++;
+		while (gcd_int(step, tile_count) != 1)
+			step += 2;
+	}
+	if (k >= tile_count)
+		k = 0;
+	return ((k++ * step) % tile_count);
+}
+
+int manager_dispatch_tile(t_tileset *tileset)
+{
+	int	tile_id;
+
+	if (tileset->tiles_done + tileset->tiles_active >= tileset->tiles_total)
+		return (-1);
+	else
+	return (dispatch(tileset->tiles_total));
 }
