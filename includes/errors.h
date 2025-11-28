@@ -41,6 +41,7 @@ typedef enum e_err
 	SUCCESS = 0,
 	/* génériques */
 	ERR_GENERIC = -1,
+	ERR_THREAD_CREATE = -2,
 	ERR_INVALID_ARGS = -100,
 	ERR_PARS = -200,
 	/* parsing	 */

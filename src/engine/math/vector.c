@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 20:38:58 by norivier          #+#    #+#             */
-/*   Updated: 2025/11/22 17:12:08 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/28 19:39:47 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,9 @@ extern inline float	vec3f_norme(t_vec3f a)
 FORCEINLINE
 extern inline t_vec3f	vec3f_normalize(t_vec3f a)
 {
-	return (vec3f_scale(a, ft_rsqrtf(vec3f_dot(a, a))));
+	// return (vec3f_scale(a, ft_rsqrtf(vec3f_dot(a, a))));
+	float inv = 1.0f / sqrtf(vec3f_dot(a, a));
+	return vec3f_scale(a, inv);
 }
 
 FORCEINLINE
@@ -116,3 +118,15 @@ extern inline float	vec3f_length(t_vec3f a)
 {
 	return (sqrtf(vec3f_dot(a, a)));
 }
+
+
+FORCEINLINE
+extern inline t_vec3f vec3f_mul(t_vec3f a, t_vec3f b)
+{
+    return ((t_vec3f){
+        a.x * b.x,
+        a.y * b.y,
+        a.z * b.z
+    });
+}
+

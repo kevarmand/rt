@@ -6,27 +6,52 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 21:25:56 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/22 14:29:27 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/28 16:56:35 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "engine.h"
 #include "scene.h"
+#include <stdio.h>
+
+
+// static void	hit_try_update(t_hit *hit, t_hit_kind kind,
+// 			int primitive_index, float distance)
+// {
+// 	if (distance <= 0.0f)
+// 		return ;
+// 	if (distance >= hit->t)
+// 		return ;
+// 	hit->t = distance;
+// 	hit->primitive_id = primitive_index;
+// 	hit->kind = kind;
+// }
+
+#define RED     "\x1b[31m"
+#define RESET   "\x1b[0m"
 
 static void	hit_try_update(t_hit *hit, t_hit_kind kind,
 			int primitive_index, float distance)
 {
+
 	if (distance <= 0.0f)
+	{
 		return ;
+	}
 	if (distance >= hit->t)
+	{
 		return ;
+	}
+
+
 	hit->t = distance;
 	hit->primitive_id = primitive_index;
 	hit->kind = kind;
 }
 
+
 //dispatcher d'intersection selon le type de primitive
-static int	inter_primitive(const t_primitive *primitive,
+int	inter_primitive(const t_primitive *primitive,
 			const t_ray *ray, float *out_distance)
 {
 	if (primitive->type == PRIM_SPHERE)
@@ -39,7 +64,6 @@ static int	inter_primitive(const t_primitive *primitive,
 		return (inter_torus(&primitive->to, ray, out_distance));
 	return (0);
 }
-
 
 static void	scene_hit_primitives(const t_scene *scene,
 			const t_ray *ray, t_hit *out_hit)

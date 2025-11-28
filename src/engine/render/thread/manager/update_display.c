@@ -6,12 +6,13 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 18:39:42 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/26 18:42:52 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/28 13:44:34 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "manager.h"
-
+#include "libft.h"
+#include <stdio.h>
 int	manager_update_display(t_render *render)
 {
 	t_mgr				*manager;

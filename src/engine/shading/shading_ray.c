@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 21:10:33 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/22 17:54:17 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/28 19:05:49 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static void	reset_hit(t_hit *hit)
 	hit->primitive_id = -1;
 }
 
-int shading_ray(const t_scene *scene, t_ray *ray, t_vec3f *color_out)
+int shading_ray(const t_scene *scene, const t_ray *ray, t_vec3f *color_out)
 {
 	t_hit	hit;
 

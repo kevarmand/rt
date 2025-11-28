@@ -6,13 +6,13 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 17:24:31 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/22 17:52:58 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/28 19:16:50 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "engine.h"
 #include "scene.h"
-
+#include <stdio.h>
 static void	build_normal_plane(const t_plane *plane, t_vec3f *normal)
 {
 	*normal = plane->normal;
@@ -23,6 +23,8 @@ static void	build_normal_sphere(const t_sphere *sphere,
 {
 	t_vec3f	diff;
 
+	printf("Building normal for sphere at hit point (%f, %f, %f)\n",
+		hit->point.x, hit->point.y, hit->point.z);
 	diff = vec3f_sub(hit->point, sphere->center);
 	*normal = vec3f_normalize(diff);
 }
@@ -62,7 +64,7 @@ static void	build_normal_primitive(const t_primitive *primitive,
 	else if (primitive->type == PRIM_TRIANGLE)
 		build_normal_triangle(&primitive->tr, normal);
 }
-
+#include <stdio.h>
 void	hit_build_geometry(const t_scene *scene,
 			const t_ray *ray, t_hit *hit)
 {
@@ -70,16 +72,25 @@ void	hit_build_geometry(const t_scene *scene,
 	t_vec3f				point;
 	t_vec3f				normal;
 
+	normal = (t_vec3f){0.0f, 0.0f, 0.0f};
 	point = vec3f_add(ray->origin, vec3f_scale(ray->dir, hit->t));
 	hit->point = point;
 	if (hit->kind == HIT_PLANE)
+	{
+		hit->surface_id = scene->planes[hit->primitive_id].surface_id;
+		hit->material_id = scene->planes[hit->primitive_id].material_id;
 		build_normal_plane(&scene->planes[hit->primitive_id].pl, &normal);
+	}
 	else if (hit->kind == HIT_PRIMITIVE)
 	{
+		hit->surface_id = scene->primitives[hit->primitive_id].surface_id;
+		hit->material_id = scene->primitives[hit->primitive_id].material_id;
 		primitive = &scene->primitives[hit->primitive_id];
 		build_normal_primitive(primitive, hit, &normal);
 	}
+	else
+		printf("ca pue du cul dans hit_build_geometry\n");
 	hit->normal = normal;
 	if (vec3f_dot(hit->normal, ray->dir) > 0.0f)
-		hit->normal = vec3f_scale(hit->normal, -1.0f);
+	 	hit->normal = vec3f_scale(hit->normal, -1.0f);
 }

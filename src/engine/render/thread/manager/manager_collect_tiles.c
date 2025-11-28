@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   maanager_collect_tiles.c                           :+:      :+:    :+:   */
+/*   manager_collect_tiles.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/25 15:26:47 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/26 19:18:02 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/28 16:33:08 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <stdatomic.h>
 #include "vector.h"
 #include "bitmap.h"
+#include "libft.h"
 
 static void	manager_copy_tile_pixels(t_render *render, t_tile *tile)
 {
@@ -38,13 +39,14 @@ static void	manager_copy_tile_pixels(t_render *render, t_tile *tile)
 		row++;
 	}
 }
-
+#include <stdio.h>
 static void	manager_handle_completed_tile(t_render *render, t_worker *worker)
 {
 	t_mgr	*mgr;
 	t_tile	*tile;
 
 	mgr = &render->manager;
+	// printf("Worker completed tile %d.\n", worker->tile.tile_id);
 	if (worker->local_view.frame_seq != mgr->render_view.frame_seq)
 	{
 		atomic_store(&worker->worker_state, WORKER_IDLE);
@@ -53,8 +55,8 @@ static void	manager_handle_completed_tile(t_render *render, t_worker *worker)
 	tile = &worker->tile;
 	manager_copy_tile_pixels(render, tile);
 	bitmap_set(&mgr->tileset.tile_state, tile->tile_id);
-	mgr->tileset.tiles_done++;
 	mgr->tileset.tiles_active--;
+	mgr->tileset.tiles_ready++;
 	atomic_store(&worker->worker_state, WORKER_IDLE); 
 }
 

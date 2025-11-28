@@ -1,6 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ren_dispatch.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/27 19:35:23 by kearmand          #+#    #+#             */
+/*   Updated: 2025/11/28 16:34:18 by kearmand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdint.h>
 #include <limits.h>	
 #include "render.h"
+
 
 static int	gcd_int(int left, int right)
 {
@@ -54,10 +67,8 @@ static int	dispatch(int tile_count)
 
 int manager_dispatch_tile(t_tileset *tileset)
 {
-	int	tile_id;
-
-	if (tileset->tiles_done + tileset->tiles_active >= tileset->tiles_total)
+	if (tileset->tiles_done + tileset->tiles_active + tileset->tiles_ready >= tileset->tiles_total)
 		return (-1);
 	else
-	return (dispatch(tileset->tiles_total));
+		return (dispatch(tileset->tiles_total));
 }

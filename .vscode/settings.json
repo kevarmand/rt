@@ -31,6 +31,8 @@
 		"rt_config.h": "c",
 		"display.h": "c",
 		"engine.h": "c",
-		"bitmap.h": "c"
+		"bitmap.h": "c",
+		"mlx.h": "c",
+		"pthread.h": "c"
 	}
 }

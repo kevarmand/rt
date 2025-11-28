@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/25 20:38:59 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/25 20:43:30 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/28 10:39:43 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 #include <stdlib.h>
 #include "bitmap.h"
+#include "errors.h"
 
 int	bitmap_init(t_bitmap *bmp, int bit_count)
 {
@@ -27,14 +28,14 @@ int	bitmap_init(t_bitmap *bmp, int bit_count)
 	bmp->word_count = word_count;
 	bmp->words = malloc(sizeof(uint64_t) * word_count);
 	if (bmp->words == NULL)
-		return (0);
+		return (ERR_MALLOC);
 	index = 0;
 	while (index < word_count)
 	{
 		bmp->words[index] = 0;
 		index++;
 	}
-	return (1);
+	return (0);
 }
 
 void	bitmap_destroy(t_bitmap *bmp)

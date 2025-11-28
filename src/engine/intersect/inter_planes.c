@@ -6,15 +6,16 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 21:35:35 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/22 14:45:06 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/28 15:03:25 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "engine.h"
 #include "scene.h"
 #include <math.h>
+#include <stdio.h>
 
-int inter_plane(t_plane *plane, const t_ray *ray, float *out_distance)
+int inter_plane(const t_plane *plane, const t_ray *ray, float *out_distance)
 {
 	float	denom;
 	float	numerator;
@@ -28,5 +29,6 @@ int inter_plane(t_plane *plane, const t_ray *ray, float *out_distance)
 	if (t <= 0.0f)
 		return (0);
 	*out_distance = t;
+	// printf("plane hit at t=%f\n", t);
 	return (1);
 }

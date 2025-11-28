@@ -6,9 +6,11 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/29 18:36:20 by karmand           #+#    #+#             */
-/*   Updated: 2025/11/22 14:39:37 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/28 18:36:41 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include <math.h>
 
 double	equa_premier(double a, double b)
 {
@@ -48,3 +50,4 @@ double	equa_second(double a, double b, double c)
 		return (x2);
 	return (-1.0);
 }
+

@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 15:10:50 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/23 19:22:21 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/27 20:22:41 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 # include "engine.h"
 # include "display.h"
 //# include "ui.h"
-
 
 typedef struct s_data
 {
@@ -35,46 +34,22 @@ typedef struct s_data
  */
 int		check_args(int argc, char **argv);
 
+/***
+ * load a scene from a .rt file
+ * return SUCCESS if ok, error code otherwise
+ * @param path path to the .rt file
+ * @param out_scene pointer to the scene to fill
+ * @return int
+ */
 int		load_scene(const char *path, t_scene *out_scene);
+
+/***
+ * run the main application loop
+ * return SUCCESS if ok, error code otherwise
+ * @param data pointer to the main data structure
+ * @return int
+ */
 int		run_app(t_data *data);
 
-void	free_scene(t_scene *scene);
+void	free_data(t_data *data);
 #endif
-
-
-////////a suprimer :
-
-typedef struct s_data
-{
-	t_scene		scene;
-	t_engine	engine;
-	t_display	display;
-}	t_data;
-
-//cette partie est ok pour l'instant
-typedef struct s_button
-{
-	int		x;           
-	int		y;
-	int		width;
-	int		height;
-	int		label;
-	char	*txt;
-	int		color_bg;
-	int		color_txt;
-	void	(*on_click)(t_data *data); // action à effectuer
-}	t_button;
-
-typedef struct s_ui {
-	int		visible;
-	t_image	img;
-	int		x;
-	int		y;
-	int		dragging;
-	int		drag_offset_x;
-	int		drag_offset_y;
-	t_button	buttons[MAX_UI_BUTTONS]; // tableau de boutons
-	int		button_count;
-}	t_ui;
-
-

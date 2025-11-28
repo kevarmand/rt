@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 17:46:18 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/23 18:12:10 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/28 10:38:43 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,174 +18,147 @@
 #include "vector.h"
 #include "rt_config.h"
 
-
-static int	round_up_div(int n, int tile)
+static void	render_init_struct(t_render *render, int width, int height)
 {
-	return ((n + tile - 1) / tile);
+	memset(render, 0, sizeof(t_render));
+	render->width = width;
+	render->height = height;
+	atomic_store(&render->cancel_flag, 0);
 }
 
-static int	render_compute_worker_count(void)
+/* ---------- Helper 2 : allocate HDR + RGB main buffers ---------- */
+
+static int	render_init_main_buffers(t_render *render)
+{
+	int		total_pixels;
+	size_t	bytes_hdr;
+	size_t	bytes_rgb;
+
+	total_pixels = render->width * render->height;
+	if (total_pixels <= 0)
+		return (ERR_INTERNAL);
+	bytes_hdr = (size_t)total_pixels * sizeof(t_vec3f);
+	bytes_rgb = (size_t)total_pixels * sizeof(int);
+	render->manager.hdr_buffer = malloc(bytes_hdr);
+	if (!render->manager.hdr_buffer)
+		return (ERR_MALLOC);
+	memset(render->manager.hdr_buffer, 0, bytes_hdr);
+	render->manager.rgb_buffer = malloc(bytes_rgb);
+	if (!render->manager.rgb_buffer)
+		return (ERR_MALLOC);
+	memset(render->manager.rgb_buffer, 0, bytes_rgb);
+	return (SUCCESS);
+}
+
+/* ---------- Helper 3 : init mailbox buffers ---------- */
+
+static int	render_init_mailbox(t_render *render)
+{
+	int		total_pixels;
+	size_t	bytes_rgb;
+
+	total_pixels = render->width * render->height;
+	bytes_rgb = (size_t)total_pixels * sizeof(int);
+	render->mailbox.rgb_pixels = malloc(bytes_rgb);
+	if (!render->mailbox.rgb_pixels)
+		return (ERR_MALLOC);
+	memset(render->mailbox.rgb_pixels, 0, bytes_rgb);
+	atomic_store(&render->mailbox.snapshot_ready, 0);
+	atomic_store(&render->mailbox.request_ready, 0);
+	return (SUCCESS);
+}
+
+/* ---------- Helper 4 : allocate worker array ---------- */
+
+static int render_compute_worker_count(void)
 {
 	if (MAX_WORKER_THREADS < 1)
 		return (0);
 	return (MAX_WORKER_THREADS);
 }
 
-static void	render_set_defaults(t_render *render, const t_engine *engine)
-{
-	render->width = engine->width;
-	render->height = engine->height;
-	render->workers = NULL;
-	render->worker_count = render_compute_worker_count();
-	render->tiles_bitmap = NULL;
-	render->tiles_total = 0;
-	atomic_store(&render->tiles_dispatched, 0);
-	atomic_store(&render->tiles_done, 0);
-	render->rgb_front = NULL;
-	render->rgb_back = NULL;
-	atomic_store(&render->rgb_ready, 0);
-	atomic_store(&render->rgb_busy, 0);
-	render->manager_created = 0;
-	atomic_store(&render->cancel_flag, 0);
-}
-
-static int	init_one_worker(t_worker *worker)
-{
-	size_t	count;
-	size_t	bytes;
-
-	worker->thread_id = 0;
-	atomic_store(&worker->has_job, 0);
-	worker->tile.id = -1;
-	worker->tile.x = 0;
-	worker->tile.y = 0;
-	atomic_store(&worker->tile.is_done, 1);
-	count = (size_t)TILE_SIZE * (size_t)TILE_SIZE;
-	bytes = count * sizeof(t_vec3f);
-	worker->tile.hdr_pixels = malloc(bytes);
-	if (!worker->tile.hdr_pixels)
-		return (ERR_MALLOC);
-	memset(worker->tile.hdr_pixels, 0, bytes);
-	return (SUCCESS);
-}
-
 static int	render_init_workers(t_render *render)
 {
-	int		i;
-	int		status;
-
-	if (render->worker_count <= 0)
-		return (SUCCESS);
-	render->workers = malloc(sizeof(t_worker) * render->worker_count);
-	memset(render->workers, 0, sizeof(t_worker) * render->worker_count);
-	if (!render->workers)
-		return (ERR_MALLOC);
-	i = 0;
-	while (i < render->worker_count)
-	{
-		status = init_one_worker(&render->workers[i]);
-		if (status != SUCCESS)
-			return (status);
-		i++;
-	}
-	return (SUCCESS);
-}
-
-
-static int	render_init_tiles_bitmap(t_render *render)
-{
-	int			gw;
-	int			gh;
-	int			words;
-	size_t		bytes;
-
-	gw = round_up_div(render->width, TILE_SIZE);
-	gh = round_up_div(render->height, TILE_SIZE);
-	render->tiles_total = gw * gh;
-	if (render->tiles_total <= 0)
-		return (ERR_INTERNAL);
-	words = (render->tiles_total + 63) / 64;
-	bytes = (size_t)words * sizeof(uint64_t);
-	render->tiles_bitmap = malloc(bytes);
-	if (!render->tiles_bitmap)
-		return (ERR_MALLOC);
-	memset(render->tiles_bitmap, 0, bytes);
-	atomic_store(&render->tiles_dispatched, 0);
-	atomic_store(&render->tiles_done, 0);
-	return (SUCCESS);
-}
-
-int	render_init_threads(t_render *render, void *thread_arg)
-{
-	int		worker_index;
-	int		status;
-
-	render->workers_created = 0;
-	render->manager_created = 0;
-	atomic_store(&render->cancel_flag, 0);
-
-	if (render->worker_count <= 0)
-		return (SUCCESS);
-
-	worker_index = 0;
-	while (worker_index < render->worker_count)
-	{
-		status = pthread_create(&render->workers[worker_index].thread_id,
-				NULL, worker_thread, thread_arg);
-		if (status != 0)
-			return (ERR_THREAD);
-		render->workers_created++;
-		worker_index++;
-	}
-	status = pthread_create(&render->manager_thread,
-			NULL, manager_thread, thread_arg);
-	if (status != 0)
-		return (ERR_THREAD);
-	render->manager_created = 1;
-	return (SUCCESS);
-}
-
-
-static int	render_init_rgb_buffers(t_render *render)
-{
-	int		pixels;
+	int		worker_count;
 	size_t	bytes;
 
-	pixels = render->width * render->height;
-	if (pixels <= 0)
-		return (ERR_INTERNAL);
-	bytes = (size_t)pixels * 3 * sizeof(int);
-	render->rgb_front = malloc(bytes);
-	if (!render->rgb_front)
+	worker_count = render_compute_worker_count();
+	if (worker_count <= 0)
+		return (SUCCESS);
+	render->workers.count = worker_count;
+	bytes = sizeof(t_worker) * (size_t)worker_count;
+	render->workers.array = malloc(bytes);
+	if (!render->workers.array)
 		return (ERR_MALLOC);
-	render->rgb_back = malloc(bytes);
-	if (!render->rgb_back)
-		return (ERR_MALLOC);
-	memset(render->rgb_front, 0, bytes);
-	memset(render->rgb_back, 0, bytes);
-	atomic_store(&render->rgb_ready, 0);
-	atomic_store(&render->rgb_busy, 0);
+	memset(render->workers.array, 0, bytes);
 	return (SUCCESS);
 }
 
+/* ---------- Helper 5 : allocate worker tile buffers ---------- */
 
+static int	render_init_worker_tiles(t_render *render)
+{
+	int		index;
+	size_t	tile_pixels;
+	size_t	bytes;
 
+	tile_pixels = (size_t)TILE_SIZE * (size_t)TILE_SIZE;
+	bytes = tile_pixels * sizeof(t_vec3f);
+	index = 0;
+	while (index < render->workers.count)
+	{
+		render->workers.array[index].tile.hdr_pixels = malloc(bytes);
+		if (!render->workers.array[index].tile.hdr_pixels)
+			return (ERR_MALLOC);
+		memset(render->workers.array[index].tile.hdr_pixels, 0, bytes);
+		atomic_store(&render->workers.array[index].worker_state, WORKER_IDLE);
+		index++;
+	}
+	return (SUCCESS);
+}
 
-int	render_init(t_render *render, const t_engine *engine)
+/* ---------- Helper 6 : init tileset ---------- */
+
+static int	render_init_tileset(t_render *render)
+{
+	t_tileset	*tileset;
+
+	tileset = &render->manager.tileset;
+	tileset->tile_width = TILE_SIZE;
+	tileset->tile_height = TILE_SIZE;
+	tileset->tiles_per_row = (render->width + TILE_SIZE - 1) / TILE_SIZE;
+	tileset->tiles_per_col = (render->height + TILE_SIZE - 1) / TILE_SIZE;
+	tileset->tiles_total = tileset->tiles_per_row * tileset->tiles_per_col;
+	if (tileset->tiles_total <= 0)
+		return (ERR_INTERNAL);
+	if (bitmap_init(&tileset->tile_state, tileset->tiles_total) != SUCCESS)
+		return (ERR_MALLOC);
+	tileset->tiles_active = 0;
+	tileset->tiles_done = 0;
+	return (SUCCESS);
+}
+
+int	render_init(t_render *render, int width, int height)
 {
 	int	status;
 
-	memset(render, 0, sizeof(t_render));
-	render_set_defaults(render, engine);
+	render_init_struct(render, width, height);
+	status = render_init_main_buffers(render);
+	if (status != SUCCESS)
+		return (status);
+	status = render_init_mailbox(render);
+	if (status != SUCCESS)
+		return (status);
 	status = render_init_workers(render);
 	if (status != SUCCESS)
 		return (status);
-	status = render_init_tiles_bitmap(render);
+	status = render_init_worker_tiles(render);
 	if (status != SUCCESS)
 		return (status);
-	status = render_init_rgb_buffers(render);
+	status = render_init_tileset(render);
 	if (status != SUCCESS)
 		return (status);
-	status = render_init_threads(render, (void *)engine);
-    return (status);
+	render->manager.render_in_progress = 0;
+	render->manager.thread_id = 0;
+	return (SUCCESS);
 }

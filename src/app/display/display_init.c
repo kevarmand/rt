@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 18:42:36 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/23 20:40:56 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/27 21:47:24 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,11 @@
 #include "rt_config.h"
 #include "new_rt.h"
 #include "engine.h"
+#include "app.h"
+#include <X11/X.h>
+#include <stdlib.h>
+#include "libft.h"
+
 
 static int	init_core(t_display *display, int width, int height)
 {
@@ -45,29 +50,90 @@ static int	init_core(t_display *display, int width, int height)
 	display->main_img.height = height;
 	return (SUCCESS);
 }
+int ft_exit(void *param)
+{
+	t_data *data;
+	
+	data = (t_data *)param;
+	mlx_loop_end(data->display.mlx);
+	return (0);
+}
 
 static int	init_loop(t_display *display, t_data *data)
 {
-	mlx_hook(data->win_ptr, 33, StructureNotifyMask, &ft_exit, data);
-	mlx_key_hook(data->win_ptr, &key_hook, data);
-	mlx_loop_hook(data->mlx_ptr, &frame_tick, data);
-	mlx_hook(data->win_ptr, 4, 1L << 2, mouse_press, data);      // ButtonPress
-	mlx_hook(data->win_ptr, 5, 1L << 3, mouse_release, data);    // ButtonRelease
-	mlx_hook(data->win_ptr, 6, 1L << 6, mouse_move, data);       // MotionNotify
-	
+	//mlx_hook(display->win, 33, StructureNotifyMask, &ft_exit, data);
+	mlx_hook(display->win, DestroyNotify, 0, ft_exit, data);
+	mlx_key_hook(display->win, &key_hook, data);
+	mlx_loop_hook(display->mlx, &frame_tick, data);
+	mlx_hook(display->win, 4, 1L << 2, mouse_press, data);
+	mlx_hook(display->win, 5, 1L << 3, mouse_release, data);
+	mlx_hook(display->win, 6, 1L << 6, mouse_move, data);
 	return (SUCCESS);
 }
 
-int	display_init(t_display *display, t_data *data))
+static int	display_init_frames(t_display *display, const t_scene *scene)
+{
+	int		index;
+	int		camera_count;
+	size_t	bytes;
+
+	camera_count = scene->camera_count;
+	display->total_cams = camera_count;
+	display->frame = malloc(sizeof(t_frame) * (size_t)camera_count);
+	if (!display->frame)
+		return (ERR_MALLOC);
+	bytes = sizeof(int) * (size_t)display->pixel_count;
+	index = 0;
+	while (index < camera_count)
+	{
+		display->frame[index].rgb_pixels = malloc(bytes);
+		if (!display->frame[index].rgb_pixels)
+			return (ERR_MALLOC);
+		ft_memset(display->frame[index].rgb_pixels, 0, bytes);
+		display->frame[index].is_dirty = 1;
+		index++;
+	}
+	display->current_cam = 0;
+	display->cam_to_render = -1;
+	display->flag_camera_changed = 1;
+	return (SUCCESS);
+}
+
+static void	display_reset_struct(t_display *display, int pixel_count)
+{
+	ft_memset(display, 0, sizeof(t_display));
+	display->pixel_count = pixel_count;
+	display->flag_img = 1;
+	display->flag_ui = 1;
+}
+
+static int	display_alloc_pixels(t_display *display)
+{
+	size_t	bytes;
+
+	bytes = sizeof(int) * (size_t)display->pixel_count;
+	display->display_pixels = malloc(bytes);
+	if (!display->display_pixels)
+		return (ERR_MALLOC);
+	ft_memset(display->display_pixels, 0, bytes);
+	return (SUCCESS);
+}
+
+int	display_init(t_display *display, t_data *data)
 {
 	int	status;
-	memset(display, 0, sizeof(t_display));
-	status  = init_core(display, data->engine.width, data->engine.height);
-	if (status != SUCCESS)
-		return (status);
-	status = init_loop(display, data);
-	if (status != SUCCESS)
-		return (status);
-	status = ui_init(&display->ui, display->mlx, display->win, data->engine.width, data->engine.height);
+	int	pixel_count;
+
+	pixel_count = data->engine.width * data->engine.height;
+	display_reset_struct(display, pixel_count);
+	status = init_core(display, data->engine.width, data->engine.height);
+	if (status == SUCCESS)
+		status = display_alloc_pixels(display);
+	// if (status == SUCCESS)
+	// 	status = ui_init(display);
+	if (status == SUCCESS)
+		status = display_init_frames(display, &data->scene);
+	if (status == SUCCESS)
+		status = init_loop(display, data);
 	return (status);
 }

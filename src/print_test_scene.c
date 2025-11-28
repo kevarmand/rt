@@ -54,19 +54,89 @@ void print_lights(const t_scene *scene)
 		printf("  color=(%.3f,%.3f,%.3f)\n", light->color[0], light->color[1], light->color[2]);
 	}
 }
-
-void print_objects(const t_scene *scene)
+//on va afficher un peu plus de donnee
+static void	print_vec3(const char *label, t_vec3f v)
 {
-	int i;
+	printf("  %s=(%.6f,%.6f,%.6f)\n", label, v.x, v.y, v.z);
+}
+
+static void	print_prim_sphere(const t_sphere *sp)
+{
+	printf("  kind=sphere\n");
+	print_vec3("center", sp->center);
+	printf("  radius=%.6f diameter=%.6f\n",
+		sp->radius, sp->radius * 2.0f);
+}
+
+static void	print_prim_triangle(const t_triangle *tr)
+{
+	t_vec3f	v1;
+	t_vec3f	v2;
+
+	v1 = vec3f_add(tr->v0, tr->edge1);
+	v2 = vec3f_add(tr->v0, tr->edge2);
+	printf("  kind=triangle\n");
+	print_vec3("v0", tr->v0);
+	print_vec3("v1", v1);
+	print_vec3("v2", v2);
+}
+
+static void	print_prim_cylinder(const t_cylinder *cy)
+{
+	printf("  kind=cylinder\n");
+	print_vec3("base", cy->base);
+	print_vec3("axis", cy->axis);
+	printf("  height=%.6f radius=%.6f\n",
+		cy->height, cy->radius);
+}
+
+static void	print_prim_torus(const t_torus *to)
+{
+	printf("  kind=torus\n");
+	print_vec3("center", to->center);
+	printf("  R=%.6f r=%.6f\n", to->R, to->r);
+}
+
+static void	print_prim_plane(const t_plane *pl)
+{
+	printf("  kind=plane\n");
+	print_vec3("normal", pl->normal);
+	printf("  d=%.6f\n", pl->d);
+}
+
+static void	print_primitive_details(const t_primitive *primitive)
+{
+	if (primitive->type == PRIM_SPHERE)
+		print_prim_sphere(&primitive->sp);
+	else if (primitive->type == PRIM_TRIANGLE)
+		print_prim_triangle(&primitive->tr);
+	else if (primitive->type == PRIM_CYLINDER)
+		print_prim_cylinder(&primitive->cy);
+	else if (primitive->type == PRIM_TORUS)
+		print_prim_torus(&primitive->to);
+	else if (primitive->type == PRIM_PLANE)
+		print_prim_plane(&primitive->pl);
+}
+
+void	print_objects(const t_scene *scene)
+{
+	int				index;
+	const t_primitive	*primitive;
 
 	printf("objects (%d)\n", scene->primitive_count);
-	for (i = 0; i < scene->primitive_count; i++)
+	index = 0;
+	while (index < scene->primitive_count)
 	{
-		const t_primitive *obj = &scene->primitives[i];
-		printf("- object[%d]\n", i);
-		printf("  primitive_type=%d\n", obj->type);
+		primitive = &scene->primitives[index];
+		printf("- object[%d]\n", index);
+		printf("  primitive_type=%d\n", primitive->type);
+		printf("  material_id=%d surface_id=%d\n",
+			primitive->material_id, primitive->surface_id);
+		print_primitive_details(primitive);
+		index++;
 	}
 }
+
 
 void print_plane(const t_scene *scene)
 {
@@ -76,6 +146,8 @@ void print_plane(const t_scene *scene)
 	for (i = 0; i < scene->plane_count; i++)
 	{
 		const t_primitive *plane = &scene->planes[i];
+			printf("  material_id=%d surface_id=%d\n",
+			plane->material_id, plane->surface_id);
 		printf("- plane[%d]\n", i);
 		printf("  primitive_type=%d\n", plane->type);
 	}
@@ -90,5 +162,9 @@ void print_scene(const t_scene *scene)
 	print_lights(scene);
 	print_objects(scene);
 	print_plane(scene);
+	printf("number of surfaces: %d\n", scene->surface_count);
+	printf("number of materials: %d\n", scene->material_count);
+	printf("number of textures: %d\n", scene->texture_count);
+	
 	printf("====================\n");
 }

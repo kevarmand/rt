@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   engine.init.c                                      :+:      :+:    :+:   */
+/*   engine_init.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 13:04:56 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/23 15:32:46 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/27 20:28:54 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,18 +24,16 @@ static void	engine_set_defaults(t_engine *engine, const t_scene *scene)
 	engine->samples_per_pixel = 1;
 }
 
-int	engine_init(t_engine *engine, const t_scene *scene)
+int	engine_init(t_engine *engine, t_scene *scene)
 {
 	int	status;
 	
 	engine_set_defaults(engine, scene);
-	status = init_cam_views(engine, scene);
-	if (status != SUCCESS)
-		return (status);
+	init_cam_views(scene);
+	
+	//petite place pour le BVH ICI TODO:NOAH
 
-	//petite place pour le BVH ICI
-
-	status = render_init(&engine->render, engine);
+	status = render_init(&engine->render, engine->width, engine->height);
 	if (status != SUCCESS)
 		return (status);
 

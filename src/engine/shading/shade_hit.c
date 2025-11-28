@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 21:21:27 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/22 17:57:05 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/28 19:16:03 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	shade_hit(const t_scene *scene, const t_hit *hit, t_vec3f *color_out)
 	//On ajouter la part ambiante
 	shade_ambient(scene, hit, &color); //Normalement ok ( mais possible davoirbesoin de , scene)
 	//On ajoute la part diffuse et spéculaire pour chaque lumière
-	shade_lights(scene, hit, &color);
+	//shade_lights(scene, hit, &color);
 	
 	// shade_Beer_Lambert(scene, hit, &color); <= not implemented yet
 

@@ -33,7 +33,7 @@ int	copy_sphere_to_primitive(const t_parsed_element *src, t_primitive *dst)
 	return (SUCCESS);
 }
 
-int	conv_cylinder_to_primitive(const t_parsed_element *src, t_primitive *dst)
+int	copy_cylinder_to_primitive(const t_parsed_element *src, t_primitive *dst)
 {
 	t_vec3f	center;
 	t_vec3f	axis;

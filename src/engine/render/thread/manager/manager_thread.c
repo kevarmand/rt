@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 22:04:44 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/26 18:38:31 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/28 14:05:35 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,10 @@
 #include <unistd.h>
 #include "engine.h"
 #include "manager.h"
-
+#include "errors.h"
 #include "new_rt.h"
-//je commence comme toi :
+#include <stdlib.h>
+
 
 typedef struct s_manager_args
 {
@@ -28,23 +29,23 @@ typedef struct s_manager_args
 	atomic_int	*cancel_flag;
 }	t_manager_args;
 
-static void	manager_idle(t_data *data, t_render *render)
+static void	manager_idle(t_render *render)
 {
-	if (manager_apply_cam_request(data, render))
+	if (manager_read_mailbox(render))
 		return ;
 	usleep(200);
 }
-
-static void manager_loop(t_render *render, t_data *data, atomic_int *cancel_flag,t_mgr *manager)
+#include <stdio.h>
+static void manager_loop(t_render *render, atomic_int *cancel_flag,t_mgr *manager)
 {
 	int		has_work;
 
-	has_work = 0;
 	while (atomic_load(cancel_flag) == 0)
 	{
+		has_work = 0;
 		if(manager->render_in_progress == 0)
 		{
-			manager_idle(data, render);
+			manager_idle(render);
 			continue ;
 		}
 		has_work |= manager_collect_tiles(render);
@@ -61,7 +62,7 @@ static void manager_loop(t_render *render, t_data *data, atomic_int *cancel_flag
 	}
 }
 
-void	*manager_thread_main(void *arg)
+void	*manager_thread(void *arg)
 {
 	t_manager_args	*args;
 	t_data			*data;
@@ -74,7 +75,26 @@ void	*manager_thread_main(void *arg)
 	render = &data->engine.render;
 	manager = args->manager;
 	cancel_flag = args->cancel_flag;
-	manager_loop(render, data, cancel_flag, manager);
+	manager_loop(render, cancel_flag, manager);
 	return (NULL);
 }
 
+int		manager_thread_start(t_data *data)
+{
+	t_manager_args	*args;
+
+	args = malloc(sizeof(t_manager_args));
+	if (args == NULL)
+		return (ERR_MALLOC);
+	args->data = data;
+	args->manager = &data->engine.render.manager;
+	args->cancel_flag = &data->engine.render.cancel_flag;
+	if (pthread_create(&data->engine.render.manager.thread_id,
+			NULL, manager_thread, args) != 0)
+	{
+		free(args);
+		return (ERR_THREAD_CREATE);
+	}
+	return (SUCCESS);
+}
+	

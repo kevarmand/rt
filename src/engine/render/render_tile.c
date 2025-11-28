@@ -6,8 +6,7 @@
 #include "new_rt.h"
 #include "errors.h"
 
-#include "rt.h"
-
+#include <stdio.h>
 static void	build_ray_for_pixel(const t_render_view *view,
 			int img_x, int img_y, t_ray *ray)
 {
@@ -32,7 +31,8 @@ static int	calcul_pixel_color(t_data *data, const t_render_view *view,
 	t_ray	ray;
 
 	build_ray_for_pixel(view, img_x, img_y, &ray);
-	return (shade_ray(&data->scene, &ray, out_color));
+	shading_ray(&data->scene, &ray, out_color);
+	return (SUCCESS);
 }
 
 int	render_tile(t_data *data, t_tile *tile, const t_render_view *view)
@@ -60,4 +60,3 @@ int	render_tile(t_data *data, t_tile *tile, const t_render_view *view)
 	}
 	return (SUCCESS);
 }
-

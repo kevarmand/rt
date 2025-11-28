@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 18:08:04 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/26 15:24:17 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/28 19:08:26 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 #include "vector.h"
 #include "scene.h"
 #include "render.h"
-
-
 
 typedef struct s_engine
 {
@@ -33,7 +31,6 @@ typedef struct s_engine
 
 	t_render		render;
 }	t_engine;
-
 
 typedef struct s_ray {
 	t_vec3f	origin;
@@ -53,6 +50,8 @@ typedef struct s_hit {
 	t_vec3f		point;
 	t_vec3f		normal;
 	int			primitive_id;
+	int			surface_id;
+	int			material_id;
 }	t_hit;
 
 typedef struct s_scene t_scene;
@@ -80,6 +79,8 @@ int	inter_cylinder(const t_cylinder *cylinder, const t_ray *ray, float *dist);
 int	inter_triangle(const t_triangle *triangle, const t_ray *ray, float *dist);
 
 int	inter_torus(const t_torus *torus, const t_ray *ray, float *dist);
+int	inter_primitive(const t_primitive *primitive,
+			const t_ray *ray, float *out_distance);
 
 int	scene_is_occluded(const t_scene *scene, const t_ray *ray, float max_dist);
 
@@ -88,13 +89,42 @@ int	scene_is_occluded(const t_scene *scene, const t_ray *ray, float max_dist);
 /* ************************************************************************** */
 
 
-int	shading_ray(const t_scene *scene, t_ray *ray, t_vec3f *color_out);
+int	shading_ray(const t_scene *scene, const t_ray *ray, t_vec3f *color_out);
 
-int	shade_hit(const t_scene *scene, t_hit *hit, t_vec3f *color_out);
+int	shade_hit(const t_scene *scene, const t_hit *hit, t_vec3f *color_out);
 
 void	shade_lights(const t_scene *scene, const t_hit *hit, t_vec3f *color);
 void	hit_build_geometry(const t_scene *scene, const t_ray *ray, t_hit *hit);
 
 void	shade_ambient(const t_scene *scene, const t_hit *hit, t_vec3f *color);
+
+/* ************************************************************************** */
+/*							ENGINE       									  */
+/* ************************************************************************** */
+
+/***
+ * Initialize the engine structure
+ * return SUCCESS if ok, error code otherwise
+ * @param engine pointer to the engine structure
+ * @param scene pointer to the scene structure
+ * @return 0 on SUCCESS, error code otherwise
+ */
+int		engine_init(t_engine *engine, t_scene *scene);
+
+/***
+ *calculate the rigight vectors for each camera in the scene
+ * return SUCCESS if ok, error code otherwise
+ * @param engine pointer to the engine structure
+ * @return 0 on SUCCESS, error code otherwise
+ */
+void		init_cam_views(t_scene *scene);
+
+/***
+ * Start the rendering threads
+ * return SUCCESS if ok, error code otherwise
+ * @param engine pointer to the engine structure
+ * @return 0 on SUCCESS, error code otherwise
+ */
+int		engine_start_threads(t_data *data);
 
 #endif

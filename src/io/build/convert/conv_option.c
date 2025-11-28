@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/06 10:40:46 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/21 09:28:05 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/28 17:25:57 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include "libft.h"
 #include "scene.h"
 #include "convert.h"
-
+#include <stdio.h>
 int	conv_option_primitive(t_primitive *prim, t_element_options *opt,
 			t_conv_ctx *cx, int *color)
 {
@@ -33,6 +33,8 @@ int	conv_option_primitive(t_primitive *prim, t_element_options *opt,
 	if (intern_surface(cx, opt, &surf_id, color) != SUCCESS)
 		return (ERR_MALLOC);
 	prim->material_id = mat_id;
+	printf("Material ID: %d\n", prim->material_id);
 	prim->surface_id = surf_id;
+	printf("Surface ID: %d\n", prim->surface_id);
 	return (SUCCESS);
 }

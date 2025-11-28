@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 15:04:24 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/22 16:50:14 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/28 17:57:51 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ static void	shade_one_light(const t_scene *scene,
 	t_vec3f				tmp;
 
 	primitive = &scene->primitives[hit->primitive_id];
-	material = &scene->materials[primitive->material_id];
-	surface = &scene->surfaces[primitive->surface_id];
+	material = &scene->materials[hit->material_id];
+	surface = &scene->surfaces[hit->surface_id];
 	light = &scene->lights[light_index];
 	light_vec = vec3f_sub(light->position, hit->point);
 	light_dist = vec3f_length(light_vec);
@@ -44,11 +44,11 @@ static void	shade_one_light(const t_scene *scene,
 	if (scene_is_occluded(scene, &shadow_ray, light_dist))
 		return ;
 	ndotl = vec3f_dot(hit->normal, light_dir);
-	if (ndotl <= 0.0f)
+	if (ndotl <= 0.0001f)
 		return ;
 	tmp = vec3f_mul(surface->color, light->color);
 	tmp = vec3f_scale(tmp, material->diffuse
-			* light->intensity * ndotl);
+	 		* light->intensity * ndotl);
 	*color = vec3f_add(*color, tmp);
 }
 

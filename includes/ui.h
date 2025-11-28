@@ -2,7 +2,6 @@
 #ifndef UI_H
 # define UI_H
 
-# include "type.h"
 # include "ui_settings.h"
 
 
