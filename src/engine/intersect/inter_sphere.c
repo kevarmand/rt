@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 14:43:12 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/28 19:30:51 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/29 11:31:29 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,11 @@ int	inter_sphere(const t_sphere *sphere,
 	float	coef_a;
 	float	coef_b;
 	float	coef_c;
-	float	solution_t;
+	double	solution_t;
 
 	offset = vec3f_sub(ray->origin, sphere->center);
 	coef_a = vec3f_dot(ray->dir, ray->dir);
-	coef_b = -2.0 * vec3f_dot(offset, ray->dir);
+	coef_b = 2.0 * vec3f_dot(offset, ray->dir);
 	coef_c = vec3f_dot(offset, offset)
 		- (sphere->radius * sphere->radius);
 	solution_t = equa_second(coef_a, coef_b, coef_c);

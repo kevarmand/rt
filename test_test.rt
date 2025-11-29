@@ -1,66 +1,34 @@
 # Ambient
 A 0.2 255,255,255
 
-# Camera : position (0, 1, 5) regardant vers l'origine, FOV 60°
-C 0,1,5 0,0,-1 60
+# Camera : position (0, 2, 12) regardant vers l'origine
+C 0,2,12  0,0,-1  60
 
-# Lumière : un peu au-dessus à droite
-L 3,4,2 0.9 255,255,255
+# Lumière blanche au-dessus à droite
+L 3,6,3  0.9  255,255,255
 
-# Plan "sol" : y = 0, normal (0,1,0)
-pl 0,0,0 0,1,0 120,120,120
+# Sol gris
+pl 0,0,0  0,1,0  120,120,120
 
-# Triangle centré devant la caméra, légèrement au-dessus du sol (y = 0.2)
-# V0 au centre, V1 gauche, V2 droite
-tr 0,1,0   -0.7,0.5,1.0   0.7,0.2,1.0   255,140,0
 
-# Sphere rouge au-dessus du plan
-sp 2,1,0 1 255,0,0
+###############################
+#   BANDE TEST SPECULAIRE     #
+###############################
 
-sp 0,1,0 0.5 255,255,0
+# 1. Mat total (ks = 0)
+sp -5,1,0  1  200,50,50  diffuse=1  specular=0 shininess=32
 
-# Sphere bleue en dessous du plan
-sp -2,-1,0 1 0,0,255
+# 2. Plastique mat (ks = 0.2)
+sp -3,1,0  1  200,200,50  diffuse=1  specular=0.2  shininess=16
 
-# Cylinder vert debout à gauche
-cy -4,0,0 0,1,0 0.5 2 0,255,0
+# 3. Plastique brillant (ks = 0.4)
+sp -1,1,0  1  50,200,50  diffuse=1  specular=0.4  shininess=32
 
-########################
-#  12 SPHERES AUTOUR   #
-########################
+# 4. Vernis / laqué (ks = 0.6)
+sp 1,1,0  1  50,200,200  diffuse=1  specular=0.6  shininess=64
 
-# Devant
-sp 0,1,2     1.5  255,0,0
+# 5. Acier poli (ks = 0.8)
+sp 3,1,0  1  50,50,200  diffuse=1  specular=0.8  shininess=128
 
-# Derrière
-sp 0,1,8     1.5  0,255,0
-
-# Gauche
-sp -3,1,5    1.5  0,0,255
-
-# Droite
-sp 3,1,5     1.5  255,255,0
-
-# Devant-gauche
-sp -2,1,3    1.5  255,0,255
-
-# Devant-droite
-sp 2,1,3     1.5  0,255,255
-
-# Derrière-gauche
-sp -2,1,7    1.5  200,100,0
-
-# Derrière-droite
-sp 2,1,7     1.5  100,200,50
-
-# Haut
-sp 0,3,5     1.5  255,100,100
-
-# Bas
-sp 0,-1,5    1.5  100,255,100
-
-# Avant-haut
-sp 0,3,3     1.5  100,100,255
-
-# Avant-bas
-sp 0,-1,3    1.5  255,150,50
+# 6. Chrome (ks = 1.0)
+sp 5,1,0  1  200,200,200  diffuse=1  specular=1.0  shininess=256

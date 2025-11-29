@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 17:24:31 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/28 19:16:50 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/29 13:14:22 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,6 @@ static void	build_normal_sphere(const t_sphere *sphere,
 {
 	t_vec3f	diff;
 
-	printf("Building normal for sphere at hit point (%f, %f, %f)\n",
-		hit->point.x, hit->point.y, hit->point.z);
 	diff = vec3f_sub(hit->point, sphere->center);
 	*normal = vec3f_normalize(diff);
 }
@@ -90,6 +88,8 @@ void	hit_build_geometry(const t_scene *scene,
 	}
 	else
 		printf("ca pue du cul dans hit_build_geometry\n");
+
+	hit->view_dir = vec3f_scale(ray->dir, -1.0f);
 	hit->normal = normal;
 	if (vec3f_dot(hit->normal, ray->dir) > 0.0f)
 	 	hit->normal = vec3f_scale(hit->normal, -1.0f);

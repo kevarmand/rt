@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 17:33:50 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/21 15:13:13 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/29 13:24:43 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,9 @@ void	init_parsed_element(t_parsed_element *elem)
 	elem->options.ior = 1.0f;
 	elem->options.reflection = 0.0f;
 	elem->options.refraction = 0.0f;
-	elem->options.shininess = 0.0f;
+	elem->options.shininess = 32.0f;
 	elem->options.diffuse_weight = 1.0f;
-	elem->options.specular_weight = 1.0f;
+	elem->options.specular_weight = 0.5f;
 	elem->options.ambient_occlusion = 0.0f;
 	elem->options.uv[0] = 0.0f;
 	elem->options.uv[1] = 0.0f;

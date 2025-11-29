@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 18:08:04 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/28 19:08:26 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/11/29 13:13:04 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ typedef struct s_hit {
 	float		t;
 	t_vec3f		point;
 	t_vec3f		normal;
+	t_vec3f		view_dir;
 	int			primitive_id;
 	int			surface_id;
 	int			material_id;
@@ -66,7 +67,7 @@ typedef struct s_torus t_torus;
 /*								INTERSECTION								  */
 /* ************************************************************************** */
 
-int equa_second(double a, double b, double c);
+double equa_second(double a, double b, double c);
 
 int scene_hit(const t_scene *scene, const t_ray *ray, t_hit *out_hit);
 
@@ -93,7 +94,7 @@ int	shading_ray(const t_scene *scene, const t_ray *ray, t_vec3f *color_out);
 
 int	shade_hit(const t_scene *scene, const t_hit *hit, t_vec3f *color_out);
 
-void	shade_lights(const t_scene *scene, const t_hit *hit, t_vec3f *color);
+void	shade_direct_lights(const t_scene *scene, const t_hit *hit, t_vec3f *color);
 void	hit_build_geometry(const t_scene *scene, const t_ray *ray, t_hit *hit);
 
 void	shade_ambient(const t_scene *scene, const t_hit *hit, t_vec3f *color);
