@@ -29,9 +29,13 @@ static int	calcul_pixel_color(t_data *data, const t_render_view *view,
 			int img_x, int img_y, t_vec3f *out_color)
 {
 	t_ray	ray;
+	t_shading_ctx	ctx;
 
+	ctx.depth = 0;
+	ctx.contribution = 1.0f;
+	ctx.current_ior = 1.0f;
 	build_ray_for_pixel(view, img_x, img_y, &ray);
-	shading_ray(&data->scene, &ray, out_color);
+	shading_ray(&data->scene, &ray, &ctx, out_color);
 	return (SUCCESS);
 }
 

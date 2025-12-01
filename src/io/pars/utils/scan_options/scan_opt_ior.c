@@ -9,7 +9,7 @@ int	scan_opt_ior(t_tok tok, t_element_options *opts)
 
 	if (scan_float(tok, &value))
 		return (ERR_PARS);
-	if (value < 1.0f)
+	if (value < 0.0f)
 		return (ERR_PARS);
 	opts->ior = value;
 	return (SUCCESS);

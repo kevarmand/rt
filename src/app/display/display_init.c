@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 18:42:36 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/27 21:47:24 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/01 14:47:35 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,7 @@ static int	display_alloc_pixels(t_display *display)
 	ft_memset(display->display_pixels, 0, bytes);
 	return (SUCCESS);
 }
+int	load_scene_textures(t_scene *scene,t_display *display);
 
 int	display_init(t_display *display, t_data *data)
 {
@@ -135,5 +136,7 @@ int	display_init(t_display *display, t_data *data)
 		status = display_init_frames(display, &data->scene);
 	if (status == SUCCESS)
 		status = init_loop(display, data);
+	if (status == SUCCESS)
+		status = load_scene_textures(&data->scene, display);
 	return (status);
 }

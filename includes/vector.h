@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:47:11 by norivier          #+#    #+#             */
-/*   Updated: 2025/11/27 21:26:15 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/01 16:29:25 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,6 @@ t_vec3f	vec3f_normalize(t_vec3f a);
 void	vec3f_load3(t_vec3f *dst, const float src[3]);
 float	vec3f_length(t_vec3f a);
 t_vec3f vec3f_mul(t_vec3f a, t_vec3f b);
+t_vec3f proj_on_plane(t_vec3f v, t_vec3f n);
 
 #endif // !VECTOR_H

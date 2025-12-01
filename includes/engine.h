@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 18:08:04 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/29 13:13:04 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/01 17:31:02 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,18 @@ typedef struct s_hit {
 	int			primitive_id;
 	int			surface_id;
 	int			material_id;
+	float		u;
+	float		v;
+	t_vec3f		albedo;
 }	t_hit;
+
+typedef struct s_shading_ctx
+{
+	int		depth;
+	float	current_ior;
+	float	contribution;
+}	t_shading_ctx;
+
 
 typedef struct s_scene t_scene;
 typedef struct s_primitive t_primitive;
@@ -90,14 +101,23 @@ int	scene_is_occluded(const t_scene *scene, const t_ray *ray, float max_dist);
 /* ************************************************************************** */
 
 
-int	shading_ray(const t_scene *scene, const t_ray *ray, t_vec3f *color_out);
+int	shading_ray(const t_scene *scene, const t_ray *ray, 
+	t_shading_ctx *ctx, t_vec3f *color_out);
 
-int	shade_hit(const t_scene *scene, const t_hit *hit, t_vec3f *color_out);
+int	shade_hit(const t_scene *scene, const t_hit *hit, t_shading_ctx *ctx, t_vec3f *color_out);
 
 void	shade_direct_lights(const t_scene *scene, const t_hit *hit, t_vec3f *color);
 void	hit_build_geometry(const t_scene *scene, const t_ray *ray, t_hit *hit);
 
 void	shade_ambient(const t_scene *scene, const t_hit *hit, t_vec3f *color);
+
+void	shade_reflection(const t_scene *scene,
+			const t_hit *hit, t_shading_ctx *ctx, t_vec3f *color);
+
+void	shade_refraction(const t_scene *scene,
+			const t_hit *hit, t_shading_ctx *ctx, t_vec3f *color);
+
+void	apply_surface_shading(const t_scene *sc, t_hit *hit);
 
 /* ************************************************************************** */
 /*							ENGINE       									  */

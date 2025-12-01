@@ -6,17 +6,33 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 17:24:31 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/29 13:14:22 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/01 19:16:13 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "engine.h"
 #include "scene.h"
 #include <stdio.h>
-static void	build_normal_plane(const t_plane *plane, t_vec3f *normal)
+static void	build_geometry_plane(const t_scene *scene, t_hit *hit)
 {
-	*normal = plane->normal;
+	t_primitive	*prim;
+	t_surface	*surf;
+	t_vec3f		origin;
+	t_vec3f		delta;
+
+	prim = &scene->planes[hit->primitive_id];
+	surf = &scene->surfaces[prim->surface_id];
+	hit->surface_id = prim->surface_id;
+	hit->material_id = prim->material_id;
+	hit->normal = prim->pl.normal;
+	origin = vec3f_scale(prim->pl.normal, -prim->pl.d);
+	delta = vec3f_sub(hit->point, origin);
+	hit->u = vec3f_dot(delta, (t_vec3f){surf->map_uv[0],
+			surf->map_uv[1], surf->map_uv[2]}) / surf->scale_u;
+	hit->v = vec3f_dot(delta, (t_vec3f){surf->map_uv[3],
+			surf->map_uv[4], surf->map_uv[5]}) / surf->scale_v;
 }
+
 
 static void	build_normal_sphere(const t_sphere *sphere,
 			const t_hit *hit, t_vec3f *normal)
@@ -77,7 +93,8 @@ void	hit_build_geometry(const t_scene *scene,
 	{
 		hit->surface_id = scene->planes[hit->primitive_id].surface_id;
 		hit->material_id = scene->planes[hit->primitive_id].material_id;
-		build_normal_plane(&scene->planes[hit->primitive_id].pl, &normal);
+		build_geometry_plane(scene, hit);
+		normal = scene->planes[hit->primitive_id].pl.normal;
 	}
 	else if (hit->kind == HIT_PRIMITIVE)
 	{
@@ -85,6 +102,7 @@ void	hit_build_geometry(const t_scene *scene,
 		hit->material_id = scene->primitives[hit->primitive_id].material_id;
 		primitive = &scene->primitives[hit->primitive_id];
 		build_normal_primitive(primitive, hit, &normal);
+		hit->albedo = scene->surfaces[hit->surface_id].color;
 	}
 	else
 		printf("ca pue du cul dans hit_build_geometry\n");

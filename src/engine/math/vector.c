@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 20:38:58 by norivier          #+#    #+#             */
-/*   Updated: 2025/11/28 19:39:47 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/01 16:28:50 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,3 +130,9 @@ extern inline t_vec3f vec3f_mul(t_vec3f a, t_vec3f b)
     });
 }
 
+
+FORCEINLINE
+extern inline t_vec3f proj_on_plane(t_vec3f v, t_vec3f n)
+{
+	return (vec3f_sub(v, vec3f_scale(n, vec3f_dot(v, n))));
+}

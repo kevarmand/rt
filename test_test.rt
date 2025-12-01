@@ -2,13 +2,13 @@
 A 0.2 255,255,255
 
 # Camera : position (0, 2, 12) regardant vers l'origine
-C 0,2,12  0,0,-1  60
+C 0,2,20  0,0,-1  60
 
 # Lumière blanche au-dessus à droite
 L 3,6,3  0.9  255,255,255
 
 # Sol gris
-pl 0,0,0  0,1,0  120,120,120
+pl 0,0,0  0,1,0  120,120,120 texture=Cat_diffuse.xpm uv=0,0,30
 
 
 ###############################
@@ -32,3 +32,18 @@ sp 3,1,0  1  50,50,200  diffuse=1  specular=0.8  shininess=128
 
 # 6. Chrome (ks = 1.0)
 sp 5,1,0  1  200,200,200  diffuse=1  specular=1.0  shininess=256
+
+#7. try mat with high shininess
+sp 2,3,0  1  150,100,50  diffuse=1  specular=0.9  shininess=512
+
+#8. try shiny with low shininess
+sp -2,3,0  1  50,100,150  diffuse=1  specular=0.3  shininess=8
+
+#9 try de la reflexion un couleur tres metal
+sp 0,3,0 1 80,80,80 diffuse=0.2 specular=0.8 shininess=200 reflection=0.5
+
+#10 try de la reflexion un couleur tres metal
+sp 4,3,0 1 150,150,150 diffuse=0.2 specular=0.8 shininess=300 reflection=0.7
+
+#une goute deau au prmeeir plan
+sp 0,1.2,10 1 50,100,200 ambient=0 diffuse=0 specular=1 shininess=200 ior=1.34 refraction=1 reflection=0.5
