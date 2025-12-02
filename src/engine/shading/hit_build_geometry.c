@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 17:24:31 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/02 18:42:23 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/02 18:53:48 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,27 @@ static void	build_geometry_plane(const t_scene *scene, t_hit *hit)
 	hit->v = vec3f_dot(delta, (t_vec3f){surf->map_uv[3],
 			surf->map_uv[4], surf->map_uv[5]}) / surf->scale_v;
 }
+void	surface_apply_uv_sphere(const t_surface *surface,
+				float base_u, float base_v,
+				float *mapped_u, float *mapped_v)
+{
+	float	raw_u;
+	float	raw_v;
+	float	wrapped_u;
+	float	wrapped_v;
+
+	raw_u = surface->map_uv[0] * base_u
+		+ surface->map_uv[1] * base_v
+		+ surface->map_uv[4];
+	raw_v = surface->map_uv[2] * base_u
+		+ surface->map_uv[3] * base_v
+		+ surface->map_uv[5];
+	wrapped_u = raw_u - floorf(raw_u);
+	wrapped_v = raw_v - floorf(raw_v);
+	*mapped_u = wrapped_u;
+	*mapped_v = wrapped_v;
+}
+
 
 static void build_geometry_sphere(const t_sphere *sphere,
 			t_hit *hit)
@@ -119,8 +140,13 @@ void	hit_build_geometry(const t_scene *scene,
 		hit->surface_id = scene->primitives[hit->primitive_id].surface_id;
 		hit->material_id = scene->primitives[hit->primitive_id].material_id;
 		primitive = &scene->primitives[hit->primitive_id];
-		build_normal_primitive(primitive, hit, &normal);
 		hit->albedo = scene->surfaces[hit->surface_id].color;
+		build_normal_primitive(primitive, hit, &normal);
+		if (primitive->type == PRIM_SPHERE)
+			surface_apply_uv_sphere(
+				&scene->surfaces[hit->surface_id],
+				hit->u, hit->v,
+				&hit->u, &hit->v);
 	}
 	else
 		printf("ca pue du cul dans hit_build_geometry\n");

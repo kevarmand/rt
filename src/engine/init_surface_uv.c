@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 16:31:16 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/02 18:11:08 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/02 19:04:29 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,12 +135,142 @@ static void	init_surface_uv_plane(t_scene *sc, t_surface *s, t_primitive *p)
 	}
 }
 
-// void	init_surface_uv_sphere(t_scene *sc, t_surface *s, t_primitive *p)
-// {
-// 	t_sphere	*sp;
-// 	t_texture	*tex;
-	
-// }
+static void	sphere_dir_to_uv(t_vec3f direction,
+				float *u_out, float *v_out)
+{
+	t_vec3f	normalized_dir;
+	float	theta_angle;
+	float	phi_angle;
+	float	u_value;
+
+	normalized_dir = vec3f_normalize(direction);
+	theta_angle = atan2f(normalized_dir[2], normalized_dir[0]);
+	phi_angle = acosf(normalized_dir[1]);
+	u_value = 0.5f + theta_angle / (2.0f * (float)M_PI);
+	if (u_value < 0.0f)
+		u_value += 1.0f;
+	else if (u_value >= 1.0f)
+		u_value -= 1.0f;
+	*u_out = u_value;
+	*v_out = phi_angle / (float)M_PI;
+}
+
+
+static void	init_surface_uv_sphere_mode1(t_surface *surface)
+{
+	t_vec3f	anchor_vector;
+	float	anchor_u;
+	float	anchor_v;
+
+	anchor_vector = (t_vec3f){surface->map_uv[0],
+		surface->map_uv[1], surface->map_uv[2]};
+	sphere_dir_to_uv(anchor_vector, &anchor_u, &anchor_v);
+	surface->map_uv[0] = 1.0f;
+	surface->map_uv[1] = 0.0f;
+	surface->map_uv[2] = 0.0f;
+	surface->map_uv[3] = 1.0f;
+	surface->map_uv[4] = 0.5f - anchor_u;
+	surface->map_uv[5] = 0.5f - anchor_v;
+}
+
+static float	wrap_u_relative(float value, float reference)
+{
+	float	diff;
+
+	diff = value - reference;
+	if (diff > 0.5f)
+		value -= 1.0f;
+	else if (diff < -0.5f)
+		value += 1.0f;
+	return (value);
+}
+
+
+
+static void	init_surface_uv_sphere_mode2(t_surface *surface)
+{
+	t_vec3f	center_vector;
+	t_vec3f	up_vector;
+	float	center_u;
+	float	center_v;
+	float	up_u;
+	float	up_v;
+	float	adjusted_up_u;
+	float	delta_u;
+	float	delta_v;
+	float	source_length;
+	float	unit_src_u;
+	float	unit_src_v;
+	float	cosine_angle;
+	float	sine_angle;
+	float	scale_factor;
+	float	coef_uu;
+	float	coef_uv;
+	float	coef_vu;
+	float	coef_vv;
+	float	offset_u;
+	float	offset_v;
+
+	center_vector = (t_vec3f){surface->map_uv[0],
+		surface->map_uv[1], surface->map_uv[2]};
+	up_vector = (t_vec3f){surface->map_uv[3],
+		surface->map_uv[4], surface->map_uv[5]};
+	sphere_dir_to_uv(center_vector, &center_u, &center_v);
+	sphere_dir_to_uv(up_vector, &up_u, &up_v);
+	adjusted_up_u = wrap_u_relative(up_u, center_u);
+	delta_u = adjusted_up_u - center_u;
+	delta_v = up_v - center_v;
+	source_length = sqrtf(delta_u * delta_u + delta_v * delta_v);
+	if (source_length < 1e-6f)
+	{
+		init_surface_uv_sphere_mode1(surface);
+		return ;
+	}
+	unit_src_u = delta_u / source_length;
+	unit_src_v = delta_v / source_length;
+	cosine_angle = unit_src_v;
+	sine_angle = unit_src_u;
+	scale_factor = 0.5f / source_length;
+	coef_uu = scale_factor * cosine_angle;
+	coef_uv = -scale_factor * sine_angle;
+	coef_vu = scale_factor * sine_angle;
+	coef_vv = scale_factor * cosine_angle;
+	offset_u = 0.5f
+		- (coef_uu * center_u + coef_uv * center_v);
+	offset_v = 0.5f
+		- (coef_vu * center_u + coef_vv * center_v);
+	surface->map_uv[0] = coef_uu;
+	surface->map_uv[1] = coef_uv;
+	surface->map_uv[2] = coef_vu;
+	surface->map_uv[3] = coef_vv;
+	surface->map_uv[4] = offset_u;
+	surface->map_uv[5] = offset_v;
+}
+
+
+
+void	init_surface_uv_sphere(t_scene *scene, t_surface *surface,
+				t_primitive *primitive)
+{
+	(void)scene;
+	(void)primitive;
+	surface->normal = (t_vec3f){0.0f, 0.0f, 0.0f};
+	if (surface->uv_mod == 0)
+	{
+		surface->map_uv[0] = 1.0f;
+		surface->map_uv[1] = 0.0f;
+		surface->map_uv[2] = 0.0f;
+		surface->map_uv[3] = 1.0f;
+		surface->map_uv[4] = 0.0f;
+		surface->map_uv[5] = 0.0f;
+	}
+	else if (surface->uv_mod == 1)
+		init_surface_uv_sphere_mode1(surface);
+	else
+		init_surface_uv_sphere_mode2(surface);
+}
+
+
 
 void	init_surface_uv(t_scene *sc)
 {
@@ -156,13 +286,13 @@ void	init_surface_uv(t_scene *sc)
 		init_surface_uv_plane(sc, s, p);
 		i++;
 	}
-	// i = 0;
-	// while (i < sc->primitive_count)
-	// {
-	// 	p = &sc->primitives[i];
-	// 	s = &sc->surfaces[p->surface_id];
-	// 	if (p->type == PRIM_SPHERE)
-	// 		init_surface_uv_sphere(sc, s, p);
-	// 	i++;
-	// }
+	i = 0;
+	while (i < sc->primitive_count)
+	{
+		p = &sc->primitives[i];
+		s = &sc->surfaces[p->surface_id];
+		if (p->type == PRIM_SPHERE)
+			init_surface_uv_sphere(sc, s, p);
+		i++;
+	}
 }
