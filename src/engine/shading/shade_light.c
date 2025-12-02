@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 15:04:24 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/01 19:28:50 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/02 11:20:18 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ typedef struct s_ctx_light
 	t_vec3f				view_dir;
 	t_vec3f				light_dir;
 	float				light_dist;
+	t_vec3f				albedo;
 }	t_ctx_light;
 
 static void	init_ctx_light(const t_scene *scene,
@@ -90,6 +91,7 @@ static void	init_ctx_light(const t_scene *scene,
 	ctx->material = &scene->materials[hit->material_id];
 	ctx->surface = &scene->surfaces[hit->surface_id];
 	ctx->light = &scene->lights[light_index];
+	ctx->albedo = hit->albedo;
 	ctx->point = hit->point;
 	ctx->normal = hit->normal;
 	ctx->view_dir = hit->view_dir;
@@ -110,7 +112,7 @@ static void	shade_diffuse(const t_ctx_light *ctx, t_vec3f *color)
 	ndotl = vec3f_dot(ctx->normal, ctx->light_dir);
 	if (ndotl <= 0.0f)
 		return ;
-	tmp = vec3f_mul(ctx->surface->color, ctx->light->color);
+	tmp = vec3f_mul(ctx->albedo, ctx->light->color);
 	tmp = vec3f_scale(tmp,
 			ctx->material->diffuse
 			* ctx->light->intensity

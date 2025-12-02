@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 21:21:27 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/01 19:00:40 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/02 11:11:59 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ int	shade_hit(const t_scene *scene, const t_hit *hit,
 	float				t;
 	float				k;
 
-	local = hit->albedo;
+	local = (t_vec3f){0.0f, 0.0f, 0.0f};
 	shade_ambient(scene, hit, &local);
 	shade_direct_lights(scene, hit, &local);
 	refl = (t_vec3f){0.0f, 0.0f, 0.0f};
@@ -98,6 +98,7 @@ int	shade_hit(const t_scene *scene, const t_hit *hit,
 	mat = &scene->materials[hit->material_id];
 	if (mat->reflection > 0.0f || mat->refraction > 0.0f)
 	{
+		printf("Here\n");
 		if (mat->reflection > 0.0f)
 			shade_reflection(scene, hit, ctx, &refl);
 		if (mat->refraction > 0.0f)

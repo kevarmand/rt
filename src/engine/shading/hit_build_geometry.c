@@ -6,13 +6,15 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 17:24:31 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/01 19:16:13 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/02 18:42:23 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "engine.h"
 #include "scene.h"
 #include <stdio.h>
+#include <math.h>
+
 static void	build_geometry_plane(const t_scene *scene, t_hit *hit)
 {
 	t_primitive	*prim;
@@ -33,6 +35,21 @@ static void	build_geometry_plane(const t_scene *scene, t_hit *hit)
 			surf->map_uv[4], surf->map_uv[5]}) / surf->scale_v;
 }
 
+static void build_geometry_sphere(const t_sphere *sphere,
+			t_hit *hit)
+{
+	t_vec3f	p_local;
+	float	theta;
+	float	phi;
+
+	p_local = vec3f_sub(hit->point, sphere->center);
+	theta = acosf(fmaxf(fminf(p_local[1] / sphere->radius, 1.0f), -1.0f));
+	phi = atan2f(p_local[2], p_local[0]);
+	if (phi < 0.0f)
+		phi += 2.0f * M_PI;
+	hit->u = 0.7f -phi / (2.0f * M_PI);
+	hit->v = - (theta / M_PI);
+}
 
 static void	build_normal_sphere(const t_sphere *sphere,
 			const t_hit *hit, t_vec3f *normal)
@@ -41,6 +58,7 @@ static void	build_normal_sphere(const t_sphere *sphere,
 
 	diff = vec3f_sub(hit->point, sphere->center);
 	*normal = vec3f_normalize(diff);
+	build_geometry_sphere(sphere, hit);
 }
 
 static void	build_normal_cylinder(const t_cylinder *cylinder,

@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 16:31:16 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/01 17:33:32 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/02 18:11:08 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,13 @@ static void	init_surface_uv_plane(t_scene *sc, t_surface *s, t_primitive *p)
 	}
 }
 
+// void	init_surface_uv_sphere(t_scene *sc, t_surface *s, t_primitive *p)
+// {
+// 	t_sphere	*sp;
+// 	t_texture	*tex;
+	
+// }
+
 void	init_surface_uv(t_scene *sc)
 {
 	int			i;
@@ -149,4 +156,13 @@ void	init_surface_uv(t_scene *sc)
 		init_surface_uv_plane(sc, s, p);
 		i++;
 	}
+	// i = 0;
+	// while (i < sc->primitive_count)
+	// {
+	// 	p = &sc->primitives[i];
+	// 	s = &sc->surfaces[p->surface_id];
+	// 	if (p->type == PRIM_SPHERE)
+	// 		init_surface_uv_sphere(sc, s, p);
+	// 	i++;
+	// }
 }
