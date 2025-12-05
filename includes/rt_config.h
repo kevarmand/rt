@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 17:07:05 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/02 10:53:01 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/04 17:42:21 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # define RGB_CHANNELS 3
 # define EPSILON 0.0001f
 
-# define MAX_RECURSION_DEPTH 3
-# define MIN_CONTRIBUTION 0.05f
+# define MAX_RECURSION_DEPTH 20
+# define MIN_CONTRIBUTION 0.01f
 
 #endif

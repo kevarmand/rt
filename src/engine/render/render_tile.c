@@ -7,6 +7,7 @@
 #include "errors.h"
 
 #include <stdio.h>
+
 static void	build_ray_for_pixel(const t_render_view *view,
 			int img_x, int img_y, t_ray *ray)
 {

@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 16:31:16 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/02 19:04:29 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/04 17:02:14 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -293,6 +293,8 @@ void	init_surface_uv(t_scene *sc)
 		s = &sc->surfaces[p->surface_id];
 		if (p->type == PRIM_SPHERE)
 			init_surface_uv_sphere(sc, s, p);
+		// if (p->type == PRIM_CYLINDER
+		// 	init_surface_uv_cylinder(sc, s, p);
 		i++;
 	}
 }

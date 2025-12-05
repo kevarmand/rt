@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 13:22:44 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/30 14:00:58 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/04 15:16:46 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,18 +41,11 @@ void	shade_reflection(const t_scene *scene,
 	t_vec3f				refl_dir;
 	t_vec3f				refl_color;
 
-	material = &scene->materials[hit->material_id];
-	kr = material->reflection;
-	if (kr <= 0.0f)
-		return ;
-	if (ctx->depth >= MAX_RECURSION_DEPTH)
+
+	if (ctx->depth >= MAX_RECURSION_DEPTH || ctx->contribution < MIN_CONTRIBUTION)
 		return ;
 	if (!build_reflection_ray(hit, &refl_ray, &refl_dir))
 		return ;
 	child = *ctx;
-	child.depth++;
-	shading_ray(scene, &refl_ray, &child, &refl_color);
-	*color = vec3f_add(
-			vec3f_scale(*color, 1.0f - kr),
-			vec3f_scale(refl_color, kr));
+	shading_ray(scene, &refl_ray, &child, color);
 }

@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 19:18:09 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/27 21:36:55 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/05 16:06:54 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,21 @@
 
 int	mouse_press(int button, int x, int y, t_data *data)
 {
-	(void)button;
-	(void)x;
-	(void)y;
-	(void)data;
+	t_display	*display;
+
+	display = &data->display;
+	/* 1) Plus tard : si l'UI le consomme, on ne touche pas à la cam */
+	/*
+	if (ui_mouse_press(button, x, y, data))
+		return (0);
+	*/
+	if (button == 1)
+	{
+		display->mouse.is_down = 1;
+		display->mouse.mode = 2; // 2 = mode caméra
+		display->mouse.last_x = x;
+		display->mouse.last_y = y;
+		/* toggle ON : on ne tourne pas ici, juste on arme l'état */
+	}
 	return (0);
 }
