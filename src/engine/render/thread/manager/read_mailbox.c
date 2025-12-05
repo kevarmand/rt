@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 18:47:20 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/28 13:39:59 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/05 22:35:16 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static void	apply_cam_request(t_render *render)
 	manager->tileset.tiles_done = 0;
 	bitmap_zero(&manager->tileset.tile_state);
 	manager->render_view.frame_seq++;
-	manager->tileset.tiles_active = 0;
+	manager->tileset.tiles_ready = 0;
 }
 
 int	manager_read_mailbox(t_render *render)

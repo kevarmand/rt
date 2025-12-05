@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 17:46:18 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/28 10:38:43 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/05 22:27:39 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,7 @@ static int	render_init_tileset(t_render *render)
 		return (ERR_INTERNAL);
 	if (bitmap_init(&tileset->tile_state, tileset->tiles_total) != SUCCESS)
 		return (ERR_MALLOC);
+
 	tileset->tiles_active = 0;
 	tileset->tiles_done = 0;
 	return (SUCCESS);

@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/25 15:26:47 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/28 16:33:08 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/05 22:27:16 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ static void	manager_handle_completed_tile(t_render *render, t_worker *worker)
 	t_tile	*tile;
 
 	mgr = &render->manager;
+	mgr->tileset.tiles_active--;
 	// printf("Worker completed tile %d.\n", worker->tile.tile_id);
 	if (worker->local_view.frame_seq != mgr->render_view.frame_seq)
 	{
@@ -55,7 +56,7 @@ static void	manager_handle_completed_tile(t_render *render, t_worker *worker)
 	tile = &worker->tile;
 	manager_copy_tile_pixels(render, tile);
 	bitmap_set(&mgr->tileset.tile_state, tile->tile_id);
-	mgr->tileset.tiles_active--;
+
 	mgr->tileset.tiles_ready++;
 	atomic_store(&worker->worker_state, WORKER_IDLE); 
 }

@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 20:14:44 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/05 16:26:49 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/05 23:13:07 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include "mlx.h"
 #include "libft.h"
 #include <stdio.h>
+#include <math.h>
 
 static void	display_update_main_image(t_data *data)
 {
@@ -67,90 +68,16 @@ static void	clear_flags(t_data *data)
 	//reset_flag_sepcifique UI
 }
 
-static t_vec3f	vec3f_rotate_axis(t_vec3f vector,
-					t_vec3f axis, float angle)
-{
-	t_vec3f	term1;
-	t_vec3f	term2;
-	t_vec3f	term3;
-	t_vec3f	cross_axis;
-	float	cos_angle;
-	float	sin_angle;
-	float	dot_axis_vector;
 
-	axis = vec3f_normalize(axis);
-	cos_angle = cosf(angle);
-	sin_angle = sinf(angle);
-	term1 = vec3f_scale(vector, cos_angle);
-	cross_axis = vec3f_cross(axis, vector);
-	term2 = vec3f_scale(cross_axis, sin_angle);
-	dot_axis_vector = vec3f_dot(axis, vector);
-	term3 = vec3f_scale(axis, dot_axis_vector * (1.0f - cos_angle));
-	return (vec3f_add(vec3f_add(term1, term2), term3));
-}
-
-void	camera_apply_mouse_delta(t_scene *scene,
-			t_display *display, int delta_x, int delta_y)
-{
-	t_camera	*camera;
-	t_vec3f		up;
-	float		yaw;
-	float		pitch;
-
-	camera = &scene->cameras[display->current_cam];
-	if (delta_x == 0 && delta_y == 0)
-		return ;
-	yaw = (float)delta_x * 0.00025f;
-	pitch = (float)delta_y * 0.00025f;
-	up = vec3f_cross(camera->right, camera->forward);
-	up = vec3f_normalize(up);
-	if (yaw != 0.0f)
-	{
-		camera->forward = vec3f_rotate_axis(camera->forward, up, yaw);
-		camera->forward = vec3f_normalize(camera->forward);
-		camera->right = vec3f_cross(up, camera->forward);
-		camera->right = vec3f_normalize(camera->right);
-	}
-	if (pitch != 0.0f)
-	{
-		camera->forward = vec3f_rotate_axis(camera->forward,
-				camera->right, -pitch);
-		camera->forward = vec3f_normalize(camera->forward);
-	}
-}
-
-
-static void	display_update_camera(t_data *data)
-{
-	t_display		*display;
-	t_mouse_state	*mouse;
-	int				delta_x;
-	int				delta_y;
-
-	display = &data->display;
-	mouse = &display->mouse;
-	if (mouse->mode != 2)
-		return ;
-	delta_x = mouse->accum_dx;
-	delta_y = mouse->accum_dy;
-	if (delta_x == 0 && delta_y == 0)
-		return ;
-	mouse->accum_dx = 0;
-	mouse->accum_dy = 0;
-	camera_apply_mouse_delta(&data->scene, display, delta_x, delta_y);
-	display->frame[display->current_cam].is_dirty = 1;
-	display->flag_camera_changed = 1;
-}
 
 int frame_tick(t_data *data)
 {
 	int image_changed;
 
-
-	image_changed = engine_sync_display(data);
-	// if (image_changed)
-		display_update_main_image(data);
 	display_update_camera(data);
+	image_changed = engine_sync_display(data);
+	if (image_changed)
+		display_update_main_image(data);
 	display_update_ui(data);
 	display_draw_base(data);
 	display_draw_ui(data);

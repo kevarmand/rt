@@ -65,7 +65,8 @@ typedef struct s_tileset
 	int			tiles_active;
 	int			tiles_ready;
 	int			tiles_done;
-	t_bitmap	tile_state;
+
+	t_bitmap	tile_state;	
 }	t_tileset;
 
 typedef struct s_display_mailbox

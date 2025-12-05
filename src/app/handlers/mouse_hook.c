@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 19:18:09 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/05 16:06:54 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/05 23:29:43 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,23 +62,49 @@
 // 	return (0);
 // }
 
+#include <stdio.h>
 int	mouse_press(int button, int x, int y, t_data *data)
 {
-	t_display	*display;
+	t_mouse_state	*mouse;
 
-	display = &data->display;
-	/* 1) Plus tard : si l'UI le consomme, on ne touche pas à la cam */
-	/*
-	if (ui_mouse_press(button, x, y, data))
-		return (0);
-	*/
+	mouse = &data->display.mouse;
 	if (button == 1)
 	{
-		display->mouse.is_down = 1;
-		display->mouse.mode = 2; // 2 = mode caméra
-		display->mouse.last_x = x;
-		display->mouse.last_y = y;
-		/* toggle ON : on ne tourne pas ici, juste on arme l'état */
+		printf("Entering camera free mode.\n");
+		mouse->mode = MOUSE_MODE_CAM_FREE;
+		mouse->is_down = 1;
+		mouse->last_x = x;
+		mouse->last_y = y;
+		mouse->accum_dx = 0;
+		mouse->accum_dy = 0;
+		return (0);
+	}
+	if (button == 3)
+	{
+		printf("Entering camera roll mode.\n");
+		mouse->mode = MOUSE_MODE_CAM_ROLL;
+		mouse->is_down = 1;
+		mouse->last_x = x;
+		mouse->last_y = y;
+		mouse->accum_dx = 0;
+		mouse->accum_dy = 0;
+		return (0);
+	}
+	if (button == 2)
+	{
+		data->display.flag_camera_level = 1;
+		printf("Resetting camera level.\n");
+		return (0);
+	}
+	if (button == 4)
+	{
+		data->display.mouse.scroll_delta++;
+		return (0);
+	}
+	if (button == 5)
+	{
+		data->display.mouse.scroll_delta--;
+		return (0);
 	}
 	return (0);
 }

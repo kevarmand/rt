@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 12:27:50 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/05 16:06:15 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/05 23:20:08 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 	// # include "ui.h"
 # include "flag.h"
+# include "mouse.h"
 
 typedef struct s_data t_data;
 
@@ -40,16 +41,6 @@ typedef struct s_ui
 	int 	visible;
 }	t_ui;
 
-typedef struct s_mouse_state
-{
-	int	mode;      // 0 = rien, 1 = UI, 2 = cam, etc.
-	int	is_down;
-	int	last_x;
-	int	last_y;
-	int	accum_dx;
-	int	accum_dy;
-}	t_mouse_state;
-
 typedef struct s_display
 {
 	void	*mlx;
@@ -68,6 +59,7 @@ typedef struct s_display
 	int		flag_img;       // 1 = l'image principale doit être redessinée
 	int		flag_ui;        // 1 = l'UI doit être redessinée
 	int		flag_camera_changed;
+	int		flag_camera_level;
 	t_mouse_state	mouse;
 }	t_display;
 
@@ -85,5 +77,7 @@ typedef struct s_display
  */
 int		display_init(t_display *display, t_data *data);
 
+
+void	display_update_camera(t_data *data);
 
 #endif
