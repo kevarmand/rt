@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 19:18:09 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/05 23:29:43 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/06 15:10:26 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@
 // }
 
 #include <stdio.h>
+
 int	mouse_press(int button, int x, int y, t_data *data)
 {
 	t_mouse_state	*mouse;
@@ -70,24 +71,23 @@ int	mouse_press(int button, int x, int y, t_data *data)
 	mouse = &data->display.mouse;
 	if (button == 1)
 	{
-		printf("Entering camera free mode.\n");
 		mouse->mode = MOUSE_MODE_CAM_FREE;
 		mouse->is_down = 1;
-		mouse->last_x = x;
-		mouse->last_y = y;
-		mouse->accum_dx = 0;
-		mouse->accum_dy = 0;
+		mouse->anchor_x = x;
+		mouse->anchor_y = y;
+		mouse->current_x = x;
+		mouse->current_y = y;
 		return (0);
 	}
 	if (button == 3)
 	{
-		printf("Entering camera roll mode.\n");
 		mouse->mode = MOUSE_MODE_CAM_ROLL;
 		mouse->is_down = 1;
-		mouse->last_x = x;
-		mouse->last_y = y;
-		mouse->accum_dx = 0;
-		mouse->accum_dy = 0;
+		mouse->anchor_x = x;
+		mouse->anchor_y = y;
+		mouse->current_x = x;
+		mouse->current_y = y;
+		mouse->roll_prev_angle = 0.0f;
 		return (0);
 	}
 	if (button == 2)

@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 19:18:14 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/05 23:07:10 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/06 15:09:21 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,18 +43,13 @@
 int	mouse_move(int x, int y, t_data *data)
 {
 	t_mouse_state	*mouse;
-	int				delta_x;
-	int				delta_y;
 
 	mouse = &data->display.mouse;
-	if (mouse->mode == MOUSE_MODE_NONE)
+	if (mouse->mode == MOUSE_MODE_NONE || mouse->is_down == 0)
 		return (0);
-	delta_x = x - mouse->last_x;
-	delta_y = y - mouse->last_y;
-	mouse->last_x = x;
-	mouse->last_y = y;
-	mouse->accum_dx += delta_x;
-	mouse->accum_dy += delta_y;
+	mouse->current_x = x;
+	mouse->current_y = y;
 	return (0);
 }
+
 

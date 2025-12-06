@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 12:27:50 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/05 23:20:08 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/06 19:19:47 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ typedef struct s_image
 	int		width;
 	int		height;
 }	t_image;
+
 
 typedef struct s_frame
 {

@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 23:05:12 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/05 23:11:19 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/06 15:10:48 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,16 @@ typedef enum e_mouse_mode
 
 typedef struct s_mouse_state
 {
-	int	mode;      /* t_mouse_mode */
-	int	is_down;
-	int	last_x;
-	int	last_y;
-	int	accum_dx;
-	int	accum_dy;
-	int	scroll_delta;
+	int		mode;
+	int		is_down;
+	int		anchor_x;
+	int		anchor_y;
+	int		current_x;
+	int		current_y;
+	int		scroll_delta;
+	float	roll_prev_angle;
 }	t_mouse_state;
+
 
 
 #endif

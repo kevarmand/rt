@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 23:13:26 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/05 23:50:47 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/06 16:54:33 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@ static t_vec3f	vec3f_rotate_axis(t_vec3f vector,
 {
 	t_vec3f	term1;
 	t_vec3f	term2;
-	t_vec3f	term3;
-	t_vec3f	cross_axis;
 	float	cos_angle;
 	float	sin_angle;
 	float	dot_axis_vector;
@@ -30,11 +28,44 @@ static t_vec3f	vec3f_rotate_axis(t_vec3f vector,
 	cos_angle = cosf(angle);
 	sin_angle = sinf(angle);
 	term1 = vec3f_scale(vector, cos_angle);
-	cross_axis = vec3f_cross(axis, vector);
-	term2 = vec3f_scale(cross_axis, sin_angle);
+	term2 = vec3f_cross(axis, vector);
+	term2 = vec3f_scale(term2, sin_angle);
+	term1 = vec3f_add(term1, term2);
 	dot_axis_vector = vec3f_dot(axis, vector);
-	term3 = vec3f_scale(axis, dot_axis_vector * (1.0f - cos_angle));
-	return (vec3f_add(vec3f_add(term1, term2), term3));
+	term2 = vec3f_scale(axis,
+			dot_axis_vector * (1.0f - cos_angle));
+	return (vec3f_add(term1, term2));
+}
+
+static float	camera_mouse_yaw(const t_scene *scene,
+					const t_camera *camera, int delta_x)
+{
+	float	fov_h;
+	float	width_f;
+	float	delta_f;
+
+	fov_h = camera->fov_deg * (float)M_PI / 180.0f;
+	width_f = (float)scene->resolution_width;
+	delta_f = (float)delta_x;
+	return (delta_f / width_f * fov_h);
+}
+
+static float	camera_mouse_pitch(const t_scene *scene,
+					const t_camera *camera, int delta_y)
+{
+	float	aspect;
+	float	fov_h;
+	float	fov_v;
+	float	height_f;
+	float	delta_f;
+
+	aspect = (float)scene->resolution_width
+		/ (float)scene->resolution_height;
+	fov_h = camera->fov_deg * (float)M_PI / 180.0f;
+	fov_v = 2.0f * atanf(tanf(fov_h * 0.5f) / aspect);
+	height_f = (float)scene->resolution_height;
+	delta_f = (float)delta_y;
+	return (delta_f / height_f * fov_v);
 }
 
 void	camera_apply_mouse_delta(t_scene *scene,
@@ -44,19 +75,12 @@ void	camera_apply_mouse_delta(t_scene *scene,
 	t_vec3f		up;
 	float		yaw;
 	float		pitch;
-	float		aspect;
-	float		fov_h;
-	float		fov_v;
 
-	camera = &scene->cameras[display->current_cam];
 	if (delta_x == 0 && delta_y == 0)
 		return ;
-	aspect = (float)scene->resolution_width
-		/ (float)scene->resolution_height;
-	fov_h = camera->fov_deg * (float)M_PI / 180.0f;
-	fov_v = 2.0f * atanf(tanf(fov_h * 0.5f) / aspect);
-	yaw = ((float)delta_x / (float)scene->resolution_width) * fov_h;
-	pitch = ((float)delta_y / (float)scene->resolution_height) * fov_v;
+	camera = &scene->cameras[display->current_cam];
+	yaw = camera_mouse_yaw(scene, camera, delta_x);
+	pitch = camera_mouse_pitch(scene, camera, delta_y);
 	up = vec3f_cross(camera->right, camera->forward);
 	up = vec3f_normalize(up);
 	if (yaw != 0.0f)
@@ -75,43 +99,89 @@ void	camera_apply_mouse_delta(t_scene *scene,
 }
 
 static void	camera_apply_roll(t_scene *scene,
-			t_display *display, int delta_x)
+			t_display *display, float angle)
 {
 	t_camera	*camera;
-	float		angle;
 
-	camera = &scene->cameras[display->current_cam];
-	if (delta_x == 0)
+	if (angle == 0.0f)
 		return ;
-	angle = (float)delta_x * 0.0025f;
+	camera = &scene->cameras[display->current_cam];
 	camera->right = vec3f_rotate_axis(camera->right,
 			camera->forward, angle);
 	camera->right = vec3f_normalize(camera->right);
 }
 
+static float	camera_roll_angle(const t_data *data,
+					const t_mouse_state *mouse)
+{
+	int		center_x;
+	int		center_y;
+	float	v0x;
+	float	v0y;
+	float	angle;
+
+	center_x = data->scene.resolution_width / 2;
+	center_y = data->scene.resolution_height / 2;
+	v0x = (float)(mouse->anchor_x - center_x);
+	v0y = (float)(mouse->anchor_y - center_y);
+	if (v0x == 0.0f && v0y == 0.0f)
+		return (0.0f);
+	if ((float)(mouse->current_x - center_x) == 0.0f
+		&& (float)(mouse->current_y - center_y) == 0.0f)
+		return (0.0f);
+	angle = atan2f(
+			v0x * (float)(mouse->current_y - center_y)
+			- v0y * (float)(mouse->current_x - center_x),
+			v0x * (float)(mouse->current_x - center_x)
+			+ v0y * (float)(mouse->current_y - center_y));
+	return (angle);
+}
+
+static int	camera_handle_drag_free(t_data *data)
+{
+	t_mouse_state	*mouse;
+	int				dx;
+	int				dy;
+
+	mouse = &data->display.mouse;
+	dx = mouse->current_x - mouse->anchor_x;
+	dy = mouse->current_y - mouse->anchor_y;
+	if (dx == 0 && dy == 0)
+		return (0);
+	mouse->anchor_x = mouse->current_x;
+	mouse->anchor_y = mouse->current_y;
+	camera_apply_mouse_delta(&data->scene, &data->display, dx, dy);
+	return (1);
+}
+
+static int	camera_handle_drag_roll(t_data *data)
+{
+	t_mouse_state	*mouse;
+	float			angle;
+	float			delta;
+
+	mouse = &data->display.mouse;
+	angle = camera_roll_angle(data, mouse);
+	if (angle == 0.0f)
+		return (0);
+	delta = angle - mouse->roll_prev_angle;
+	if (delta == 0.0f)
+		return (0);
+	mouse->roll_prev_angle = angle;
+	camera_apply_roll(&data->scene, &data->display, -delta);
+	return (1);
+}
 
 static int	camera_handle_drag(t_data *data)
 {
-	t_display		*display;
 	t_mouse_state	*mouse;
-	int				delta_x;
-	int				delta_y;
 
-	display = &data->display;
-	mouse = &display->mouse;
-	if (mouse->mode == MOUSE_MODE_NONE)
-		return (0);
-	delta_x = mouse->accum_dx;
-	delta_y = mouse->accum_dy;
-	if (delta_x == 0 && delta_y == 0)
-		return (0);
-	mouse->accum_dx = 0;
-	mouse->accum_dy = 0;
+	mouse = &data->display.mouse;
 	if (mouse->mode == MOUSE_MODE_CAM_FREE)
-		camera_apply_mouse_delta(&data->scene, display, delta_x, delta_y);
-	else if (mouse->mode == MOUSE_MODE_CAM_ROLL)
-		camera_apply_roll(&data->scene, display, delta_x);
-	return (1);
+		return (camera_handle_drag_free(data));
+	if (mouse->mode == MOUSE_MODE_CAM_ROLL)
+		return (camera_handle_drag_roll(data));
+	return (0);
 }
 
 static int	camera_handle_scroll(t_data *data)
@@ -146,11 +216,13 @@ static void	camera_level(t_scene *scene, t_display *display)
 	world_up[1] = -1.0f;
 	world_up[2] = 0.0f;
 	new_right = vec3f_cross(world_up, camera->forward);
-	if (new_right[0] == 0.0f && new_right[1] == 0.0f && new_right[2] == 0.0f)
+	if (new_right[0] == 0.0f
+		&& new_right[1] == 0.0f
+		&& new_right[2] == 0.0f)
 		return ;
 	camera->right = vec3f_normalize(new_right);
 }
-#include <stdio.h>
+
 void	display_update_camera(t_data *data)
 {
 	t_display	*display;
@@ -162,14 +234,12 @@ void	display_update_camera(t_data *data)
 	changed |= camera_handle_scroll(data);
 	if (display->flag_camera_level)
 	{
-		printf("icing\n");
 		camera_level(&data->scene, display);
 		display->flag_camera_level = 0;
 		changed = 1;
 	}
 	if (!changed)
 		return ;
-	printf("Camera updated via mouse input.\n");
 	display->frame[display->current_cam].is_dirty = 1;
 	display->flag_camera_changed = 1;
 }

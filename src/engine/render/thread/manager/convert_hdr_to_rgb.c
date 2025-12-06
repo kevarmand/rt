@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 18:18:51 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/05 22:23:48 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/06 17:33:39 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,12 +101,15 @@ int	manager_convert_hdr_to_rgb(t_render *render)
 {
 	int tile_id;
 
- 	tile_id = find_next_tile_to_convert(&render->manager.tileset);
-	if (tile_id < 0)
-		return (0);
-	convert_tile_hdr_to_rgb(render, tile_id);
-	bitmap_clear(&render->manager.tileset.tile_state, tile_id);
-	render->manager.tileset.tiles_done++;
-	render->manager.tileset.tiles_ready--;
-	return (1);
+	while (1)
+	{
+		tile_id = find_next_tile_to_convert(&render->manager.tileset);
+		if (tile_id < 0)
+			return (0);
+		convert_tile_hdr_to_rgb(render, tile_id);
+		bitmap_clear(&render->manager.tileset.tile_state, tile_id);
+		render->manager.tileset.tiles_done++;
+		render->manager.tileset.tiles_ready--;
+	}
+return (1);
 }

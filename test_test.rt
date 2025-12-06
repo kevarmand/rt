@@ -4,7 +4,8 @@ R  1600 1200
 A 0.2 255,255,255
 
 # Camera : position (0, 2, 12) regardant vers l'origine
-C 0,3,22  0,0,-1  50
+C 0,3,22  0,0,-1  70
+
 
 #sphere jsute devant la cam distance - R dans le plan focal image
 sp 0,3,20.5 1 255,255,255  diffuse=0 specular=0 shininess=0 refraction=1 reflection=1 ior=1.01
