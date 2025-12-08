@@ -3,3 +3,7 @@
 
 # Fichiers de dépendances (gcc/clang)
 *.d
+*.a
+*.out
+compile_commands.json
+.cache/*
