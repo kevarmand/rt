@@ -15,6 +15,8 @@
 
 # if defined(__clang__)
 typedef float t_vec4f __attribute__((ext_vector_type(4)));
+typedef float t_mat3x3f __attribute__((matrix_type(3, 3)));
+typedef float t_mat3x4f __attribute__((matrix_type(3, 4)));
 # elif defined (__GNUC__)
 typedef float t_vec4f __attribute__((vector_size(sizeof(float) * 4)));
 # endif

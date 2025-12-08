@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <float.h>
 #include <math.h>
 #include "bvh.h"
 #include "types.h"
@@ -97,6 +98,51 @@ extern inline int	sphere_inter(t_ray r, t_sphere *s, t_hit *hit)
 }
 
 FORCEINLINE
+extern inline int	cap_inter(t_ray r, t_cylinder *cl, t_hit *hit, t_equ *eq)
+{
+	float	t_plane;
+	t_vec3f	p_local;
+
+	solve_quadratic(*eq, &t_plane);
+	if (t_plane > EPSILON && t_plane < hit->t)
+	{
+		p_local = vec3f_add(r.origin, vec3f_scale(r.dir, t_plane));
+		if (p_local.x * p_local.x + p_local.z * p_local.z
+			<= cl->r_squared + EPSILON)
+		{
+			hit->t = t_plane;
+			hit->inter = p_local;
+			return (1);
+		}
+	}
+	return (0);
+}
+
+FORCEINLINE
+extern inline int	cylinder_cap(t_ray r, t_cylinder *cl, t_hit *hit)
+{
+	int		hit_happened;
+	t_equ	eq;
+
+	eq.a = 0;
+	eq.b = r.dir.y;
+	eq.c = r.origin.y;
+	hit_happened = 0;
+	if (cap_inter(r, cl, hit, &eq))
+	{
+		hit_happened = 1;
+		hit->normal = -cl->axis;
+	}
+	eq.c = r.origin.y - cl->height;
+	if (cap_inter(r, cl, hit, &eq))
+	{
+		hit_happened = 1;
+		hit->normal = cl->axis;
+	}
+	return (hit_happened);
+}
+
+FORCEINLINE
 extern inline int	cylinder_inter(t_ray r, t_cylinder *cl, t_hit *hit)
 {
 	t_vec3f				ro;
@@ -105,7 +151,7 @@ extern inline int	cylinder_inter(t_ray r, t_cylinder *cl, t_hit *hit)
 	float				roots[2];
 	int					nroots;
 	t_vec3f				p_local;
-	t_vec3f				n_local;
+	int					hit_happened;
 	int					i;
 
 	ro = mat3x3_mulv(cl->inv_basis, vec3f_sub(r.origin, cl->p0));
@@ -114,10 +160,9 @@ extern inline int	cylinder_inter(t_ray r, t_cylinder *cl, t_hit *hit)
 	eq.b = 2.0f * (ro.x * rd.x + ro.z * rd.z);
 	eq.c = ro.x * ro.x + ro.z * ro.z - cl->r_squared;
 	nroots = solve_quadratic(eq, roots);
-	if (nroots == 0)
-		return (0);
+	hit_happened = 0;
 	i = 0;
-	hit->t = -1.0f;
+	hit->t = FLT_MAX;
 	while (i < nroots)
 	{
 		if (roots[i] > EPSILON)
@@ -125,19 +170,24 @@ extern inline int	cylinder_inter(t_ray r, t_cylinder *cl, t_hit *hit)
 			p_local = vec3f_add(ro, vec3f_scale(rd, roots[i]));
 			if (p_local.y > -EPSILON && p_local.y <= cl->height + EPSILON)
 			{
-				if (hit->t < 0.0f || roots[i] < hit->t + EPSILON)
+				if (roots[i] < hit->t)
 				{
 					hit->t = roots[i];
 					hit->inter = p_local;
+					hit->normal = vec3f_normalize((t_vec3f){hit->inter.x, 0, hit->inter.z});
+					hit_happened = 1;
 				}
 			}
 		}
 		i += 1;
 	}
-	if (hit->t < -EPSILON)
+	if (fabsf(rd.y) > EPSILON) {
+		if (cylinder_cap(r, cl, hit))
+			hit_happened = 1;
+	}
+	if (hit_happened == 0)
 		return (0);
-	n_local = vec3f_normalize((t_vec3f){hit->inter.x, 0.0f, hit->inter.z});
-	hit->normal = vec3f_normalize(mat3x3_mulv(cl->basis, n_local));
+	hit->normal = vec3f_normalize(mat3x3_mulv(cl->basis, hit->normal));
 	hit->inter = vec3f_add(mat3x3_mulv(cl->basis, hit->inter), cl->p0);
 	return (1);
 }

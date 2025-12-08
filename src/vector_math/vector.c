@@ -15,13 +15,6 @@
 #include "types.h"
 #include "rt_math.h"
 
-#if defined (__clang__)
-FORCEINLINE
-extern inline t_vec3f	vec3f_min(t_vec3f a, t_vec3f b)
-{
-	return (__builtin_elementwise_min(a, b));
-}
-#else
 FORCEINLINE
 extern inline t_vec3f	vec3f_min(t_vec3f a, t_vec3f b)
 {
@@ -32,15 +25,7 @@ extern inline t_vec3f	vec3f_min(t_vec3f a, t_vec3f b)
 		0.0f
 	});
 }
-#endif
 
-#if defined (__clang__)
-FORCEINLINE
-extern inline t_vec3f	vec3f_max(t_vec3f a, t_vec3f b)
-{
-	return (__builtin_elementwise_max(a, b));
-}
-#else
 FORCEINLINE
 extern inline t_vec3f	vec3f_max(t_vec3f a, t_vec3f b)
 {
@@ -51,7 +36,6 @@ extern inline t_vec3f	vec3f_max(t_vec3f a, t_vec3f b)
 		0.0f
 	});
 }
-#endif
 
 FORCEINLINE
 extern inline t_vec3f	vec3f_sub(t_vec3f a, t_vec3f b)
