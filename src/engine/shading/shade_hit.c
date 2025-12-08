@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 21:21:27 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/04 15:07:29 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/08 13:55:27 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ float	fresnel_eval(const t_material *mat,
 	r_tm = (n2 * cos_i - n1 * cos_t) / (n2 * cos_i + n1 * cos_t);
 	return (0.5f * (r_te * r_te + r_tm * r_tm));
 }
+
 float	fresnel_schlick(const t_material *mat,
 			const t_hit *hit, const t_shading_ctx *ctx)
 {

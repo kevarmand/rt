@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 20:14:44 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/05 23:13:07 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/08 13:33:15 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ static void	display_update_main_image(t_data *data)
 	t_image		*image;
 	int			byte_count;
 
+	if (data->display.flag_img == 0)
+		return ;
 	display = &data->display;
 	image = &display->main_img;
 	byte_count = display->pixel_count * (int)sizeof(int);
@@ -72,12 +74,9 @@ static void	clear_flags(t_data *data)
 
 int frame_tick(t_data *data)
 {
-	int image_changed;
-
 	display_update_camera(data);
-	image_changed = engine_sync_display(data);
-	if (image_changed)
-		display_update_main_image(data);
+	engine_sync_display(data);
+	display_update_main_image(data);
 	display_update_ui(data);
 	display_draw_base(data);
 	display_draw_ui(data);

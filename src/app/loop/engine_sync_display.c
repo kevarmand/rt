@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 20:26:48 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/06 19:46:14 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/08 13:32:18 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ static void	display_engine_send(t_scene *scene,
 	atomic_store(&mailbox->request_ready, 1);
 }
 
-void	display_sync_engine(t_data *data)
+void	engine_sync_display(t_data *data)
 {
 	t_display			*display;
 	t_display_mailbox	*mailbox;

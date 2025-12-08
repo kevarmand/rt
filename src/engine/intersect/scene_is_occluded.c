@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 16:53:48 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/30 13:48:27 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/08 13:58:43 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static int	scene_is_occluded_planes(const t_scene *scene,
 		if (inter_plane(&scene->planes[plane_index].pl,
 				ray, &hit_distance))
 		{
-			if (hit_distance > 0.01f && hit_distance < max_distance)
+			if (hit_distance > 0.001f && hit_distance < max_distance)
 				return (1);
 		}
 		plane_index++;

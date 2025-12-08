@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 20:38:58 by norivier          #+#    #+#             */
-/*   Updated: 2025/12/01 16:28:50 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/08 14:25:39 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,11 +123,11 @@ extern inline float	vec3f_length(t_vec3f a)
 FORCEINLINE
 extern inline t_vec3f vec3f_mul(t_vec3f a, t_vec3f b)
 {
-    return ((t_vec3f){
-        a.x * b.x,
-        a.y * b.y,
-        a.z * b.z
-    });
+	return ((t_vec3f){
+		a.x * b.x,
+		a.y * b.y,
+		a.z * b.z
+	});
 }
 
 
