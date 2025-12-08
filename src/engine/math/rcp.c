@@ -3,25 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   rcp.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-<<<<<<< HEAD:src/engine/math/rcp.c
-/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
+/*   By: norivier <norivier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/02 10:17:20 by norivier          #+#    #+#             */
-/*   Updated: 2025/11/10 14:21:09 by kearmand         ###   ########.fr       */
+/*   Created: 2025/12/08 15:52:39 by norivier          #+#    #+#             */
+/*   Updated: 2025/12/08 15:52:41 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "attributes.h"
-=======
-/*   By: norivier <norivier@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/02 10:17:20 by norivier          #+#    #+#             */
-/*   Updated: 2025/10/02 10:24:39 by norivier         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include "types.h"
->>>>>>> readme:src/vector_math/rcp.c
 #include <immintrin.h>
 
 #if defined(__SSE__)
@@ -48,8 +37,4 @@ extern inline float	ft_rcpf(float x)
 	return (1.0f / x);
 }
 
-<<<<<<< HEAD:src/engine/math/rcp.c
 #endif
-=======
-#endif
->>>>>>> readme:src/vector_math/rcp.c
