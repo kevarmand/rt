@@ -1,5 +1,11 @@
 # Fichiers objets
 *.o
+*.a
+*.out
+compile_commands.json
+.cache/clangd*
+.vscode/*
+miniRT
 
 # Fichiers de dépendances (gcc/clang)
 *.d

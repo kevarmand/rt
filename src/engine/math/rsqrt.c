@@ -3,6 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   rsqrt.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
+<<<<<<< HEAD:src/engine/math/rsqrt.c
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/01 21:24:45 by norivier          #+#    #+#             */
@@ -11,6 +12,16 @@
 /* ************************************************************************** */
 
 #include "attributes.h"
+=======
+/*   By: norivier <norivier@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/01 21:24:45 by norivier          #+#    #+#             */
+/*   Updated: 2025/10/02 10:16:52 by norivier         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "types.h"
+>>>>>>> readme:src/vector_math/rsqrt.c
 #include <immintrin.h>
 #include <math.h>
 
@@ -40,4 +51,8 @@ extern inline float	ft_rsqrtf(float x)
 	return (1.0f / sqrtf(x));
 }
 
+<<<<<<< HEAD:src/engine/math/rsqrt.c
 #endif
+=======
+#endif
+>>>>>>> readme:src/vector_math/rsqrt.c

@@ -3,15 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   vector.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
+<<<<<<< HEAD:src/engine/math/vector.c
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 20:38:58 by norivier          #+#    #+#             */
 /*   Updated: 2025/12/08 14:25:39 by kearmand         ###   ########.fr       */
+=======
+/*   By: norivier <norivier@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/14 20:38:58 by norivier          #+#    #+#             */
+/*   Updated: 2025/10/02 09:47:18 by norivier         ###   ########.fr       */
+>>>>>>> readme:src/vector_math/vector.c
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <math.h>
 #include "vector.h"
+<<<<<<< HEAD:src/engine/math/vector.c
 #include "attributes.h"
 #include "rt_math.h"
 
@@ -22,6 +30,11 @@ extern inline t_vec3f	vec3f_min(t_vec3f a, t_vec3f b)
 	return (__builtin_elementwise_min(a, b));
 }
 #else
+=======
+#include "types.h"
+#include "rt_math.h"
+
+>>>>>>> readme:src/vector_math/vector.c
 FORCEINLINE
 extern inline t_vec3f	vec3f_min(t_vec3f a, t_vec3f b)
 {
@@ -32,6 +45,7 @@ extern inline t_vec3f	vec3f_min(t_vec3f a, t_vec3f b)
 		0.0f
 	});
 }
+<<<<<<< HEAD:src/engine/math/vector.c
 #endif
 
 #if defined (__clang__) && __clang_major__ >= 15
@@ -41,6 +55,9 @@ extern inline t_vec3f	vec3f_max(t_vec3f a, t_vec3f b)
 	return (__builtin_elementwise_max(a, b));
 }
 #else
+=======
+
+>>>>>>> readme:src/vector_math/vector.c
 FORCEINLINE
 extern inline t_vec3f	vec3f_max(t_vec3f a, t_vec3f b)
 {
@@ -51,7 +68,10 @@ extern inline t_vec3f	vec3f_max(t_vec3f a, t_vec3f b)
 		0.0f
 	});
 }
+<<<<<<< HEAD:src/engine/math/vector.c
 #endif
+=======
+>>>>>>> readme:src/vector_math/vector.c
 
 FORCEINLINE
 extern inline t_vec3f	vec3f_sub(t_vec3f a, t_vec3f b)
@@ -99,6 +119,7 @@ extern inline float	vec3f_norme(t_vec3f a)
 FORCEINLINE
 extern inline t_vec3f	vec3f_normalize(t_vec3f a)
 {
+<<<<<<< HEAD:src/engine/math/vector.c
 	// return (vec3f_scale(a, ft_rsqrtf(vec3f_dot(a, a))));
 	float inv = 1.0f / sqrtf(vec3f_dot(a, a));
 	return vec3f_scale(a, inv);
@@ -136,3 +157,7 @@ extern inline t_vec3f proj_on_plane(t_vec3f v, t_vec3f n)
 {
 	return (vec3f_sub(v, vec3f_scale(n, vec3f_dot(v, n))));
 }
+=======
+	return (vec3f_scale(a, ft_rsqrtf(vec3f_dot(a, a))));
+}
+>>>>>>> readme:src/vector_math/vector.c
