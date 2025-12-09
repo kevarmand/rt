@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 18:47:20 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/06 17:32:38 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/09 19:42:19 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ static void	copy_request(t_render_view *view, const t_camera *src)
 	view->forward = src->forward;
 	view->right = src->right;
 	view->fov_deg = src->fov_deg;
+	
 }
 static void	apply_cam_request(t_render *render)
 {
@@ -50,6 +51,7 @@ int	manager_read_mailbox(t_render *render)
 	if (atomic_load(&mailbox->request_ready) == 0)
 		return (0);
 	copy_request(view, &mailbox->cam);
+	view->frame_seq = mailbox->req_job_id;
 	atomic_store(&mailbox->request_ready, 0);
 	apply_cam_request(render);
 	return (1);

@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 12:27:50 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/06 19:19:47 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/09 19:29:27 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,100 @@ typedef struct s_ui
 	int 	visible;
 }	t_ui;
 
+/**
+ * @brief Display system state and communication flags.
+ *
+ * This structure contains all the state required by the MLX thread for:
+ *  - camera handling,
+ *  - progressive rendering,
+ *  - UI refresh management,
+ *  - communication with the render engine.
+ *
+ * The system follows a strict pipeline, executed once per frame:
+ *    1. display_update_camera()
+ *    2. display_prepare_render()     (optional module)
+ *    3. engine_sync_display()
+ *    4. display_update_main_image()
+ *    5. display_update_ui()
+ *    6. display_draw_base()
+ *    7. display_draw_ui()
+ *
+ * Each flag has a well-defined ownership. Only the designated module is
+ * allowed to modify it. This keeps the system predictable and prevents
+ * invalid states.
+ *
+ * --------------------------------------------------------------------------
+ * Flag ownership and responsibilities
+ * --------------------------------------------------------------------------
+ *
+ * flag_camera_changed
+ * -------------------
+ *  - Set to 1 by input hooks (mouse, keyboard) whenever the user changes the
+ *    current camera's parameters (position, direction, FOV, index switch).
+ *  - Consumed and reset to 0 by display_update_camera().
+ *  - This flag never directly triggers rendering; it only signals that the
+ *    camera parameters have changed.
+ *
+ *
+ * flag_camera_level
+ * -----------------
+ *  - Set to 1 by input/UI when the rendering quality level is modified
+ *    (FAST → NORMAL → SUPER).
+ *  - Consumed and reset to 0 by display_prepare_render().
+ *  - Used to determine whether an existing cached image is sufficient or
+ *    whether a new render must be launched.
+ *
+ *
+ * flag_img
+ * --------
+ *  - Set to 1 exclusively by engine_sync_display() when a new RGB buffer has
+ *    been copied into display_pixels and must be presented on screen.
+ *  - Consumed and reset to 0 by display_update_main_image() once the image
+ *    has been uploaded to the MLX texture.
+ *  - No other module is allowed to modify this flag.
+ *
+ *
+ * flag_ui
+ * -------
+ *  - Set by engine_sync_display() or UI modules when the user interface
+ *    requires a redraw (progress bar update, camera info, etc.).
+ *  - Consumed by display_update_ui().
+ *  - Behavior similar to flag_img but reserved for UI widgets.
+ *
+ *
+ * cam_to_render
+ * -------------
+ *  - Owned exclusively by engine_sync_display().
+ *  - Holds the index of the camera currently being rendered by the engine.
+ *  - Set when a render request is sent; reset to -1 when a full frame is
+ *    received and stored.
+ *  - No other module must modify this value.
+ *
+ *
+ * frame[i].is_dirty
+ * -----------------
+ *  - Indicates whether camera i requires a full rerender.
+ *  - Set only by engine_sync_display(), based on high-level flags coming
+ *    from display_prepare_render().
+ *  - Reset only by engine_sync_display() when the engine delivers a complete
+ *    image for that camera.
+ *  - This field is never written directly by UI or input hooks.
+ *
+ *
+ * display_pixels
+ * --------------
+ *  - Temporary buffer used for progressive / partial updates.
+ *  - Written by engine_sync_display() whenever new tiles arrive.
+ *  - Read by display_update_main_image().
+ *
+ *
+ * frame[i].rgb_pixels
+ * -------------------
+ *  - Persistent “clean” image for camera i.
+ *  - Written only when a full frame is completed.
+ *  - Used for instant camera switching without rerendering.
+ *
+ */
 typedef struct s_display
 {
 	void	*mlx;
@@ -49,18 +143,21 @@ typedef struct s_display
 	t_image	main_img;
 	 t_ui	ui;
 
-	t_frame	*frame;         // tableau: 1 frame par caméra
+	t_frame	*frame;
 	int		total_cams;
 	int		pixel_count;
 	int		*display_pixels;
 
-	int		current_cam;    // caméra affichée
-	int		cam_to_render;  // caméra actuellement rendue par le manager, ou -1
+	int		current_cam;
+	int		cam_to_render;
 
-	int		flag_img;       // 1 = l'image principale doit être redessinée
-	int		flag_ui;        // 1 = l'UI doit être redessinée
+	int		flag_ui;
 	int		flag_camera_changed;
 	int		flag_camera_level;
+	int		flag_request_render;
+	int		background_job;
+	int		flag_img_buffer;
+	int		flag_img_window;
 	t_mouse_state	mouse;
 }	t_display;
 

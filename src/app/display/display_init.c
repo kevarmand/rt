@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 18:42:36 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/01 14:47:35 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/09 16:09:24 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,9 @@ static void	display_reset_struct(t_display *display, int pixel_count)
 {
 	ft_memset(display, 0, sizeof(t_display));
 	display->pixel_count = pixel_count;
-	display->flag_img = 1;
+	display->flag_img_buffer = 1;
+	display->flag_img_window = 1;
+	display->flag_camera_changed = 1;
 	display->flag_ui = 1;
 }
 

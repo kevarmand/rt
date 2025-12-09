@@ -71,13 +71,15 @@ typedef struct s_tileset
 
 typedef struct s_display_mailbox
 {
+	t_camera	cam;
+	int			req_job_id;
+	atomic_int	request_ready;
+
 	int			*rgb_pixels;
 	int			tile_count;
 	int			tiles_done;
+	int			snap_job_id;
 	atomic_int	snapshot_ready;
-
-	t_camera	cam;
-	atomic_int	request_ready;
 }	t_display_mailbox;
 
 typedef struct s_mgr
