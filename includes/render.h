@@ -11,6 +11,13 @@
 
 typedef struct s_data t_data;
 
+typedef enum e_render_mode
+{
+	FAST_MODE = 0,
+	NORMAL_MODE = 1,
+	SUPER_MODE = 2
+}	t_render_mode;
+
 typedef struct s_render_view
 {
 	t_vec3f	origin;
@@ -22,6 +29,7 @@ typedef struct s_render_view
 	t_vec3f	dy;
 	float	fov_deg;
 	int		frame_seq;
+	int 	mode;
 }	t_render_view;
 
 typedef struct s_tile
