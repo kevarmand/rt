@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 21:25:56 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/10 05:21:59 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/10 11:52:26 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,8 +114,8 @@ static void	scene_hit_planes(const t_scene *scene,
 int	scene_hit(const t_scene *scene, const t_ray *ray, t_hit *out_hit)
 {
 	scene_hit_planes(scene, ray, out_hit);
-	scene_hit_primitives(scene, ray, out_hit);
-	// scene_hit_prims(scene, ray, out_hit);
+	//scene_hit_primitives(scene, ray, out_hit);
+	scene_hit_prims(scene, ray, out_hit);
 	if (out_hit->kind == HIT_NONE)
 		return (0);
 	return (1);
