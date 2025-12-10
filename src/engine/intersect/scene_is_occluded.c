@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 16:53:48 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/10 19:29:50 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/10 19:49:42 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,11 +127,19 @@ int	bvh_ocult(t_ray r, t_bvhnode *nodes, t_primitive *prims, t_hit *out)
 			{
 				int	prim_id = node->leaf.start + i;
 				t_hit	local_hit = *out;
-				if (prim_id == out->primitive_id && out->kind == HIT_PRIMITIVE && prims[prim_id].type > PRIM_PLANE)
+				if (prim_id == out->primitive_id && out->kind == HIT_PRIMITIVE)
 				{
-					if (ocult_inter(r, &prims[prim_id], &local_hit) != 0)
-						if (local_hit.t > EPSILON && local_hit.t < out->t + EPSILON)
-							return (1);
+					if (prims[prim_id].type > PRIM_PLANE)
+					{
+						if (ocult_inter(r, &prims[prim_id], &local_hit) != 0)
+							if (local_hit.t > EPSILON && local_hit.t < out->t + EPSILON)
+								return (1);
+					}
+					else
+					{
+						i += 1;
+						continue;
+					}
 				}
 				else if (prim_inter(r, &prims[prim_id], &local_hit) != 0)
 				{
