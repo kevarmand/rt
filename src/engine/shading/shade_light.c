@@ -6,11 +6,12 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 15:04:24 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/02 11:20:18 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/10 18:09:51 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "engine.h"
+#include "rt_config.h"
 #include "scene.h"
 
 // static void	shade_one_light(const t_scene *scene,
@@ -150,12 +151,17 @@ void	shade_one_light(const t_scene *scene,
 	init_ctx_light(scene, hit, light_i, &ctx);
 	if (ctx.light_dist <= 0.0f)
 		return ;
-	offset = vec3f_scale(ctx.normal, 1e-4f);
+	offset = vec3f_scale(ctx.normal, 0.0f);
 	shadow_ray.origin = vec3f_add(ctx.point, offset);
 	shadow_ray.origin = vec3f_add(shadow_ray.origin,
-			vec3f_scale(ctx.light_dir, 0.01f));
+			vec3f_scale(ctx.light_dir, 0.0f));
 	shadow_ray.dir = ctx.light_dir;
-	if (scene_is_occluded(scene, &shadow_ray, ctx.light_dist))
+	shadow_ray.invdir = 1 / shadow_ray.dir;
+	shadow_ray.orig_div = shadow_ray.origin * shadow_ray.invdir;
+	shadow_ray.sign[0] = (shadow_ray.invdir.x < 0);
+	shadow_ray.sign[1] = (shadow_ray.invdir.y < 0);
+	shadow_ray.sign[2] = (shadow_ray.invdir.z < 0);
+	if (scene_is_occluded(scene, &shadow_ray, ctx.light_dist, hit))
 		return ;
 	shade_diffuse(&ctx, color);
 	shade_specular_blinn(&ctx, color);

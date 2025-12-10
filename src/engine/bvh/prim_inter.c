@@ -6,7 +6,7 @@
 /*   By: norivier <norivier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/31 02:11:27 by norivier          #+#    #+#             */
-/*   Updated: 2025/12/10 05:05:55 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/10 19:10:07 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ extern inline int	triangle_inter(t_ray r, t_triangle *tr, t_hit *hit)
 // 	hit->v = phi * (inv_pi);
 // }
 
-void	print_vec3(t_vec3f vec);
 FORCEINLINE
 extern inline int	sphere_inter(t_ray r, t_sphere *s, t_hit *hit)
 {
@@ -94,7 +93,7 @@ extern inline int	sphere_inter(t_ray r, t_sphere *s, t_hit *hit)
 		hit->t = roots[0];
 	else if (nroots > 1 && roots[1] > EPSILON)
 		hit->t = roots[1];
-	if (hit->t < -EPSILON)
+	if (hit->t <= EPSILON)
 		return (0);
 	return (1);
 }
@@ -148,50 +147,50 @@ FORCEINLINE
 extern inline int	cylinder_inter(t_ray r, t_cylinder *cl, t_hit *hit)
 {
 	t_vec3f				ro;
+	float				ro_dot;
 	t_vec3f				rd;
+	float				rd_dot;
 	t_equ				eq;
 	float				roots[2];
 	int					nroots;
-	t_vec3f				p_local;
+	float				t;
 	int					hit_happened;
 	int					i;
 
 	// ro = mat3x3_mulv(cl->inv_basis, vec3f_sub(r.origin, cl->p0));
 	// rd = mat3x3_mulv(cl->inv_basis, r.dir);
-	ro = r.origin;
-	rd = r.dir;
-	eq.a = rd.x * rd.x + rd.z * rd.z;
-	eq.b = 2.0f * (ro.x * rd.x + ro.z * rd.z);
-	eq.c = ro.x * ro.x + ro.z * ro.z - cl->r_squared;
+	ro = r.origin - cl->base;
+	ro_dot = vec3f_dot(ro, cl->axis);
+	ro = ro - cl->axis * ro_dot;
+	rd_dot = vec3f_dot(r.dir, cl->axis);
+	rd = r.dir - cl->axis * rd_dot;
+	eq.a = vec3f_dot(rd, rd);
+	eq.b = 2.0f * vec3f_dot(rd, ro);
+	eq.c = vec3f_dot(ro, ro) - cl->r_squared;
 	nroots = solve_quad(eq, roots);
 	hit_happened = 0;
 	i = 0;
-	hit->t = FLT_MAX;
 	while (i < nroots)
 	{
 		if (roots[i] > EPSILON)
 		{
-			p_local = vec3f_add(ro, vec3f_scale(rd, roots[i]));
-			if (p_local.y > -EPSILON && p_local.y <= cl->height + EPSILON)
+			t = ro_dot + rd_dot * roots[i];
+			if (t > -EPSILON && t <= cl->height + EPSILON)
 			{
 				if (roots[i] < hit->t)
 				{
 					hit->t = roots[i];
-					hit->point = p_local;
-					hit->normal = vec3f_normalize((t_vec3f){hit->point.x, 0, hit->point.z});
 					hit_happened = 1;
 				}
 			}
 		}
 		i += 1;
 	}
-	if (fabsf(rd.y) > EPSILON) {
-		if (cylinder_cap(r, cl, hit))
-			hit_happened = 1;
-	}
-	if (hit_happened == 0)
-		return (0);
-	return (1);
+	// if (fabsf(rd.y) > EPSILON) {
+	// 	// if (cylinder_cap(r, cl, hit))
+	// 	// 	hit_happened = 1;
+	// }
+	return (hit_happened);
 }
 
 // Looks ok ?
@@ -255,11 +254,7 @@ extern inline int	prim_inter(t_ray r, t_primitive *p, t_hit *out)
 	{
 		int	result;
 
-		// p->tr.edge1 -= p->tr.v0;
-		// p->tr.edge2 -= p->tr.v0;
 		result = triangle_inter(r, &p->tr, out);
-		// p->tr.edge1 += p->tr.v0;
-		// p->tr.edge2 += p->tr.v0;
 		return (result);
 	}
 	else if (p->type == PRIM_SPHERE)

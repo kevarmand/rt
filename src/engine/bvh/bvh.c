@@ -6,11 +6,12 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 20:45:35 by norivier          #+#    #+#             */
-/*   Updated: 2025/12/10 05:19:03 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/10 16:27:39 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bvh.h"
+#include "rt_config.h"
 #include "types.h"
 #include "vector.h"
 #include <float.h>
@@ -81,7 +82,7 @@ int	bvh_inter(t_ray r, t_bvhnode *nodes, t_primitive *prims, t_hit *out)
 	int			hit_happened;
 
 	hit_happened = 0;
-	out->t = FLT_MAX;
+	// out->t = FLT_MAX;
 	sp = 0;
 	stack[sp++] = 0;
 	while (sp > 0)
@@ -97,7 +98,6 @@ int	bvh_inter(t_ray r, t_bvhnode *nodes, t_primitive *prims, t_hit *out)
 		if (node->is_leaf)
 		{
 			uint32_t	i;
-
 			i = 0;
 			while (i < node->leaf.count)
 			{

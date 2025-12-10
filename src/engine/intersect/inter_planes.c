@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 21:35:35 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/28 15:03:25 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/10 18:26:13 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int inter_plane(const t_plane *plane, const t_ray *ray, float *out_distance)
 	float	t;
 
 	denom = vec3f_dot(plane->normal, ray->dir);
-	if (fabsf(denom) < 1e-6f)
+	if (fabsf(denom) < EPSILON)
 		return (0);
 	numerator = - (vec3f_dot(plane->normal, ray->origin) + plane->d);
 	t = numerator / denom;

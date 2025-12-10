@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 18:08:04 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/10 03:12:13 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/10 18:19:43 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,8 @@ int	inter_torus(const t_torus *torus, const t_ray *ray, float *dist);
 int	inter_primitive(const t_primitive *primitive,
 			const t_ray *ray, float *out_distance);
 
-int	scene_is_occluded(const t_scene *scene, const t_ray *ray, float max_dist);
+int	scene_is_occluded(const t_scene *scene, const t_ray *ray,
+				float max_distance, t_hit *hit);
 
 /* ************************************************************************** */
 /*  							Shading									  	  */
@@ -121,6 +122,7 @@ void	shade_refraction(const t_scene *scene,
 			const t_hit *hit, t_shading_ctx *ctx, t_vec3f *color);
 
 void	apply_surface_shading(const t_scene *sc, t_hit *hit);
+t_ray	build_ray(t_vec3f origin, t_vec3f direction);
 
 /* ************************************************************************** */
 /*							ENGINE       									  */

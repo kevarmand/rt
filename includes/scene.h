@@ -25,11 +25,11 @@ typedef struct s_aabb
 /* --------- Types de primitives géométriques --------- */
 typedef enum e_primtype
 {
-	PRIM_TRIANGLE = 0,
-	PRIM_SPHERE   = 1,
-	PRIM_CYLINDER = 2,
-	PRIM_TORUS    = 3,
-	PRIM_PLANE   = 4
+	PRIM_TRIANGLE,
+	PRIM_PLANE,
+	PRIM_SPHERE,
+	PRIM_CYLINDER,
+	PRIM_TORUS,
 	/* PRIM_PLANE non listé ici: plans traités hors BVH. */
 }	t_primtype;
 

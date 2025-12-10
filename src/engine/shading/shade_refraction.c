@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 14:17:36 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/04 15:33:21 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/10 16:29:38 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ static int	build_refraction_ray(const t_hit *hit,
 	refr_ray->dir = vec3f_normalize(dir);
 	refr_ray->origin = vec3f_add(hit->point,
 			vec3f_scale(refr_ray->dir, 1e-2f));
+	*refr_ray = build_ray(refr_ray->origin, refr_ray->dir);
 	return (1);
 }
 

@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 21:21:27 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/08 13:55:27 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/10 18:07:41 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,8 @@ int	shade_hit(const t_scene *scene, const t_hit *hit,
 	refraction_color = (t_vec3f){0.0f, 0.0f, 0.0f};
 	shade_ambient(scene, hit, &local_color);
 	shade_direct_lights(scene, hit, &local_color);
+	*color_out = local_color;
+	return (0);
 	material = &scene->materials[hit->material_id];
 	fresnel_factor = fresnel_schlick(material, hit, ctx);
 	reflect_factor = fresnel_factor * material->reflection;
