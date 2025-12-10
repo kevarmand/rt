@@ -30,6 +30,7 @@ int	copy_sphere_to_primitive(const t_parsed_element *src, t_primitive *dst)
 		src->data.sphere.center[1],
 		src->data.sphere.center[2]});
 	dst->sp.radius = (src->data.sphere.diameter / 2.0f);
+	dst->sp.r_squared = dst->sp.radius * dst->sp.radius;
 	return (SUCCESS);
 }
 
@@ -55,7 +56,7 @@ int	copy_cylinder_to_primitive(const t_parsed_element *src, t_primitive *dst)
 	dst->cy.axis = axis;
 	dst->cy.height = height;
 	dst->cy.radius = radius;
-	dst->cy.radius_sq = radius * radius;
+	dst->cy.r_squared = radius * radius;
 	dst->cy.base = vec3f_sub(center, vec3f_scale(axis, 0.5f * height));
 	return (SUCCESS);
 }

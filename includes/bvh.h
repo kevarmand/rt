@@ -6,7 +6,7 @@
 /*   By: norivier <norivier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 20:01:56 by norivier          #+#    #+#             */
-/*   Updated: 2025/11/13 22:15:52 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/10 04:30:06 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,54 +14,14 @@
 #ifndef BVH_H
 # define BVH_H 1
 
+# include <stddef.h>
 # include "vector.h"
+# include "scene.h"
+# include "engine.h"
 # define MALLOC_ERR -2
 # define LEAF_THRESHOLD 4
+# define STACK_MAX_DEPTH 64
 # define BIN_COUNT 16
-
-typedef enum __attribute__((packed)) e_primtype : uint8_t
-{
-	PRIM_TRIANGLE,
-	PRIM_SPHERE,
-	PRIM_CYLINDER,
-	PRIM_TORUS,
-}	t_primtype;
-
-typedef struct s_triangle
-{
-	t_vec3f		v0;
-	t_vec3f		edge1;
-	t_vec3f		edge2;
-	t_vec3f		normal;
-}	t_triangle;
-
-typedef struct s_sphere
-{
-	t_vec3f	center;
-	float	radius;
-	float	r_squared;
-	float	inv_r;
-}	t_sphere;
-
-typedef struct s_cylinder
-{
-	t_vec3f	p0;
-	t_vec3f	p1;
-	t_vec3f	axis; // (p1 - p0) / height this is normalized
-	float	height; // ||p1 - p0||
-	float	inv_height;
-	float	radius;
-	float	r_squared;
-}	t_cylinder;
-
-typedef struct s_torus
-{
-	t_vec3f	center;
-	float	R;
-	float	r;
-	float	r_square;
-	float	R_square;
-}	t_torus;
 
 typedef struct s_transform
 {
@@ -70,22 +30,12 @@ typedef struct s_transform
 	t_vec3f			trans;
 }	t_transform;
 
-typedef struct s_aabb
+typedef struct s_bin
 {
-	t_vec3f	b[2];
-}	t_aabb;
+	t_aabb	bounds;
+	int		count;
+}	t_bin;
 
-typedef struct __attribute__((aligned(16))) s_primitive
-{
-	t_primtype		type;
-	union
-	{
-		t_triangle	tr;
-		t_sphere	sp;
-		t_cylinder	cy;
-		t_torus		to;
-	};
-}	t_primitive;
 
 typedef struct s_primref
 {
@@ -94,62 +44,6 @@ typedef struct s_primref
 	uint32_t	prim_id;
 }	t_primref;
 
-typedef struct s_ray
-{
-	t_vec3f	origin;
-	t_vec3f	dir;
-	t_vec3f	invdir;
-	t_vec3f	orig_div;
-	int		sign[3];
-}	t_ray;
-
-typedef struct s_bvhnode
-{
-	t_aabb	bounds;
-	uint8_t	is_leaf;
-	union
-	{
-		struct s_node
-		{
-			uint32_t	left;
-			uint32_t	right;
-		}	node;
-		struct s_leaf
-		{
-			uint32_t	start;
-			uint32_t	count;
-		}	leaf;
-	};
-}	t_bvhnode;
-
-typedef struct s_blas
-{
-	t_primitive	*p;
-	uint32_t	prim_count;
-	t_primref	*pref;
-	uint32_t	primref_count;
-	t_bvhnode	*nodes;
-	uint32_t	node_count;
-}	t_blas;
-
-typedef struct s_object
-{
-	t_blas		*blas;
-	t_mat3x4f	o_t_w;
-	t_mat3x4f	w_t_o;
-	t_aabb		bounds;
-}	t_object;
-
-typedef t_bvhnode	t_tlas_node;
-
-typedef struct s_tlas
-{
-	t_object	*objects;
-	uint32_t	obj_count;
-	t_tlas_node	*nodes;
-	uint32_t	node_count;
-}	t_tlas;
-
 typedef struct s_bvh_child
 {
 	int			start;
@@ -157,16 +51,11 @@ typedef struct s_bvh_child
 	int			node_idx;
 }	t_bvh_child;
 
-typedef struct s_bin
-{
-	t_aabb	bounds;
-	int		count;
-}	t_bin;
-
 typedef struct s_bvh_buf
 {
 	t_primref	*pref;
 	int			*pref_idx;
+	t_bvh_child	stack[STACK_MAX_DEPTH];
 	t_bin		bins[BIN_COUNT];
 	t_aabb		prefix[BIN_COUNT];
 	t_aabb		suffix[BIN_COUNT];
@@ -176,7 +65,6 @@ typedef struct s_bvh_buf
 	int			bin_split_idx;
 	int			nodecount;
 }	t_bvh_buf;
-
 
 // fuck the norme, amirite ?
 typedef struct s_aabb_inter
@@ -204,16 +92,6 @@ typedef struct s_moller
 	t_vec3f	s;
 }	t_moller;
 
-typedef struct s_hit
-{
-	float	u;
-	float	v;
-	float	t;
-	t_vec3f	inter;
-	t_vec3f	normal;
-	int		prim_id;
-}	t_hit;
-
 typedef struct s_sphere_inter
 {
 	t_vec3f	L;
@@ -240,10 +118,10 @@ typedef struct s_equ
 
 // AABB
 t_aabb	prim_bound(t_primitive *p);
-void	prim_nbound(t_bvh_child pack, t_aabb out);
 t_aabb	bound_merge(t_aabb a, t_aabb b);
 float	bound_area(t_aabb b);
-void	prim_bound_init(t_primref *pref, t_primitive *prims, int count);
+void	prim_bound_init(t_bvh_buf *buf, t_primitive *prims, int count);
+t_aabb	prim_bound_range(t_primref *pref, int *indice, int start, int count);
 int		bound_intersect(t_ray r, t_aabb bound, float *near, float *far);
 // Sorting
 void	swap_int(int *a, int *b);
@@ -253,8 +131,25 @@ void	sortf2(float *a, float *b);
 void	sortf3(float *a, float *b, float *c);
 void	sortf4(float *a, float *b, float *c, float *d);
 // Equations
-int		solve_quadratic(t_equ arg, float roots[]);
+int		solve_quad(t_equ arg, float roots[]);
 int		solve_quartic(t_equ arg, float roots[]);
 // Inter math
 t_vec3f	mat3x3_mulv(t_mat3x3f m, t_vec3f v);
+// SAH
+float	prim_centroid_axis(const t_primref *p, int axis);
+void	zero_bins(t_bin *bins, size_t siz);
+int		fill_bins(t_bvh_buf *b,t_bvh_child e, t_vec3f *cbounds, int axis);
+void	instance_cbounds(t_bvh_buf *b, t_bvh_child e, t_vec3f *cbounds);
+int		sah_split(t_bvh_child e, t_bvh_buf *b);
+// Primitive Inter functions
+int	triangle_inter(t_ray r, t_triangle *tr, t_hit *hit);
+int	sphere_inter(t_ray r, t_sphere *s, t_hit *hit);
+int	cylinder_inter(t_ray r, t_cylinder *cl, t_hit *hit);
+int	torus_inter(t_ray r, t_torus *t, t_hit *hit);
+int	prim_inter(t_ray r, t_primitive *p, t_hit *out);
+void	build_bvh(t_bvhnode *nodes, t_bvh_buf *buf, int primcount);
+t_primitive	*reorder_prims(t_primitive *prims, int *idx, size_t count);
+int	bvh_inter(t_ray r, t_bvhnode *nodes, t_primitive *prims, t_hit *out);
+// Centroid
+t_vec3f	prim_centroid(t_primitive *p);
 #endif // !BVH_H

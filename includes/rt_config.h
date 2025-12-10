@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 17:07:05 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/04 17:42:21 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/10 04:32:36 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,9 @@
 # define TILE_SIZE 64
 # define MAX_WORKER_THREADS 25
 # define RGB_CHANNELS 3
-# define EPSILON 0.0001f
+# ifndef EPSILON
+#  define EPSILON 0x1.0c6f7ap-20f
+# endif
 
 # define MAX_RECURSION_DEPTH 20
 # define MIN_CONTRIBUTION 0.01f

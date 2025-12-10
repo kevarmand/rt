@@ -6,12 +6,13 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 21:25:56 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/30 13:10:12 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/10 05:21:59 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "engine.h"
 #include "scene.h"
+#include "bvh.h"
 #include <stdio.h>
 
 
@@ -82,6 +83,17 @@ static void	scene_hit_primitives(const t_scene *scene,
 	}
 }
 
+static void	scene_hit_prims(const t_scene *scene,
+			const t_ray *ray, t_hit *out_hit)
+{
+	int	status;
+
+	status = bvh_inter(*ray, scene->bvh_nodes, scene->primitives,
+					out_hit);
+	if (status != 0)
+		out_hit->kind = HIT_PRIMITIVE;
+}
+
 static void	scene_hit_planes(const t_scene *scene,
 			const t_ray *ray, t_hit *out_hit)
 {
@@ -103,6 +115,7 @@ int	scene_hit(const t_scene *scene, const t_ray *ray, t_hit *out_hit)
 {
 	scene_hit_planes(scene, ray, out_hit);
 	scene_hit_primitives(scene, ray, out_hit);
+	// scene_hit_prims(scene, ray, out_hit);
 	if (out_hit->kind == HIT_NONE)
 		return (0);
 	return (1);

@@ -24,6 +24,11 @@ static void	build_ray_for_pixel(const t_render_view *view,
 	dir = vec3f_normalize(dir);
 	ray->origin = view->origin;
 	ray->dir = dir;
+	ray->invdir = 1 / dir;
+	ray->orig_div = view->origin * ray->invdir;
+	ray->sign[0] = (ray->invdir.x < 0);
+	ray->sign[1] = (ray->invdir.y < 0);
+	ray->sign[2] = (ray->invdir.z < 0);
 }
 
 static int	calcul_pixel_color(t_data *data, const t_render_view *view,

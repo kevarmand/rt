@@ -6,7 +6,7 @@
 /*   By: norivier <norivier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/31 02:01:43 by norivier          #+#    #+#             */
-/*   Updated: 2025/10/31 02:10:30 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/10 03:55:28 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "types.h"
 #include "math.h"
 #include "bvh.h"
+#include "scene.h"
 #include "vector.h"
 
 FORCEINLINE
@@ -27,7 +28,7 @@ extern inline t_aabb	bound_merge(const t_aabb a, const t_aabb b)
 }
 
 FORCEINLINE
-extern inline t_vec3f	aabb_centroid(const t_aabb a)
+static inline t_vec3f	aabb_centroid(const t_aabb a)
 {
 	return ((a.b[0] + a.b[1]) * RCP_2);
 }
@@ -37,23 +38,23 @@ extern inline float	bound_area(t_aabb b)
 {
 	t_vec3f	d;
 
-	d.x = b.b[1].x - b.b[0].x;
-	d.y = b.b[1].y - b.b[0].y;
-	d.z = b.b[1].z - b.b[0].z;
+	d = b.b[1] - b.b[0];
 	return (2.0f * (d.x * d.y + d.y * d.z + d.z * d.x));
 }
 
 FORCEINLINE
-extern inline void	prim_bound_init(t_primref *pref, t_primitive *prims, int count)
+extern inline void	prim_bound_init(t_bvh_buf *buf, t_primitive *prims,
+	int count)
 {
 	int	i;
 
 	i = 0;
 	while (i < count)
 	{
-		pref[i].prim_id = i;
-		pref[i].bounds = prim_bound(&prims[i]);
-		pref[i].centroid = aabb_centroid(pref[i].bounds);
+		buf->pref[i].prim_id = i;
+		buf->pref_idx[i] = i;
+		buf->pref[i].bounds = prim_bound(&prims[i]);
+		buf->pref[i].centroid = aabb_centroid(buf->pref[i].bounds);
 		i += 1;
 	}
 }
@@ -81,4 +82,20 @@ extern inline int	bound_intersect(t_ray r, t_aabb bound, float *near,
 	if (far != ((void *)0))
 		far[0] = tmax;
 	return (1);
+}
+
+FORCEINLINE
+t_aabb	prim_bound_range(t_primref *pref, int *indice, int start, int count)
+{
+	t_aabb	out;
+	int		i;
+
+	out = pref[indice[start]].bounds;
+	i = 1;
+	while (i < count)
+	{
+		out = bound_merge(out, pref[indice[start + i]].bounds);
+		i += 1;
+	}
+	return (out);
 }

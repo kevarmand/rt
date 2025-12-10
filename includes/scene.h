@@ -7,6 +7,7 @@
 
 
 # include "vector.h"
+# include <stdint.h>
 /* Indice uniforme pour référencer les éléments de la scène. */
 typedef int t_index;
 
@@ -15,7 +16,11 @@ typedef enum e_scene_id {
 }	t_scene_id;
 
 /* AABB utilitaire (min,max) — utilisé par les nœuds BVH et les objets. */
-typedef t_vec3f t_aabb[2];
+// typedef t_vec3f t_aabb[2];
+typedef struct s_aabb
+{
+	t_vec3f	b[2];
+}	t_aabb;
 
 /* --------- Types de primitives géométriques --------- */
 typedef enum e_primtype
@@ -42,6 +47,7 @@ typedef struct s_sphere
 {
 	t_vec3f center;
 	float   radius;
+	float	r_squared;
 }	t_sphere;
 
 typedef struct s_cylinder
@@ -50,7 +56,7 @@ typedef struct s_cylinder
 	t_vec3f	axis;       // unitaire
 	float	height;     // longueur
 	float	radius;     // rayon
-	float	radius_sq;  // rayon^2
+	float	r_squared;  // rayon^2
 }	t_cylinder;
 
 typedef struct s_torus
@@ -58,6 +64,8 @@ typedef struct s_torus
 	t_vec3f center;
 	float   R;      /* grand rayon (centre → tube) */
 	float   r;      /* petit rayon (rayon du tube) */
+	float	r_square;
+	float	R_square;
 }	t_torus;
 
 /* --------- Plans “infini” (hors BVH) ---------
@@ -164,16 +172,24 @@ typedef struct s_camera
 /* --------- BVH (runtime) ---------
  * Nœuds immuables; feuilles pointent sur une plage contiguë de primitives.
  */
-typedef struct s_bvh_node
+typedef struct s_bvhnode
 {
-	t_aabb  bounds;        /* AABB du nœud (min,max) */
-	int     is_leaf;       /* 0/1 */
-	t_index left_child;    /* index dans nodes[], inutilisé si feuille */
-	t_index right_child;   /* index dans nodes[], inutilisé si feuille */
-	t_index first_prim;    /* utilisé si feuille */
-	int     prim_count;    /* utilisé si feuille */
-}	t_bvh_node;
-
+	t_aabb	bounds;
+	uint8_t	is_leaf;
+	union
+	{
+		struct s_node
+		{
+			uint32_t	left;
+			uint32_t	right;
+		}	node;
+		struct s_leaf
+		{
+			uint32_t	start;
+			uint32_t	count;
+		}	leaf;
+	};
+}	t_bvhnode;
 
 
 /* --------- Scène finale immuable --------- */
@@ -188,7 +204,7 @@ typedef struct s_scene
 	t_primitive *primitives;
 	int          primitive_count;
 
-	t_bvh_node  *bvh_nodes;
+	t_bvhnode	*bvh_nodes;
 	int          bvh_node_count;
 	t_index      bvh_root_id; /* SCENE_ID_NONE si vide */
 

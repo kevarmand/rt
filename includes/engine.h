@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 18:08:04 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/01 17:31:02 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/10 03:12:13 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,9 @@ typedef struct s_engine
 typedef struct s_ray {
 	t_vec3f	origin;
 	t_vec3f	dir;
+	t_vec3f	invdir;
+	t_vec3f	orig_div;
+	int		sign[3];
 }	t_ray;
 
 typedef enum e_hit_kind
@@ -101,7 +104,7 @@ int	scene_is_occluded(const t_scene *scene, const t_ray *ray, float max_dist);
 /* ************************************************************************** */
 
 
-int	shading_ray(const t_scene *scene, const t_ray *ray, 
+int	shading_ray(const t_scene *scene, const t_ray *ray,
 	t_shading_ctx *ctx, t_vec3f *color_out);
 
 int	shade_hit(const t_scene *scene, const t_hit *hit, t_shading_ctx *ctx, t_vec3f *color_out);

@@ -6,7 +6,7 @@
 /*   By: norivier <norivier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/31 02:20:09 by norivier          #+#    #+#             */
-/*   Updated: 2025/10/31 04:07:09 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/10 04:29:45 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 // Stable version
 FORCEINLINE
-extern inline int	solve_quadratic(t_equ arg, float roots[])
+extern inline int	solve_quad(t_equ arg, float roots[])
 {
 	float	disc;
 	float	disc_sqrt;
@@ -64,7 +64,7 @@ extern inline int	solve_cubic(t_equ arg, float roots[])
 	float	phi;
 
 	if (fabsf(arg.a) < EPSILON)
-		return (solve_quadratic((t_equ){arg.b, arg.c, arg.d, 0, 0}, roots));
+		return (solve_quad((t_equ){arg.b, arg.c, arg.d, 0, 0}, roots));
 	inv_a = ft_rcpf(arg.a);
 	arg.b *= inv_a;
 	arg.c *= inv_a;
@@ -138,8 +138,8 @@ extern inline int	solve_quartic(t_equ arg, float roots[])
 		v = 0.0f;
 	else
 		v = -q / (2.0f * u);
-	n = solve_quadratic((t_equ){1.0f, u, z - v, 0, 0}, roots);
-	n += solve_quadratic((t_equ){1.0f, -u, z + v, 0, 0}, roots + n);
+	n = solve_quad((t_equ){1.0f, u, z - v, 0, 0}, roots);
+	n += solve_quad((t_equ){1.0f, -u, z + v, 0, 0}, roots + n);
 	substitute = arg.b * RCP_4;
 	i = 0;
 	while (i < n)

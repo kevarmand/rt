@@ -6,11 +6,12 @@
 /*   By: norivier <norivier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/31 01:56:51 by norivier          #+#    #+#             */
-/*   Updated: 2025/10/31 02:00:28 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/10 04:04:41 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bvh.h"
+#include "scene.h"
 #include "types.h"
 
 FORCEINLINE
@@ -32,12 +33,8 @@ static inline t_aabb	sphere_bound(t_sphere s)
 {
 	t_aabb	out;
 
-	out.b[0].x = s.center.x - s.radius;
-	out.b[0].y = s.center.y - s.radius;
-	out.b[0].z = s.center.z - s.radius;
-	out.b[1].x = s.center.x + s.radius;
-	out.b[1].y = s.center.y + s.radius;
-	out.b[1].z = s.center.z + s.radius;
+	out.b[0] = s.center - s.radius;
+	out.b[1] = s.center + s.radius;
 	return (out);
 }
 
@@ -45,15 +42,13 @@ FORCEINLINE
 static inline t_aabb	cylinder_bound(t_cylinder c)
 {
 	t_aabb	out;
+	t_vec3f	p1;
 
-	out.b[0] = vec3f_min(c.p0, c.p1);
-	out.b[1] = vec3f_max(c.p0, c.p1);
-	out.b[0].x -= c.radius;
-	out.b[0].y -= c.radius;
-	out.b[0].z -= c.radius;
-	out.b[1].x += c.radius;
-	out.b[1].y += c.radius;
-	out.b[1].z += c.radius;
+	p1 = c.base + c.axis * c.height;
+	out.b[0] = vec3f_min(c.base, p1);
+	out.b[1] = vec3f_max(c.base, p1);
+	out.b[0] -= c.radius;
+	out.b[1] += c.radius;
 	return (out);
 }
 
@@ -64,12 +59,8 @@ static inline t_aabb	torus_bound(t_torus t)
 	t_aabb	out;
 
 	extent = t.R + t.r;
-	out.b[0].x = t.center.x - extent;
-	out.b[0].y = t.center.y - extent;
-	out.b[0].z = t.center.z - extent;
-	out.b[1].x = t.center.x + extent;
-	out.b[1].y = t.center.y + extent;
-	out.b[1].z = t.center.z + extent;
+	out.b[0] = t.center - extent;
+	out.b[1] = t.center + extent;
 	return (out);
 }
 
@@ -88,8 +79,8 @@ extern inline t_aabb	prim_bound(t_primitive *p)
 		out = torus_bound(p->to);
 	else
 	{
-		out.b[0] = (t_vec3f){0, 0, 0};
-		out.b[1] = (t_vec3f){0, 0, 0};
+		out.b[0] = (t_vec3f){0, 0, 0, 0};
+		out.b[1] = (t_vec3f){0, 0, 0, 0};
 	}
 	return (out);
 }

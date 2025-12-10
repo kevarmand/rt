@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 14:43:38 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/04 13:53:20 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/10 04:07:29 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int	inter_cylinder(const t_cylinder *cylinder,
 	quad_a = vec3f_dot(perp_dir, perp_dir);
 	quad_b = 2.0 * vec3f_dot(perp_dir, perp_offset);
 	quad_c = vec3f_dot(perp_offset, perp_offset)
-		 - cylinder->radius_sq;
+		 - cylinder->r_squared;
 	if (!solve_quadratic(quad_a, quad_b, quad_c, roots))
 		return (0);
 	best_t = -1.0;
