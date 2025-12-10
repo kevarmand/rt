@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 12:27:50 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/09 19:29:27 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/10 13:16:49 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,7 @@ typedef struct s_display
 	int		flag_camera_level;
 	int		flag_request_render;
 	int		background_job;
+	int		force_normal_next; 
 	int		flag_img_buffer;
 	int		flag_img_window;
 	t_mouse_state	mouse;

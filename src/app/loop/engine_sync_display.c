@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 20:26:48 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/09 19:54:17 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/10 13:18:50 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ static void	display_engine_receive(t_display *display,
 	int	camera_id;
 	int	is_full;
 	int	job_id;
+	int	mode;
 
 	if (atomic_load(&mailbox->snapshot_ready) == 0)
 		return ;
@@ -33,6 +34,7 @@ static void	display_engine_receive(t_display *display,
 		return ;
 	}
 	job_id = mailbox->snap_job_id;
+	mode = mailbox->render_mode;
 	is_full = (mailbox->tiles_done >= mailbox->tile_count);
 	if (display->background_job == 0
 		&& camera_id == display->current_cam)
@@ -43,17 +45,28 @@ static void	display_engine_receive(t_display *display,
 	}
 	if (is_full && job_id == mailbox->req_job_id)
 	{
-		ft_memcpy(display->frame[camera_id].rgb_pixels,
-			mailbox->rgb_pixels,
-			(size_t)display->pixel_count * sizeof(int));
-		display->frame[camera_id].is_dirty = 0;
-		display->cam_to_render = -1;
-		display->background_job = 0;
+		if (mode == FAST_MODE)
+		{
+			display->cam_to_render = -1;
+			display->background_job = 0;
+			display->force_normal_next = 1;
+			display->flag_request_render = 1;
+		}
+		else if (mode == NORMAL_MODE)
+		{
+			ft_memcpy(display->frame[camera_id].rgb_pixels,
+				mailbox->rgb_pixels,
+				(size_t)display->pixel_count * sizeof(int));
+			display->frame[camera_id].is_dirty = 0;
+			display->cam_to_render = -1;
+			display->background_job = 0;
+		}
 	}
-	printf("Received snapshot for camera %d (job %d), full=%d\n",
-		camera_id, job_id, is_full);
+	printf("Received snapshot for camera %d (job %d), mode=%d, full=%d\n",
+		camera_id, job_id, mode, is_full);
 	atomic_store(&mailbox->snapshot_ready, 0);
 }
+
 
 
 static int	find_next_dirty_camera(t_display *display)
@@ -84,13 +97,23 @@ static void	display_engine_send_foreground(t_scene *scene,
 		return ;
 	camera_id = display->current_cam;
 	display->cam_to_render = camera_id;
-	display->frame[camera_id].is_dirty = 1;
 	display->background_job = 0;
 	mailbox->cam = scene->cameras[camera_id];
+	if (display->force_normal_next != 0)
+	{
+		display->force_normal_next = 0;
+		mailbox->render_mode = NORMAL_MODE;
+		display->frame[camera_id].is_dirty = 1;
+	}
+	else
+	{
+		mailbox->render_mode = FAST_MODE;
+	}
 	mailbox->req_job_id++;
 	atomic_store(&mailbox->request_ready, 1);
 	display->flag_request_render = 0;
 }
+
 
 static void	display_engine_send_background(t_scene *scene,
 				t_display_mailbox *mailbox,
@@ -108,9 +131,11 @@ static void	display_engine_send_background(t_scene *scene,
 	display->cam_to_render = camera_id;
 	display->background_job = 1;
 	mailbox->cam = scene->cameras[camera_id];
+	mailbox->render_mode = NORMAL_MODE;
 	mailbox->req_job_id++;
 	atomic_store(&mailbox->request_ready, 1);
 }
+
 
 static void	display_engine_send(t_scene *scene,
 				t_display_mailbox *mailbox,

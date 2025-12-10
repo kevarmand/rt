@@ -81,6 +81,7 @@ typedef struct s_display_mailbox
 {
 	t_camera	cam;
 	int			req_job_id;
+	int			render_mode;
 	atomic_int	request_ready;
 
 	int			*rgb_pixels;

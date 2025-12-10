@@ -37,7 +37,12 @@ void	*worker_thread(void *arg)
 	wait_for_job(&worker->worker_state, cancel_flag);
 	while (atomic_load(cancel_flag) == 0)
 	{
-		render_tile(data, &worker->tile, &worker->local_view);
+		if (worker->local_view.mode == NORMAL_MODE) 
+			render_tile_normal(data, &worker->tile, &worker->local_view);
+		else if (worker->local_view.mode == FAST_MODE)
+			render_tile_fast(data, &worker->tile, &worker->local_view);
+		else if (worker->local_view.mode == SUPER_MODE)
+			render_tile_super(data, &worker->tile, &worker->local_view);
 		atomic_store(&worker->worker_state, WORKER_DONE);
 		wait_for_job(&worker->worker_state, cancel_flag);
 	}

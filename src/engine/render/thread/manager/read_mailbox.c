@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 18:47:20 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/09 19:59:45 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/10 13:17:35 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ int	manager_read_mailbox(t_render *render)
 		return (0);
 	copy_request(view, &mailbox->cam);
 	view->frame_seq = mailbox->req_job_id;
+	view->mode = mailbox->render_mode;
 	atomic_store(&mailbox->request_ready, 0);
 	apply_cam_request(render);
 	return (1);
