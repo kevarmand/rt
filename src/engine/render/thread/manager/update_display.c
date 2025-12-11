@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 18:39:42 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/10 13:17:59 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/11 15:58:36 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ int	manager_update_display(t_render *render)
 	mailbox->tile_count = manager->tileset.tiles_total;
 	mailbox->tiles_done = manager->tileset.tiles_done;
 	mailbox->snap_job_id = manager->render_view.frame_seq;
-	mailbox->render_mode = manager->render_view.mode;
+	mailbox->snap_camera_id = manager->current_cam_id;
+	mailbox->snapshot_render_mode = manager->render_view.mode;
 	atomic_store(&mailbox->snapshot_ready, 1);
 	return (1);
 }

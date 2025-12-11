@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 20:14:44 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/09 17:34:37 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/11 16:05:10 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,17 +30,10 @@ static void	display_refresh_main_image(t_data *data)
 
 	if (data->display.flag_img_buffer == 0)
 		return ;
-	printf("refresh main image\n");
 	display = &data->display;
 	image = &display->main_img;
-	if (display->frame[display->current_cam].is_dirty)
-	{
-		printf("using display pixels\n");
-		src = display->display_pixels;
-	}
-	else
-		src = (int *)display->frame[display->current_cam].rgb_pixels;
-	byte_count = display->pixel_count * (int)sizeof(int);
+	src = display->display_pixels;
+	byte_count = display->pixel_count * sizeof(int);
 	ft_memcpy(image->data, src, (size_t)byte_count);
 	display->flag_img_buffer = 0;
 	display->flag_img_window = 1;
@@ -90,7 +83,6 @@ static void	display_prepare_render(t_data *data)
 int frame_tick(t_data *data)
 {
 	display_update_camera(data);
-	display_prepare_render(data);
 	engine_sync_display(data);
 	display_refresh_main_image(data);
 	display_update_ui(data);

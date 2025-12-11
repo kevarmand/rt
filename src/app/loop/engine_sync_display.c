@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 20:26:48 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/10 13:18:50 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/11 17:06:07 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,20 @@
 #include "new_rt.h"
 #include "libft.h"
 #include <stdatomic.h>
+
+static int	helper_mode(int is_full, int render_mode)
+{
+	if (is_full)
+	{
+		if (render_mode == FAST_MODE)
+			return (FRAME_STATE_FAST_FULL);
+		else if (render_mode == NORMAL_MODE)
+			return (FRAME_STATE_NORMAL_FULL);
+		else if (render_mode == SUPER_MODE)
+			return (FRAME_STATE_SUPER_FULL);
+	}
+	return (FRAME_STATE_DIRTY);
+}
 
 static void	display_engine_receive(t_display *display,
 				t_display_mailbox *mailbox)
@@ -27,47 +41,23 @@ static void	display_engine_receive(t_display *display,
 
 	if (atomic_load(&mailbox->snapshot_ready) == 0)
 		return ;
-	camera_id = display->cam_to_render;
-	if (camera_id == -1)
-	{
-		atomic_store(&mailbox->snapshot_ready, 0);
-		return ;
-	}
+	camera_id = mailbox->snap_camera_id;
 	job_id = mailbox->snap_job_id;
-	mode = mailbox->render_mode;
+	mode = mailbox->snapshot_render_mode;
 	is_full = (mailbox->tiles_done >= mailbox->tile_count);
-	if (display->background_job == 0
-		&& camera_id == display->current_cam)
+	if (is_full || display->current_cam == camera_id)
 	{
-		ft_memcpy(display->display_pixels, mailbox->rgb_pixels,
+		ft_memcpy(display->frame[camera_id].rgb_pixels,
+			mailbox->rgb_pixels,
 			(size_t)display->pixel_count * sizeof(int));
-		display->flag_img_buffer = 1;
+		display->frame[camera_id].state = helper_mode(is_full, mode);
+		if (display->current_cam == camera_id)
+			display->flag_img_buffer = 1;
 	}
-	if (is_full && job_id == mailbox->req_job_id)
-	{
-		if (mode == FAST_MODE)
-		{
-			display->cam_to_render = -1;
-			display->background_job = 0;
-			display->force_normal_next = 1;
-			display->flag_request_render = 1;
-		}
-		else if (mode == NORMAL_MODE)
-		{
-			ft_memcpy(display->frame[camera_id].rgb_pixels,
-				mailbox->rgb_pixels,
-				(size_t)display->pixel_count * sizeof(int));
-			display->frame[camera_id].is_dirty = 0;
-			display->cam_to_render = -1;
-			display->background_job = 0;
-		}
-	}
-	printf("Received snapshot for camera %d (job %d), mode=%d, full=%d\n",
-		camera_id, job_id, mode, is_full);
+	if (is_full && mailbox->req_job_id == job_id)
+		display->ds_sync.in_flight = 0;
 	atomic_store(&mailbox->snapshot_ready, 0);
 }
-
-
 
 static int	find_next_dirty_camera(t_display *display)
 {
@@ -76,73 +66,40 @@ static int	find_next_dirty_camera(t_display *display)
 	index = 0;
 	while (index < display->total_cams)
 	{
-		if (display->frame[index].is_dirty != 0)
+		if (display->frame[index] != 0)
 			return (index);
 		index++;
 	}
 	return (-1);
 }
 
-static void	display_engine_send_foreground(t_scene *scene,
-				t_display_mailbox *mailbox,
-				t_display *display)
+typedef struct s_local_request
+{
+	int	camera_id;
+	int	render_mode;     // FAST_MODE / NORMAL_MODE / SUPER_MODE
+	int	is_foreground;   // 1 = current_cam, 0 = background
+	int	request_render;  // 1 = il y a un job à envoyer, 0 = rien
+}	t_local_request;
+
+static void	display_engine_send(t_scene *scene, t_display *display,
+				t_display_mailbox *mailbox)
 {
 	int	ready;
 	int	camera_id;
 
-	if (display->flag_request_render == 0)
+	if (req->request_render == 0)
 		return ;
 	ready = atomic_load(&mailbox->request_ready);
 	if (ready != 0)
 		return ;
-	camera_id = display->current_cam;
-	display->cam_to_render = camera_id;
-	display->background_job = 0;
+	camera_id = req->camera_id;
 	mailbox->cam = scene->cameras[camera_id];
-	if (display->force_normal_next != 0)
-	{
-		display->force_normal_next = 0;
-		mailbox->render_mode = NORMAL_MODE;
-		display->frame[camera_id].is_dirty = 1;
-	}
-	else
-	{
-		mailbox->render_mode = FAST_MODE;
-	}
+	mailbox->request_camera_id = camera_id;
+	mailbox->request_render_mode = req->render_mode;
 	mailbox->req_job_id++;
 	atomic_store(&mailbox->request_ready, 1);
-	display->flag_request_render = 0;
-}
-
-
-static void	display_engine_send_background(t_scene *scene,
-				t_display_mailbox *mailbox,
-				t_display *display)
-{
-	int	ready;
-	int	camera_id;
-
-	ready = atomic_load(&mailbox->request_ready);
-	if (ready != 0 || display->cam_to_render != -1)
-		return ;
-	camera_id = find_next_dirty_camera(display);
-	if (camera_id < 0)
-		return ;
-	display->cam_to_render = camera_id;
-	display->background_job = 1;
-	mailbox->cam = scene->cameras[camera_id];
-	mailbox->render_mode = NORMAL_MODE;
-	mailbox->req_job_id++;
-	atomic_store(&mailbox->request_ready, 1);
-}
-
-
-static void	display_engine_send(t_scene *scene,
-				t_display_mailbox *mailbox,
-				t_display *display)
-{
-	display_engine_send_foreground(scene, mailbox, display);
-	display_engine_send_background(scene, mailbox, display);
+	display->ds_sync.in_flight = 1;
+	display->ds_sync.pending = 0;
 }
 
 
@@ -150,10 +107,14 @@ void	engine_sync_display(t_data *data)
 {
 	t_display			*display;
 	t_display_mailbox	*mailbox;
+	t_local_request		req;
 
 	display = &data->display;
 	mailbox = &data->engine.render.mailbox;
-	display_engine_send(&data->scene, mailbox, display);
+	req.request_render = 0;
 	display_engine_receive(display, mailbox);
-
+	display_request_policy(&data->scene, display, &req);
+	if (req.request_render != 0)
+		display_engine_send(&data->scene, display, mailbox, &req);
 }
+

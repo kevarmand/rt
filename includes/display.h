@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 12:27:50 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/10 13:16:49 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/11 17:06:43 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,17 +30,52 @@ typedef struct s_image
 	int		height;
 }	t_image;
 
+typedef enum e_render_level
+{
+	RENDER_LEVEL_FAST = 0,
+	RENDER_LEVEL_NORMAL = 1,
+	RENDER_LEVEL_SUPER = 2
+}	t_render_level;
+
+typedef enum e_frame_state
+{
+	FRAME_STATE_DIRTY = 0,
+	FRAME_STATE_FAST_FULL = 1,
+	FRAME_STATE_NORMAL_FULL = 2,
+	FRAME_STATE_SUPER_FULL = 3
+}	t_frame_state;
+
+typedef enum e_user_render_mode
+{
+	USER_RENDER_AUTO = 0,
+	USER_RENDER_FORCE_FAST = 1,
+	USER_RENDER_FORCE_NORMAL = 2,
+	USER_RENDER_FORCE_SUPER = 3
+}	t_user_render_mode;
 
 typedef struct s_frame
 {
-	int				*rgb_pixels; // buffer calcul interne
-	int				is_dirty;
+	int				*rgb_pixels;
+	t_frame_state	state;
 }	t_frame;
-
 typedef struct s_ui
 {
 	int 	visible;
 }	t_ui;
+
+
+typedef struct s_ds_sync
+{
+	/* Job déjà envoyé au manager et en attente de snapshot */
+	int	in_flight;          /* 1 si un rendu est en cours */
+
+	/* Job décidé par la policy mais pas encore envoyé */
+	int	pending;            /* 1 si une requête est prête à être envoyée */
+	int
+	int	p_cam;              /* caméra cible */
+	int	p_mode;             /* FAST / NORMAL / SUPER */
+}	t_ds_sync;
+
 
 /**
  * @brief Display system state and communication flags.
@@ -146,7 +181,6 @@ typedef struct s_display
 	t_frame	*frame;
 	int		total_cams;
 	int		pixel_count;
-	int		*display_pixels;
 
 	int		current_cam;
 	int		cam_to_render;
@@ -159,6 +193,8 @@ typedef struct s_display
 	int		force_normal_next; 
 	int		flag_img_buffer;
 	int		flag_img_window;
+	int		user_mode;
+	t_ds_sync	ds_sync;
 	t_mouse_state	mouse;
 }	t_display;
 

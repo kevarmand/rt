@@ -79,22 +79,29 @@ typedef struct s_tileset
 
 typedef struct s_display_mailbox
 {
+	/* Request MLX -> Manager */
 	t_camera	cam;
+	int			request_camera_id;
 	int			req_job_id;
-	int			render_mode;
+	int			request_render_mode;
 	atomic_int	request_ready;
 
+	/* Snapshot Manager -> MLX */
 	int			*rgb_pixels;
 	int			tile_count;
 	int			tiles_done;
+	int			snap_camera_id;
 	int			snap_job_id;
+	int			snapshot_render_mode;
 	atomic_int	snapshot_ready;
 }	t_display_mailbox;
+
 
 typedef struct s_mgr
 {
 	pthread_t		thread_id;
 	int				render_in_progress;
+	int				current_cam_id;
 
 	t_tileset		tileset;
 	int				*rgb_buffer;
