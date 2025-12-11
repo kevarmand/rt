@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   keycode.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karmand <karmand@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/10 14:01:53 by karmand           #+#    #+#             */
-/*   Updated: 2020/01/11 14:25:39 by karmand          ###   ########.fr       */
+/*   Updated: 2025/12/11 22:55:30 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,5 +82,15 @@
 # define KEY_MOINS	65453
 # define KEY_FOIS	65450
 # define KEY_DIV	65455
+
+
+
+/***
+ * Function keys
+ */
+# define KEY_F1		65470
+# define KEY_F2		65471
+# define KEY_F3		65472
+# define KEY_F4		65473
 
 #endif

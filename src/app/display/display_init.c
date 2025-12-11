@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 18:42:36 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/11 21:56:55 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/11 22:56:50 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ static void	display_reset_struct(t_display *display, int pixel_count)
 	display->flag_img_window = 1;
 	display->flag_camera_changed = 1;
 	display->flag_ui = 1;
-	display->user_render_mode = USER_RENDER_LOCK_SUPER;
+	display->user_render_mode = USER_RENDER_AUTO;
 }
 
 int	load_scene_textures(t_scene *scene,t_display *display);
