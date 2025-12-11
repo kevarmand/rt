@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 15:04:24 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/02 11:20:18 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/10 19:36:17 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,10 +150,10 @@ void	shade_one_light(const t_scene *scene,
 	init_ctx_light(scene, hit, light_i, &ctx);
 	if (ctx.light_dist <= 0.0f)
 		return ;
-	offset = vec3f_scale(ctx.normal, 1e-4f);
+	offset = vec3f_scale(ctx.normal, 0.0f);
 	shadow_ray.origin = vec3f_add(ctx.point, offset);
 	shadow_ray.origin = vec3f_add(shadow_ray.origin,
-			vec3f_scale(ctx.light_dir, 0.01f));
+			vec3f_scale(ctx.light_dir, 0.0f));
 	shadow_ray.dir = ctx.light_dir;
 	if (scene_is_occluded(scene, &shadow_ray, ctx.light_dist))
 		return ;
