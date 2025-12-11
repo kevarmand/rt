@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 20:14:44 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/08 13:33:15 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/11 20:42:47 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,32 +21,35 @@
 #include <stdio.h>
 #include <math.h>
 
-static void	display_update_main_image(t_data *data)
+static void	display_refresh_main_image(t_data *data)
 {
 	t_display	*display;
 	t_image		*image;
 	int			byte_count;
+	int			*src;
 
-	if (data->display.flag_img == 0)
+	if (data->display.flag_img_buffer == 0)
 		return ;
 	display = &data->display;
 	image = &display->main_img;
-	byte_count = display->pixel_count * (int)sizeof(int);
-	ft_memcpy(image->data, display->display_pixels,
-		(size_t)byte_count);
-	display->flag_img = 1;
+	src = display->frame[display->current_cam].rgb_pixels;
+	byte_count = display->pixel_count * sizeof(int);
+	ft_memcpy(image->data, src, (size_t)byte_count);
+	display->flag_img_buffer = 0;
+	display->flag_img_window = 1;
 }
 
 
 void	display_draw_base(t_data *data)
 {
-	if (data->display.flag_img == 0)
+	if (data->display.flag_img_window == 0)
 		return ;
 	mlx_put_image_to_window(
 		data->display.mlx,
 		data->display.win,
 		data->display.main_img.img_ptr,
 		0, 0);
+	data->display.flag_img_window = 0;
 }
 
 static void	display_draw_ui(t_data *data)
@@ -54,6 +57,7 @@ static void	display_draw_ui(t_data *data)
 	if (!data->display.flag_ui)
 		return ;
 	//fait des truc en attendant
+	data->display.flag_ui = 0;
 	(void)data;
 }
 
@@ -63,11 +67,15 @@ static void	display_update_ui(t_data *data)
 	//si l ui est recalculer il mofiera les champ display.flag_ui et display.flag_img
 }
 
-static void	clear_flags(t_data *data)
+static void	display_prepare_render(t_data *data)
 {
-	data->display.flag_img = 0;
-	data->display.flag_ui = 0;
-	//reset_flag_sepcifique UI
+	t_display	*display;
+
+	display = &data->display;
+	if (!display->flag_camera_changed)
+		return ;
+	display->flag_request_render = 1;
+	display->flag_camera_changed = 0;
 }
 
 
@@ -76,12 +84,10 @@ int frame_tick(t_data *data)
 {
 	display_update_camera(data);
 	engine_sync_display(data);
-	display_update_main_image(data);
+	display_refresh_main_image(data);
 	display_update_ui(data);
 	display_draw_base(data);
 	display_draw_ui(data);
-
-	clear_flags(data);
 	return (0);
 }
 

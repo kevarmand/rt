@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 23:13:26 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/06 16:54:33 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/09 17:21:21 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -240,6 +240,5 @@ void	display_update_camera(t_data *data)
 	}
 	if (!changed)
 		return ;
-	display->frame[display->current_cam].is_dirty = 1;
 	display->flag_camera_changed = 1;
 }

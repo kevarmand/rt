@@ -22,6 +22,7 @@ typedef struct s_render_view
 	t_vec3f	dy;
 	float	fov_deg;
 	int		frame_seq;
+	int 	mode;
 }	t_render_view;
 
 typedef struct s_tile
@@ -71,19 +72,29 @@ typedef struct s_tileset
 
 typedef struct s_display_mailbox
 {
+	/* Request MLX -> Manager */
+	t_camera	cam;
+	int			request_camera_id;
+	int			req_job_id;
+	int			request_render_mode;
+	atomic_int	request_ready;
+
+	/* Snapshot Manager -> MLX */
 	int			*rgb_pixels;
 	int			tile_count;
 	int			tiles_done;
+	int			snap_camera_id;
+	int			snap_job_id;
+	int			snapshot_render_mode;
 	atomic_int	snapshot_ready;
-
-	t_camera	cam;
-	atomic_int	request_ready;
 }	t_display_mailbox;
+
 
 typedef struct s_mgr
 {
 	pthread_t		thread_id;
 	int				render_in_progress;
+	int				current_cam_id;
 
 	t_tileset		tileset;
 	int				*rgb_buffer;
@@ -181,9 +192,14 @@ void manager_run_tonemap(t_render *render);
 void view_setup(t_render_view *view, int width, int height);
 
 /* render tile */
-int  render_tile(t_data *data, t_tile *tile, const t_render_view *view);
+int	render_tile_normal(t_data *data, t_tile *tile, const t_render_view *view);
+
+int	render_tile_fast(t_data *data, t_tile *tile, const t_render_view *view);
+
+int  render_tile_super(t_data *data, t_tile *tile, const t_render_view *view);
 
 /* init */
 int  render_init(t_render *render, int width, int height);
+
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 18:42:36 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/01 14:47:35 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/11 21:56:55 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ static int	display_init_frames(t_display *display, const t_scene *scene)
 		if (!display->frame[index].rgb_pixels)
 			return (ERR_MALLOC);
 		ft_memset(display->frame[index].rgb_pixels, 0, bytes);
-		display->frame[index].is_dirty = 1;
+		display->frame[index].quality = QUALITY_NONE;
 		index++;
 	}
 	display->current_cam = 0;
@@ -103,21 +103,13 @@ static void	display_reset_struct(t_display *display, int pixel_count)
 {
 	ft_memset(display, 0, sizeof(t_display));
 	display->pixel_count = pixel_count;
-	display->flag_img = 1;
+	display->flag_img_buffer = 1;
+	display->flag_img_window = 1;
+	display->flag_camera_changed = 1;
 	display->flag_ui = 1;
+	display->user_render_mode = USER_RENDER_LOCK_SUPER;
 }
 
-static int	display_alloc_pixels(t_display *display)
-{
-	size_t	bytes;
-
-	bytes = sizeof(int) * (size_t)display->pixel_count;
-	display->display_pixels = malloc(bytes);
-	if (!display->display_pixels)
-		return (ERR_MALLOC);
-	ft_memset(display->display_pixels, 0, bytes);
-	return (SUCCESS);
-}
 int	load_scene_textures(t_scene *scene,t_display *display);
 
 int	display_init(t_display *display, t_data *data)
@@ -128,8 +120,6 @@ int	display_init(t_display *display, t_data *data)
 	pixel_count = data->engine.width * data->engine.height;
 	display_reset_struct(display, pixel_count);
 	status = init_core(display, data->engine.width, data->engine.height);
-	if (status == SUCCESS)
-		status = display_alloc_pixels(display);
 	// if (status == SUCCESS)
 	// 	status = ui_init(display);
 	if (status == SUCCESS)
