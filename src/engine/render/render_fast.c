@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 13:39:22 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/11 11:49:59 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/11 20:53:12 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,27 +31,6 @@ static t_vec3f	trace_sample_fast(t_data *data, const t_render_view *view,
 	build_ray_for_pixel(view, (float)img_x, (float)img_y, &ray);
 	shading_ray_fast(&data->scene, &ray, &ctx, &color_out);
 	return (color_out);
-}
-
-int shading_ray_fast(const t_scene *scene, const t_ray *ray, 
-	t_shading_ctx *ctx, t_vec3f *color_out)
-{
-	t_hit	hit;
-
-	reset_hit(&hit);
-	if (scene_hit(scene, ray, &hit))
-	{
-		if (hit.kind == HIT_PLANE)
-			hit.surface_id = scene->planes[hit.primitive_id].surface_id;
-		else if (hit.kind == HIT_PRIMITIVE)
-			hit.surface_id = scene->primitives[hit.primitive_id].surface_id;
-		*color_out = scene->surfaces[hit.surface_id].color;
-	}
-	else
-	{
-		sky_color(ray->dir, color_out);
-	}
-	return (0);
 }
 
 typedef struct s_coef
@@ -222,6 +201,7 @@ int	render_tile_fast(t_data *data, t_tile *tile, const t_render_view *view)
 	int	last_row;
 	int	last_col;
 
+	printf("FAST\n");
 	fast_sample_tile(data, view, tile);
 	interpolate_tile_blocks(tile, &last_row, &last_col);
 	fill_fast_borders(tile, last_row, last_col);

@@ -11,13 +11,6 @@
 
 typedef struct s_data t_data;
 
-typedef enum e_render_mode
-{
-	FAST_MODE = 0,
-	NORMAL_MODE = 1,
-	SUPER_MODE = 2
-}	t_render_mode;
-
 typedef struct s_render_view
 {
 	t_vec3f	origin;
@@ -199,9 +192,14 @@ void manager_run_tonemap(t_render *render);
 void view_setup(t_render_view *view, int width, int height);
 
 /* render tile */
-int  render_tile(t_data *data, t_tile *tile, const t_render_view *view);
+int	render_tile_normal(t_data *data, t_tile *tile, const t_render_view *view);
+
+int	render_tile_fast(t_data *data, t_tile *tile, const t_render_view *view);
+
+int  render_tile_super(t_data *data, t_tile *tile, const t_render_view *view);
 
 /* init */
 int  render_init(t_render *render, int width, int height);
+
 
 #endif

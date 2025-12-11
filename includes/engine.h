@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 18:08:04 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/01 17:31:02 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/11 20:45:05 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,9 @@ int	scene_is_occluded(const t_scene *scene, const t_ray *ray, float max_dist);
 int	shading_ray(const t_scene *scene, const t_ray *ray, 
 	t_shading_ctx *ctx, t_vec3f *color_out);
 
+int shading_ray_fast(const t_scene *scene, const t_ray *ray, 
+	t_shading_ctx *ctx, t_vec3f *color_out);
+
 int	shade_hit(const t_scene *scene, const t_hit *hit, t_shading_ctx *ctx, t_vec3f *color_out);
 
 void	shade_direct_lights(const t_scene *scene, const t_hit *hit, t_vec3f *color);
@@ -147,5 +150,8 @@ void		init_cam_views(t_scene *scene);
  * @return 0 on SUCCESS, error code otherwise
  */
 int		engine_start_threads(t_data *data);
+
+void	build_ray_for_pixel(const t_render_view *view,
+			float img_x, float img_y, t_ray *ray);
 
 #endif

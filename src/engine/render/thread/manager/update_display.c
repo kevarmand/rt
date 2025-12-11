@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 18:39:42 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/11 15:58:36 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/11 21:02:51 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,8 @@ int	manager_update_display(t_render *render)
 	mailbox->snap_camera_id = manager->current_cam_id;
 	mailbox->snapshot_render_mode = manager->render_view.mode;
 	atomic_store(&mailbox->snapshot_ready, 1);
+	//SI on a fini le rendu on peut mettre le render en pause
+	if (manager->tileset.tiles_done == manager->tileset.tiles_total)
+		manager->render_in_progress = 0;
 	return (1);
 }

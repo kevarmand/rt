@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 20:14:44 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/11 16:05:10 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/11 20:42:47 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static void	display_refresh_main_image(t_data *data)
 		return ;
 	display = &data->display;
 	image = &display->main_img;
-	src = display->display_pixels;
+	src = display->frame[display->current_cam].rgb_pixels;
 	byte_count = display->pixel_count * sizeof(int);
 	ft_memcpy(image->data, src, (size_t)byte_count);
 	display->flag_img_buffer = 0;
