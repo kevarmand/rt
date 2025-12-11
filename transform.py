@@ -29,7 +29,7 @@ mesh = trimesh.load(obj_file, process=False)
 
 # Flatten multiple meshes if needed
 if isinstance(mesh, trimesh.Scene):
-    mesh = trimesh.util.concatenate(mesh.dump())
+    mesh = trimesh.util.concatenate([g for g in mesh.geometry.values()])
 
 # -----------------------------
 # COMPUTE CAMERA
