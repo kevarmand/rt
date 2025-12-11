@@ -13,6 +13,7 @@
 #include "vector.h"
 #include "engine.h"
 #include "attributes.h"
+#include <stdint.h>
 
 FORCEINLINE
 t_ray	build_ray(t_vec3f origin, t_vec3f direction)
@@ -20,7 +21,7 @@ t_ray	build_ray(t_vec3f origin, t_vec3f direction)
 	t_ray	out;
 
 	out.origin = origin;
-	out.dir = vec3f_normalize(direction);
+	out.dir = direction;
 	out.invdir = 1.0f / direction;
 	out.orig_div = origin * out.invdir;
 	out.sign[0] = (out.invdir.x < 0);

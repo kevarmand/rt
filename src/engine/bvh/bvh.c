@@ -105,7 +105,7 @@ int	bvh_inter(t_ray r, t_bvhnode *nodes, t_primitive *prims, t_hit *out)
 				t_hit	local_hit = *out;
 				if (prim_inter(r, &prims[prim_id], &local_hit) != 0)
 				{
-					if (local_hit.t > EPSILON && local_hit.t < out->t + EPSILON)
+					if (local_hit.t > TMIN_PRIM && local_hit.t < out->t)
 					{
 						*out = local_hit;
 						out->primitive_id = prim_id;

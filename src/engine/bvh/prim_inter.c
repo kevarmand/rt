@@ -26,27 +26,23 @@ extern inline int	triangle_inter(t_ray r, t_triangle *tr, t_hit *hit)
 	t_vec3f		ro;
 	t_vec3f		rd;
 
-	// ro = mat3x3_mulv(tr->inv_basis, vec3f_sub(r.origin, tr->v0));
-	// rd = mat3x3_mulv(tr->inv_basis, r.dir);
 	ro = r.origin;
 	rd = r.dir;
 	m.r_cross_e2 = vec3f_cross(rd, tr->edge2);
 	m.det = vec3f_dot(tr->edge1, m.r_cross_e2);
-	if (fabsf(m.det) < EPSILON)
+	if (m.det == 0.0f)
 		return (0);
 	m.invdet = 1.0f / m.det;
 	m.s = vec3f_sub(ro, tr->v0);
 	hit->u = m.invdet * vec3f_dot(m.s, m.r_cross_e2);
-	if (hit->u < -EPSILON || hit->u > 1.0f + EPSILON)
+	if (hit->u < 0.0f || hit->u > 1.0f)
 		return (0);
 	m.s_cross_e1 = vec3f_cross(m.s, tr->edge1);
 	hit->v = m.invdet * vec3f_dot(rd, m.s_cross_e1);
-	if (hit->v < -EPSILON || hit->u + hit->v > 1.0f + EPSILON)
+	if (hit->v < 0.0f || hit->u + hit->v > 1.0f)
 		return (0);
 	hit->t = m.invdet * vec3f_dot(tr->edge2, m.s_cross_e1);
-	if (hit->t <= EPSILON)
-		return (0);
-	return (1);
+	return (hit->t > 0.0f);
 }
 
 // FORCEINLINE
@@ -78,8 +74,6 @@ extern inline int	sphere_inter(t_ray r, t_sphere *s, t_hit *hit)
 	float			roots[2];
 	int				nroots;
 
-	// ro = mat3x3_mulv(s->inv_basis, vec3f_sub(r.origin, s->center));
-	// rd = mat3x3_mulv(s->inv_basis, r.dir);
 	ro = vec3f_sub(r.origin, s->center);
 	rd = r.dir;
 	eq.a = 1.0f;
@@ -89,11 +83,11 @@ extern inline int	sphere_inter(t_ray r, t_sphere *s, t_hit *hit)
 	if (nroots == 0)
 		return (0);
 	hit->t = -1.0f;
-	if (roots[0] > EPSILON)
+	if (roots[0] > 0.0f)
 		hit->t = roots[0];
-	else if (nroots > 1 && roots[1] > EPSILON)
+	else if (nroots > 1 && roots[1] > 0.0f)
 		hit->t = roots[1];
-	if (hit->t <= EPSILON)
+	else
 		return (0);
 	return (1);
 }
@@ -157,8 +151,6 @@ extern inline int	cylinder_inter(t_ray r, t_cylinder *cl, t_hit *hit)
 	int					hit_happened;
 	int					i;
 
-	// ro = mat3x3_mulv(cl->inv_basis, vec3f_sub(r.origin, cl->p0));
-	// rd = mat3x3_mulv(cl->inv_basis, r.dir);
 	ro = r.origin - cl->base;
 	ro_dot = vec3f_dot(ro, cl->axis);
 	ro = ro - cl->axis * ro_dot;
@@ -172,10 +164,10 @@ extern inline int	cylinder_inter(t_ray r, t_cylinder *cl, t_hit *hit)
 	i = 0;
 	while (i < nroots)
 	{
-		if (roots[i] > EPSILON)
+		if (roots[i] > 0.0f)
 		{
 			t = ro_dot + rd_dot * roots[i];
-			if (t > -EPSILON && t <= cl->height + EPSILON)
+			if (t > 0.0f && t <= cl->height)
 			{
 				if (roots[i] < hit->t)
 				{
@@ -210,8 +202,6 @@ extern inline int	torus_inter(t_ray r, t_torus *t, t_hit *hit)
 	// float	tmp;
 	float	p_dot_d;
 
-	// r_local.origin = mat3x3_mulv(t->inv_basis, vec3f_sub(r.origin, t->center));
-	// r_local.dir    = mat3x3_mulv(t->inv_basis, r.dir);
 	r_local.origin = r.origin;
 	r_local.dir = r.dir;
 	p = r_local.origin;
@@ -230,7 +220,7 @@ extern inline int	torus_inter(t_ray r, t_torus *t, t_hit *hit)
 		return 0;
 	tmin = -1.0f;
 	for (int i = 0; i < nroots; ++i)
-		if (roots[i] > EPSILON && (tmin < 0.0f || roots[i] < tmin))
+		if (roots[i] > 0.0f && (tmin < 0.0f || roots[i] < tmin))
 			tmin = roots[i];
 	if (tmin < 0.0f)
 		return 0;
@@ -251,12 +241,7 @@ FORCEINLINE
 extern inline int	prim_inter(t_ray r, t_primitive *p, t_hit *out)
 {
 	if (p->type == PRIM_TRIANGLE)
-	{
-		int	result;
-
-		result = triangle_inter(r, &p->tr, out);
-		return (result);
-	}
+		return (triangle_inter(r, &p->tr, out));
 	else if (p->type == PRIM_SPHERE)
 		return (sphere_inter(r, &p->sp, out));
 	else if (p->type == PRIM_CYLINDER)

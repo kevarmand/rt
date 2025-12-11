@@ -22,7 +22,7 @@ int inter_plane(const t_plane *plane, const t_ray *ray, float *out_distance)
 	float	t;
 
 	denom = vec3f_dot(plane->normal, ray->dir);
-	if (fabsf(denom) < EPSILON)
+	if (fabsf(denom) < 1e-4f)
 		return (0);
 	numerator = - (vec3f_dot(plane->normal, ray->origin) + plane->d);
 	t = numerator / denom;

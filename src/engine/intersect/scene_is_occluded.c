@@ -104,10 +104,15 @@ int	bvh_ocult(t_ray r, t_bvhnode *nodes, t_primitive *prims, t_hit *out)
 {
 	uint32_t	stack[64];
 	int			sp;
+	float		tmin;
 
 	// out->t = FLT_MAX;
 	sp = 0;
 	stack[sp++] = 0;
+	if (out->kind == HIT_PLANE)
+		tmin = 0.0f;
+	else
+		tmin = TMIN_SHADOW;
 	while (sp > 0)
 	{
 		uint32_t	idx = stack[--sp];
@@ -127,23 +132,9 @@ int	bvh_ocult(t_ray r, t_bvhnode *nodes, t_primitive *prims, t_hit *out)
 			{
 				int	prim_id = node->leaf.start + i;
 				t_hit	local_hit = *out;
-				if (prim_id == out->primitive_id && out->kind == HIT_PRIMITIVE)
+				if (prim_inter(r, &prims[prim_id], &local_hit) != 0)
 				{
-					if (prims[prim_id].type > PRIM_PLANE)
-					{
-						if (ocult_inter(r, &prims[prim_id], &local_hit) != 0)
-							if (local_hit.t > EPSILON && local_hit.t < out->t + EPSILON)
-								return (1);
-					}
-					else
-					{
-						i += 1;
-						continue;
-					}
-				}
-				else if (prim_inter(r, &prims[prim_id], &local_hit) != 0)
-				{
-					if (local_hit.t > EPSILON && local_hit.t < out->t + EPSILON)
+					if (local_hit.t > tmin && local_hit.t < out->t)
 						return (1);
 				}
 				i += 1;

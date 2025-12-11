@@ -151,16 +151,14 @@ void	shade_one_light(const t_scene *scene,
 	init_ctx_light(scene, hit, light_i, &ctx);
 	if (ctx.light_dist <= 0.0f)
 		return ;
-	offset = vec3f_scale(ctx.normal, 0.0f);
+	if (hit->kind == HIT_PLANE)
+		offset = 0.0f;
+	else
+		offset = vec3f_scale(ctx.normal, TMIN_SHADOW);
 	shadow_ray.origin = vec3f_add(ctx.point, offset);
-	shadow_ray.origin = vec3f_add(shadow_ray.origin,
-			vec3f_scale(ctx.light_dir, 0.0f));
-	shadow_ray.dir = ctx.light_dir;
-	shadow_ray.invdir = 1 / shadow_ray.dir;
-	shadow_ray.orig_div = shadow_ray.origin * shadow_ray.invdir;
-	shadow_ray.sign[0] = (shadow_ray.invdir.x < 0);
-	shadow_ray.sign[1] = (shadow_ray.invdir.y < 0);
-	shadow_ray.sign[2] = (shadow_ray.invdir.z < 0);
+	// shadow_ray.origin = vec3f_add(shadow_ray.origin,
+	// 		vec3f_scale(ctx.light_dir, 0.0f));
+	shadow_ray = build_ray(shadow_ray.origin, ctx.light_dir);
 	if (scene_is_occluded(scene, &shadow_ray, ctx.light_dist, hit))
 		return ;
 	shade_diffuse(&ctx, color);

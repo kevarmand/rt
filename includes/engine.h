@@ -16,6 +16,7 @@
 #include "vector.h"
 #include "scene.h"
 #include "render.h"
+#include <stdint.h>
 
 typedef struct s_engine
 {
@@ -37,7 +38,8 @@ typedef struct s_ray {
 	t_vec3f	dir;
 	t_vec3f	invdir;
 	t_vec3f	orig_div;
-	int		sign[3];
+	int8_t	sign[3];
+	int8_t	tmin;
 }	t_ray;
 
 typedef enum e_hit_kind
