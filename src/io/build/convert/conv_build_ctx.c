@@ -10,13 +10,9 @@ int	conv_build_ctx(t_scene_parsed *parsed, t_conv_ctx *ctx)
 
 	conv_count_all(parsed, ctx);
 	//on va afficher les counts pour debug
-	print_ctx(ctx);
 	status = conv_cameras(parsed, ctx);
-	print_ctx(ctx);
 	if (status == SUCCESS)
 		status = conv_lights(parsed, ctx);
-
-	print_ctx(ctx);
 	if (status == SUCCESS)
 		status = conv_primitives(parsed, ctx);
 	return (status);

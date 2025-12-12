@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 19:18:17 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/05 23:29:50 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/12 15:15:25 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,20 +27,18 @@
 
 int	mouse_release(int button, int x, int y, t_data *data)
 {
-	t_display	*display;
 	t_mouse_state	*mouse;
 
 	(void)x;
 	(void)y;
-	display = &data->display;
-	mouse = &display->mouse;
-	if (button == 1 || button == 3)
+	mouse = &data->display.mouse;
+	if ((button == 1 && mouse->button == MOUSE_BUTTON_LEFT)
+		|| (button == 3 && mouse->button == MOUSE_BUTTON_RIGHT))
 	{
 		mouse->is_down = 0;
-		if (mouse->mode == MOUSE_MODE_CAM_FREE
-			|| mouse->mode == MOUSE_MODE_CAM_ROLL)
-			mouse->mode = MOUSE_MODE_NONE;
+		mouse->button = MOUSE_BUTTON_NONE;
 	}
 	return (0);
 }
+
 

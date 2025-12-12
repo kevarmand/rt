@@ -1,35 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mouse.h                                            :+:      :+:    :+:   */
+/*   pars_default_option.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/05 23:05:12 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/12 16:15:31 by kearmand         ###   ########.fr       */
+/*   Created: 2025/12/12 18:38:57 by kearmand          #+#    #+#             */
+/*   Updated: 2025/12/12 19:00:59 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef UI2_H
-# define UI2_H
+#include "io.h"
+#include "type.h"
+#include "errors.h"
+#include "../parsing_internal.h"
 
-typedef enum e_mouse_button
+int	pars_default_option(t_pars_state *st, t_scene_parsed *scene)
 {
-	MOUSE_BUTTON_NONE = 0,
-	MOUSE_BUTTON_LEFT,
-	MOUSE_BUTTON_RIGHT,
-}	t_mouse_button;
+	t_tok				token;
+	int					status;
 
-typedef struct s_mouse_state
-{
-	int		button;
-	int		is_down;
-	int		anchor_x;
-	int		anchor_y;
-	int		current_x;
-	int		current_y;
-	int		scroll_delta;
-	
-}	t_mouse_state;
-
-#endif
+	status = pars_options(st, &scene->default_options);
+	if (status != 0)
+		return (ERR_PARS);
+	return (0);
+}

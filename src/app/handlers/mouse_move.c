@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 19:18:14 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/06 15:09:21 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/12 15:15:17 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,16 +40,18 @@
 // 	}
 // 	return (0);
 // }
+
 int	mouse_move(int x, int y, t_data *data)
 {
 	t_mouse_state	*mouse;
 
 	mouse = &data->display.mouse;
-	if (mouse->mode == MOUSE_MODE_NONE || mouse->is_down == 0)
+	if (mouse->is_down == 0)
 		return (0);
 	mouse->current_x = x;
 	mouse->current_y = y;
 	return (0);
 }
+
 
 

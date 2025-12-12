@@ -38,14 +38,7 @@ typedef struct s_param
 	float	color[3];
 }	t_param;
 
-typedef struct s_scene_parsed
-{
-	t_list	*objects;
-	t_list	*cameras;
-	t_list	*lights;
-	t_param	globals;
-	t_pmask	presence_mask;
-}	t_scene_parsed;
+
 
 typedef struct s_element_options
 {
@@ -62,6 +55,16 @@ typedef struct s_element_options
 	char		*bumpmap_path;
 }	t_element_options;
 
+typedef struct s_scene_parsed
+{
+	t_list				*objects;
+	t_list				*cameras;
+	t_list				*lights;
+	t_param				globals;
+	t_pmask				presence_mask;
+	t_element_options	default_options;
+}	t_scene_parsed;
+
 typedef enum e_element_type {
 	ELEM_NONE,
 	ELEM_SPHERE,
@@ -70,7 +73,8 @@ typedef enum e_element_type {
 	ELEM_TRIANGLE,
 	ELEM_CAMERA,
 	ELEM_LIGHT,
-	ELEM_AMBIENT
+	ELEM_AMBIENT,
+	ELEM_OPTIONS
 }	t_element_type;
 
 typedef struct s_parsed_sphere
@@ -305,6 +309,8 @@ int	pars_light(t_pars_state *st, t_scene_parsed *scene,
 			t_elem_role role);
 int	pars_ambient(t_pars_state *st, t_scene_parsed *scene);
 int	pars_resolution(t_pars_state *st, t_scene_parsed *scene);
+
+int	pars_default_option(t_pars_state *st, t_scene_parsed *scene);
 
 /* ************************************************************************** */
 /*                        SCENE BUILDER - OBJECTS                             */

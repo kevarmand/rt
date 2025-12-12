@@ -6,6 +6,7 @@ A 0.2 255,255,255
 # Camera : position (0, 2, 12) regardant vers l'origine
 C 0,3,22  0,0,-1  70
 
+
 	
 #sphere jsute devant la cam distance - R dans le plan focal image
 sp 0,3,20.5 1 255,255,255  diffuse=0 specular=0 shininess=0 refraction=1 reflection=1 ior=1.01
@@ -23,6 +24,8 @@ pl 0,0,0  0,1,0  120,120,120 texture=pavage.xpm uv=0,0,3
 
 # 1. Mat total (ks = 0)
 sp -5,3,0  7  200,50,50  diffuse=1  specular=0.15 shininess=32 texture=terre.xpm uv=1,0,0
+
+l -5,3,0  0.3  255,255,255
 
 # 2. Plastique mat (ks = 0.2)
 sp -3,1,0  1  200,200,50  diffuse=1  specular=0.1  shininess=10

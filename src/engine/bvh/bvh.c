@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 20:45:35 by norivier          #+#    #+#             */
-/*   Updated: 2025/12/10 16:27:39 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/12 17:31:46 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,8 +109,8 @@ int	bvh_inter(t_ray r, t_bvhnode *nodes, t_primitive *prims, t_hit *out)
 					{
 						*out = local_hit;
 						out->primitive_id = prim_id;
+						hit_happened = 1;
 					}
-					hit_happened = 1;
 				}
 				i += 1;
 			}

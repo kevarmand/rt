@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 16:36:14 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/30 14:45:11 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/12 22:06:49 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,9 @@ static int	split_key_value(t_tok tok, t_tok *key_tok, t_tok *val_tok)
 
 int	scan_option(t_tok tok, t_element_options *opts)
 {
-	t_tok					key_tok;
-	t_tok					val_tok;
-	int						table_index;
+	t_tok	key_tok;
+	t_tok	val_tok;
+	int		table_index;
 
 	if (split_key_value(tok, &key_tok, &val_tok))
 		return (ERR_PARS);

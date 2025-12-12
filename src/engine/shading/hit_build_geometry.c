@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 17:24:31 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/04 14:04:57 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/12 18:41:46 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static void build_geometry_sphere(const t_sphere *sphere,
 	phi = atan2f(p_local[2], p_local[0]);
 	if (phi < 0.0f)
 		phi += 2.0f * M_PI;
-	hit->u = 0.7f -phi / (2.0f * M_PI);
+	hit->u = 0.7 - phi / (2.0f * M_PI);
 	hit->v = - (theta / M_PI);
 }
 

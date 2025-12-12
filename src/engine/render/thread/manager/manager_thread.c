@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 22:04:44 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/11 21:02:15 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/12 10:13:47 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,13 +48,15 @@ static void manager_loop(t_render *render, atomic_int *cancel_flag,t_mgr *manage
 			manager_idle(render);
 			continue ;
 		}
-		has_work |= manager_collect_tiles(render);
-		has_work |= manager_assign_jobs(render);
-		if (render->manager.tileset.tiles_done 
-			== render->manager.tileset.tiles_total)
-			manager_run_tonemap(render);
-		else
+		while (1)
+		{
+			has_work |= manager_collect_tiles(render);
+			has_work |= manager_assign_jobs(render);
 			has_work |= manager_convert_hdr_to_rgb(render);
+			if (!(manager->render_view.mode == QUALITY_FAST
+			&& manager->tileset.tiles_done != manager->tileset.tiles_total))
+				break ;
+		}
 		has_work |= manager_update_display(render);
 		has_work |= manager_read_mailbox(render);
 		if (has_work == 0)

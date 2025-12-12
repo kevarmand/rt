@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/10 14:01:53 by karmand           #+#    #+#             */
-/*   Updated: 2025/12/11 22:55:30 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/12 15:45:33 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,5 +92,10 @@
 # define KEY_F2		65471
 # define KEY_F3		65472
 # define KEY_F4		65473
+
+/***
+ * control key
+ */
+# define KEY_CTRL	65507
 
 #endif

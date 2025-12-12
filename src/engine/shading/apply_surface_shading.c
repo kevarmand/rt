@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 17:16:59 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/01 18:58:33 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/12 18:19:16 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ void	apply_surface_shading(const t_scene *sc, t_hit *hit)
 		hit->albedo = surf->color;
 		return ;
 	}
+	
 	c = sample_texture(tex, hit->u, hit->v);
 	hit->albedo = c;
 }

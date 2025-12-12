@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 13:24:01 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/01 17:47:11 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/12 18:13:57 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ int	intern_texture(t_conv_ctx *cx, char **path, t_index *out_id)
 		*out_id = SCENE_ID_NONE;
 		return (SUCCESS);
 	}
-	printf("Interning texture: %s\n", *path);
 	if (texture_hit(cx, path, out_id))
 		return (SUCCESS);
 	return (texture_emplace(cx, path, out_id));

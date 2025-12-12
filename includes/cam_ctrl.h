@@ -1,35 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mouse.h                                            :+:      :+:    :+:   */
+/*   cam_ctrl.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/05 23:05:12 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/12 16:15:31 by kearmand         ###   ########.fr       */
+/*   Created: 2025/12/12 15:16:40 by kearmand          #+#    #+#             */
+/*   Updated: 2025/12/12 16:21:50 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef UI2_H
-# define UI2_H
+#ifndef CAM_CTRL_H
+# define CAM_CTRL_H
+# include "vector.h"
 
-typedef enum e_mouse_button
+typedef enum e_cam_mode
 {
-	MOUSE_BUTTON_NONE = 0,
-	MOUSE_BUTTON_LEFT,
-	MOUSE_BUTTON_RIGHT,
-}	t_mouse_button;
+	CAM_MODE_STANDARD,
+	CAM_MODE_ROLL
+}	t_cam_mode;
 
-typedef struct s_mouse_state
+typedef struct s_cam_ctrl
 {
-	int		button;
-	int		is_down;
-	int		anchor_x;
-	int		anchor_y;
-	int		current_x;
-	int		current_y;
-	int		scroll_delta;
-	
-}	t_mouse_state;
+	int			flag_level;
+	float		nav_scale;
+	float		nav_mul;
+	t_vec3f		center;
+	float		roll_prev_angle;
+	t_cam_mode	mode;
+}	t_cam_ctrl;
+
+
 
 #endif

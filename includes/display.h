@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 12:27:50 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/11 21:17:56 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/12 16:08:50 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 	// # include "ui.h"
 # include "flag.h"
 # include "mouse.h"
+# include "cam_ctrl.h"
 
 typedef struct s_data t_data;
 
@@ -178,15 +179,13 @@ typedef struct s_display
 
 	int		flag_ui;
 	int		flag_camera_changed;
-	int		flag_camera_level;
 	int		flag_request_render;
-	int		background_job;
-	int		force_normal_next; 
 	int		flag_img_buffer;
 	int		flag_img_window;
 	int		user_render_mode;
 	t_ds_sync	ds_sync;
 	t_mouse_state	mouse;
+	t_cam_ctrl		cam_ctrl;
 }	t_display;
 
 

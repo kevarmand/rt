@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 18:42:36 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/11 22:56:50 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/12 15:39:33 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,40 @@ static void	display_reset_struct(t_display *display, int pixel_count)
 	display->flag_ui = 1;
 	display->user_render_mode = USER_RENDER_AUTO;
 }
+static float	max3f(float value_a, float value_b, float value_c)
+{
+	float	max_value;
+
+	max_value = value_a;
+	if (value_b > max_value)
+		max_value = value_b;
+	if (value_c > max_value)
+		max_value = value_c;
+	return (max_value);
+}
+
+static int	init_cam_ctrl(t_data *data)
+{
+	t_display	*display;
+	t_aabb		bounds;
+	t_vec3f		extent;
+
+	display = &data->display;
+	display->cam_ctrl.mode = CAM_MODE_STANDARD;
+	display->cam_ctrl.nav_mul = 1.0f;
+	bounds = data->scene.bvh_nodes[0].bounds;
+	extent = vec3f_sub(bounds.b[1], bounds.b[0]);
+	extent.x = fabsf(extent.x);
+	extent.y = fabsf(extent.y);
+	extent.z = fabsf(extent.z);
+	display->cam_ctrl.nav_scale = max3f(extent.x, extent.y, extent.z);
+	if (display->cam_ctrl.nav_scale < 1e-3f)
+		display->cam_ctrl.nav_scale = 1e-3f;
+	display->cam_ctrl.center = vec3f_scale(vec3f_add(bounds.b[0],
+				bounds.b[1]), 0.5f);
+	return (SUCCESS);
+}
+
 
 int	load_scene_textures(t_scene *scene,t_display *display);
 
@@ -128,5 +162,7 @@ int	display_init(t_display *display, t_data *data)
 		status = init_loop(display, data);
 	if (status == SUCCESS)
 		status = load_scene_textures(&data->scene, display);
+	if (status == SUCCESS)
+		status = init_cam_ctrl(data);
 	return (status);
 }

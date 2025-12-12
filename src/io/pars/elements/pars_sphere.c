@@ -9,7 +9,7 @@ int	pars_sphere(t_pars_state *st, t_scene_parsed *scene)
 	t_tok				token;
 	int					status;
 
-	ft_bzero(&parsed_element, sizeof(parsed_element));
+	init_parsed_element(&parsed_element);
 	parsed_element.type = ELEM_SPHERE;
 	if (!pars_next_tok(st, &token) || scan_point(token,
 			parsed_element.data.sphere.center))

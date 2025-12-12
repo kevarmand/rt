@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 13:39:22 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/11 20:53:12 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/12 17:23:05 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,7 +201,6 @@ int	render_tile_fast(t_data *data, t_tile *tile, const t_render_view *view)
 	int	last_row;
 	int	last_col;
 
-	printf("FAST\n");
 	fast_sample_tile(data, view, tile);
 	interpolate_tile_blocks(tile, &last_row, &last_col);
 	fill_fast_borders(tile, last_row, last_col);

@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 19:18:09 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/06 15:10:26 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/12 16:08:19 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	mouse_press(int button, int x, int y, t_data *data)
 	mouse = &data->display.mouse;
 	if (button == 1)
 	{
-		mouse->mode = MOUSE_MODE_CAM_FREE;
+		mouse->button = MOUSE_BUTTON_LEFT;
 		mouse->is_down = 1;
 		mouse->anchor_x = x;
 		mouse->anchor_y = y;
@@ -81,30 +81,29 @@ int	mouse_press(int button, int x, int y, t_data *data)
 	}
 	if (button == 3)
 	{
-		mouse->mode = MOUSE_MODE_CAM_ROLL;
+		mouse->button = MOUSE_BUTTON_RIGHT;
 		mouse->is_down = 1;
 		mouse->anchor_x = x;
 		mouse->anchor_y = y;
 		mouse->current_x = x;
 		mouse->current_y = y;
-		mouse->roll_prev_angle = 0.0f;
 		return (0);
 	}
 	if (button == 2)
 	{
-		data->display.flag_camera_level = 1;
-		printf("Resetting camera level.\n");
+		data->display.cam_ctrl.flag_level = 1;
 		return (0);
 	}
 	if (button == 4)
 	{
-		data->display.mouse.scroll_delta++;
+		mouse->scroll_delta++;
 		return (0);
 	}
 	if (button == 5)
 	{
-		data->display.mouse.scroll_delta--;
+		mouse->scroll_delta--;
 		return (0);
 	}
 	return (0);
 }
+
