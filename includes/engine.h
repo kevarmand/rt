@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 22:00:12 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/11 22:00:27 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/13 21:02:44 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,12 +120,12 @@ void	hit_build_geometry(const t_scene *scene, const t_ray *ray, t_hit *hit);
 
 void	shade_ambient(const t_scene *scene, const t_hit *hit, t_vec3f *color);
 
-void	shade_reflection(const t_scene *scene,
-			const t_hit *hit, t_shading_ctx *ctx, t_vec3f *color);
+t_vec3f	shade_reflection(const t_scene *scene,
+			const t_hit *hit, t_shading_ctx *ctx, float factor);
 
-void	shade_refraction(const t_scene *scene,
-			const t_hit *hit, t_shading_ctx *ctx, t_vec3f *color);
-
+t_vec3f	shade_refraction(const t_scene *scene,
+			const t_hit *hit, t_shading_ctx *ctx, float factor);
+			
 void	apply_surface_shading(const t_scene *sc, t_hit *hit);
 t_ray	build_ray(t_vec3f origin, t_vec3f direction);
 

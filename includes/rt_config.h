@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 21:59:50 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/13 18:46:44 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/13 19:55:20 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # define TMIN_PRIM 1e-6f
 # define TMIN_SHADOW 1e-3f
 
-# define MAX_RECURSION_DEPTH 50
+# define MAX_RECURSION_DEPTH 20
 # define MIN_CONTRIBUTION 0.001f
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 21:21:27 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/11 22:59:29 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/13 21:02:02 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,68 +114,113 @@ float	fresnel_schlick(const t_material *mat,
 // 	*color_out = vec3f_add(local, vec3f_add(refl, refr));
 // 	return (0);
 // }
+// int	shade_hit(const t_scene *scene, const t_hit *hit,
+// 		t_shading_ctx *ctx, t_vec3f *color_out)
+// {
+// 	const t_material	*material;
+// 	t_vec3f			local_color;
+// 	t_vec3f			reflection_color;
+// 	t_vec3f			refraction_color;
+// 	float			fresnel_factor;
+// 	float			reflect_factor;
+// 	float			transmit_factor;
+// 	float			local_factor;
+// 	float			total_factor;
+// 	t_shading_ctx		reflection_ctx;
+// 	t_shading_ctx		refraction_ctx;
+
+// 	local_color = (t_vec3f){0.0f, 0.0f, 0.0f};
+// 	reflection_color = (t_vec3f){0.0f, 0.0f, 0.0f};
+// 	refraction_color = (t_vec3f){0.0f, 0.0f, 0.0f};
+// 	shade_ambient(scene, hit, &local_color);
+// 	shade_direct_lights(scene, hit, &local_color);
+// 	// *color_out = local_color;
+// 	// return (0);
+// 	material = &scene->materials[hit->material_id];
+// 	fresnel_factor = fresnel_schlick(material, hit, ctx);
+// 	reflect_factor = fresnel_factor * material->reflection;
+// 	transmit_factor = (1.0f - fresnel_factor)
+// 		* material->refraction;
+// 	if (reflect_factor < 0.0f)
+// 		reflect_factor = 0.0f;
+// 	if (transmit_factor < 0.0f)
+// 		transmit_factor = 0.0f;
+// 	total_factor = reflect_factor + transmit_factor;
+// 	if (total_factor > 1.0f)
+// 	{
+// 		reflect_factor /= total_factor;
+// 		transmit_factor /= total_factor;
+// 	}
+// 	local_factor = 1.0f - reflect_factor - transmit_factor;
+// 	if (local_factor < 0.0f)
+// 		local_factor = 0.0f;
+// 	local_color = vec3f_scale(local_color, local_factor);
+// 	if (reflect_factor > 0.0f && material->reflection > 0.0f)
+// 	{
+// 		reflection_ctx = *ctx;
+// 		reflection_ctx.depth++;
+// 		reflection_ctx.contribution = ctx->contribution
+// 			* reflect_factor;
+// 		shade_reflection(scene, hit, &reflection_ctx,
+// 			&reflection_color);
+// 	}
+// 	if (transmit_factor > 0.0f && material->refraction > 0.0f)
+// 	{
+// 		refraction_ctx = *ctx;
+// 		refraction_ctx.depth++;
+// 		refraction_ctx.contribution = ctx->contribution
+// 			* transmit_factor;
+// 		shade_refraction(scene, hit, &refraction_ctx,
+// 			&refraction_color);
+// 	}
+// 	*color_out = vec3f_add(local_color,
+// 			vec3f_add(vec3f_scale(reflection_color, reflect_factor),
+// 				vec3f_scale(refraction_color, transmit_factor)));
+// 	return (0);
+// }
+
+
+static void	compute_secondary_weights(const t_material *mat,
+				const t_hit *hit, const t_shading_ctx *ctx,
+				float weights[2])
+{
+	float	fresnel;
+
+	if (mat->reflection <= 0.0f)
+	{
+		weights[0] = 0.0f;
+		weights[1] = mat->refraction;
+		return ;
+	}
+	if (mat->refraction <= 0.0f)
+	{
+		weights[0] = mat->reflection;
+		weights[1] = 0.0f;
+		return ;
+	}
+	fresnel = fresnel_schlick(mat, hit, ctx);
+	weights[0] = mat->reflection * fresnel;
+	weights[1] = mat->refraction * (1.0f - fresnel);
+}
+
 int	shade_hit(const t_scene *scene, const t_hit *hit,
 		t_shading_ctx *ctx, t_vec3f *color_out)
 {
 	const t_material	*material;
-	t_vec3f			local_color;
-	t_vec3f			reflection_color;
-	t_vec3f			refraction_color;
-	float			fresnel_factor;
-	float			reflect_factor;
-	float			transmit_factor;
-	float			local_factor;
-	float			total_factor;
-	t_shading_ctx		reflection_ctx;
-	t_shading_ctx		refraction_ctx;
+	t_vec3f				direct_color;
+	float				weights[2];
 
-	local_color = (t_vec3f){0.0f, 0.0f, 0.0f};
-	reflection_color = (t_vec3f){0.0f, 0.0f, 0.0f};
-	refraction_color = (t_vec3f){0.0f, 0.0f, 0.0f};
-	shade_ambient(scene, hit, &local_color);
-	shade_direct_lights(scene, hit, &local_color);
-	// *color_out = local_color;
-	// return (0);
+	direct_color = (t_vec3f){0.0f, 0.0f, 0.0f};
+	shade_ambient(scene, hit, &direct_color);
+	shade_direct_lights(scene, hit, &direct_color);
 	material = &scene->materials[hit->material_id];
-	fresnel_factor = fresnel_schlick(material, hit, ctx);
-	reflect_factor = fresnel_factor * material->reflection;
-	transmit_factor = (1.0f - fresnel_factor)
-		* material->refraction;
-	if (reflect_factor < 0.0f)
-		reflect_factor = 0.0f;
-	if (transmit_factor < 0.0f)
-		transmit_factor = 0.0f;
-	total_factor = reflect_factor + transmit_factor;
-	if (total_factor > 1.0f)
-	{
-		reflect_factor /= total_factor;
-		transmit_factor /= total_factor;
-	}
-	local_factor = 1.0f - reflect_factor - transmit_factor;
-	if (local_factor < 0.0f)
-		local_factor = 0.0f;
-	local_color = vec3f_scale(local_color, local_factor);
-	if (reflect_factor > 0.0f && material->reflection > 0.0f)
-	{
-		reflection_ctx = *ctx;
-		reflection_ctx.depth++;
-		reflection_ctx.contribution = ctx->contribution
-			* reflect_factor;
-		shade_reflection(scene, hit, &reflection_ctx,
-			&reflection_color);
-	}
-	if (transmit_factor > 0.0f && material->refraction > 0.0f)
-	{
-		refraction_ctx = *ctx;
-		refraction_ctx.depth++;
-		refraction_ctx.contribution = ctx->contribution
-			* transmit_factor;
-		shade_refraction(scene, hit, &refraction_ctx,
-			&refraction_color);
-	}
-	*color_out = vec3f_add(local_color,
-			vec3f_add(vec3f_scale(reflection_color, reflect_factor),
-				vec3f_scale(refraction_color, transmit_factor)));
+	compute_secondary_weights(material, hit, ctx, weights);
+	if (weights[0] > 0.0f)
+		direct_color = vec3f_add(direct_color,
+				shade_reflection(scene, hit, ctx, weights[0]));
+	if (weights[1] > 0.0f)
+		direct_color = vec3f_add(direct_color,
+				shade_refraction(scene, hit, ctx, weights[1]));
+	*color_out = direct_color;
 	return (0);
 }
-

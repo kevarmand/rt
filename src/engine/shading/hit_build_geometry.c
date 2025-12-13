@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 17:32:19 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/13 19:01:45 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/13 19:56:26 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,8 @@ static void	hit_build_plane(const t_scene *scene, t_hit *hit)
 	hit->surface_id = plane_prim->surface_id;
 	hit->material_id = plane_prim->material_id;
 	build_geometry_plane(scene, hit);
+	surface_apply_uv(&scene->surfaces[hit->surface_id], hit);
+	
 }
 
 static float	clamp_unit(float value)
@@ -163,7 +165,8 @@ static void	build_primitive_triangle(const t_primitive *primitive,
 
 	tria = &primitive->tr;
 
-	hit->normal = surface->normal;
+	hit->normal = vec3f_cross(tria->edge1, tria->edge2);
+	hit->normal = vec3f_normalize(hit->normal);
 	// coordonnées barycentriques ( on el fait apres  :)
 	hit->u = 0.0f;
 	hit->v = 0.0f;
@@ -198,7 +201,7 @@ void	hit_build_geometry(const t_scene *scene, const t_ray *ray, t_hit *hit)
 		hit_build_plane(scene, hit);
 	else if (hit->kind == HIT_PRIMITIVE)
 		hit_build_primitive(scene, hit);
-	
+	hit->albedo = (t_vec3f){1.0f, 0.5f, 0.5f};
 	hit_faceforward(ray, hit);
 	if (hit->normal[0] == 0.0f && hit->normal[1] == 0.0f && hit->normal[2] == 0.0f)
 		printf("normal pas build dans hit_build_geometry\n");
