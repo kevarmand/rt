@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 21:10:33 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/11 22:05:12 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/13 23:40:26 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int shading_ray(const t_scene *scene, const t_ray *ray,
 	}
 	else
 	{
-		sky_color(ray->dir, color_out);
+		skybox_eval(ray->dir, scene, color_out);
 	}
 	return (0);
 }

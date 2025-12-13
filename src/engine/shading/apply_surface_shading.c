@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 17:16:59 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/12 18:19:16 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/13 23:49:21 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static t_vec3f	fetch_texel(const t_texture *t, int x, int y)
 
 
 
-static t_vec3f	sample_texture(const t_texture *t, float u, float v)
+t_vec3f	sample_texture(const t_texture *t, float u, float v)
 {
 	float		x;
 	float		y;

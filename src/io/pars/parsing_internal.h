@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 13:18:27 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/13 17:10:59 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/13 23:54:25 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,6 @@ void	init_parsed_element(t_parsed_element *elem, t_scene_parsed *scene);
  * @param options Pointer to the t_element_options structure to initialize. (no_null)
  */
 void	init_element_options(t_element_options *options);
-
+int	intern_texture_tok(t_texture_parsed *textures, t_tok tok, int *out_id);
 
 #endif

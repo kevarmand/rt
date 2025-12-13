@@ -18,4 +18,9 @@ void	conv_globals(const t_scene_parsed *parsed, t_scene *scene)
 	scene->ambient_color[0] *= parsed->globals.brightness;
 	scene->ambient_color[1] *= parsed->globals.brightness;
 	scene->ambient_color[2] *= parsed->globals.brightness;
+	scene->skybox.texture_id = parsed->skybox.texture_id;
+	scene->skybox.mode = (int)parsed->skybox.mode;
+	scene->skybox.intensity[0] = parsed->skybox.intensity[0];
+	scene->skybox.intensity[1] = parsed->skybox.intensity[1];
+	scene->skybox.intensity[2] = parsed->skybox.intensity[2];
 }

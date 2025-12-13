@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 16:20:10 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/13 16:20:27 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/13 23:54:14 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,7 @@
 #include "../../parsing_internal.h"
 #include <stdint.h>
 
-static int	intern_texture_tok(t_texture_parsed *textures, t_tok tok,
-	int *out_id)
+int	intern_texture_tok(t_texture_parsed *textures, t_tok tok, int *out_id)
 {
 	char	saved_char;
 	void	*found;

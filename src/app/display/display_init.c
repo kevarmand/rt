@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   display_init.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 18:42:36 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/13 10:44:53 by marvin           ###   ########.fr       */
+/*   Updated: 2025/12/13 23:36:35 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,25 @@ static int	init_cam_ctrl(t_data *data)
 
 int	load_scene_textures(t_scene *scene,t_display *display);
 
+void init_sky_texture(t_scene *scene)
+{
+	t_texture	*tex;
+	t_vec3f		intensity;
+	int			index;
+
+	if (scene->skybox.texture_id != SCENE_ID_NONE)
+	{
+		index = 0;
+		intensity = scene->skybox.intensity;
+		tex = &scene->textures[scene->skybox.texture_id];
+		while (index < tex->width * tex->height)
+		{
+			((t_vec3f *)tex->pixels)[index] = vec3f_mul(((t_vec3f *)tex->pixels)[index], intensity);
+			index++;
+		}
+	}
+}
+	
 int	display_init(t_display *display, t_data *data)
 {
 	int	status;
@@ -165,5 +184,7 @@ int	display_init(t_display *display, t_data *data)
 		status = load_scene_textures(&data->scene, display);
 	if (status == SUCCESS)
 		status = init_cam_ctrl(data);
+	if (status == SUCCESS)
+		init_sky_texture(&data->scene);
 	return (status);
 }

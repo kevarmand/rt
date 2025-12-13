@@ -193,6 +193,14 @@ typedef struct s_bvhnode
 }	t_bvhnode;
 
 
+typedef struct s_skybox
+{
+	t_index		texture_id; /* SCENE_ID_NONE si pas de skybox */
+	int			mode;       /* e_skybox_mode */
+	t_vec3f		intensity; /* multiplicateur de couleur */
+}	t_skybox;
+
+
 /* --------- Scène finale immuable --------- */
 typedef struct s_scene
 {
@@ -200,6 +208,9 @@ typedef struct s_scene
 	int     resolution_width;
 	int     resolution_height;
 	t_vec3f ambient_color;     /* 0..1 linéaire */
+
+	/* Skybox */
+	t_skybox	skybox;
 
 	/* Primitives & Objets (BVH) */
 	t_primitive *primitives;

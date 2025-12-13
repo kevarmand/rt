@@ -61,6 +61,19 @@ typedef struct s_texture_parsed
 	int			index;
 }	t_texture_parsed;
 
+typedef enum e_skybox_mode
+{
+	SKYBOX_SPHERE = 0,
+	SKYBOX_CYLINDER = 1
+}	t_skybox_mode;
+
+typedef struct s_skybox_parsed
+{
+	int				texture_id;
+	t_skybox_mode	mode;
+	float			intensity[3];
+}	t_skybox_parsed;
+
 typedef struct s_scene_parsed
 {
 	t_list				*objects;
@@ -70,6 +83,7 @@ typedef struct s_scene_parsed
 	t_pmask				presence_mask;
 	t_texture_parsed	textures;
 	t_element_options	default_options;
+	t_skybox_parsed		skybox;
 }	t_scene_parsed;
 
 typedef enum e_element_type {
@@ -322,7 +336,7 @@ int	pars_plane(t_pars_state *st, t_scene_parsed *scene);
 int	pars_cylinder(t_pars_state *st, t_scene_parsed *scene);
 int	pars_triangle(t_pars_state *st, t_scene_parsed *scene);
 int	pars_torus(t_pars_state *st, t_scene_parsed *scene);
-
+int	pars_skybox(t_pars_state *st, t_scene_parsed *scene);
 int	pars_camera(t_pars_state *st, t_scene_parsed *scene,
 			t_elem_role role);
 int	pars_light(t_pars_state *st, t_scene_parsed *scene,

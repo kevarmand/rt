@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 17:33:50 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/13 17:16:05 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/13 23:26:25 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,11 @@ void	init_parsed_scene(t_scene_parsed *parsed)
 	parsed->textures.h_texture = hashmap_create(16);
 	if (status != SUCCESS)
 		return ;
+	parsed->skybox.texture_id = -1;
+	parsed->skybox.mode = SKYBOX_SPHERE;
+	parsed->skybox.intensity[0] = 1.0f;
+	parsed->skybox.intensity[1] = 1.0f;
+	parsed->skybox.intensity[2] = 1.0f;
 	printf("Hashmap for textures created successfully\n");
 	parsed->textures.index = 0;
 	init_element_options(&parsed->default_options);
