@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 16:36:14 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/12 22:06:49 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/13 16:07:04 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 #include "errors.h"
 #include "../../parsing_internal.h"
 
-typedef int					(*t_opt_handler)(t_tok, t_element_options *);
-
+typedef int					(*t_opt_handler)(t_tok, t_element_options *,
+							t_texture_parsed *);
 typedef struct s_opt_entry {
 	const char		*key;
 	t_opt_handler	fn;
@@ -52,7 +52,7 @@ static int	split_key_value(t_tok tok, t_tok *key_tok, t_tok *val_tok)
 	return (SUCCESS);
 }
 
-int	scan_option(t_tok tok, t_element_options *opts)
+int	scan_option(t_tok tok, t_element_options *opts, t_texture_parsed *texture)
 {
 	t_tok	key_tok;
 	t_tok	val_tok;
@@ -64,7 +64,7 @@ int	scan_option(t_tok tok, t_element_options *opts)
 	while (g_opt_tab[table_index].key)
 	{
 		if (pars_tok_eq(key_tok, g_opt_tab[table_index].key))
-			return (g_opt_tab[table_index].fn(val_tok, opts));
+			return (g_opt_tab[table_index].fn(val_tok, opts, texture));
 		table_index++;
 	}
 	return (ERR_PARS);

@@ -6,43 +6,29 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 17:33:50 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/29 13:24:43 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/13 17:16:05 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "io.h"
 #include "libft.h"
-
-void free_parsed_element(void *obj)
-{
-	char 				*path;
-	t_parsed_element	*elem;
-
-	elem = (t_parsed_element *)obj;
-	if (!elem)
-		return ;
-	path = elem->options.texture_path;
-	if (path)
-		free(path);
-	elem->options.texture_path = NULL;
-	path = elem->options.bumpmap_path;
-	if (path)
-		free(path);
-	elem->options.bumpmap_path = NULL;
-	free(obj);
-}
+#include "errors.h"
+#include <stdio.h>
+#include "pars/parsing_internal.h"
 
 void	free_parsed_scene(t_scene_parsed *parsed)
 {
-	ft_lstclear(&parsed->objects, free_parsed_element);
-	ft_lstclear(&parsed->cameras, free_parsed_element);
-	ft_lstclear(&parsed->lights, free_parsed_element);
+	ft_lstclear(&parsed->objects, free);
+	ft_lstclear(&parsed->cameras, free);
+	ft_lstclear(&parsed->lights, free);
 	parsed->objects = NULL;
 	parsed->cameras = NULL;
 	parsed->lights = NULL;
 }
 void	init_parsed_scene(t_scene_parsed *parsed)
 {
+	int	status;
+
 	parsed->objects = NULL;
 	parsed->cameras = NULL;
 	parsed->lights = NULL;
@@ -53,25 +39,37 @@ void	init_parsed_scene(t_scene_parsed *parsed)
 	parsed->globals.color[1] = 0.0f;
 	parsed->globals.color[2] = 0.0f;
 	parsed->presence_mask = 0;
+	parsed->textures.h_texture = hashmap_create(16);
+	if (status != SUCCESS)
+		return ;
+	printf("Hashmap for textures created successfully\n");
+	parsed->textures.index = 0;
+	init_element_options(&parsed->default_options);
 }
 
-void	init_parsed_element(t_parsed_element *elem)
+void	init_element_options(t_element_options *options)
+{
+	options->ior = 1.0f;
+	options->reflection = 0.0f;
+	options->refraction = 0.0f;
+	options->shininess = 32.0f;
+	options->diffuse_weight = 1.0f;
+	options->specular_weight = 0.5f;
+	options->ambient_occlusion = 0.0f;
+	options->uv[0] = 0.0f;
+	options->uv[1] = 0.0f;
+	options->uv[2] = 1.0f;
+	options->uv[3] = 1.0f;
+	options->uv[4] = 0.0f;
+	options->uv[5] = 0.0f;
+	options->uv_mod = 0;
+	options->texture_id = -1;
+	options->bumpmap_id = -1;
+}
+
+void	init_parsed_element(t_parsed_element *elem, t_scene_parsed *scene)
 {
 	elem->type = ELEM_NONE;
-	elem->options.ior = 1.0f;
-	elem->options.reflection = 0.0f;
-	elem->options.refraction = 0.0f;
-	elem->options.shininess = 32.0f;
-	elem->options.diffuse_weight = 1.0f;
-	elem->options.specular_weight = 0.5f;
-	elem->options.ambient_occlusion = 0.0f;
-	elem->options.uv[0] = 0.0f;
-	elem->options.uv[1] = 0.0f;
-	elem->options.uv[2] = 1.0f;
-	elem->options.uv[3] = 1.0f;
-	elem->options.uv[4] = 0.0f;
-	elem->options.uv[5] = 0.0f;
-	elem->options.uv_mod = 0;
-	elem->options.texture_path = NULL;
-	elem->options.bumpmap_path = NULL;
+	elem->options = scene->default_options;
 }
+

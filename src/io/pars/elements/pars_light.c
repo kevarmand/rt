@@ -9,7 +9,8 @@ int	pars_light(t_pars_state *st, t_scene_parsed *scene, t_elem_role role)
 	t_tok				token;
 	int					status;
 
-	init_parsed_element(&parsed_element);
+	status = 0;
+	init_parsed_element(&parsed_element, scene);
 	parsed_element.type = ELEM_LIGHT;
 	if (!pars_next_tok(st, &token) || scan_point(token,
 			parsed_element.data.light.position))
@@ -23,7 +24,6 @@ int	pars_light(t_pars_state *st, t_scene_parsed *scene, t_elem_role role)
 	if (!pars_next_tok(st, &token) || scan_color(token,
 			parsed_element.data.light.rgb))
 		return (ERR_PARS);
-	status = pars_options(st, &parsed_element.options);
 	if (status != 0)
 		return (ERR_PARS);
 	return (pars_register_element(scene, &parsed_element, role));

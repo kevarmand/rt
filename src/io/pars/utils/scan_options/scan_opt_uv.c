@@ -45,12 +45,13 @@ static int	copy_floats_to_opts(
 	return (SUCCESS);
 }
 
-int	scan_opt_uv(t_tok tok, t_element_options *opts)
+int	scan_opt_uv(t_tok tok, t_element_options *opts, t_texture_parsed *texture)
 {
 	int		index;
 	int		pos;
 	float	tmp[6];
 
+	(void)texture;
 	pos = 0;
 	index = 0;
 	while (index < 6)

@@ -5,12 +5,6 @@
 
 typedef int t_index;
 
-typedef struct s_opt_ids
-{
-	t_index	albedo;
-	t_index	normal;
-}	t_opt_ids;
-
 typedef struct s_conv_ctx
 {
 	int		primitive_count;
@@ -19,11 +13,7 @@ typedef struct s_conv_ctx
 	int		light_count;
 	int		camera_count;
 	int		material_count;
-	int		texture_count;
 
-	//texture
-	t_vector	tex_v;
-	t_hashmap	*tex_m;
 
 	//material
 	t_vector	mat_v;
@@ -51,6 +41,7 @@ typedef struct s_scene t_scene;
 typedef struct s_primitive t_primitive;
 typedef struct s_element_options t_element_options;
 typedef struct s_material t_material;
+typedef struct s_texture_parsed t_texture_parsed;
 
 
 /* ************************************************************************ */
@@ -89,6 +80,14 @@ int	conv_build_ctx(t_scene_parsed *parsed, t_conv_ctx *ctx);
  */
 int	assemble_scene(t_conv_ctx *cx, t_scene *scene);
 
+
+/***
+ * Build textures in the final scene from parsed texture data
+ * @param scene The scene to populate
+ * @param tex_parsed The parsed texture data
+ * @return SUCCESS on success, error code on failure
+ */
+int	build_textures(t_scene *scene, t_texture_parsed *tex_parsed);
 
 /* ************************************************************************** */
 /*                         CONVERT - ELEMENTS                                 */
@@ -134,15 +133,6 @@ int	conv_primitives(t_scene_parsed *parsed, t_conv_ctx *cx);
 int	conv_option_primitive(t_primitive *prim, t_element_options *opt,
 			t_conv_ctx *cx, int *color);
 
-/***
- * Intern a texture into the conversion context
- * Add the path in a hashmap for avoiding duplicates
- * @param cx The conversion context
- * @param path The texture file path
- * @param out_tex The output texture index
- * @return SUCCESS on success, error code on failure
- */
-int	intern_texture(t_conv_ctx *cx, char **path, t_index *out_tex);
 
 /***
  * Intern a material into the conversion context
@@ -154,7 +144,7 @@ int	intern_texture(t_conv_ctx *cx, char **path, t_index *out_tex);
  * @return SUCCESS on success, error code on failure
  */
 int	intern_material(t_conv_ctx *cx, t_element_options *opt,
-			t_opt_ids *ids, t_index *out_mat);
+			t_index *out_mat);
 
 /***
  * Intern a surface into the conversion context

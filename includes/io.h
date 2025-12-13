@@ -51,9 +51,15 @@ typedef struct s_element_options
 	float		ambient_occlusion;
 	float	 	uv[6];
 	int			uv_mod;
-	char		*texture_path;
-	char		*bumpmap_path;
+	int			texture_id;
+	int			bumpmap_id;
 }	t_element_options;
+
+typedef struct s_texture_parsed
+{
+	t_hashmap	*h_texture;
+	int			index;
+}	t_texture_parsed;
 
 typedef struct s_scene_parsed
 {
@@ -62,6 +68,7 @@ typedef struct s_scene_parsed
 	t_list				*lights;
 	t_param				globals;
 	t_pmask				presence_mask;
+	t_texture_parsed	textures;
 	t_element_options	default_options;
 }	t_scene_parsed;
 
@@ -265,7 +272,8 @@ int	scan_point(t_tok tok, float out_vec[3]);
  * @note The function reads tokens until no more valid options are found.
  * Each option is expected to be in the format "key=value".
  */
-int	pars_options(t_pars_state *st, t_element_options *options);
+int	pars_options(t_pars_state *st, t_element_options *options,
+			t_texture_parsed *tex_parsed);
 
 /**
  * @brief Split a token of the form "key=value" into key and value tokens.
@@ -276,18 +284,18 @@ int	pars_options(t_pars_state *st, t_element_options *options);
  * @return 0 on success, or ERR_PARSE_FLOAT if the format is invalid.
  * @note Both output tokens point into the original token's string.
  */
-int	scan_option(t_tok tok, t_element_options *opts);
+int	scan_option(t_tok tok, t_element_options *opts, t_texture_parsed *texture);
 
-int	scan_opt_ior(t_tok tok, t_element_options *opts);
-int	scan_opt_refraction(t_tok tok, t_element_options *opts);
-int	scan_opt_reflection(t_tok tok, t_element_options *opts);
-int	scan_opt_shininess(t_tok tok, t_element_options *opts);
-int	scan_opt_diffuse(t_tok tok, t_element_options *opts);
-int	scan_opt_specular(t_tok tok, t_element_options *opts);
-int	scan_opt_ambient(t_tok tok, t_element_options *opts);
-int	scan_opt_bump(t_tok tok, t_element_options *opts);
-int	scan_opt_texture(t_tok tok, t_element_options *opts);
-int	scan_opt_uv(t_tok tok, t_element_options *opts);
+int	scan_opt_ior(t_tok tok, t_element_options *opts, t_texture_parsed *texture);
+int	scan_opt_refraction(t_tok tok, t_element_options *opts, t_texture_parsed *texture);
+int	scan_opt_reflection(t_tok tok, t_element_options *opts, t_texture_parsed *texture);
+int	scan_opt_shininess(t_tok tok, t_element_options *opts, t_texture_parsed *texture);
+int	scan_opt_diffuse(t_tok tok, t_element_options *opts, t_texture_parsed *texture);
+int	scan_opt_specular(t_tok tok, t_element_options *opts, t_texture_parsed *texture);
+int	scan_opt_ambient(t_tok tok, t_element_options *opts, t_texture_parsed *texture);
+int	scan_opt_bump(t_tok tok, t_element_options *opts, t_texture_parsed *texture);
+int	scan_opt_texture(t_tok tok, t_element_options *opts, t_texture_parsed *texture);
+int	scan_opt_uv(t_tok tok, t_element_options *opts, t_texture_parsed *texture);
 
 
 /* ************************************************************************** */

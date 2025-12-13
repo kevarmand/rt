@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 13:18:27 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/20 18:27:22 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/13 17:10:59 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ typedef struct s_pars_state {
 }	t_pars_state;
 
 typedef struct s_tok {
-	const char	*start;
+	char		*start;
 	int			len;
 }	t_tok;
 
@@ -45,14 +45,15 @@ void	free_parsed_scene(t_scene_parsed *parsed);
 /***
  * @brief Initialize a t_parsed_element structure with default values.
  * @param elem Pointer to the t_parsed_element structure to initialize. (no_null)
+ * @param scene Pointer to the t_scene_parsed structure for context. (no_null)
  */
-void	init_parsed_element(t_parsed_element *elem);
+void	init_parsed_element(t_parsed_element *elem, t_scene_parsed *scene);
 
 /***
- * @brief Free any dynamically allocated memory within a t_parsed_element.
- * @param elem Pointer to the t_parsed_element to free. (no_null)
+ * @brief Initialize a t_element_options structure with default values.
+ * @param options Pointer to the t_element_options structure to initialize. (no_null)
  */
-void	free_parsed_element(void *obj);
+void	init_element_options(t_element_options *options);
 
 
 #endif

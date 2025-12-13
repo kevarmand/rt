@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 19:30:25 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/21 16:18:17 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/13 16:40:28 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,7 @@
 void	init_ctx(t_conv_ctx *cx)
 {
 	ft_memset(cx, 0, sizeof(t_conv_ctx));
-	cx->tex_m = hashmap_create(256);
 	cx->mat_m = hashmap_create(256);
-	vector_init(&cx->tex_v, 0, sizeof(t_texture));
 	vector_init(&cx->mat_v, 0, sizeof(t_material));
 	vector_init(&cx->surf_v, 0, sizeof(t_surface));
 	vector_init(&cx->cam_v, 0, sizeof(t_camera));
@@ -31,30 +29,9 @@ void	init_ctx(t_conv_ctx *cx)
 }
 
 
-static void	destroy_texture(t_vector tex_vector)
-{
-	int			i;
-	int			count;
-	t_texture	*tex_data;
-	char		*path;
-	
-	i = 0;
-	count = vector_size(&tex_vector);
-	while (i < count)
-	{
-		tex_data = (t_texture *)vector_at(&tex_vector, i);
-		path = tex_data->path;
-		if (path)
-			free(path);
-		i++;
-	}
-}
 
 void	free_ctx(t_conv_ctx *cx)
 {
-	destroy_texture(cx->tex_v);
-	vector_destroy(&cx->tex_v);
-	hashmap_destroy(cx->tex_m, NULL);
 	vector_destroy(&cx->mat_v);
 	hashmap_destroy(cx->mat_m, NULL);
 	vector_destroy(&cx->surf_v);

@@ -11,7 +11,7 @@ int	pars_camera(t_pars_state *st, t_scene_parsed *scene, t_elem_role role)
 	float				fov_as_float;
 	int					status;
 
-	init_parsed_element(&parsed_element);
+	init_parsed_element(&parsed_element, scene);
 	parsed_element.type = ELEM_CAMERA;
 	if (!pars_next_tok(st, &token) || scan_point(token,
 			parsed_element.data.camera.position))
@@ -26,7 +26,7 @@ int	pars_camera(t_pars_state *st, t_scene_parsed *scene, t_elem_role role)
 	if (parsed_element.data.camera.fov < 1
 		|| parsed_element.data.camera.fov > 179)
 		return (ERR_PARS);
-	status = pars_options(st, &parsed_element.options);
+	status = pars_options(st, &parsed_element.options, &scene->textures);
 	if (status != 0)
 		return (ERR_PARS);
 	return (pars_register_element(scene, &parsed_element, role));

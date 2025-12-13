@@ -11,14 +11,14 @@
  * @note The function reads tokens until no more valid options are found.
  * Each option is expected to be in the format "key=value".
  */
-int	pars_options(t_pars_state *st, t_element_options *options)
+int	pars_options(t_pars_state *st, t_element_options *options, t_texture_parsed *tex_parsed)
 {
 	t_tok	token;
 	int		ret;
 
 	while (pars_next_tok(st, &token))
 	{
-		ret = scan_option(token, options);
+		ret = scan_option(token, options, tex_parsed);
 		if (ret != SUCCESS)
 			return (ret);
 	}

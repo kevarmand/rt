@@ -9,7 +9,7 @@ int	pars_plane(t_pars_state *st, t_scene_parsed *scene)
 	t_tok				token;
 	int					status;
 
-	init_parsed_element(&parsed);
+	init_parsed_element(&parsed, scene);
 	parsed.type = ELEM_PLANE;
 	if (!pars_next_tok(st, &token) || scan_point(token,
 			parsed.data.plane.origin))
@@ -19,7 +19,7 @@ int	pars_plane(t_pars_state *st, t_scene_parsed *scene)
 		return (ERR_PARS);
 	if (!pars_next_tok(st, &token) || scan_color(token, parsed.rgb))
 		return (ERR_PARS);
-	status = pars_options(st, &parsed.options);
+	status = pars_options(st, &parsed.options, &scene->textures);
 	if (status != SUCCESS)
 		return (ERR_PARS);
 	status = pars_register_element(scene, &parsed, ELEM_ROLE_NORMAL);

@@ -1,44 +1,57 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   scan_opt_texture.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/13 16:20:10 by kearmand          #+#    #+#             */
+/*   Updated: 2025/12/13 16:20:27 by kearmand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "io.h"
 #include "type.h"
 #include "errors.h"
 #include "../../parsing_internal.h"
+#include <stdint.h>
 
-static char	*dup_tok_str(t_tok tok)
+static int	intern_texture_tok(t_texture_parsed *textures, t_tok tok,
+	int *out_id)
 {
-	char	*out;
-	int		i;
+	char	saved_char;
+	void	*found;
+	int		new_id;
+	int		insert_ret;
 
-	out = (char *)malloc((size_t)tok.len + 1);
-	if (!out)
-		return (NULL);
-	i = 0;
-	while (i < tok.len)
+	saved_char = tok.start[tok.len];
+	tok.start[tok.len] = '\0';
+	found = hashmap_get(textures->h_texture, tok.start);
+	if (found)
 	{
-		out[i] = tok.start[i];
-		i++;
+		*out_id = (int)((intptr_t)found) - 1;
+		tok.start[tok.len] = saved_char;
+		return (SUCCESS);
 	}
-	out[i] = '\0';
-	return (out);
-}
-
-int	scan_opt_texture(t_tok tok, t_element_options *opts)
-{
-	char	*path;
-
-	path = dup_tok_str(tok);
-	if (!path)
-		return (ERR_PARS);
-	opts->texture_path = path;
+	new_id = textures->index;
+	insert_ret = hashmap_insert(textures->h_texture, tok.start,
+			(void *)(intptr_t)(new_id + 1));
+	tok.start[tok.len] = saved_char;
+	if (insert_ret < 0)
+		return (ERR_MALLOC);
+	textures->index++;
+	*out_id = new_id;
 	return (SUCCESS);
 }
 
-int	scan_opt_bump(t_tok tok, t_element_options *opts)
+int	scan_opt_texture(t_tok tok, t_element_options *opts,
+			t_texture_parsed *textures)
 {
-	char	*path;
+	return (intern_texture_tok(textures, tok, &opts->texture_id));
+}
 
-	path = dup_tok_str(tok);
-	if (!path)
-		return (ERR_PARS);
-	opts->bumpmap_path = path;
-	return (SUCCESS);
+int	scan_opt_bump(t_tok tok, t_element_options *opts,
+			t_texture_parsed *textures)
+{
+	return (intern_texture_tok(textures, tok, &opts->bumpmap_id));
 }

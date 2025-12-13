@@ -151,8 +151,10 @@ static void	print_options_numbers(const t_element_options *o)
 
 static void	print_options_paths(const t_element_options *o)
 {
-	printf("    texture=%s\n", o->texture_path ? o->texture_path : "(null)");
-	printf("    bump   =%s\n", o->bumpmap_path ? o->bumpmap_path : "(null)");
+	if (o->texture_id != -1)
+		printf("    texture_id=%d\n", o->texture_id);
+	if (o->bumpmap_id != -1)
+		printf("    bumpmap_id=%d\n", o->bumpmap_id);
 }
 
 static void	print_options(const t_element_options *o)

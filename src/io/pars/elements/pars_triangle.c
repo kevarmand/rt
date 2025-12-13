@@ -9,7 +9,7 @@ int	pars_triangle(t_pars_state *st, t_scene_parsed *scene)
 	t_tok				token;
 	int					status;
 
-	init_parsed_element(&parsed_element);
+	init_parsed_element(&parsed_element, scene);
 	parsed_element.type = ELEM_TRIANGLE;
 	if (!pars_next_tok(st, &token) || scan_point(token,
 			parsed_element.data.triangle.vertex1))
@@ -23,7 +23,7 @@ int	pars_triangle(t_pars_state *st, t_scene_parsed *scene)
 	if (!pars_next_tok(st, &token) || scan_color(token,
 			parsed_element.rgb))
 		return (ERR_PARS);
-	status = pars_options(st, &parsed_element.options);
+	status = pars_options(st, &parsed_element.options, &scene->textures);
 	if (status != 0)
 		return (ERR_PARS);
 	return (pars_register_element(scene, &parsed_element, ELEM_ROLE_NORMAL));

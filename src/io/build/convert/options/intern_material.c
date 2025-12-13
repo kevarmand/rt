@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 13:23:38 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/29 13:32:21 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/13 16:25:24 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,7 @@ static int	material_hit(t_conv_ctx *cx, char *key, t_index *out_mat)
 	return (1);
 }
 
-static void	material_build(const t_element_options *m,
-			t_opt_ids *ids, t_material *out)
+static void	material_build(const t_element_options *m, t_material *out)
 {
 	out->ambient = m->ambient_occlusion;
 	out->diffuse = m->diffuse_weight;
@@ -39,18 +38,18 @@ static void	material_build(const t_element_options *m,
 	out->reflection = m->reflection;
 	out->refraction = m->refraction;
 	out->ior = m->ior;
-	out->texture_albedo_id = ids->albedo;
-	out->texture_normal_id = ids->normal;
+	out->texture_albedo_id = m->texture_id;
+	out->texture_normal_id = m->bumpmap_id;
 }
 
 int	intern_material(t_conv_ctx *cx,
-		t_element_options *opt, t_opt_ids *ids, t_index *out_mat)
+		t_element_options *opt, t_index *out_mat)
 {
 	t_material	new_mat;
 	char		key[256];
 	int			idx;
 	
-	material_build(opt, ids, &new_mat);
+	material_build(opt, &new_mat);
 	generate_option_key(&new_mat, key);
 	if (material_hit(cx, key, out_mat))
 		return (SUCCESS);
