@@ -30,11 +30,9 @@ l -5,3,0  0.3  255,255,255
 # 2. Plastique mat (ks = 0.2)
 sp -3,1,0  1  200,200,50  diffuse=1  specular=0.1  shininess=10
 
-mat texture=terre.xpm
 # 3. Plastique brillant (ks = 0.4)
 sp -1,1,0  1  50,200,50  diffuse=1  specular=0.4  shininess=32
 
-mat
 # 4. Vernis / laqué (ks = 0.6)
 sp 1,1,0  1  50,200,200  diffuse=1  specular=0.6  shininess=64
 
@@ -55,6 +53,9 @@ sp 0,3,0 1 80,80,80 diffuse=0.2 specular=0.8 shininess=200 reflection=0.5
 
 #10 try de la reflexion un couleur tres metal
 sp 4,3,0 1 150,150,150 diffuse=0.2 specular=0.8 shininess=300 reflection=0.7
+
+#11 un full mirroir
+sp 1,4.5,0 1 255,255,255 diffuse=0 specular=0 shininess=0 reflection=1
 
 #une goute deau au prmeeir plan
 sp 0,1,10 2 0,255,255 ior=1.5 diffuse=1 specular=0.5 shininess=100  reflection=0.1 refraction=0.9
