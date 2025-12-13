@@ -13,6 +13,7 @@
 #include "engine.h"
 #include "scene.h"
 #include <math.h>
+#include <stdio.h>
 float	fresnel_eval(const t_material *mat,
 			const t_hit *hit, const t_shading_ctx *ctx)
 {

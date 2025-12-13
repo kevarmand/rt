@@ -23,6 +23,7 @@
 # endif
 # define TMIN_PRIM 1e-6f
 # define TMIN_SHADOW 1e-3f
+# define TMIN_SHADOW_BIAS 5e-5f
 
 # define MAX_RECURSION_DEPTH 20
 # define MIN_CONTRIBUTION 0.01f

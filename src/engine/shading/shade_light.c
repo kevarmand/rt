@@ -154,7 +154,7 @@ void	shade_one_light(const t_scene *scene,
 	if (hit->kind == HIT_PLANE)
 		offset = 0.0f;
 	else
-		offset = vec3f_scale(ctx.normal, TMIN_SHADOW);
+		offset = vec3f_scale(ctx.normal, fmaxf(TMIN_SHADOW, TMIN_SHADOW_BIAS * hit->t));
 	shadow_ray.origin = vec3f_add(ctx.point, offset);
 	// shadow_ray.origin = vec3f_add(shadow_ray.origin,
 	// 		vec3f_scale(ctx.light_dir, 0.0f));
