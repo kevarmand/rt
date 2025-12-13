@@ -40,6 +40,7 @@ static const t_pars_entry	g_pars_tab[] = {{"A", pars_ambient},
 {"tr", pars_triangle},
 {"pl", pars_plane},
 {"cy", pars_cylinder},
+{"to", pars_torus},
 //{"mat", pars_default_option},
 {NULL, NULL}
 };

@@ -62,6 +62,7 @@ typedef struct s_cylinder
 typedef struct s_torus
 {
 	t_vec3f center;
+	t_vec3f normal; /* unitaire */
 	float   R;      /* grand rayon (centre → tube) */
 	float   r;      /* petit rayon (rayon du tube) */
 	float	r_square;

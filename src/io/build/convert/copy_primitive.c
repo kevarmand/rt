@@ -73,3 +73,21 @@ int	copy_plane_to_primitive(const t_parsed_element *src, t_primitive *dst)
 		+ dst->pl.normal[2] * src->data.plane.origin[2]);
 	return (SUCCESS);
 }
+
+int	copy_torus_to_primitive(const t_parsed_element *src, t_primitive *dst)
+{
+	dst->type = PRIM_TORUS;
+	dst->to.center = ((t_vec3f){
+		src->data.torus.center[0],
+		src->data.torus.center[1],
+		src->data.torus.center[2]});
+	dst->to.normal = vec3f_normalize((t_vec3f){
+		src->data.torus.normal[0],
+		src->data.torus.normal[1],
+		src->data.torus.normal[2]});
+	dst->to.R = src->data.torus.major_radius;
+	dst->to.r = src->data.torus.minor_radius;
+	dst->to.R_square = dst->to.R * dst->to.R;
+	dst->to.r_square = dst->to.r * dst->to.r;
+	return (SUCCESS);
+}

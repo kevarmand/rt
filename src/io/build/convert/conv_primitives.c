@@ -10,6 +10,7 @@ int	copy_triangle_to_primitive(const t_parsed_element *src, t_primitive *dst);
 int	copy_sphere_to_primitive(const t_parsed_element *src, t_primitive *dst);
 int	copy_cylinder_to_primitive(const t_parsed_element *src, t_primitive *dst);
 int	copy_plane_to_primitive(const t_parsed_element *src, t_primitive *dst);
+int	copy_torus_to_primitive(const t_parsed_element *src, t_primitive *dst);
 
 int	conv_option_primitive(t_primitive *prim, t_element_options *opt,
 			t_conv_ctx *cx, int *color);
@@ -33,6 +34,8 @@ static void	object_from_parsed(t_parsed_element *src, t_primitive *dst)
 		copy_cylinder_to_primitive(src, dst);
 	else if (src->type == ELEM_PLANE)
 		copy_plane_to_primitive(src, dst);
+	else if (src->type == ELEM_TORUS)
+		copy_torus_to_primitive(src, dst);
 }
 	
 

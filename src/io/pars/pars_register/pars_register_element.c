@@ -29,7 +29,8 @@ static int	is_object_type(t_element_type type)
 	return (type == ELEM_SPHERE
 		|| type == ELEM_PLANE
 		|| type == ELEM_CYLINDER
-		|| type == ELEM_TRIANGLE);
+		|| type == ELEM_TRIANGLE
+		|| type == ELEM_TORUS);
 }
 
 int	pars_register_element(t_scene_parsed *scene,

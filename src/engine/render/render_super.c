@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render_super.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 10:20:00 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/11 20:52:42 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/13 10:44:04 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ int	render_tile_super(t_data *data, t_tile *tile, const t_render_view *view)
 	int		local_x;
 	int		index;
 
-	printf("SUPER\n");	
 	local_y = 0;
 	index = 0;
 	while (local_y < tile->pixel_height)

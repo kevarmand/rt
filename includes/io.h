@@ -71,6 +71,7 @@ typedef enum e_element_type {
 	ELEM_PLANE,
 	ELEM_CYLINDER,
 	ELEM_TRIANGLE,
+	ELEM_TORUS,
 	ELEM_CAMERA,
 	ELEM_LIGHT,
 	ELEM_AMBIENT,
@@ -96,6 +97,14 @@ typedef struct s_parsed_cylinder
 	float			diameter;
 	float			height;
 }	t_parsed_cylinder;
+
+typedef struct s_parsed_torus
+{
+	float			center[3];
+	float			normal[3];
+	float			major_radius;
+	float			minor_radius;
+}	t_parsed_torus;
 
 typedef struct s_parsed_triangle
 {
@@ -127,6 +136,7 @@ typedef struct s_parsed_element
 		t_parsed_plane		plane;
 		t_parsed_cylinder	cylinder;
 		t_parsed_triangle	triangle;
+		t_parsed_torus		torus;
 		t_parsed_camera		camera;
 		t_parsed_light		light;
 	}	data;
@@ -303,6 +313,8 @@ int	pars_sphere(t_pars_state *st, t_scene_parsed *scene);
 int	pars_plane(t_pars_state *st, t_scene_parsed *scene);
 int	pars_cylinder(t_pars_state *st, t_scene_parsed *scene);
 int	pars_triangle(t_pars_state *st, t_scene_parsed *scene);
+int	pars_torus(t_pars_state *st, t_scene_parsed *scene);
+
 int	pars_camera(t_pars_state *st, t_scene_parsed *scene,
 			t_elem_role role);
 int	pars_light(t_pars_state *st, t_scene_parsed *scene,

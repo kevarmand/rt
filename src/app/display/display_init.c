@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   display_init.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 18:42:36 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/12 15:39:33 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/13 10:44:53 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,7 @@ static float	max3f(float value_a, float value_b, float value_c)
 	return (max_value);
 }
 
+#include <math.h>
 static int	init_cam_ctrl(t_data *data)
 {
 	t_display	*display;

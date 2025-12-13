@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   engine_sync_display.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 00:00:00 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/11 21:39:22 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/13 10:45:23 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 #include "render.h"
 #include "libft.h"
 #include <stdatomic.h>
+#include <stdio.h>
+
 
 /* -------------------------------------------------------------------------- */
 /* Helpers qualité                                                            */
