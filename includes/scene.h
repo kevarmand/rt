@@ -129,13 +129,14 @@ typedef struct s_surface
 	//pas d index ixi je veux le mapping UV, la couleur de base, etc
 	float		map_uv[6]; /* u0,v0,u1,v1,u2,v2 OU px py pz, rx ry rz*/
 	int			uv_mod;
-	float		scale_u;
-	float		scale_v;
 	t_vec3f		color;    /* 0..1 linéaire */
 	t_vec3f		normal;   /* unitaire */
-	// float		w2o[16];  /* world to object matrix */
-	// float		o2w[16];  /* object to world matrix */
-}	t_surface;
+	t_index		texture_albedo_id; /* SCENE_ID_NONE si absent */
+	t_index		bump_normal_id; /* SCENE_ID_NONE si absent */
+	int			checker_mode;
+	int			checker_texture_id;
+	t_vec3f		checker_color;
+}	t_surface_map;
 
 typedef struct s_material
 {
@@ -146,8 +147,6 @@ typedef struct s_material
 	float reflection;  /* [0..1] */
 	float refraction;  /* [0..1] */
 	float ior;         /* indice optique */
-	t_index texture_albedo_id; /* SCENE_ID_NONE si absent */
-	t_index texture_normal_id; /* SCENE_ID_NONE si absent */
 }	t_material;
 
 /* --------- Lumières (point pour l’instant) --------- */
@@ -201,6 +200,7 @@ typedef struct s_skybox
 }	t_skybox;
 
 
+
 /* --------- Scène finale immuable --------- */
 typedef struct s_scene
 {
@@ -229,7 +229,7 @@ typedef struct s_scene
 	int          material_count;
 
 	/* Surfaces */
-	t_surface   *surfaces;
+	t_surface_map   *surfaces;
 	int          surface_count;
 
 	t_texture   *textures;

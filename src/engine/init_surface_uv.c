@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 16:31:16 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/13 18:19:07 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/14 16:02:12 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "vector.h"
 #include <math.h>
 
-static void	init_surface_uv_one(t_surface *surface, const t_primitive *primitive)
+static void	init_surface_uv_one(t_surface_map *surface, const t_primitive *primitive)
 {
 	float	det;
 
@@ -37,7 +37,7 @@ void	init_surface_uv(t_scene *scene)
 {
 	int			index;
 	t_primitive	*primitive;
-	t_surface	*surface;
+	t_surface_map	*surface;
 
 	index = 0;
 	while (index < scene->plane_count)

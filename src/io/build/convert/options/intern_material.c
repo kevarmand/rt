@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 13:23:38 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/13 16:25:24 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/14 16:04:45 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,6 @@ static void	material_build(const t_element_options *m, t_material *out)
 	out->reflection = m->reflection;
 	out->refraction = m->refraction;
 	out->ior = m->ior;
-	out->texture_albedo_id = m->texture_id;
-	out->texture_normal_id = m->bumpmap_id;
 }
 
 int	intern_material(t_conv_ctx *cx,

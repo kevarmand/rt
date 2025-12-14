@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 15:00:07 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/02 11:13:45 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/14 16:02:12 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 void	shade_ambient(const t_scene *scene,
 			const t_hit *hit, t_vec3f *color_out)
 {
-	const t_surface		*surface;
+	const t_surface_map		*surface;
 	t_vec3f				ambiant_color;
 	t_vec3f				tmp;
 

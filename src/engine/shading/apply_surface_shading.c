@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 17:16:59 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/13 23:49:21 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/14 16:29:27 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,24 +85,58 @@ t_vec3f	sample_texture(const t_texture *t, float u, float v)
 	return (vec3f_lerp2(c00, c10, c01, c11, fx, fy));
 }
 
+static int	is_checker_odd(float u, float v)
+{
+	int	u_i;
+	int	v_i;
+
+	u_i = (int)floorf(u);
+	v_i = (int)floorf(v);
+	return ((u_i + v_i) & 1);
+}
+
+static t_vec3f	get_surface_color(const t_scene *sc,
+				const t_surface_map *surf,
+				t_index tex_id,
+				float u,
+				float v)
+{
+	t_texture	*tex;
+
+	if (tex_id == SCENE_ID_NONE)
+		return (surf->color);
+	tex = &sc->textures[tex_id];
+	if (tex->width <= 0 || tex->height <= 0 || !tex->pixels)
+		return (surf->color);
+	return (sample_texture(tex, u, v));
+}
+
+
 void	apply_surface_shading(const t_scene *sc, t_hit *hit)
 {
-	t_material	*mat;
-	t_texture	*tex;
-	t_surface	*surf;
-	t_vec3f		c;
+	t_surface_map	*surf;
+	int				odd;
 
-	mat = &sc->materials[hit->material_id];
-	tex = 0;
-	if (mat->texture_albedo_id >= 0)
-		tex = &sc->textures[mat->texture_albedo_id];
-	if (!tex || tex->width <= 0 || tex->height <= 0 || !tex->pixels)
+	surf = &sc->surfaces[hit->surface_id];
+	if (surf->checker_mode == 0)
 	{
-		surf = &sc->surfaces[hit->surface_id];
-		hit->albedo = surf->color;
+		hit->albedo = get_surface_color(sc, surf,
+				surf->texture_albedo_id, hit->u, hit->v);
 		return ;
 	}
-	
-	c = sample_texture(tex, hit->u, hit->v);
-	hit->albedo = c;
+	odd = is_checker_odd(hit->u, hit->v);
+	if (odd)
+	{
+		if (surf->checker_mode == 3)
+			hit->albedo = get_surface_color(sc, surf,
+					surf->checker_texture_id, hit->u, hit->v);
+		else
+			hit->albedo = surf->checker_color;
+	}
+	else
+	{
+		hit->albedo = get_surface_color(sc, surf,
+				surf->texture_albedo_id, hit->u, hit->v);
+	}
 }
+

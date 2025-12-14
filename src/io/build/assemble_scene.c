@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 10:24:15 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/13 16:39:28 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/14 16:02:12 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	assemble_scene(t_conv_ctx *cx, t_scene *scene)
 	if (assemble_array(&cx->light_v, sizeof(t_light),
 			(void **)&scene->lights, &scene->light_count) != SUCCESS)
 		return (ERR_MALLOC);
-	if (assemble_array(&cx->surf_v, sizeof(t_surface),
+	if (assemble_array(&cx->surf_v, sizeof(t_surface_map),
 			(void **)&scene->surfaces, &scene->surface_count) != SUCCESS)
 		return (ERR_MALLOC);
 	if (assemble_array(&cx->mat_v, sizeof(t_material),

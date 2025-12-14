@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   hit_build_geometry_saved.c                         :+:      :+:    :+:   */
+/*   .hit_build_geometry_saved.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 17:24:31 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/13 19:01:07 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/14 16:02:12 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 static void	build_geometry_plane(const t_scene *scene, t_hit *hit)
 {
 	t_primitive	*prim;
-	t_surface	*surf;
+	t_surface_map	*surf;
 	t_vec3f		origin;
 	t_vec3f		delta;
 
@@ -34,7 +34,7 @@ static void	build_geometry_plane(const t_scene *scene, t_hit *hit)
 	hit->v = vec3f_dot(delta, (t_vec3f){surf->map_uv[3],
 			surf->map_uv[4], surf->map_uv[5]}) / surf->scale_v;
 }
-void	surface_apply_uv_sphere(const t_surface *surface,
+void	surface_apply_uv_sphere(const t_surface_map *surface,
 				float base_u, float base_v,
 				float *mapped_u, float *mapped_v)
 {

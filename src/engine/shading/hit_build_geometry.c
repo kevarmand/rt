@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 17:32:19 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/13 19:56:26 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/14 16:02:12 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static void	hit_faceforward(const t_ray *ray, t_hit *hit)
 		hit->normal = vec3f_scale(hit->normal, -1.0f);
 }
 
-void	surface_apply_uv(const t_surface *surface, t_hit *hit)
+void	surface_apply_uv(const t_surface_map *surface, t_hit *hit)
 {
 	float	base_u;
 	float	base_v;
@@ -159,24 +159,33 @@ static void	build_primitive_cylinder(const t_cylinder *cylinder,
 }
 
 static void	build_primitive_triangle(const t_primitive *primitive,
-				t_hit *hit, const t_surface *surface)
+				t_hit *hit, const t_surface_map *surface)
 {
 	const t_triangle	*tria;
+	float	bary_u;
+	float	bary_v;
+	float	bary_w;
 
+	bary_u = hit->u;
+	bary_v = hit->v;
+	bary_w = 1.0f - bary_u - bary_v;
 	tria = &primitive->tr;
-
 	hit->normal = vec3f_cross(tria->edge1, tria->edge2);
 	hit->normal = vec3f_normalize(hit->normal);
-	// coordonnées barycentriques ( on el fait apres  :)
-	hit->u = 0.0f;
-	hit->v = 0.0f;
+
+	hit->u = surface->map_uv[0] * bary_w
+		+ surface->map_uv[2] * bary_u
+		+ surface->map_uv[4] * bary_v;
+	hit->v = surface->map_uv[1] * bary_w
+		+ surface->map_uv[3] * bary_u
+		+ surface->map_uv[5] * bary_v;
 }
 
 
 static void	hit_build_primitive(const t_scene *scene, t_hit *hit)
 {
 	const t_primitive	*primitive;
-	const t_surface		*surface;
+	const t_surface_map		*surface;
 
 	primitive = &scene->primitives[hit->primitive_id];
 	hit->surface_id = primitive->surface_id;

@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 19:23:24 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/12 15:44:25 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/14 17:18:29 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,5 +53,27 @@ int	key_hook(int keycode, t_data *data)
 		data->display.cam_ctrl.nav_mul /= 1.2f;
 	if(keycode == KEY_CTRL)
 		data->display.cam_ctrl.mode = !(data->display.cam_ctrl.mode);
+	//Afficher la cam active en console en appuyant sur espace ( +coordonnees )
+	if (keycode == KEY_SPACE)
+	{
+		int active_cam = data->display.current_cam;
+		printf("Camera %d/%d\n", active_cam, data->display.total_cams);
+		printf("Position : (%f, %f, %f)\n", data->scene.cameras[active_cam].origin.x,
+			data->scene.cameras[active_cam].origin.y,
+			data->scene.cameras[active_cam].origin.z);
+		printf("Orientation : (%f, %f, %f)\n", data->scene.cameras[active_cam].forward.x,
+			data->scene.cameras[active_cam].forward.y,
+			data->scene.cameras[active_cam].forward.z);
+	}
+	//le switch cam(juste tab)
+	if (keycode == KEY_TAB)
+	{
+		printf("Switching camera...\n");
+		printf("Previous camera: %d\n", data->display.current_cam);
+		data->display.current_cam++;
+		if (data->display.current_cam >= data->display.total_cams)
+			data->display.current_cam = 0;
+		data->display.flag_img_buffer = 1;
+	}
 	return (SUCCESS);
 }

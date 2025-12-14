@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 17:33:50 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/13 23:26:25 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/14 16:33:11 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	init_element_options(t_element_options *options)
 	options->refraction = 0.0f;
 	options->shininess = 32.0f;
 	options->diffuse_weight = 1.0f;
-	options->specular_weight = 0.5f;
+	options->specular_weight = 0.3f;
 	options->ambient_occlusion = 0.0f;
 	options->uv[0] = 0.0f;
 	options->uv[1] = 0.0f;
@@ -70,6 +70,11 @@ void	init_element_options(t_element_options *options)
 	options->uv_mod = 0;
 	options->texture_id = -1;
 	options->bumpmap_id = -1;
+	options->checker_mode = 0;
+	options->checker_texture_id = -1;
+	options->checker_color[0] = 0;
+	options->checker_color[1] = 0;
+	options->checker_color[2] = 0;
 }
 
 void	init_parsed_element(t_parsed_element *elem, t_scene_parsed *scene)

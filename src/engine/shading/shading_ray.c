@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 21:10:33 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/13 23:40:26 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/14 19:04:48 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,11 +70,7 @@ int shading_ray(const t_scene *scene, const t_ray *ray,
 	reset_hit(&hit);
 	if (scene_hit(scene, ray, &hit))
 	{
-		if (hit.kind == HIT_PLANE)
-			hit.surface_id = scene->planes[hit.primitive_id].surface_id;
-		else if (hit.kind == HIT_PRIMITIVE)
-			hit.surface_id = scene->primitives[hit.primitive_id].surface_id;
-		*color_out = scene->surfaces[hit.surface_id].color;
+
 		hit_build_geometry(scene, ray, &hit);
 		apply_surface_shading(scene, &hit);
 		shade_hit(scene, &hit, ctx, color_out);//peut etre regarder lerreur si un jour y en a une

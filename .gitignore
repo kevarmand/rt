@@ -13,3 +13,4 @@ miniRT
 *.out
 compile_commands.json
 .cache/*
+puresky.xpm

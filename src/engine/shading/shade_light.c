@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 15:04:24 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/11 22:05:04 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/14 16:02:12 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@
 typedef struct s_ctx_light
 {
 	const t_material	*material;
-	const t_surface		*surface;
+	const t_surface_map		*surface;
 	const t_light		*light;
 	t_vec3f				point;
 	t_vec3f				normal;
