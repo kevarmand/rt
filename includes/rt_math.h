@@ -31,6 +31,7 @@
 # define THREE_OVER_256 0x1.8p-2f
 # define FIVE_OVER_6 0x1.aaaaaap-1f
 # define ZEROF 1.0e-8f
+# define ZEROD 1.0e-10
 
 float	ft_rsqrtf(float x);
 float	ft_rcpf(float x);

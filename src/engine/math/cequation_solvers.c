@@ -25,7 +25,7 @@ int	filter_real_numbers(int numvalues, complex double in[], double out[])
 	i = 0;
 	while (i < numvalues)
 	{
-		if (fabs(cimag(in[i])) < ZEROF)
+		if (fabs(cimag(in[i])) < ZEROD)
 			out[num_real_values++] = creal(in[i]);
 		i += 1;
 	}
@@ -35,7 +35,7 @@ int	filter_real_numbers(int numvalues, complex double in[], double out[])
 FORCEINLINE
 static inline int	cis_zero(complex double x)
 {
-	return ((fabs(creal(x)) < ZEROF) && (fabs(cimag(x)) < ZEROF));
+	return ((fabs(creal(x)) < ZEROD) && (fabs(cimag(x)) < ZEROD));
 }
 
 int	csolve_quad(t_cequ arg, complex double roots[])
@@ -53,14 +53,14 @@ int	csolve_quad(t_cequ arg, complex double roots[])
 	}
 	else
 	{
-		disc = arg.b * arg.b - 4.0f * arg.a * arg.c;
+		disc = arg.b * arg.b - 4.0 * arg.a * arg.c;
 		if (cis_zero(disc))
 		{
-			roots[0] = -arg.b / (2.0f * arg.a);
+			roots[0] = -arg.b / (2.0 * arg.a);
 			return (1);
 		}
 		r = csqrt(disc);
-		d = 2.0f * arg.a;
+		d = 2.0 * arg.a;
 		roots[0] = (-arg.b + r) / d;
 		roots[1] = (-arg.b - r) / d;
 		return (2);
@@ -76,8 +76,8 @@ complex double	ft_ccbrt(complex double a, int n)
 
 	rho = cabs(a);
 	theta = carg(a);
-	rho = powf(rho, RCP_3);
-	theta = (theta + (twopi * n)) * RCP_3;
+	rho = pow(rho, (1.0 / 3.0));
+	theta = (theta + (twopi * n)) * (1.0 / 3.0);
 	return (rho * (cos(theta) + I * sin(theta)));
 }
 
@@ -151,7 +151,7 @@ int	csolve_quartic(t_cequ arg, complex double roots[])
 	t = -arg.b * (1.0 / 4.0);
 	if (cis_zero(beta))
 	{
-		rad = csqrt(alpha2 - 4.0f * gamma);
+		rad = csqrt(alpha2 - 4.0 * gamma);
 		r1 = csqrt((-alpha + rad) * 0.5);
 		r2 = csqrt((-alpha - rad) * 0.5);
 		roots[0] = t + r1;
@@ -163,16 +163,16 @@ int	csolve_quartic(t_cequ arg, complex double roots[])
 	{
 		p = -(alpha2 * (1.0 / 12.0) + gamma);
 		q = -alpha2 * alpha * (1.0 / 108.0) + alpha * gamma * (1.0 / 3.0) - beta * beta * (1.0 / 8.0);
-		r = -q * 0.5 + csqrt(q * q * (1.0 / 4.0) + p * p * p * (1.0 / 127.0));
+		r = -q * 0.5 + csqrt(q * q * (1.0 / 4.0) + p * p * p * (1.0 / 27.0));
 		u = ft_ccbrt(r, 0);
 		y = -(5.0 / 6.0) * alpha + u;
 		if (cis_zero(u))
 			y -= ft_ccbrt(q, 0);
 		else
-			y -= p / (3.0f * u);
-		w = csqrt(alpha + 2.0f * y);
-		r1 = csqrt(-(3.0f * alpha + 2.0f * y + 2.0f * beta / w));
-		r2 = csqrt(-(3.0f * alpha + 2.0f * y - 2.0f * beta / w));
+			y -= p / (3.0 * u);
+		w = csqrt(alpha + 2.0 * y);
+		r1 = csqrt(-(3.0 * alpha + 2.0 * y + 2.0 * beta / w));
+		r2 = csqrt(-(3.0 * alpha + 2.0 * y - 2.0 * beta / w));
 		roots[0] = t + (w - r1) * 0.5;
 		roots[1] = t + (w + r1) * 0.5;
 		roots[2] = t + (-w - r2) * 0.5;

@@ -21,7 +21,7 @@
 # ifndef EPSILON
 #  define EPSILON 0x1.0c6f7ap-20f
 # endif
-# define TMIN_PRIM 1e-6f
+# define TMIN_PRIM 1e-4f
 # define TMIN_SHADOW 1e-3f
 # define TMIN_SHADOW_BIAS 5e-5f
 
