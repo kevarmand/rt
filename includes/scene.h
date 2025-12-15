@@ -129,6 +129,9 @@ typedef struct s_surface
 	//pas d index ixi je veux le mapping UV, la couleur de base, etc
 	float		map_uv[6]; /* u0,v0,u1,v1,u2,v2 OU px py pz, rx ry rz*/
 	int			uv_mod;
+	float		uv_jacobian_t[4]; //matrice transposee de uv_mod
+	t_vec3f		tang;
+	t_vec3f		bitang;
 	t_vec3f		color;    /* 0..1 linéaire */
 	t_vec3f		normal;   /* unitaire */
 	t_index		texture_albedo_id; /* SCENE_ID_NONE si absent */
@@ -234,6 +237,9 @@ typedef struct s_scene
 
 	t_texture   *textures;
 	int          texture_count;
+
+	t_texture   *bumpmaps;
+	int          bumpmap_count;
 
 	/* Lumières */
 	t_light     *lights;

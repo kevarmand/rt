@@ -1,0 +1,19 @@
+#resolution
+R  1600 1200
+# Ambient
+A 0.2 255,255,255
+
+# Camera : position (0, 2, 12) regardant vers l'origine
+C 0,3,10  0,0,-1  70
+
+
+# Lumière blanche au-dessus à droite
+L 3,6,3  0.9  255,255,255
+
+# Sol gris
+pl 0,0,0  0,1,0  120,120,120 texture=pavage.xpm uv=0.5,0,0,0.5,0,0
+
+#mur de brique avec bumpmap
+pl -10,0,0  1,0,0  200,50,50 texture=wall.xpm bumpmap=wall_bump.xpm 
+
+sp 0,3,0 1 255,255,255 texture=terre.xpm uv=1,0,0,1,0.5,0

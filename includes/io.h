@@ -61,7 +61,9 @@ typedef struct s_element_options
 typedef struct s_texture_parsed
 {
 	t_hashmap	*h_texture;
-	int			index;
+	int			index_t;
+	t_hashmap	*h_bumpmap;
+	int			index_b;
 }	t_texture_parsed;
 
 typedef enum e_skybox_mode

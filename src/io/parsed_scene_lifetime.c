@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 17:33:50 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/14 16:33:11 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/15 13:19:22 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,11 @@ void	init_parsed_scene(t_scene_parsed *parsed)
 	parsed->skybox.intensity[1] = 1.0f;
 	parsed->skybox.intensity[2] = 1.0f;
 	printf("Hashmap for textures created successfully\n");
-	parsed->textures.index = 0;
+	parsed->textures.index_t = 0;
+	parsed->textures.h_bumpmap = hashmap_create(16);
+	if (status != SUCCESS)
+		return ;
+	parsed->textures.index_b = 0;
 	init_element_options(&parsed->default_options);
 }
 
@@ -59,8 +63,8 @@ void	init_element_options(t_element_options *options)
 	options->refraction = 0.0f;
 	options->shininess = 32.0f;
 	options->diffuse_weight = 1.0f;
-	options->specular_weight = 0.3f;
-	options->ambient_occlusion = 0.0f;
+	options->specular_weight = 0.2f;
+	options->ambient_occlusion = 0.2f;
 	options->uv[0] = 0.0f;
 	options->uv[1] = 0.0f;
 	options->uv[2] = 1.0f;

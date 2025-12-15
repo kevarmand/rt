@@ -5,15 +5,17 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/01 14:46:28 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/01 17:41:15 by kearmand         ###   ########.fr       */
+/*   Created: 2025/12/15 00:00:00 by kearmand          #+#    #+#             */
+/*   Updated: 2025/12/15 14:24:10 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "display.h"
 #include "scene.h"
-#include "libft.h"
+#include "display.h"
 #include "mlx.h"
+#include <stdlib.h>
+#include <math.h>
+#include "libft.h"
 #include "color.h"
 
 static int	texture_has_xpm_ext(const char *path)
@@ -34,13 +36,13 @@ static int	texture_has_xpm_ext(const char *path)
 	return (1);
 }
 
-static int	texture_alloc_pixels(t_texture *tex)
+static int	texture_alloc_pixels_vec3(t_texture *tex)
 {
 	t_vec3f	*pixels;
 	int		count;
 
 	count = tex->width * tex->height;
-	pixels = malloc(sizeof(t_vec3f) * count);
+	pixels = malloc(sizeof(t_vec3f) * (size_t)count);
 	if (!pixels)
 		return (0);
 	tex->pixels = pixels;
@@ -48,76 +50,199 @@ static int	texture_alloc_pixels(t_texture *tex)
 	return (1);
 }
 
-static void	texture_copy_from_mlx(t_texture *tex, void *img, void *mlx)
+static void	extract_rgb(int pixel_value, int rgb[3])
 {
+	rgb[0] = (pixel_value >> 16) & 0xFF;
+	rgb[1] = (pixel_value >> 8) & 0xFF;
+	rgb[2] = pixel_value & 0xFF;
+}
+
+static float	rgb8_to_height(int rgb[3])
+{
+	return ((float)(rgb[0] + rgb[1] + rgb[2]) * (1.0f / (3.0f * 255.0f)));
+}
+
+static int	wrap_index(int value, int size)
+{
+	value = value % size;
+	if (value < 0)
+		value += size;
+	return (value);
+}
+
+static void	bump_store_height_z(t_texture *tex, char *addr,
+				int bpp_line[2])
+{
+	int		pos_y;
+	int		pos_x;
+	int		rgb[3];
+	int		pixel_value;
+	int		texel_index;
+	int		line_len;
+	int		bytespp;
+	t_vec3f	*pixels;
+
+	line_len = bpp_line[0];
+	bytespp = bpp_line[1] / 8;
+	pixels = (t_vec3f *)tex->pixels;
+	pos_y = 0;
+	while (pos_y < tex->height)
+	{
+		pos_x = 0;
+		while (pos_x < tex->width)
+		{
+			pixel_value = *(int *)(addr + pos_y * line_len + pos_x * bytespp);
+			extract_rgb(pixel_value, rgb);
+			texel_index = pos_y * tex->width + pos_x;
+			pixels[texel_index] = (t_vec3f){0.0f, 0.0f, rgb8_to_height(rgb)};
+			pos_x++;
+		}
+		pos_y++;
+	}
+}
+
+static float	height_at_z(const t_vec3f *pixels, int width, int x, int y)
+{
+	return (pixels[y * width + x][2]);
+}
+
+static void	bump_bake_dxdy_xy(t_texture *tex)
+{
+	int		pos_y;
+	int		pos_x;
+	int		width;
+	int		height;
+	int		xm;
+	int		xp;
+	int		ym;
+	int		yp;
+	float	dx;
+	float	dy;
+	t_vec3f	*pixels;
+
+	width = tex->width;
+	height = tex->height;
+	pixels = (t_vec3f *)tex->pixels;
+	pos_y = 0;
+	while (pos_y < height)
+	{
+		ym = wrap_index(pos_y - 1, height);
+		yp = wrap_index(pos_y + 1, height);
+		pos_x = 0;
+		while (pos_x < width)
+		{
+			xm = wrap_index(pos_x - 1, width);
+			xp = wrap_index(pos_x + 1, width);
+			dx = (height_at_z(pixels, width, xp, pos_y)
+					- height_at_z(pixels, width, xm, pos_y)) * 0.5f;
+			dy = (height_at_z(pixels, width, pos_x, yp)
+					- height_at_z(pixels, width, pos_x, ym)) * 0.5f;
+			pixels[pos_y * width + pos_x][0] = dx * (float)width;
+			pixels[pos_y * width + pos_x][1] = dy * (float)height;
+			pos_x++;
+		}
+		pos_y++;
+	}
+}
+
+static void	bump_clear_z(t_texture *tex)
+{
+	int		texel_index;
+	int		count;
+	t_vec3f	*pixels;
+
+	pixels = (t_vec3f *)tex->pixels;
+	count = tex->width * tex->height;
+	texel_index = 0;
+	while (texel_index < count)
+	{
+		pixels[texel_index][2] = 0.0f;
+		texel_index++;
+	}
+}
+
+static void	copy_albedo_from_mlx(t_texture *tex, char *addr,
+				int bpp_line[2])
+{
+	int		pos_y;
+	int		pos_x;
+	int		rgb[3];
+	int		pixel_value;
+	int		texel_index;
+	int		line_len;
+	int		bytespp;
+	t_vec3f	*pixels;
+
+	line_len = bpp_line[0];
+	bytespp = bpp_line[1] / 8;
+	pixels = (t_vec3f *)tex->pixels;
+	pos_y = 0;
+	while (pos_y < tex->height)
+	{
+		pos_x = 0;
+		while (pos_x < tex->width)
+		{
+			pixel_value = *(int *)(addr + pos_y * line_len + pos_x * bytespp);
+			extract_rgb(pixel_value, rgb);
+			texel_index = pos_y * tex->width + pos_x;
+			rgb8_to_linear_vec(rgb, &pixels[texel_index]);
+			pos_x++;
+		}
+		pos_y++;
+	}
+}
+
+static int	load_one_texture(t_texture *tex, t_display *display, int is_bump)
+{
+	void	*img;
 	char	*addr;
 	int		bpp;
 	int		line_len;
 	int		endian;
-	int		x;
-	int		y;
-	int		rgb[3];
-
-	addr = mlx_get_data_addr(img, &bpp, &line_len, &endian);
-	y = 0;
-	while (y < tex->height)
-	{
-		x = 0;
-		while (x < tex->width)
-		{
-			int	pix;
-			int	index;
-			t_vec3f	*dst;
-
-			pix = *(int *)(addr + y * line_len + x * (bpp / 8));
-			rgb[0] = (pix >> 16) & 0xFF;
-			rgb[1] = (pix >> 8) & 0xFF;
-			rgb[2] = pix & 0xFF;
-			index = y * tex->width + x;
-			dst = &((t_vec3f *)tex->pixels)[index];
-			rgb8_to_linear_vec(rgb, dst);
-			x++;
-		}
-		y++;
-	}
-	mlx_destroy_image(mlx, img);
-}
-#include <stdio.h>
-
-static int	load_one_texture(t_texture *tex, t_display *display)
-{
-	void	*img;
+	int		bpp_line[2];
 
 	if (!tex->path || !texture_has_xpm_ext(tex->path))
 		return (0);
-	printf("Loading texture from XPM file: %s\n", tex->path);
 	img = mlx_xpm_file_to_image(display->mlx, tex->path,
 			&tex->width, &tex->height);
 	if (!img)
 		return (0);
-	if (!texture_alloc_pixels(tex))
+	if (!texture_alloc_pixels_vec3(tex))
+		return (mlx_destroy_image(display->mlx, img), 0);
+	addr = mlx_get_data_addr(img, &bpp, &line_len, &endian);
+	bpp_line[0] = line_len;
+	bpp_line[1] = bpp;
+	if (is_bump == 0)
+		copy_albedo_from_mlx(tex, addr, bpp_line);
+	else
 	{
-		mlx_destroy_image(display->mlx, img);
-		return (0);
+		bump_store_height_z(tex, addr, bpp_line);
+		bump_bake_dxdy_xy(tex);
+		bump_clear_z(tex);
 	}
-	texture_copy_from_mlx(tex, img, display->mlx);
+	mlx_destroy_image(display->mlx, img);
 	return (1);
 }
 
 int	load_scene_textures(t_scene *scene, t_display *display)
 {
-	int	i;
+	int	index;
 
-	i = 0;
-	while (i < scene->texture_count)
+	index = 0;
+	while (index < scene->texture_count)
 	{
-		printf("Loading texture %d/%d: %s\n", i + 1, scene->texture_count, scene->textures[i].path);
-		if (scene->textures[i].path)
-		{
-			if (!load_one_texture(&scene->textures[i], display))
+		if (scene->textures[index].path)
+			if (!load_one_texture(&scene->textures[index], display, 0))
 				return (1);
-		}
-		i++;
+		index++;
+	}
+	index = 0;
+	while (index < scene->bumpmap_count)
+	{
+		if (scene->bumpmaps[index].path)
+			if (!load_one_texture(&scene->bumpmaps[index], display, 1))
+				return (1);
+		index++;
 	}
 	return (0);
 }

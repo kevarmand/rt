@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 16:34:12 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/13 16:35:19 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/15 12:58:45 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	build_textures(t_scene *scene, t_texture_parsed *parsed)
 {
 	int	count;
 
-	count = parsed->index;
+	count = parsed->index_t;
 	scene->texture_count = count;
 	if (count == 0)
 	{
@@ -66,12 +66,26 @@ int	build_textures(t_scene *scene, t_texture_parsed *parsed)
 	scene->textures = ft_calloc((size_t)count, sizeof(t_texture));
 	if (!scene->textures)
 		return (ERR_MALLOC);
-	return (textures_detach_all(scene, parsed->h_texture));
+	if (textures_detach_all(scene, parsed->h_texture))
+		return (ERR_MALLOC);
+	count = parsed->index_b;
+	scene->bumpmap_count = count;
+	if (count == 0)
+	{
+		scene->bumpmaps = NULL;
+		return (SUCCESS);
+	}
+	scene->bumpmaps = ft_calloc((size_t)count, sizeof(t_texture));
+	if (!scene->bumpmaps)
+		return (ERR_MALLOC);
+	if (textures_detach_all(scene, parsed->h_bumpmap))
+		return (ERR_MALLOC);
+	return (SUCCESS);
 }
 
 void	parsed_textures_destroy(t_texture_parsed *parsed)
 {
 	hashmap_destroy(parsed->h_texture, NULL);
 	parsed->h_texture = NULL;
-	parsed->index = 0;
+	parsed->index_t = 0;
 }
