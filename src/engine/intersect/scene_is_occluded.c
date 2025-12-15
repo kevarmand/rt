@@ -111,6 +111,8 @@ int	bvh_ocult(t_ray r, t_bvhnode *nodes, t_primitive *prims, t_hit *out)
 	stack[sp++] = 0;
 	if (out->kind == HIT_PLANE || prims[out->primitive_id].type == PRIM_TRIANGLE)
 		tmin = 0.0f;
+	else if (prims[out->primitive_id].type == PRIM_TORUS)
+		tmin = 1e-2f;
 	else
 		tmin = TMIN_SHADOW;
 	while (sp > 0)

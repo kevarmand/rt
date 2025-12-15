@@ -119,7 +119,7 @@ static void	build_normal_primitive(const t_primitive *primitive,
 	else if (primitive->type == PRIM_TRIANGLE)
 		build_normal_triangle(&primitive->tr, normal);
 	else if (primitive->type == PRIM_TORUS)
-		build_normal_torus(&primitive->to, &hit->point, normal);
+			*normal = hit->normal;
 }
 #include <stdio.h>
 void	hit_build_geometry(const t_scene *scene,

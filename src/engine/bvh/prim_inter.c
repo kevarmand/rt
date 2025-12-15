@@ -220,9 +220,16 @@ t_vec3f	from_local(t_vec3f p, t_vec3f ux, t_vec3f uy, t_vec3f uz)
 
 void	build_normal_torus(t_torus *t, t_vec3f *point, t_vec3f *normal)
 {
-	float	a;
+	double	a;
+	double	len;
 
-	a = 1.0 - (t->R / sqrtf(point->x * point->x + point->z * point->z));
+	len = sqrt(point->x * point->x + point->z * point->z);
+	if (len < 1e-6)
+	{
+		*normal = (t_vec3f){0.0f, copysignf(1.0f, point->y), 0.0f};
+		return ;
+	}
+	a = 1.0 - (t->R / len);
 	*normal = vec3f_normalize((t_vec3f){a * point->x, point->y, a * point->z});
 }
 
@@ -256,29 +263,14 @@ extern inline int	torus_inter(t_ray r, t_torus *t, t_hit *hit)
 	t_vec3f	uy = vec3f_normalize(t->normal);
 	t_vec3f	ux,uz;
 	frisvad(uy, &ux, &uz);
-	uz = vec3f_normalize(uz);
-	ux = vec3f_cross(uz, uy);
-	t_vec3f	tmp;
-	tmp = from_local(to_local(ro, ux, uy, uz), ux, uy, uz);
-	assert(fabsf(tmp.x - ro.x) <= 1e-4f);
-	assert(fabsf(tmp.y - ro.y) <= 1e-4f);
-	assert(fabsf(tmp.z - ro.z) <= 1e-4f);
 	ro = to_local(ro, ux, uy, uz);
 	rd = to_local(rd, ux, uy, uz);
-	double	rox = (double)ro.x, roy = (double)ro.y, roz = (double)ro.z;
-	double	rdx = (double)rd.x, rdy = (double)rd.y, rdz = (double)rd.z;
-	double	rd_len = sqrt(rdx * rdx + rdy * rdy + rdz * rdz);
-	rdx /= rd_len; rdy /= rd_len; rdz /= rd_len;
-	double	RR = (double)t->R;
-	double	RR2 = RR * RR;
-	double	rr = (double)t->r;
-	double	rr2 = rr * rr;
-	g = 4.0 * RR2 * (rdx * rdx + rdz * rdz);
-	h = 8.0 * RR2 * (rox * rdx + roz * rdz);
-	i = 4.0 * RR2 * (rox * rox + roz * roz);
-	j = rdx * rdx + rdy * rdy + rdz * rdz;
-	k = 2.0 * (rox * rdx + roy * rdy + roz * rdz);
-	l = rox * rox + roy * roy + roz * roz + RR2 - rr2;
+	g = 4.0 * t->R_square * (rd.x * rd.x + rd.z * rd.z);
+	h = 8.0 * t->R_square * (ro.x * rd.x + ro.z * rd.z);
+	i = 4.0 * t->R_square * (ro.x * ro.x + ro.z * ro.z);
+	j = vec3f_dot(rd, rd);
+	k = 2.0 * vec3f_dot(ro, rd);
+	l = vec3f_dot(ro, ro) + t->R_square - t->r_square;
 	eq.a = j * j;
 	eq.b = 2.0 * j * k;
 	eq.c = 2.0 * j * l + k * k - g;
@@ -294,6 +286,14 @@ extern inline int	torus_inter(t_ray r, t_torus *t, t_hit *hit)
 			hit->t = roots[z];
 			hit_happened = 1;
 		}
+	}
+	if (hit_happened)
+	{
+		t_vec3f	p_local;
+
+		p_local = ro + hit->t * rd;
+		build_normal_torus(t, &p_local, &hit->normal);
+		hit->normal = vec3f_normalize(from_local(hit->normal, ux, uy, uz));
 	}
 	return (hit_happened);
 }

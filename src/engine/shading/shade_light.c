@@ -13,6 +13,7 @@
 #include "engine.h"
 #include "rt_config.h"
 #include "scene.h"
+#include "vector.h"
 
 // static void	shade_one_light(const t_scene *scene,
 // 			const t_hit *hit, int light_index, t_vec3f *color)
@@ -153,6 +154,10 @@ void	shade_one_light(const t_scene *scene,
 		return ;
 	if (hit->kind == HIT_PLANE)
 		offset = 0.0f;
+	else if (scene->primitives[hit->primitive_id].type == PRIM_TORUS)
+	{
+		offset = vec3f_scale(ctx.normal, fmax(0.0f, 5e-3f * scene->primitives[hit->primitive_id].to.r));
+	}
 	else
 		offset = vec3f_scale(ctx.normal, fmaxf(TMIN_SHADOW, TMIN_SHADOW_BIAS * hit->t));
 	shadow_ray.origin = vec3f_add(ctx.point, offset);
