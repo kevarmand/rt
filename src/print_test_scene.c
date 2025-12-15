@@ -158,10 +158,10 @@ void print_scene(const t_scene *scene)
 {
 	printf("=== parsed scene ===\n");
 	print_globals(scene);
-	print_cameras(scene);
-	print_lights(scene);
-	print_objects(scene);
-	print_plane(scene);
+	// print_cameras(scene);
+	// print_lights(scene);
+	// print_objects(scene);
+	// print_plane(scene);
 	printf("number of surfaces: %d\n", scene->surface_count);
 	printf("number of materials: %d\n", scene->material_count);
 	printf("number of textures: %d\n", scene->texture_count);
