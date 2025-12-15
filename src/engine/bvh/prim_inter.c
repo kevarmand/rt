@@ -6,13 +6,15 @@
 /*   By: norivier <norivier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/31 02:11:27 by norivier          #+#    #+#             */
-/*   Updated: 2025/12/10 19:10:07 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/15 01:24:57 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <assert.h>
 #include <float.h>
 #include <math.h>
 #include "bvh.h"
+#include "engine.h"
 #include "types.h"
 #include "rt_math.h"
 #include "vector.h"
@@ -178,63 +180,121 @@ extern inline int	cylinder_inter(t_ray r, t_cylinder *cl, t_hit *hit)
 		}
 		i += 1;
 	}
-	// if (fabsf(rd.y) > EPSILON) {
-	// 	// if (cylinder_cap(r, cl, hit))
-	// 	// 	hit_happened = 1;
-	// }
 	return (hit_happened);
+}
+
+void	frisvad(const t_vec3f axis, t_vec3f *b1, t_vec3f *b2)
+{
+	float	a;
+	float	b;
+
+	if (axis.y < -0.9999999f)
+	{
+		*b1 = (t_vec3f){0.0f, 0.0f, -1.0f, 0.0f};
+		*b2 = (t_vec3f){-1.0f, 0.0f, 0.0f, 0.0f};
+		return ;
+	}
+	a = ft_rcpf(1.0f + axis.y);
+	b = -axis.x * axis.z * a;
+	*b1 = (t_vec3f){1.0f - axis.x * axis.x * a, -axis.x, b, 0.0f};
+	*b2 = (t_vec3f){b, -axis.z, 1.0f - axis.z * axis.z * a, 0.0f};
+}
+
+t_vec3f	to_local(t_vec3f p, t_vec3f ux, t_vec3f uy, t_vec3f uz)
+{
+	return ((t_vec3f){
+		vec3f_dot(p, ux),
+		vec3f_dot(p, uy),
+		vec3f_dot(p, uz),
+	});
+}
+
+t_vec3f	from_local(t_vec3f p, t_vec3f ux, t_vec3f uy, t_vec3f uz)
+{
+	return ((t_vec3f){
+		p.x * ux.x + p.y * uy.x + p.z * uz.x,
+		p.x * ux.y + p.y * uy.y + p.z * uz.y,
+		p.x * ux.z + p.y * uy.z + p.z * uz.z,
+	});
+}
+
+void	build_normal_torus(t_torus *t, t_vec3f *point, t_vec3f *normal)
+{
+	float	a;
+
+	a = 1.0 - (t->R / sqrtf(point->x * point->x + point->z * point->z));
+	*normal = vec3f_normalize((t_vec3f){a * point->x, point->y, a * point->z});
+}
+
+int	inside_torus(t_torus *t, t_vec3f *point)
+{
+	const float	t2 = t->R - sqrtf(point->x * point->x + point->z * point->z);
+	const float	f = t2 * t2 + point->y * point->y - t->r_square;
+	return (f <= EPSILON);
 }
 
 // Looks ok ?
 FORCEINLINE
 extern inline int	torus_inter(t_ray r, t_torus *t, t_hit *hit)
 {
-	t_ray	r_local;
-	t_vec3f	p;
-	float	m;
+	t_vec3f	ro;
+	t_vec3f	rd;
+	t_cequ	eq;
+	complex double	croots[4];
+	double	roots[4];
+	float	g;
+	float	h;
+	float	i;
+	float	j;
 	float	k;
-	t_equ	eq;
-	float	roots[4];
+	float	l;
 	int		nroots;
-	float	tmin;
-	// t_vec3f	hit_local;
-	// t_vec3f	normal_local;
-	// float	tmp;
-	float	p_dot_d;
 
-	r_local.origin = r.origin;
-	r_local.dir = r.dir;
-	p = r_local.origin;
-	m = vec3f_dot(r_local.dir, r_local.dir);
-	k = vec3f_dot(p, p) + t->R * t->R - t->r * t->r;
-	p_dot_d = vec3f_dot(p, r_local.dir);
-	eq.a = m * m;
-	eq.b = 4.0f * m * p_dot_d;
-	eq.c = 2.0f * m * k + 4.0f * p_dot_d * p_dot_d - 4.0f * t->R * t->R
-		* (r_local.dir.x * r_local.dir.x + r_local.dir.y * r_local.dir.y);
-	eq.d = 4.0f * p_dot_d * k
-		- 8.0f * t->R * t->R * (p.x * r_local.dir.x + p.y * r_local.dir.y);
-	eq.e = k * k - 4.0f * t->R * t->R * (p.x * p.x + p.y * p.y);
-	nroots = solve_quartic(eq, roots);
-	if (nroots == 0)
-		return 0;
-	tmin = -1.0f;
-	for (int i = 0; i < nroots; ++i)
-		if (roots[i] > 0.0f && (tmin < 0.0f || roots[i] < tmin))
-			tmin = roots[i];
-	if (tmin < 0.0f)
-		return 0;
-	// hit_local = vec3f_add(r_local.origin, vec3f_scale(r_local.dir, tmin));
-	// p = hit_local;
-	// tmp = vec3f_dot(p, p) + t->R * t->R - t->r * t->r;
-	// normal_local.x = 4.0f * p.x * tmp - 8.0f * t->R * t->R * p.x;
-	// normal_local.y = 4.0f * p.y * tmp - 8.0f * t->R * t->R * p.y;
-	// normal_local.z = 4.0f * p.z * tmp;
-	// normal_local = vec3f_normalize(normal_local);
-	hit->t = tmin;
-	// hit->point = vec3f_add(t->center, mat3x3_mulv(t->basis, hit_local));
-	// hit->normal = vec3f_normalize(mat3x3_mulv(t->basis, normal_local)); //assuming orthonormal otherwise replace basis by transpose of invbasis
-	return 1;
+	ro = vec3f_sub(r.origin, t->center);
+	rd = r.dir;
+	t_vec3f	uy = vec3f_normalize(t->normal);
+	t_vec3f	ux,uz;
+	frisvad(uy, &ux, &uz);
+	t_vec3f	tmp;
+	tmp = from_local(to_local(ro, ux, uy, uz), ux, uy, uz);
+	assert(fabsf(tmp.x - ro.x) <= 1e-3f);
+	assert(fabsf(tmp.z - ro.y) <= 1e-3f);
+	assert(fabsf(tmp.z - ro.z) <= 1e-3f);
+	ro = to_local(ro, ux, uy, uz);
+	rd = to_local(rd, ux, uy, uz);
+	g = 4 * t->R_square * (rd.x * rd.x + rd.z * rd.z);
+	h = 8 * t->R_square * (ro.x * rd.x + ro.z * rd.z);
+	i = 4 * t->R_square * (ro.x * ro.x + ro.z * ro.z);
+	j = vec3f_dot(rd, rd);
+	k = 2 * vec3f_dot(ro, rd);
+	l = vec3f_dot(ro, ro) + (t->R_square - t->r_square);
+	eq.a = j * j;
+	eq.b = 2.0 * j * k;
+	eq.c = 2.0 * j * l + k * k - g;
+	eq.d = 2.0 * k * l - h;
+	eq.e = l * l - i;
+	nroots = csolve_quartic(eq, croots);
+	nroots = filter_real_numbers(nroots, croots, roots);
+	t_vec3f	hit_point_local;
+	t_vec3f	hit_point_world;
+	t_vec3f	normal;
+	float	t_world;
+	int		hit_happened = 0;
+	for (int z = 0; z < nroots; ++z)
+	{
+		hit_point_local = ro + rd * roots[z];
+		build_normal_torus(t, &hit_point_local, &normal);
+		if (vec3f_dot(normal, rd) > 0.0f)
+			continue ;
+		hit_point_world = from_local(hit_point_local, ux, uy, uz) + t->center;
+		t_world = vec3f_dot(hit_point_world - r.origin, r.dir);
+		if (t_world > 1e-4f && t_world < hit->t)
+		{
+			hit->t = t_world;
+			hit_happened = 1;
+		}
+	}
+	return (hit_happened);
 }
 
 FORCEINLINE

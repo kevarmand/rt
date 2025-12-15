@@ -6,10 +6,11 @@
 /*   By: norivier <norivier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 20:01:56 by norivier          #+#    #+#             */
-/*   Updated: 2025/12/10 04:30:06 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/14 23:03:08 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <complex.h>
 #include <stdint.h>
 #ifndef BVH_H
 # define BVH_H 1
@@ -116,6 +117,15 @@ typedef struct s_equ
 	float	e;
 }	t_equ;
 
+typedef struct s_cequ
+{
+	complex float	a;
+	complex float	b;
+	complex float	c;
+	complex float	d;
+	complex float	e;
+}	t_cequ;
+
 // AABB
 t_aabb	prim_bound(t_primitive *p);
 t_aabb	bound_merge(t_aabb a, t_aabb b);
@@ -132,7 +142,9 @@ void	sortf3(float *a, float *b, float *c);
 void	sortf4(float *a, float *b, float *c, float *d);
 // Equations
 int		solve_quad(t_equ arg, float roots[]);
-int		solve_quartic(t_equ arg, float roots[]);
+int		csolve_quartic(t_cequ arg, complex double roots[]);
+int		filter_real_numbers(int numvalues, complex double in[], double out[]);
+void	build_normal_torus(t_torus *t, t_vec3f *point, t_vec3f *normal);
 // Inter math
 t_vec3f	mat3x3_mulv(t_mat3x3f m, t_vec3f v);
 // SAH

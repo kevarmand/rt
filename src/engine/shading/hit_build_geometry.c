@@ -6,12 +6,14 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 17:24:31 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/12 18:41:46 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/14 23:03:26 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "engine.h"
 #include "scene.h"
+#include "vector.h"
+#include "bvh.h"
 #include <stdio.h>
 #include <math.h>
 
@@ -116,6 +118,8 @@ static void	build_normal_primitive(const t_primitive *primitive,
 		build_normal_cylinder(&primitive->cy, hit, normal);
 	else if (primitive->type == PRIM_TRIANGLE)
 		build_normal_triangle(&primitive->tr, normal);
+	else if (primitive->type == PRIM_TORUS)
+		build_normal_torus(&primitive->to, &hit->point, normal);
 }
 #include <stdio.h>
 void	hit_build_geometry(const t_scene *scene,
