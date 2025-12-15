@@ -62,39 +62,14 @@ static int	scene_is_occluded_primitives(const t_scene *scene,
 }
 
 FORCEINLINE
-extern inline int	sphere_ocult(t_ray r, t_sphere *s, t_hit *hit)
-{
-	t_vec3f			ro;
-	t_vec3f			rd;
-	t_equ			eq;
-	float			roots[2];
-	int				nroots;
-
-	// ro = mat3x3_mulv(s->inv_basis, vec3f_sub(r.origin, s->center));
-	// rd = mat3x3_mulv(s->inv_basis, r.dir);
-	ro = vec3f_sub(r.origin, s->center);
-	rd = r.dir;
-	eq.a = 1.0f;
-	eq.b = 2.0f * vec3f_dot(rd, ro);
-	eq.c = vec3f_dot(ro, ro) - s->r_squared;
-	nroots = solve_quad(eq, roots);
-	if (nroots == 0)
-		return (0);
-	hit->t = -1.0f;
-	if (roots[0] > -EPSILON && nroots > 1 && roots[1] > EPSILON)
-		hit->t = roots[1];
-	else
-		return (0);
-	return (1);
-}
-
-FORCEINLINE
 extern inline int	ocult_inter(t_ray r, t_primitive *p, t_hit *out)
 {
-	if (p->type == PRIM_SPHERE)
-		return (sphere_ocult(r, &p->sp, out));
+	// if (p->type == PRIM_TRIANGLE)
+	// 	return (triangle_inter(r, &p->tr, out));
+	// else if (p->type == PRIM_SPHERE)
+	// 	return (sphere_inter(r, &p->sp, out));
 	// else if (p->type == PRIM_CYLINDER)
-	// 	return (cylinder_ocult(r, &p->cy, out));
+	// 	return (cylinder_inter(r, &p->cy, out));
 	// else if (p->type == PRIM_TORUS)
 	// 	return (torus_ocult(r, &p->to, out));
 	return (0);
@@ -106,7 +81,6 @@ int	bvh_ocult(t_ray r, t_bvhnode *nodes, t_primitive *prims, t_hit *out)
 	int			sp;
 	float		tmin;
 
-	// out->t = FLT_MAX;
 	sp = 0;
 	stack[sp++] = 0;
 	if (out->kind == HIT_PLANE || prims[out->primitive_id].type == PRIM_TRIANGLE)
@@ -183,6 +157,8 @@ int	scene_is_occluded(const t_scene *scene, const t_ray *ray,
 	out_hit.t = max_distance;
 	out_hit.primitive_id = hit->primitive_id;
 	out_hit.kind = hit->kind;
+	out_hit.tmin = hit->tmin;
+	out_hit.inside = hit->inside;
 	int status = bvh_ocult(*ray, scene->bvh_nodes, scene->primitives, &out_hit);
 	return (status);
 	// if (scene_is_occluded_primitives(scene, ray, max_distance))

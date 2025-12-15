@@ -119,7 +119,7 @@ static void	build_normal_primitive(const t_primitive *primitive,
 	else if (primitive->type == PRIM_TRIANGLE)
 		build_normal_triangle(&primitive->tr, normal);
 	else if (primitive->type == PRIM_TORUS)
-			*normal = hit->normal;
+			*normal = vec3f_normalize(hit->normal);
 }
 #include <stdio.h>
 void	hit_build_geometry(const t_scene *scene,
@@ -157,6 +157,11 @@ void	hit_build_geometry(const t_scene *scene,
 
 	hit->view_dir = vec3f_scale(ray->dir, -1.0f);
 	hit->normal = normal;
-	if (vec3f_dot(hit->normal, ray->dir) > 0.0f)
-	 	hit->normal = vec3f_scale(hit->normal, -1.0f);
+	if (hit->kind == HIT_PRIMITIVE && primitive->type == PRIM_TORUS)
+		;
+	else
+	{
+		if (vec3f_dot(hit->normal, ray->dir) > 0.0f)
+			hit->normal = vec3f_scale(hit->normal, -1.0f);
+	}
 }

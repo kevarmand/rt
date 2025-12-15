@@ -183,61 +183,76 @@ extern inline int	cylinder_inter(t_ray r, t_cylinder *cl, t_hit *hit)
 	return (hit_happened);
 }
 
-void	frisvad(const t_vec3f axis, t_vec3f *b1, t_vec3f *b2)
+void	frisvad(const t_vec3d axis, t_vec3d *b1, t_vec3d *b2)
 {
-	float	a;
-	float	b;
+	double	a;
+	double	b;
 
-	if (axis.y < -0.9999999f)
+	if (axis.y < -0.9999999)
 	{
-		*b1 = (t_vec3f){0.0f, 0.0f, -1.0f, 0.0f};
-		*b2 = (t_vec3f){-1.0f, 0.0f, 0.0f, 0.0f};
+		*b1 = (t_vec3d){0.0, 0.0, -1.0, 0.0};
+		*b2 = (t_vec3d){-1.0, 0.0, 0.0, 0.0};
 		return ;
 	}
-	a = ft_rcpf(1.0f + axis.y);
+	a = 1 / (1.0 + axis.y);
 	b = -axis.x * axis.z * a;
-	*b1 = (t_vec3f){1.0f - axis.x * axis.x * a, -axis.x, b, 0.0f};
-	*b2 = (t_vec3f){b, -axis.z, 1.0f - axis.z * axis.z * a, 0.0f};
+	*b1 = (t_vec3d){1.0 - axis.x * axis.x * a, -axis.x, b, 0.0};
+	*b2 = (t_vec3d){b, -axis.z, 1.0 - axis.z * axis.z * a, 0.0};
 }
 
-t_vec3f	to_local(t_vec3f p, t_vec3f ux, t_vec3f uy, t_vec3f uz)
+t_vec3d	to_local(t_vec3d p, t_vec3d ux, t_vec3d uy, t_vec3d uz)
 {
-	return ((t_vec3f){
-		vec3f_dot(p, ux),
-		vec3f_dot(p, uy),
-		vec3f_dot(p, uz),
+	return ((t_vec3d){
+		vec3d_dot(p, ux),
+		vec3d_dot(p, uy),
+		vec3d_dot(p, uz),
 	});
 }
 
-t_vec3f	from_local(t_vec3f p, t_vec3f ux, t_vec3f uy, t_vec3f uz)
+t_vec3d	from_local(t_vec3d p, t_vec3d ux, t_vec3d uy, t_vec3d uz)
 {
-	return ((t_vec3f){
+	return ((t_vec3d){
 		p.x * ux.x + p.y * uy.x + p.z * uz.x,
 		p.x * ux.y + p.y * uy.y + p.z * uz.y,
 		p.x * ux.z + p.y * uy.z + p.z * uz.z,
 	});
 }
 
-void	build_normal_torus(t_torus *t, t_vec3f *point, t_vec3f *normal)
+int	inside_torus(t_torus *t, t_vec3d *point)
 {
-	double	a;
-	double	len;
+	double	t2;
+	double	f;
 
-	len = sqrt(point->x * point->x + point->z * point->z);
-	if (len < 1e-6)
-	{
-		*normal = (t_vec3f){0.0f, copysignf(1.0f, point->y), 0.0f};
-		return ;
-	}
-	a = 1.0 - (t->R / len);
-	*normal = vec3f_normalize((t_vec3f){a * point->x, point->y, a * point->z});
+	t2 = t->R - sqrt(point->x * point->x + point->z * point->z);
+	f = t2 * t2 + point->y * point->y - t->r_square;
+	return (f < 1e-12);
 }
 
-int	inside_torus(t_torus *t, t_vec3f *point)
+static inline t_vec3d	newton_torus(double *t, t_torus *to, t_vec3d ro, t_vec3d rd)
 {
-	const float	t2 = t->R - sqrtf(point->x * point->x + point->z * point->z);
-	const float	f = t2 * t2 + point->y * point->y - t->r_square;
-	return (f <= EPSILON);
+	int		i;
+	t_vec3d	p;
+	double	sum;
+	double	f;
+	t_vec3d	grad;
+	double	df;
+
+	i = 0;
+	while (i < 6)
+	{
+		p = ro + *t * rd;
+		sum = vec3d_dot(p, p) + to->R_square - to->r_square;
+		f = sum * sum - 4.0 * to->R_square * (p.x * p.x + p.z * p.z);
+		grad.x = 4.0 * p.x * sum - 8.0 * to->R_square * p.x;
+		grad.y = 4.0 * p.y * sum;
+		grad.z = 4.0 * p.z * sum - 8.0 * to->R_square * p.z;
+		df = vec3d_dot(grad, rd);
+		if (fabs(df) < 1e-12)
+			break ;
+		*t -= f / df;
+		i += 1;
+	}
+	return (grad);
 }
 
 // Looks ok ?
@@ -245,8 +260,8 @@ FORCEINLINE
 extern inline int	torus_inter(t_ray r, t_torus *t, t_hit *hit)
 {
 
-	t_vec3f	ro;
-	t_vec3f	rd;
+	t_vec3d	ro;
+	t_vec3d	rd;
 	t_cequ	eq;
 	complex double	croots[4];
 	double	roots[4];
@@ -258,19 +273,19 @@ extern inline int	torus_inter(t_ray r, t_torus *t, t_hit *hit)
 	double	l;
 	int		nroots;
 
-	ro = vec3f_sub(r.origin, t->center);
-	rd = r.dir;
-	t_vec3f	uy = vec3f_normalize(t->normal);
-	t_vec3f	ux,uz;
+	ro = vec3f_to_vec3d(vec3f_sub(r.origin, t->center));
+	rd = vec3f_to_vec3d(r.dir);
+	t_vec3d	uy = vec3f_to_vec3d(t->normal);
+	t_vec3d	ux,uz;
 	frisvad(uy, &ux, &uz);
 	ro = to_local(ro, ux, uy, uz);
 	rd = to_local(rd, ux, uy, uz);
 	g = 4.0 * t->R_square * (rd.x * rd.x + rd.z * rd.z);
 	h = 8.0 * t->R_square * (ro.x * rd.x + ro.z * rd.z);
 	i = 4.0 * t->R_square * (ro.x * ro.x + ro.z * ro.z);
-	j = vec3f_dot(rd, rd);
-	k = 2.0 * vec3f_dot(ro, rd);
-	l = vec3f_dot(ro, ro) + t->R_square - t->r_square;
+	j = 1.0;
+	k = 2.0 * vec3d_dot(ro, rd);
+	l = vec3d_dot(ro, ro) + t->R_square - t->r_square;
 	eq.a = j * j;
 	eq.b = 2.0 * j * k;
 	eq.c = 2.0 * j * l + k * k - g;
@@ -281,7 +296,7 @@ extern inline int	torus_inter(t_ray r, t_torus *t, t_hit *hit)
 	int		hit_happened = 0;
 	for (int z = 0; z < nroots; ++z)
 	{
-		if (roots[z] > 1e-6f && roots[z] < hit->t)
+		if (roots[z] > 1e-6 && roots[z] < hit->t)
 		{
 			hit->t = roots[z];
 			hit_happened = 1;
@@ -289,11 +304,17 @@ extern inline int	torus_inter(t_ray r, t_torus *t, t_hit *hit)
 	}
 	if (hit_happened)
 	{
-		t_vec3f	p_local;
+		t_vec3d	p_local;
+		t_vec3d	grad;
+		t_vec3d	normal;
 
+		grad = newton_torus(&hit->t, t, ro, rd);
+		normal = vec3d_normalize(grad);
 		p_local = ro + hit->t * rd;
-		build_normal_torus(t, &p_local, &hit->normal);
-		hit->normal = vec3f_normalize(from_local(hit->normal, ux, uy, uz));
+		hit->inside = inside_torus(t, &p_local);
+		if (hit->inside)
+			normal = -normal;
+		hit->normal = vec3d_to_vec3f(from_local(normal, ux, uy, uz));
 	}
 	return (hit_happened);
 }

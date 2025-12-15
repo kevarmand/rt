@@ -9,7 +9,8 @@ C 0,3,22  0,0,-1  70
 
 
 #sphere jsute devant la cam distance - R dans le plan focal image
-sp 0,3,20.5 1 255,255,255  diffuse=0 specular=0 shininess=0 refraction=1 reflection=1 ior=1.01
+#sp 0,3,20.5 1 255,255,255  diffuse=0 specular=0 shininess=0 refraction=1 reflection=1 ior=1.01
+to 0,3,20.5 0,1,0 3 1 255,255,255  diffuse=0 specular=0 shininess=0 refraction=1 reflection=1 ior=1.01
 
 # Lumière blanche au-dessus à droite
 L 3,6,3  0.9  255,255,255

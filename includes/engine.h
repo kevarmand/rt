@@ -51,7 +51,9 @@ typedef enum e_hit_kind
 
 typedef struct s_hit {
 	t_hit_kind	kind;
-	float		t;
+	double		t;
+	float		tmin;
+	uint8_t		inside; // for torus;
 	t_vec3f		point;
 	t_vec3f		normal;
 	t_vec3f		view_dir;
@@ -110,7 +112,7 @@ int	scene_is_occluded(const t_scene *scene, const t_ray *ray,
 int	shading_ray(const t_scene *scene, const t_ray *ray,
 	t_shading_ctx *ctx, t_vec3f *color_out);
 
-int shading_ray_fast(const t_scene *scene, const t_ray *ray, 
+int shading_ray_fast(const t_scene *scene, const t_ray *ray,
 	t_shading_ctx *ctx, t_vec3f *color_out);
 
 int	shade_hit(const t_scene *scene, const t_hit *hit, t_shading_ctx *ctx, t_vec3f *color_out);

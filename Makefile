@@ -10,7 +10,7 @@ NAME 			:= miniRT
 # **************************************************************************** #
 
 CC			:= clang
-CFLAGS		:= -Wall -Wextra -pthread -ffast-math -fno-math-errno -Ofast -march=native -fenable-matrix
+CFLAGS		:= -Wall -Wextra -pthread -O1 -march=native -fenable-matrix
 DEP_FLAGS	:= -MMD -MP
 AR			:= ar rcs
 RM			:= rm -rf

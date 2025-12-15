@@ -158,6 +158,7 @@ int	triangle_inter(t_ray r, t_triangle *tr, t_hit *hit);
 int	sphere_inter(t_ray r, t_sphere *s, t_hit *hit);
 int	cylinder_inter(t_ray r, t_cylinder *cl, t_hit *hit);
 int	torus_inter(t_ray r, t_torus *t, t_hit *hit);
+int	torus_ocult(t_ray r, t_torus *t, t_hit *hit);
 int	prim_inter(t_ray r, t_primitive *p, t_hit *out);
 void	build_bvh(t_bvhnode *nodes, t_bvh_buf *buf, int primcount);
 t_primitive	*reorder_prims(t_primitive *prims, int *idx, size_t count);

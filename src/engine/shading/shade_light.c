@@ -143,7 +143,7 @@ static void	shade_specular_blinn(const t_ctx_light *ctx, t_vec3f *color)
 }
 
 void	shade_one_light(const t_scene *scene,
-			const t_hit *hit, int light_i, t_vec3f *color)
+			t_hit *hit, int light_i, t_vec3f *color)
 {
 	t_ctx_light	ctx;
 	t_ray		shadow_ray;
@@ -153,13 +153,19 @@ void	shade_one_light(const t_scene *scene,
 	if (ctx.light_dist <= 0.0f)
 		return ;
 	if (hit->kind == HIT_PLANE)
+	{
+		hit->tmin = 0.0f;
 		offset = 0.0f;
+	}
 	else if (scene->primitives[hit->primitive_id].type == PRIM_TORUS)
 	{
-		offset = vec3f_scale(ctx.normal, fmax(0.0f, 5e-3f * scene->primitives[hit->primitive_id].to.r));
+		offset = vec3f_scale(ctx.light_dir, fmax(fmax(1e-4 * scene->primitives[hit->primitive_id].to.R, 1e-6 * hit->t), 1e-5));
 	}
 	else
-		offset = vec3f_scale(ctx.normal, fmaxf(TMIN_SHADOW, TMIN_SHADOW_BIAS * hit->t));
+	{
+		hit->tmin = fmaxf(TMIN_SHADOW, TMIN_SHADOW_BIAS * hit->t);
+		offset = vec3f_scale(ctx.normal, hit->tmin);
+	}
 	shadow_ray.origin = vec3f_add(ctx.point, offset);
 	// shadow_ray.origin = vec3f_add(shadow_ray.origin,
 	// 		vec3f_scale(ctx.light_dir, 0.0f));

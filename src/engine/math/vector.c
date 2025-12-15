@@ -56,9 +56,24 @@ extern inline t_vec3f	vec3f_scale(t_vec3f a, float s)
 }
 
 FORCEINLINE
+extern inline t_vec3d	vec3d_scale(t_vec3d a, double s)
+{
+	return (a * (t_vec3d){s, s, s, 0});
+}
+
+FORCEINLINE
 extern inline float	vec3f_dot(t_vec3f a, t_vec3f b)
 {
 	t_vec3f	tmp;
+
+	tmp = a * b;
+	return (tmp.x + tmp.y + tmp.z);
+}
+
+FORCEINLINE
+extern inline float	vec3d_dot(t_vec3d a, t_vec3d b)
+{
+	t_vec3d	tmp;
 
 	tmp = a * b;
 	return (tmp.x + tmp.y + tmp.z);
@@ -87,6 +102,12 @@ extern inline t_vec3f	vec3f_normalize(t_vec3f a)
 }
 
 FORCEINLINE
+extern inline t_vec3d	vec3d_normalize(t_vec3d a)
+{
+	return (vec3d_scale(a, 1.0 / sqrt(vec3d_dot(a, a))));
+}
+
+FORCEINLINE
 extern inline void	vec3f_load3(t_vec3f *dst, const float src[3])
 {
 	(*dst)[0] = src[0];
@@ -99,6 +120,12 @@ FORCEINLINE
 extern inline float	vec3f_length(t_vec3f a)
 {
 	return (sqrtf(vec3f_dot(a, a)));
+}
+
+FORCEINLINE
+extern inline double	vec3d_length(t_vec3d a)
+{
+	return (sqrt(vec3d_dot(a, a)));
 }
 
 
@@ -117,4 +144,28 @@ FORCEINLINE
 extern inline t_vec3f proj_on_plane(t_vec3f v, t_vec3f n)
 {
 	return (vec3f_sub(v, vec3f_scale(n, vec3f_dot(v, n))));
+}
+
+FORCEINLINE
+extern inline t_vec3d	vec3f_to_vec3d(t_vec3f vf)
+{
+	t_vec3d	vd;
+
+	vd.x = (double)vf.x;
+	vd.y = (double)vf.y;
+	vd.z = (double)vf.z;
+	vd.w = (double)0.0;
+	return (vd);
+}
+
+FORCEINLINE
+extern inline t_vec3f	vec3d_to_vec3f(t_vec3d vd)
+{
+	t_vec3f	vf;
+
+	vf.x = (float)vd.x;
+	vf.y = (float)vd.y;
+	vf.z = (float)vd.z;
+	vf.w = (float)0.0;
+	return (vf);
 }
