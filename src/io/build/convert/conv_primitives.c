@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   conv_primitives.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/16 16:34:38 by kearmand          #+#    #+#             */
+/*   Updated: 2025/12/16 16:35:09 by kearmand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "color.h"
 #include "scene.h"
 #include "convert.h"
@@ -13,7 +25,7 @@ int	copy_plane_to_primitive(const t_parsed_element *src, t_primitive *dst);
 int	copy_torus_to_primitive(const t_parsed_element *src, t_primitive *dst);
 
 int	conv_option_primitive(t_primitive *prim, t_element_options *opt,
-			t_conv_ctx *cx, int *color);
+		t_conv_ctx *cx, int *color);
 
 static int	init_primitives(t_conv_ctx *cx)
 {
@@ -37,7 +49,6 @@ static void	object_from_parsed(t_parsed_element *src, t_primitive *dst)
 	else if (src->type == ELEM_TORUS)
 		copy_torus_to_primitive(src, dst);
 }
-	
 
 static int	push_elem_to_ctx(t_parsed_element *elem, t_conv_ctx *cx)
 {
@@ -56,7 +67,6 @@ static int	push_elem_to_ctx(t_parsed_element *elem, t_conv_ctx *cx)
 		return (ERR_MALLOC);
 	return (SUCCESS);
 }
-
 
 int	conv_primitives(t_scene_parsed *parsed, t_conv_ctx *cx)
 {
@@ -80,4 +90,3 @@ int	conv_primitives(t_scene_parsed *parsed, t_conv_ctx *cx)
 	}
 	return (SUCCESS);
 }
-

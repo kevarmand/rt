@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 13:23:38 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/14 16:04:45 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/16 16:37:41 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	intern_material(t_conv_ctx *cx,
 	t_material	new_mat;
 	char		key[256];
 	int			idx;
-	
+
 	material_build(opt, &new_mat);
 	generate_option_key(&new_mat, key);
 	if (material_hit(cx, key, out_mat))

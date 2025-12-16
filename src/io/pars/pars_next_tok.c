@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pars_next_tok.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/16 16:50:06 by kearmand          #+#    #+#             */
+/*   Updated: 2025/12/16 16:50:19 by kearmand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "io.h"
 #include "parsing_internal.h"
 
@@ -25,7 +37,7 @@ int	pars_next_tok(t_pars_state *st, t_tok *out)
 
 int	pars_tok_eq(t_tok t, const char *lit)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < t.len && lit[i] && t.start[i] == lit[i])

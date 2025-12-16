@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pars_dispatch_tok.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/16 16:51:21 by kearmand          #+#    #+#             */
+/*   Updated: 2025/12/16 16:53:23 by kearmand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "io.h"
 #include "errors.h"
 #include "parsing_internal.h"
 
-
-typedef int	(*t_pars_handler)(t_pars_state *st, t_scene_parsed *scene);
+typedef int					(*t_pars_handler)(t_pars_state *st,
+								t_scene_parsed *scene);
 
 static int	handle_camera_primary(t_pars_state *st, t_scene_parsed *scene)
 {

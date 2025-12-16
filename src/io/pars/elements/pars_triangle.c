@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pars_triangle.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/16 16:46:49 by kearmand          #+#    #+#             */
+/*   Updated: 2025/12/16 16:46:53 by kearmand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "io.h"
 #include "type.h"
 #include "errors.h"
@@ -28,4 +40,3 @@ int	pars_triangle(t_pars_state *st, t_scene_parsed *scene)
 		return (ERR_PARS);
 	return (pars_register_element(scene, &parsed_element, ELEM_ROLE_NORMAL));
 }
- 

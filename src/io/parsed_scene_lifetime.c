@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 17:33:50 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/16 13:46:43 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/16 16:21:07 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,25 @@ void	free_parsed_scene(t_scene_parsed *parsed)
 	parsed->cameras = NULL;
 	parsed->lights = NULL;
 }
-void	init_parsed_scene(t_scene_parsed *parsed)
+
+int	init_heap_element(t_scene_parsed *parsed)
+{
+	parsed->textures.h_texture = hashmap_create(16);
+	if (parsed->textures.h_texture == NULL)
+		return (ERR_MALLOC);
+	parsed->textures.h_bumpmap = hashmap_create(16);
+	ft_printf("Hashmap for textures created successfully\n");
+	if (parsed->textures.h_bumpmap == NULL)
+		return (ERR_MALLOC);
+	ft_printf("Hashmap for bumpmaps created successfully\n");
+	return (SUCCESS);
+}
+
+int	init_parsed_scene(t_scene_parsed *parsed)
 {
 	int	status;
 
+	ft_memset(parsed, 0, sizeof(t_scene_parsed));
 	parsed->objects = NULL;
 	parsed->cameras = NULL;
 	parsed->lights = NULL;
@@ -39,22 +54,17 @@ void	init_parsed_scene(t_scene_parsed *parsed)
 	parsed->globals.color[1] = 0.0f;
 	parsed->globals.color[2] = 0.0f;
 	parsed->presence_mask = 0;
-	parsed->textures.h_texture = hashmap_create(16);
-	if (parsed->textures.h_texture == NULL)
-		return ;
 	parsed->skybox.texture_id = -1;
 	parsed->skybox.mode = SKYBOX_SPHERE;
 	parsed->skybox.intensity[0] = 1.0f;
 	parsed->skybox.intensity[1] = 1.0f;
 	parsed->skybox.intensity[2] = 1.0f;
-	printf("Hashmap for textures created successfully\n");
 	parsed->textures.index_t = 0;
-	parsed->textures.h_bumpmap = hashmap_create(16);
-	if (parsed->textures.h_bumpmap == NULL)
-		return ;
 	parsed->textures.index_b = 0;
-	printf("Hashmap for bumpmaps created successfully\n");
+	if (init_heap_element(parsed) != SUCCESS)
+		return (ERR_MALLOC);
 	init_element_options(&parsed->default_options);
+	return (SUCCESS);
 }
 
 void	init_element_options(t_element_options *options)
@@ -88,4 +98,3 @@ void	init_parsed_element(t_parsed_element *elem, t_scene_parsed *scene)
 	elem->type = ELEM_NONE;
 	elem->options = scene->default_options;
 }
-

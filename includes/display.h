@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 12:27:50 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/12 16:08:50 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/16 17:21:56 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define DISPLAY_H
 
 	// # include "ui.h"
-# include "flag.h"
 # include "mouse.h"
 # include "cam_ctrl.h"
 

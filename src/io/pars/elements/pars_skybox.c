@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 23:07:05 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/14 00:17:19 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/16 16:45:01 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ int	pars_skybox(t_pars_state *st, t_scene_parsed *scene)
 	t_tok	token;
 
 	if (!pars_next_tok(st, &token)
-		|| parse_skybox_texture(scene, token, &scene->skybox.texture_id) != SUCCESS)
+		|| parse_skybox_texture(scene, token, &scene->skybox.texture_id)
+		!= SUCCESS)
 		return (ERR_PARS);
 	if (!pars_next_tok(st, &token))
 		return (SUCCESS);
@@ -62,7 +63,6 @@ int	pars_skybox(t_pars_state *st, t_scene_parsed *scene)
 		|| scene->skybox.intensity[0] < 0.0f
 		|| scene->skybox.intensity[1] < 0.0f
 		|| scene->skybox.intensity[2] < 0.0f)
-		
 		return (ERR_PARS);
 	if (pars_next_tok(st, &token))
 		return (ERR_PARS);

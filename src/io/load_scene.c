@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   load_scene.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/16 16:15:00 by kearmand          #+#    #+#             */
+/*   Updated: 2025/12/16 16:15:57 by kearmand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "io.h"
 #include <stdio.h>
 #include <errors.h>
@@ -7,12 +19,12 @@
 #include "scene.h"
 #include "pars/parsing_internal.h"
 
-void print_scene2(const t_scene_parsed *scene);
+void	print_scene2(const t_scene_parsed *scene);
 
-int load_scene(const char *path, t_scene *out_scene)
+int	load_scene(const char *path, t_scene *out_scene)
 {
 	t_scene_parsed	parsed;
-	int		status;
+	int				status;
 
 	(void)out_scene;
 	init_parsed_scene(&parsed);

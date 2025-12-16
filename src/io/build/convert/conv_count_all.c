@@ -1,11 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   conv_count_all.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/16 16:31:56 by kearmand          #+#    #+#             */
+/*   Updated: 2025/12/16 16:32:16 by kearmand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "convert.h"
 #include "io.h"
 #include "errors.h"
 #include <stdlib.h>
 
-static int list_count(t_list *lst)
+static int	list_count(t_list *lst)
 {
-	int count;
+	int	count;
 
 	count = 0;
 	while (lst)
@@ -16,7 +28,7 @@ static int list_count(t_list *lst)
 	return (count);
 }
 
-static void count_objects_planes(t_list *lst, int *obj_out, int *plane_out)
+static void	count_objects_planes(t_list *lst, int *obj_out, int *plane_out)
 {
 	t_parsed_element	*elem;
 	int					obj_count;

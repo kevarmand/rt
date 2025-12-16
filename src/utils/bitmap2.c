@@ -1,26 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   flag.c                                             :+:      :+:    :+:   */
+/*   bitmap2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/23 19:59:02 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/23 20:05:28 by kearmand         ###   ########.fr       */
+/*   Created: 2025/12/16 17:02:47 by kearmand          #+#    #+#             */
+/*   Updated: 2025/12/16 17:03:13 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	flag_has(int flags, int mask)
-{
-	return (!!(flags & mask));
-}
+#include "bitmap.h"
+#include <stdlib.h>
+#include "bitmap.h"
+#include "errors.h"
 
-void	flag_set(int *flags, int mask)
+int	bitmap_get(const t_bitmap *bmp, int index)
 {
-	*flags |= mask;
-}
+	int	word_index;
+	int	bit_index;
 
-void	flag_clear(int *flags, int mask)
-{
-	*flags &= ~mask;
+	word_index = index / 64;
+	bit_index = index % 64;
+	return ((bmp->words[word_index] >> bit_index) & 1);
 }
