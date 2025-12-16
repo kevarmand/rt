@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 13:04:56 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/10 04:48:47 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/16 18:18:42 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,6 @@ int	engine_init(t_engine *engine, t_scene *scene)
 
 	engine_set_defaults(engine, scene);
 	init_cam_views(scene);
-
-	//petite place pour le BVH ICI TODO:NOAH
 	status = init_bvh(scene);
 	if (status != SUCCESS)
 		return (status);

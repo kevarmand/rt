@@ -6,12 +6,13 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 19:18:09 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/12 16:08:19 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/16 21:03:03 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "new_rt.h"
 #include "display.h"
+#include <stdio.h>
 
 // int	mouse_drag_ui(int rel_x, int rel_y, t_data *data)
 // {
@@ -61,8 +62,6 @@
 // 	}
 // 	return (0);
 // }
-
-#include <stdio.h>
 
 int	mouse_press(int button, int x, int y, t_data *data)
 {

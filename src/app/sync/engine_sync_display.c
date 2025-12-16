@@ -1,31 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   rt_config.h                                        :+:      :+:    :+:   */
+/*   engine_sync_display.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/11 21:59:50 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/16 22:07:39 by kearmand         ###   ########.fr       */
+/*   Created: 2025/12/11 00:00:00 by kearmand          #+#    #+#             */
+/*   Updated: 2025/12/16 18:51:18 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef RT_CONFIG_H
-# define RT_CONFIG_H
+#include "sync.h"
 
-# define RT_NAME "RayonTraceur 2999.7"
+void	engine_sync_display(t_data *data)
+{
+	t_display			*display;
+	t_display_mailbox	*mailbox;
 
-# define TILE_SIZE 64
-# define MAX_WORKER_THREADS 25
-# define RGB_CHANNELS 3
-# define SCROLL_PIXEL 120.0f
-# ifndef EPSILON
-#  define EPSILON 0x1.0c6f7ap-20f
-# endif
-# define TMIN_PRIM 1e-6f
-# define TMIN_SHADOW 1e-3f
-
-# define MAX_RECURSION_DEPTH 20
-# define MIN_CONTRIBUTION 0.001f
-
-#endif
+	display = &data->display;
+	mailbox = &data->engine.render.mailbox;
+	display_engine_receive(display, mailbox);
+	display_request_policy(&data->scene, display);
+	display_engine_send(&data->scene, display, mailbox);
+}

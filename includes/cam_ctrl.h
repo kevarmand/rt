@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/12 15:16:40 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/12 16:21:50 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/16 21:06:56 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,5 @@ typedef struct s_cam_ctrl
 	float		roll_prev_angle;
 	t_cam_mode	mode;
 }	t_cam_ctrl;
-
-
 
 #endif

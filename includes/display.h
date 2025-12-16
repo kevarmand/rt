@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 12:27:50 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/16 17:21:56 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/16 18:07:30 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,6 @@ typedef struct s_ds_sync
  *
  * The system follows a strict pipeline, executed once per frame:
  *    1. display_update_camera()
- *    2. display_prepare_render()     (optional module)
  *    3. engine_sync_display()
  *    4. display_update_main_image()
  *    5. display_update_ui()
@@ -107,7 +106,6 @@ typedef struct s_ds_sync
  * -----------------
  *  - Set to 1 by input/UI when the rendering quality level is modified
  *    (FAST → NORMAL → SUPER).
- *  - Consumed and reset to 0 by display_prepare_render().
  *  - Used to determine whether an existing cached image is sufficient or
  *    whether a new render must be launched.
  *
@@ -141,8 +139,6 @@ typedef struct s_ds_sync
  * frame[i].is_dirty
  * -----------------
  *  - Indicates whether camera i requires a full rerender.
- *  - Set only by engine_sync_display(), based on high-level flags coming
- *    from display_prepare_render().
  *  - Reset only by engine_sync_display() when the engine delivers a complete
  *    image for that camera.
  *  - This field is never written directly by UI or input hooks.
