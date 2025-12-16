@@ -136,6 +136,7 @@ typedef struct s_surface
 	t_vec3f		normal;   /* unitaire */
 	t_index		texture_albedo_id; /* SCENE_ID_NONE si absent */
 	t_index		bump_normal_id; /* SCENE_ID_NONE si absent */
+	float		bump_scale;
 	int			checker_mode;
 	int			checker_texture_id;
 	t_vec3f		checker_color;

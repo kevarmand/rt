@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 13:23:25 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/14 16:06:29 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/16 10:02:46 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,4 +72,5 @@ void	generate_option_key(t_material *mat, char *key)
 		write_float_to_key(mat->specular, key, &write_index);
 	if (write_index < KEY_SIZE - 8)
 		write_float_to_key(mat->ambient, key, &write_index);
+	key[write_index] = '\0';
 }

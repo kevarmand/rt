@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 13:23:52 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/14 18:49:36 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/16 13:46:28 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ int	intern_surface(t_conv_ctx *cx,
 	new_surf.uv_mod = opt->uv_mod;
 	new_surf.checker_mode = opt->checker_mode;
 	new_surf.checker_texture_id = opt->checker_texture_id;
+	new_surf.bump_scale = opt->bscale;
 	rgb8_to_linear_vec(opt->checker_color, &new_surf.checker_color);
 	status = vector_push_back(&cx->surf_v, &new_surf);
 	if (status < 0)

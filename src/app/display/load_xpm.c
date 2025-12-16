@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 00:00:00 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/15 14:24:10 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/16 11:33:33 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,8 +137,8 @@ static void	bump_bake_dxdy_xy(t_texture *tex)
 					- height_at_z(pixels, width, xm, pos_y)) * 0.5f;
 			dy = (height_at_z(pixels, width, pos_x, yp)
 					- height_at_z(pixels, width, pos_x, ym)) * 0.5f;
-			pixels[pos_y * width + pos_x][0] = dx * (float)width;
-			pixels[pos_y * width + pos_x][1] = dy * (float)height;
+			pixels[pos_y * width + pos_x][0] = dx;
+			pixels[pos_y * width + pos_x][1] = dy;
 			pos_x++;
 		}
 		pos_y++;
@@ -192,6 +192,32 @@ static void	copy_albedo_from_mlx(t_texture *tex, char *addr,
 	}
 }
 
+void bump_print_texture(t_texture *tex)
+{
+	int		pos_y;
+	int		pos_x;
+	int		width;
+	int		height;
+	t_vec3f	*pixels;
+
+	width = tex->width;
+	height = tex->height;
+	pixels = (t_vec3f *)tex->pixels;
+	pos_y = 0;
+	while (pos_y < height)
+	{
+		pos_x = 0;
+		while (pos_x < width)
+		{
+			printf("(%.2f,%.2f) ", pixels[pos_y * width + pos_x][0],
+				pixels[pos_y * width + pos_x][1]);
+			pos_x++;
+		}
+		ft_printf("\n");
+		pos_y++;
+	}
+}
+
 static int	load_one_texture(t_texture *tex, t_display *display, int is_bump)
 {
 	void	*img;
@@ -219,6 +245,7 @@ static int	load_one_texture(t_texture *tex, t_display *display, int is_bump)
 		bump_store_height_z(tex, addr, bpp_line);
 		bump_bake_dxdy_xy(tex);
 		bump_clear_z(tex);
+		//bump_print_texture(tex);
 	}
 	mlx_destroy_image(display->mlx, img);
 	return (1);

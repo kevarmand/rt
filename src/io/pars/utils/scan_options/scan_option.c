@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 16:36:14 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/14 16:34:29 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/16 13:41:39 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ static const t_opt_entry	g_opt_tab[] = {{"ior", scan_opt_ior},
 {"texture", scan_opt_texture},
 {"uv", scan_opt_uv},
 {"checkerboard", scan_opt_checkerboard},
+{"bscale", scan_opt_bscale},
 {NULL, NULL}
 };
 

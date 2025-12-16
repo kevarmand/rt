@@ -63,6 +63,7 @@ SRCS = engine/render/core/init_worker_tile.c engine/render/core/ren_dispatch.c e
 	io/pars/elements/pars_skybox.c\
 	engine/shading/shade_eval_skybox.c\
 	io/pars/utils/scan_options/scan_opt_checkerboard.c\
+	io/pars/utils/scan_options/scan_opt_bscale.c
 
 
 

@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 16:31:16 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/15 19:50:23 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/16 11:55:59 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ static void	triangle_build_tbn_cache(const t_triangle *triangle,
 	du2 = surface->map_uv[4] - surface->map_uv[0];
 	dv2 = surface->map_uv[5] - surface->map_uv[1];
 	det = du1 * dv2 - dv1 * du2;
-	if (fabsf(det) < 1e-8f)
+	if (fabsf(det) < 1e-6f)
 	{
 		surface_build_frame_from_normal(normal, tangent, bitangent);
 		return ;
@@ -116,12 +116,12 @@ static void	init_surface_triangle_cache(t_surface_map *surface,
 
 static void	init_surface_uv_one(t_surface_map *surface, const t_primitive *primitive)
 {
+	init_surface_uv_affine(surface);
 	if (primitive->type == PRIM_TRIANGLE)
 	{
 		init_surface_triangle_cache(surface, &primitive->tr);
 		return ;
 	}
-	init_surface_uv_affine(surface);
 	if (primitive->type == PRIM_PLANE)
 		init_surface_plane_cache(surface, &primitive->pl);
 }

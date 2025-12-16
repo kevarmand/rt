@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 17:33:50 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/15 13:19:22 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/16 13:46:43 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	init_parsed_scene(t_scene_parsed *parsed)
 	parsed->globals.color[2] = 0.0f;
 	parsed->presence_mask = 0;
 	parsed->textures.h_texture = hashmap_create(16);
-	if (status != SUCCESS)
+	if (parsed->textures.h_texture == NULL)
 		return ;
 	parsed->skybox.texture_id = -1;
 	parsed->skybox.mode = SKYBOX_SPHERE;
@@ -50,9 +50,10 @@ void	init_parsed_scene(t_scene_parsed *parsed)
 	printf("Hashmap for textures created successfully\n");
 	parsed->textures.index_t = 0;
 	parsed->textures.h_bumpmap = hashmap_create(16);
-	if (status != SUCCESS)
+	if (parsed->textures.h_bumpmap == NULL)
 		return ;
 	parsed->textures.index_b = 0;
+	printf("Hashmap for bumpmaps created successfully\n");
 	init_element_options(&parsed->default_options);
 }
 
@@ -79,6 +80,7 @@ void	init_element_options(t_element_options *options)
 	options->checker_color[0] = 0;
 	options->checker_color[1] = 0;
 	options->checker_color[2] = 0;
+	options->bscale = 1.0f;
 }
 
 void	init_parsed_element(t_parsed_element *elem, t_scene_parsed *scene)

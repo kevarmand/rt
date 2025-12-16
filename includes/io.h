@@ -53,6 +53,7 @@ typedef struct s_element_options
 	int			uv_mod;
 	int			texture_id;
 	int			bumpmap_id;
+	float		bscale;
 	int			checker_mode;
 	int			checker_texture_id;
 	int			checker_color[3];
@@ -317,6 +318,8 @@ int	scan_opt_texture(t_tok tok, t_element_options *opts, t_texture_parsed *textu
 int	scan_opt_uv(t_tok tok, t_element_options *opts, t_texture_parsed *texture);
 int	scan_opt_checkerboard(t_tok tok, t_element_options *opts,
 			t_texture_parsed *textures);
+int	scan_opt_bscale(t_tok tok, t_element_options *opts,
+			t_texture_parsed *texture);
 
 /* ************************************************************************** */
 /*                             PARSING - OBJECT                               */

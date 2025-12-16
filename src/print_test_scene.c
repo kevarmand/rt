@@ -153,15 +153,33 @@ void print_plane(const t_scene *scene)
 	}
 } 
 
+void print_surfaces(const t_scene *scene)
+{
+	int i;
+
+	printf("surfaces (%d)\n", scene->surface_count);
+	for (i = 0; i < scene->surface_count; i++)
+	{
+		const t_surface_map *surface = &scene->surfaces[i];
+		printf("- surface[%d]\n", i);
+		print_vec3("color", surface->color);
+		printf("  texture_albedo_id=%d bump_normal_id=%d\n",
+			surface->texture_albedo_id, surface->bump_normal_id);
+		printf("  checker_mode=%d checker_texture_id=%d\n",
+			surface->checker_mode, surface->checker_texture_id);
+		print_vec3("checker_color", surface->checker_color);
+	}
+}
 
 void print_scene(const t_scene *scene)
 {
 	printf("=== parsed scene ===\n");
 	print_globals(scene);
-	// print_cameras(scene);
-	// print_lights(scene);
-	// print_objects(scene);
-	// print_plane(scene);
+	print_cameras(scene);
+	print_lights(scene);
+	print_objects(scene);
+	print_plane(scene);
+	print_surfaces(scene);
 	printf("number of surfaces: %d\n", scene->surface_count);
 	printf("number of materials: %d\n", scene->material_count);
 	printf("number of textures: %d\n", scene->texture_count);

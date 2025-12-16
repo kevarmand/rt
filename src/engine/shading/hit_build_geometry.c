@@ -3,10 +3,7 @@
 #include <math.h>
 #include "attributes.h"
 
-#ifndef BUMP_STRENGTH
-# define BUMP_STRENGTH 1.0f
-#endif
-
+t_vec3f sample_texture(const t_texture *tex, float u, float v);
 
 /***helper globaux**/
 static float	clamp_unit(float value)
@@ -218,14 +215,15 @@ void	build_geo_sphere(const t_scene *scene,
 	}
 	if (needs_bump)
 	{
+
 		sphere_build_tbn(normal_raw, &tangent, &bitangent);
 		grad_final = sample_texture(&scene->bumpmaps[surface->bump_normal_id],
 				hit->u, hit->v);
 		surface_grad_to_base(surface, grad_final, &grad_base);
 		normal_raw = vec3f_add(normal_raw, vec3f_scale(tangent,
-					grad_base.x * (float)BUMP_STRENGTH));
+					grad_base.x * surface->bump_scale));
 		normal_raw = vec3f_add(normal_raw, vec3f_scale(bitangent,
-					grad_base.y * (float)BUMP_STRENGTH));
+					grad_base.y * surface->bump_scale));
 		normal_raw = vec3f_normalize(normal_raw);
 	}
 	hit->normal = normal_raw;
@@ -262,9 +260,9 @@ void	build_geo_cylinder(const t_scene *scene,
 				hit->u, hit->v);
 		surface_grad_to_base(surface, grad_final, &grad_base);
 		normal_raw = vec3f_add(normal_raw, vec3f_scale(tangent,
-					grad_base.x * (float)BUMP_STRENGTH));
+					grad_base.x * surface->bump_scale));
 		normal_raw = vec3f_add(normal_raw, vec3f_scale(bitangent,
-					grad_base.y * (float)BUMP_STRENGTH));
+					grad_base.y * surface->bump_scale));
 		normal_raw = vec3f_normalize(normal_raw);
 	}
 	hit->normal = normal_raw;
@@ -297,9 +295,9 @@ void	build_geo_triangle(const t_scene *scene,
 				hit->u, hit->v);
 		surface_grad_to_base(surface, grad_final, &grad_base);
 		normal_raw = vec3f_add(normal_raw, vec3f_scale(surface->tang,
-					grad_base.x * (float)BUMP_STRENGTH));
+					grad_base.x * surface->bump_scale));
 		normal_raw = vec3f_add(normal_raw, vec3f_scale(surface->bitang,
-					grad_base.y * (float)BUMP_STRENGTH));
+					grad_base.y * surface->bump_scale));
 		normal_raw = vec3f_normalize(normal_raw);
 	}
 	hit->normal = normal_raw;
@@ -329,9 +327,9 @@ void	build_geo_plane(const t_scene *scene,
 				hit->u, hit->v);
 		surface_grad_to_base(surface, grad_final, &grad_base);
 		normal_raw = vec3f_add(normal_raw, vec3f_scale(surface->tang,
-					grad_base.x * (float)BUMP_STRENGTH));
+					grad_base.x * surface->bump_scale));
 		normal_raw = vec3f_add(normal_raw, vec3f_scale(surface->bitang,
-					grad_base.y * (float)BUMP_STRENGTH));
+					grad_base.y * surface->bump_scale));
 		normal_raw = vec3f_normalize(normal_raw);
 	}
 	hit->normal = normal_raw;
