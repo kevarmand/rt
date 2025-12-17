@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 18:42:36 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/13 23:36:35 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/17 03:51:23 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 #include <X11/X.h>
 #include <stdlib.h>
 #include "libft.h"
+#include "logs.h"
 
 
 static int	init_core(t_display *display, int width, int height)
@@ -174,16 +175,19 @@ int	display_init(t_display *display, t_data *data)
 	pixel_count = data->engine.width * data->engine.height;
 	display_reset_struct(display, pixel_count);
 	status = init_core(display, data->engine.width, data->engine.height);
-	// if (status == SUCCESS)
-	// 	status = ui_init(display);
+	log_step(LOGSTEP_DISPLAY_INIT_CORE, status);
 	if (status == SUCCESS)
 		status = display_init_frames(display, &data->scene);
+	log_step(LOGSTEP_DISPLAY_INIT_FRAMES, status);
 	if (status == SUCCESS)
 		status = init_loop(display, data);
+	log_step(LOGSTEP_DISPLAY_INIT_LOOP, status);
 	if (status == SUCCESS)
 		status = load_scene_textures(&data->scene, display);
+	log_step(LOGSTEP_DISPLAY_LOAD_TEXTURES, status);
 	if (status == SUCCESS)
 		status = init_cam_ctrl(data);
+	log_step(LOGSTEP_DISPLAY_INIT_CAM_CTRL, status);
 	if (status == SUCCESS)
 		init_sky_texture(&data->scene);
 	return (status);

@@ -1,7 +1,6 @@
 #ifndef ERRORS_H
 #define ERRORS_H
 
-
 # define ERROR				-1
 # define ERR_INTERNAL		-1
 # define ERR_THREAD			-2

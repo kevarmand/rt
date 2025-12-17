@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 18:13:40 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/16 20:19:40 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/17 03:49:57 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	display_engine_receive(t_display *display,
 
 	if (atomic_load(&mailbox->snapshot_ready) == 0)
 		return ;
-	print_info(mailbox);
+	//print_info(mailbox);
 	camera_id = mailbox->snap_camera_id;
 	snapshot_job_id = mailbox->snap_job_id;
 	snapshot_mode = mailbox->snapshot_render_mode;

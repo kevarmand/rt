@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 19:23:24 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/14 17:18:29 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/17 04:04:17 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "mlx.h"
 #include "errors.h"
 #include "keycode.h"
+#include <stdio.h>
 
 int	display_exit(t_data *data)
 {

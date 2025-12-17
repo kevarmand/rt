@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 16:34:38 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/16 16:35:09 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/17 01:32:31 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,14 +73,9 @@ int	conv_primitives(t_scene_parsed *parsed, t_conv_ctx *cx)
 	t_list					*node;
 	t_parsed_element		*elem;
 
-	write(1, "1- Converting primitives...\n", 29);
 	if (init_primitives(cx) != SUCCESS)
 		return (ERR_MALLOC);
-	write(1, "2- Converting primitives...\n", 29);
-	if (parsed == NULL)
-		write(1, "test ?\n", 7);
 	node = parsed->objects;
-	write(1, "Converting primitives...\n", 26);
 	while (node)
 	{
 		elem = node->content;

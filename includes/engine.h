@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 22:00:12 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/13 21:02:44 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/17 04:07:12 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,7 @@ t_vec3f	shade_refraction(const t_scene *scene,
 			
 void	apply_surface_shading(const t_scene *sc, t_hit *hit);
 t_ray	build_ray(t_vec3f origin, t_vec3f direction);
+void	skybox_eval(t_vec3f dir, const t_scene *scene, t_vec3f *color_out);
 
 /* ************************************************************************** */
 /*							ENGINE       									  */

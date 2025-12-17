@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 13:04:56 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/16 18:18:42 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/17 03:47:07 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,9 @@
 #include "errors.h"
 #include "bvh.h"
 #include "libft.h"
+#include "logs.h"
 
-#define RENDER_MODE_NORMAL 0 //default render mode
+#define RENDER_MODE_NORMAL 0
 
 static void	engine_set_defaults(t_engine *engine, const t_scene *scene)
 {
@@ -67,10 +68,14 @@ int	engine_init(t_engine *engine, t_scene *scene)
 
 	engine_set_defaults(engine, scene);
 	init_cam_views(scene);
+	log_step(LOGSTEP_ENGINE_INIT_CAM_VIEWS, 0);
+	
 	status = init_bvh(scene);
+	log_step(LOGSTEP_ENGINE_INIT_BVH, 0);
 	if (status != SUCCESS)
 		return (status);
 	status = render_init(&engine->render, engine->width, engine->height);
+	log_step(LOGSTEP_ENGINE_RENDER_INIT, status);
 	if (status != SUCCESS)
 		return (status);
 	return (SUCCESS);

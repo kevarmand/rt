@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 00:00:00 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/16 11:33:33 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/17 04:05:06 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <math.h>
 #include "libft.h"
 #include "color.h"
+#include <stdio.h>
 
 static int	texture_has_xpm_ext(const char *path)
 {
@@ -218,6 +219,8 @@ void bump_print_texture(t_texture *tex)
 	}
 }
 
+//petit log provisoire
+
 static int	load_one_texture(t_texture *tex, t_display *display, int is_bump)
 {
 	void	*img;
@@ -229,6 +232,7 @@ static int	load_one_texture(t_texture *tex, t_display *display, int is_bump)
 
 	if (!tex->path || !texture_has_xpm_ext(tex->path))
 		return (0);
+	ft_printf("\t\tLoading XPM file : %s\n", tex->path);
 	img = mlx_xpm_file_to_image(display->mlx, tex->path,
 			&tex->width, &tex->height);
 	if (!img)
@@ -239,14 +243,19 @@ static int	load_one_texture(t_texture *tex, t_display *display, int is_bump)
 	bpp_line[0] = line_len;
 	bpp_line[1] = bpp;
 	if (is_bump == 0)
+	{
+		ft_printf("\t\t\t-> Albedo conversion\n");
 		copy_albedo_from_mlx(tex, addr, bpp_line);
+	}
 	else
 	{
+		ft_printf("\t\t\t-> Bumpmap conversion\n");
 		bump_store_height_z(tex, addr, bpp_line);
 		bump_bake_dxdy_xy(tex);
 		bump_clear_z(tex);
 		//bump_print_texture(tex);
 	}
+	ft_printf("\t\t\t-> Destruction d'image MLX\n\n");
 	mlx_destroy_image(display->mlx, img);
 	return (1);
 }

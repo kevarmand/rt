@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 17:33:50 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/16 16:21:07 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/17 01:30:06 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,10 @@ int	init_heap_element(t_scene_parsed *parsed)
 	if (parsed->textures.h_texture == NULL)
 		return (ERR_MALLOC);
 	parsed->textures.h_bumpmap = hashmap_create(16);
-	ft_printf("Hashmap for textures created successfully\n");
+	ft_printf("\t\tHashmap for textures created successfully\n");
 	if (parsed->textures.h_bumpmap == NULL)
 		return (ERR_MALLOC);
-	ft_printf("Hashmap for bumpmaps created successfully\n");
+	ft_printf("\t\tHashmap for bumpmaps created successfully\n");
 	return (SUCCESS);
 }
 
