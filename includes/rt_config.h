@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 21:59:50 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/16 22:07:39 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/17 16:40:21 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,5 +27,8 @@
 
 # define MAX_RECURSION_DEPTH 20
 # define MIN_CONTRIBUTION 0.001f
+
+//Tonemapping
+# define TONESIZE 512
 
 #endif

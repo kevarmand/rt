@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   render_tile.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/17 22:19:54 by kearmand          #+#    #+#             */
+/*   Updated: 2025/12/17 22:20:12 by kearmand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "render.h"
 #include "engine.h"
 #include "scene.h"
@@ -36,8 +48,8 @@ int	render_tile_normal(t_data *data, t_tile *tile, const t_render_view *view)
 		while (local_x < tile->pixel_width)
 		{
 			color = calcul_pixel_color(data, view,
-				tile->pixel_x + local_x,
-				tile->pixel_y + local_y);
+					tile->pixel_x + local_x,
+					tile->pixel_y + local_y);
 			tile->hdr_pixels[index] = color;
 			index++;
 			local_x++;

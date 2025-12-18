@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 20:47:20 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/16 22:55:12 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/17 18:56:45 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static void	camera_apply_orbit(t_scene *scene, t_display *display,
 	ctx.cam = &scene->cameras[display->current_cam];
 	ctx.ctrl = &display->cam_ctrl;
 	ctx.world_up = (t_vec3f){0.0f, -1.0f, 0.0f};
-	ctx.yaw = camera_orbit_yaw(scene, delta_x);
+	ctx.yaw = camera_orbit_yaw(scene, -delta_x);
 	ctx.pitch = camera_orbit_pitch(scene, delta_y);
 	ctx.offset = vec3f_sub(ctx.cam->origin, ctx.ctrl->center);
 	if (ctx.yaw != 0.0f)

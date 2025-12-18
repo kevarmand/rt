@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 00:00:00 by kevin             #+#    #+#             */
-/*   Updated: 2025/12/17 03:41:17 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/17 23:27:59 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 # ifndef LOG_ASCII
 #  define LOG_HDR_PARSE   "📜 PARSING 📜"
 #  define LOG_HDR_ENGINE  "🔧 ENGINE 🔧"
-#  define LOG_HDR_DISPLAY "🖥️ DISPLAY 🖥️"
+#  define LOG_HDR_DISPLAY "🖥️  DISPLAY 🖥️"
 #  define LOG_TOK_OK      "✓"
 #  define LOG_TOK_KO      "✗"
 #  define LOG_TOK_WARN    "!"

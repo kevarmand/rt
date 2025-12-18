@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 21:25:56 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/12 17:30:00 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/17 22:54:49 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,22 +34,14 @@
 static void	hit_try_update(t_hit *hit, t_hit_kind kind,
 			int primitive_index, float distance)
 {
-
 	if (distance <= 0.0f)
-	{
 		return ;
-	}
 	if (distance >= hit->t)
-	{
 		return ;
-	}
-
-
 	hit->t = distance;
 	hit->primitive_id = primitive_index;
 	hit->kind = kind;
 }
-
 
 //dispatcher d'intersection selon le type de primitive
 int	inter_primitive(const t_primitive *primitive,
@@ -66,22 +58,22 @@ int	inter_primitive(const t_primitive *primitive,
 	return (0);
 }
 
-static void	scene_hit_primitives(const t_scene *scene,
-			const t_ray *ray, t_hit *out_hit)
-{
-	int		primitive_index;
-	float	hit_distance;
+// static void	scene_hit_primitives(const t_scene *scene,
+// 			const t_ray *ray, t_hit *out_hit)
+// {
+// 	int		primitive_index;
+// 	float	hit_distance;
 
-	primitive_index = 0;
-	while (primitive_index < scene->primitive_count)
-	{
-		if (inter_primitive(&scene->primitives[primitive_index],
-				ray, &hit_distance))
-			hit_try_update(out_hit, HIT_PRIMITIVE,
-				primitive_index, hit_distance);
-		primitive_index++;
-	}
-}
+// 	primitive_index = 0;
+// 	while (primitive_index < scene->primitive_count)
+// 	{
+// 		if (inter_primitive(&scene->primitives[primitive_index],
+// 				ray, &hit_distance))
+// 			hit_try_update(out_hit, HIT_PRIMITIVE,
+// 				primitive_index, hit_distance);
+// 		primitive_index++;
+// 	}
+// }
 
 static void	scene_hit_prims(const t_scene *scene,
 			const t_ray *ray, t_hit *out_hit)

@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 17:33:50 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/17 01:30:06 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/17 22:47:47 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,6 @@ int	init_heap_element(t_scene_parsed *parsed)
 
 int	init_parsed_scene(t_scene_parsed *parsed)
 {
-	int	status;
-
 	ft_memset(parsed, 0, sizeof(t_scene_parsed));
 	parsed->objects = NULL;
 	parsed->cameras = NULL;

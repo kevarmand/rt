@@ -206,7 +206,7 @@ int build_scene(t_scene *scene, t_scene_parsed *parsed);
  * @brief Parse a single line: read first word span, dispatch by tag.
  * @note  Braces '{}' unsupported yet (reserved for later).
  */
-int	pars_line(const char *line, t_scene_parsed *scene, t_pars_state *st);
+int	pars_line(char *line, t_scene_parsed *scene, t_pars_state *st);
 
 /**
  * @brief Get next whitespace-delimited token from st->line as a span.

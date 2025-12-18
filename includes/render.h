@@ -100,6 +100,7 @@ typedef struct s_mgr
 	int				*rgb_buffer;
 	t_vec3f			*hdr_buffer;
 	t_render_view	render_view;
+	float			*tonemap_exposure; //champ ajouter
 }	t_mgr;
 
 typedef struct s_display_thread
@@ -107,7 +108,6 @@ typedef struct s_display_thread
 	int			*front_pixels;
 	t_camera	current_cam;
 }	t_display_thread;
-
 
 typedef struct s_render
 {
@@ -180,13 +180,7 @@ int  init_worker_tile(t_tileset *tileset, t_tile *tile,
 void *worker_thread(void *arg);
 void *manager_thread(void *arg);
 
-/* manager core */
-int  manager_collect_tiles(t_render *render);
-int  manager_assign_jobs(t_render *render);
-int  manager_convert_hdr_to_rgb(t_render *render);
-int  manager_update_display(t_render *render);
-int  manager_read_mailbox(t_render *render);
-void manager_run_tonemap(t_render *render);
+
 
 /* view */
 void view_setup(t_render_view *view, int width, int height);

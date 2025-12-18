@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 19:18:14 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/12 15:15:17 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/17 22:01:24 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,3 @@ int	mouse_move(int x, int y, t_data *data)
 	mouse->current_y = y;
 	return (0);
 }
-
-
-

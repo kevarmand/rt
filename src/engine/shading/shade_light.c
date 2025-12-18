@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 15:04:24 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/14 16:02:12 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/17 22:56:29 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,9 @@ void	shade_one_light(const t_scene *scene,
 	// shadow_ray.origin = vec3f_add(shadow_ray.origin,
 	// 		vec3f_scale(ctx.light_dir, 0.0f));
 	shadow_ray = build_ray(shadow_ray.origin, ctx.light_dir);
-	if (scene_is_occluded(scene, &shadow_ray, ctx.light_dist, hit))
+	t_hit	hit_tmp;
+	hit_tmp = *hit;
+	if (scene_is_occluded(scene, &shadow_ray, ctx.light_dist, &hit_tmp))
 		return ;
 	shade_diffuse(&ctx, color);
 	shade_specular_blinn(&ctx, color);

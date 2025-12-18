@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 11:05:22 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/28 16:25:38 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/17 23:14:05 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,35 +14,52 @@
 #include "vector.h"
 #include <math.h>
 
-void	view_setup(t_render_view *view, int width, int height)
+typedef struct s_view_plane
+{
+	float	half_w;
+	float	half_h;
+}	t_view_plane;
+
+static void	view_compute_plane(float fov_deg, int width, int height,
+				t_view_plane *plane)
 {
 	float	aspect_ratio;
 	float	fov_rad;
-	float	half_w;
-	float	half_h;
-	t_vec3f	tmp_right;
-	t_vec3f	tmp_up;
-	t_vec3f	forward_step;
 
 	aspect_ratio = (float)width / (float)height;
-	fov_rad = view->fov_deg * (float)M_PI / 180.0f;
-	half_w = tanf(fov_rad * 0.5f);
-	half_h = half_w / aspect_ratio;
+	fov_rad = fov_deg * (float)M_PI / 180.0f;
+	plane->half_w = tanf(fov_rad * 0.5f);
+	plane->half_h = plane->half_w / aspect_ratio;
+}
 
-	// On s'assure que la base est propre
+static void	view_orthonormalize_basis(t_render_view *view)
+{
 	view->forward = vec3f_normalize(view->forward);
 	view->right = vec3f_normalize(view->right);
 	view->up = vec3f_normalize(vec3f_cross(view->right, view->forward));
+}
 
-	tmp_right = vec3f_scale(view->right, -half_w);
-	tmp_up = vec3f_scale(view->up, half_h);
-	forward_step = view->forward; // distance focale = 1.0
+static void	view_build_rayspace(t_render_view *view, int width, int height,
+				const t_view_plane *plane)
+{
+	t_vec3f	tmp_right;
+	t_vec3f	tmp_up;
 
-	// ⚠️ Ici la correction : le plan image est DEVANT la caméra
-	view->p0 = vec3f_add(
-					vec3f_add(view->origin, forward_step),
-					vec3f_add(tmp_right, tmp_up));
+	tmp_right = vec3f_scale(view->right, -plane->half_w);
+	tmp_up = vec3f_scale(view->up, plane->half_h);
+	view->p0 = vec3f_add(vec3f_add(view->origin, view->forward),
+			vec3f_add(tmp_right, tmp_up));
+	view->dx = vec3f_scale(view->right,
+			(2.0f * plane->half_w) / (float)width);
+	view->dy = vec3f_scale(view->up,
+			(-2.0f * plane->half_h) / (float)height);
+}
 
-	view->dx = vec3f_scale(view->right, (2.0f * half_w) / (float)width);
-	view->dy = vec3f_scale(view->up, (-2.0f * half_h) / (float)height);
+void	view_setup(t_render_view *view, int width, int height)
+{
+	t_view_plane	plane;
+
+	view_compute_plane(view->fov_deg, width, height, &plane);
+	view_orthonormalize_basis(view);
+	view_build_rayspace(view, width, height, &plane);
 }

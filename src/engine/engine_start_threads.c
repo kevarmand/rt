@@ -6,21 +6,17 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 20:39:18 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/28 10:59:08 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/17 22:07:19 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include <pthread.h>
 #include "engine.h"
 #include "errors.h"
 #include "new_rt.h"
 
-
-
 int		manager_thread_start(t_data *data);
 int		worker_thread_start(t_data *data, int worker_index);
-
 
 static int	start_manager_thread(t_data *data)
 {

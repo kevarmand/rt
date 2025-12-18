@@ -6,19 +6,19 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 18:13:40 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/17 03:49:57 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/17 22:49:37 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sync.h"
 
-static void	print_info(const t_display_mailbox *mailbox)
-{
-	ft_printf("Receives snapshot: cam %d job_id %d mode %d tiles_done %d/%d\n",
-		mailbox->snap_camera_id, mailbox->snap_job_id,
-		mailbox->snapshot_render_mode, mailbox->tiles_done,
-		mailbox->tile_count);
-}
+// static void	print_info(const t_display_mailbox *mailbox)
+// {
+// 	ft_printf("Receives snapshot: cam %d job_id %d mode %d tiles_done %d/%d\n",
+// 		mailbox->snap_camera_id, mailbox->snap_job_id,
+// 		mailbox->snapshot_render_mode, mailbox->tiles_done,
+// 		mailbox->tile_count);
+// }
 
 void	display_engine_receive(t_display *display,
 				t_display_mailbox *mailbox)
@@ -30,7 +30,6 @@ void	display_engine_receive(t_display *display,
 
 	if (atomic_load(&mailbox->snapshot_ready) == 0)
 		return ;
-	//print_info(mailbox);
 	camera_id = mailbox->snap_camera_id;
 	snapshot_job_id = mailbox->snap_job_id;
 	snapshot_mode = mailbox->snapshot_render_mode;

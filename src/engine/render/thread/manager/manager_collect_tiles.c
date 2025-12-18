@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/25 15:26:47 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/05 22:27:16 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/17 23:31:45 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "vector.h"
 #include "bitmap.h"
 #include "libft.h"
+#include <stdio.h>
 
 static void	manager_copy_tile_pixels(t_render *render, t_tile *tile)
 {
@@ -39,7 +40,7 @@ static void	manager_copy_tile_pixels(t_render *render, t_tile *tile)
 		row++;
 	}
 }
-#include <stdio.h>
+
 static void	manager_handle_completed_tile(t_render *render, t_worker *worker)
 {
 	t_mgr	*mgr;
@@ -47,7 +48,6 @@ static void	manager_handle_completed_tile(t_render *render, t_worker *worker)
 
 	mgr = &render->manager;
 	mgr->tileset.tiles_active--;
-	// printf("Worker completed tile %d.\n", worker->tile.tile_id);
 	if (worker->local_view.frame_seq != mgr->render_view.frame_seq)
 	{
 		atomic_store(&worker->worker_state, WORKER_IDLE);
@@ -56,9 +56,8 @@ static void	manager_handle_completed_tile(t_render *render, t_worker *worker)
 	tile = &worker->tile;
 	manager_copy_tile_pixels(render, tile);
 	bitmap_set(&mgr->tileset.tile_state, tile->tile_id);
-
 	mgr->tileset.tiles_ready++;
-	atomic_store(&worker->worker_state, WORKER_IDLE); 
+	atomic_store(&worker->worker_state, WORKER_IDLE);
 }
 
 int	manager_collect_tiles(t_render *render)
@@ -72,7 +71,8 @@ int	manager_collect_tiles(t_render *render)
 	did_work = 0;
 	while (worker_index < workers->count)
 	{
-		if (atomic_load(&workers->array[worker_index].worker_state) == WORKER_DONE)
+		if (atomic_load(&workers->array[worker_index].worker_state)
+			== WORKER_DONE)
 		{
 			manager_handle_completed_tile(render,
 				&workers->array[worker_index]);
@@ -82,4 +82,3 @@ int	manager_collect_tiles(t_render *render)
 	}
 	return (did_work);
 }
-

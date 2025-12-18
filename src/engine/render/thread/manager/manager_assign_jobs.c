@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/25 15:29:07 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/05 22:23:44 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/17 23:25:23 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,13 @@ int	manager_assign_jobs(t_render *render)
 	t_workers	*workers;
 	int			worker_index;
 	int			did_work;
+	t_worker	*worker;
 
 	workers = &render->workers;
 	worker_index = 0;
 	did_work = 0;
 	while (worker_index < workers->count)
 	{
-		t_worker	*worker;
-
 		worker = &workers->array[worker_index];
 		if (atomic_load(&worker->worker_state) == WORKER_IDLE)
 			did_work |= dispatch_next_tile(render, worker);
@@ -48,4 +47,3 @@ int	manager_assign_jobs(t_render *render)
 	}
 	return (did_work);
 }
-

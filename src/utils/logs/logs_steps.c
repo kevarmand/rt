@@ -6,22 +6,91 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 23:37:57 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/17 03:53:59 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/17 14:11:20 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "logs.h"
 #include "libft.h"
 
+static void	print_clear(void)
+{
+	ft_putstr_fd("\033[2J\033[H", 1);
+}
+
+static void	print_cyan_header(void)
+{
+	ft_putstr_fd("\033[1;36m\n", 1);
+	ft_putstr_fd("╔══════════════════════════════════════════════════════════════════════════════╗\n", 1);
+	ft_putstr_fd("║                                                                              ║\n", 1);
+	ft_putstr_fd("║                ███╗   ███╗██╗███╗   ██╗██╗██████╗ ████████╗                  ║\n", 1);
+	ft_putstr_fd("║                ████╗ ████║██║████╗  ██║██║██╔══██╗╚══██╔══╝                  ║\n", 1);
+	ft_putstr_fd("║                ██╔████╔██║██║██╔██╗ ██║██║██████╔╝   ██║                     ║\n", 1);
+	ft_putstr_fd("║                ██║╚██╔╝██║██║██║╚██╗██║██║██╔══██╗   ██║                     ║\n", 1);
+	ft_putstr_fd("║                ██║ ╚═╝ ██║██║██║ ╚████║██║██║  ██║   ██║                     ║\n", 1);
+	ft_putstr_fd("║                ╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝   ╚═╝                     ║\n", 1);
+	ft_putstr_fd("║                                                                              ║\n", 1);
+	ft_putstr_fd("║                          by kearmand - norivier                              ║\n", 1);
+	ft_putstr_fd("║                                                                              ║\n", 1);
+	ft_putstr_fd("╚══════════════════════════════════════════════════════════════════════════════╝\n", 1);
+	ft_putstr_fd("\033[0m\n", 1);
+}
+
+static void	put_blue_pipe(void)
+{
+	ft_putstr_fd("  \033[1;34m│\033[1;33m", 1);
+}
+
+static void	print_line_features(const char *logo,
+						const char *label,
+						const char *value)
+{
+	ft_putstr_fd("  \033[1;34m│\033[1;33m  " , 1);
+	ft_putstr_fd(logo, 1);
+	ft_putstr_fd("  ", 1);
+	ft_putstr_fd(label, 1);
+	ft_putstr_fd(" : \033[1;37m", 1);
+	ft_putstr_fd(value, 1);
+	ft_putstr_fd("\033[1;33m\n", 1);
+}
+
+static void	print_geometry_lines(void)
+{
+	ft_putstr_fd("  \033[1;34m│\033[1;33m  🧬  Geometry :  \033[1;37m🟠 Sphere     🟦 Plane\033[1;33m\n", 1);
+	ft_putstr_fd("  \033[1;34m│\033[1;33m                  \033[1;37m🍩 Torus      🛢️ Cylinder\033[1;33m\n", 1);
+	ft_putstr_fd("  \033[1;34m│\033[1;33m                        \033[1;37m🔺 Triangle   (Möller–Trumbore)\033[1;33m\n", 1);
+}
+
+static void	print_features_box(void)
+{
+	ft_putstr_fd("\033[1;34m", 1);
+	ft_putstr_fd("  ┌──────────────────────────────────────────────────────────────┐\n", 1);
+	print_line_features("🧠", "Shading ", "Phong / Specular / Ambient");
+	print_line_features("💡", "Lights  ", "Colored lights");
+	print_line_features("🌑", "Shadows ", "Hard shadows");
+	print_line_features("🪞", "Optics  ", "Reflection / Refraction");
+	print_line_features("🧱", "Surfaces", "Texture / Checkerboard / Bump mapping");
+	print_line_features("🧊", "HDR     ", "Linear pipeline + tonemapping");
+	print_line_features("🧩", "Accel   ", "BVH (SAH)");
+	print_geometry_lines();
+	print_line_features("🪟", "Display ", "MiniLibX (X11)");
+	print_line_features("🎥", "Camera  ", "6-DoF navigation");
+	print_line_features("🎮", "Control ", "Orbit / Pan / Dolly / Look / Roll / Level");
+	ft_putstr_fd("\033[1;34m", 1);
+	ft_putstr_fd("  └─────────────────────────────────────────────────────────────┘\n", 1);
+	ft_putstr_fd("\033[1;32m", 1);
+	ft_putstr_fd("\n\n\n✨ Starting MiniRT...✨\n", 1);
+	ft_putstr_fd("\033[0m", 1);
+}
+
+
 static void	print_banner(void)
 {
-	//clear
-	ft_putstr_fd("\033[2J\033[H", 1);
-	ft_putstr_fd("========================================\n", 1);
-	ft_putstr_fd("             MiniRT - 42 School         \n", 1);
-	ft_putstr_fd("           by kearmand - norivier       \n", 1);
-	ft_putstr_fd("========================================\n", 1);
+	print_clear();
+	print_cyan_header();
+	print_features_box();
 }
+
 
 static t_logsec	step_section(t_logstep step)
 {

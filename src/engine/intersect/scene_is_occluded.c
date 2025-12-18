@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 16:53:48 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/10 19:49:42 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/17 22:53:00 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,25 +41,25 @@ static int	scene_is_occluded_planes(const t_scene *scene,
 	return (0);
 }
 
-static int	scene_is_occluded_primitives(const t_scene *scene,
-			const t_ray *ray, float max_distance)
-{
-	int		primitive_index;
-	float	hit_distance;
+// static int	scene_is_occluded_primitives(const t_scene *scene,
+// 			const t_ray *ray, float max_distance)
+// {
+// 	int		primitive_index;
+// 	float	hit_distance;
 
-	primitive_index = 0;
-	while (primitive_index < scene->primitive_count)
-	{
-		if (inter_primitive(&scene->primitives[primitive_index],
-				ray, &hit_distance))
-		{
-			if (hit_distance > 0.01f && hit_distance < max_distance)
-				return (1);
-		}
-		primitive_index++;
-	}
-	return (0);
-}
+// 	primitive_index = 0;
+// 	while (primitive_index < scene->primitive_count)
+// 	{
+// 		if (inter_primitive(&scene->primitives[primitive_index],
+// 				ray, &hit_distance))
+// 		{
+// 			if (hit_distance > 0.01f && hit_distance < max_distance)
+// 				return (1);
+// 		}
+// 		primitive_index++;
+// 	}
+// 	return (0);
+// }
 
 FORCEINLINE
 extern inline int	sphere_ocult(t_ray r, t_sphere *s, t_hit *hit)

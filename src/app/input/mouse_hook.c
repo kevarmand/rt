@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 19:18:09 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/16 21:03:03 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/17 22:41:48 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@
 // 			if (btn->on_click)
 // 			{
 // 				btn->on_click(data);
-// 				printf("Button[%i] clicked: %s\n", i, btn->txt ? btn->txt : "No text");
+// 				printf("Button[%i] clicked: %s\n", i, btn->txt ?
+//					btn->txt : "No text");
 // 				return (1); // bouton trouvé et action exécutée
 // 			}
 // 		}
@@ -62,6 +63,25 @@
 // 	}
 // 	return (0);
 // }
+
+void	mouse_next(int button, t_data *data, t_mouse_state *mouse)
+{
+	if (button == 2)
+	{
+		data->display.cam_ctrl.flag_level = 1;
+		return ;
+	}
+	if (button == 4)
+	{
+		mouse->scroll_delta++;
+		return ;
+	}
+	if (button == 5)
+	{
+		mouse->scroll_delta--;
+		return ;
+	}
+}
 
 int	mouse_press(int button, int x, int y, t_data *data)
 {
@@ -88,21 +108,6 @@ int	mouse_press(int button, int x, int y, t_data *data)
 		mouse->current_y = y;
 		return (0);
 	}
-	if (button == 2)
-	{
-		data->display.cam_ctrl.flag_level = 1;
-		return (0);
-	}
-	if (button == 4)
-	{
-		mouse->scroll_delta++;
-		return (0);
-	}
-	if (button == 5)
-	{
-		mouse->scroll_delta--;
-		return (0);
-	}
+	mouse_next(button, data, mouse);
 	return (0);
 }
-

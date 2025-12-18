@@ -12,26 +12,34 @@ c	100,138,11	-0.742249,-0.669924,0.016401	60
 
 
 #une 3 eme camera au niveua de yeux d anivia
-c	0,47,-8	0,0,1	60
+#c	0,47,-8	0,0,1	60
 
-l 700,900,600   0.412456   255,255,255
-l 400,200,0     0.412456   90,130,255
-l 200,500,300   0.412456   150,180,255
-l 1000,300,400  0.412456   230,240,255
+l 700,900,600   0.9412456   255,255,255
+l 400,200,0     0.9412456   90,130,255
+l 200,500,300   0.9412456   150,180,255
+l 1000,300,400  0.9412456   230,240,255
 pl	0,0,0	0,1,0	200,200,200	texture=ground.xpm	uv=0.02,0.00,0.00,-0.02,0,0 checkerboard=pavage.xpm
 
 skybox puresky.xpm sp 0.5,0.5,0.5
 
 #mettre la sphere au milieu de la cam
-sp	0,47,25	30	255,255,255	diffuse=0.1 specular=0.9 shininess=300 reflection=0.5
+sp	0,47,25	30	255,255,255	diffuse=0.1 specular=1 shininess=300 reflection=0.5
 
+
+#on se met 	
+sp	20,150,-20	70	255,255,255	specular=0 ambient=0.3 diffuse=0.7 bump=lunar_bump.xpm bscale=20
+
+#une jupiter devan en haut a gauche (orange)
+
+
+sp	-350,150,-85	120	255,150,50	diffuse=0.6 specular=0.04 shininess=100 texture=jupiter.xpm uv=1,0,0,1,-0.20,0.2
 
 # sp 0.45,35,-48 1.2 255,0,0	diffuse=1 specular=0 shininess=0
 # sp -0.45,35,-48 1.1 255,0,0	diffuse=1 specular=0 shininess=0
 # cy 0,36.5,-48 0,1,0 0.8 3 255,0,0 diffuse=1 specular=0 shininess=0
 # sp 0,38,-48 0.8 255,0,0	diffuse=1 specular=0 shininess=0
 
-mat reflection=1 ior=2 refraction=1
+mat reflection=1 ambient=0.4 ior=2 refraction=1 diffuse=0.8 specular=0.9 shininess=300
 tr	4.080986,43.005039,-48.217819	2.518696,44.544491,-46.171803	2.541477,42.730064,-46.002541	200,220,255
 tr	3.841336,45.392429,-44.924572	1.674697,44.329441,-42.248470	1.676587,42.877819,-42.275291	200,220,255
 tr	2.163124,46.942184,-43.045078	0.851963,44.781013,-41.566551	1.613419,44.260925,-41.372612	200,220,255

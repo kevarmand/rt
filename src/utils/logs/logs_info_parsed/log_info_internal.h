@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 03:06:52 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/17 03:38:21 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/17 13:00:36 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,12 @@
 # define LOG_INFO_W 96
 
 /* UTF8 box */
-# define UTF8_VLINE    "\xE2\x94\x82"
-# define UTF8_HLINE    "\xE2\x94\x80"
-# define UTF8_ULCORNER "\xE2\x94\x8C"
-# define UTF8_URCORNER "\xE2\x94\x90"
-# define UTF8_LLCORNER "\xE2\x94\x94"
-# define UTF8_LRCORNER "\xE2\x94\x98"
+# define UTF8_VLINE    "\xE2\x94\x82" //│|
+# define UTF8_HLINE    "\xE2\x94\x80"//─
+# define UTF8_ULCORNER "\xE2\x94\x8C"//┌
+# define UTF8_URCORNER "\xE2\x94\x90"//┐
+# define UTF8_LLCORNER "\xE2\x94\x94"//└
+# define UTF8_LRCORNER "\xE2\x94\x98"//┘
 
 /* ANSI */
 # define ANSI_BOLD   "\033[1m"

@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 13:18:27 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/16 16:54:54 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/17 22:49:00 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 typedef struct s_pars_state {
 	int			line_no;
 	int			depth;
-	const char	*line;
+	char		*line;
 	int			pos;
 }	t_pars_state;
 

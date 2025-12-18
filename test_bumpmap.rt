@@ -22,7 +22,7 @@ sp -2,3,0 1	 180,200,120 uv=1,0,0,1,0,0 bump=wall_bump.xpm bscale=10
 
 
 
-sp 5,3,0 6 180,200,120 uv=1,0,0,1,0,0 bump=wall_bump.xpm bscale=10 uv=3,0,-3,3,0,0
+sp 5,3,0 6 180,200,120 ambient=0.02 uv=1,0,0,1,0,0 texture=wall.xpm bump=wall_bump.xpm bscale=100 uv=3,0,-3,3,0,0
 
 # une sphere avec texture :
 sp 0,5,0 2 255,255,255 texture=terre.xpm  bscale=50 uv=3,0,0,3,0,0

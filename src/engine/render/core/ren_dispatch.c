@@ -6,14 +6,13 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 19:35:23 by kearmand          #+#    #+#             */
-/*   Updated: 2025/11/28 16:34:18 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/17 23:03:48 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdint.h>
 #include <limits.h>	
 #include "render.h"
-
 
 static int	gcd_int(int left, int right)
 {
@@ -62,12 +61,13 @@ static int	dispatch(int tile_count)
 	}
 	if (k >= tile_count)
 		k = 0;
-	return ((k++ * step) % tile_count);
+	return (((k++) * step) % tile_count);
 }
 
-int manager_dispatch_tile(t_tileset *tileset)
+int	manager_dispatch_tile(t_tileset *tileset)
 {
-	if (tileset->tiles_done + tileset->tiles_active + tileset->tiles_ready >= tileset->tiles_total)
+	if (tileset->tiles_done + tileset->tiles_active
+		+ tileset->tiles_ready >= tileset->tiles_total)
 		return (-1);
 	else
 		return (dispatch(tileset->tiles_total));

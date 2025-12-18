@@ -6,13 +6,14 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 18:18:51 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/06 17:33:39 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/17 23:06:12 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "manager.h"
 #include "color.h"
 #include "render.h"
+#include "bitmap.h"
 
 typedef struct s_tile_rect
 {
@@ -81,7 +82,6 @@ static void	convert_tile_hdr_to_rgb(t_render *render, int tile_id)
 		local_y++;
 	}
 }
-#include <stdio.h>
 
 static int	find_next_tile_to_convert(t_tileset *tileset)
 {
@@ -99,7 +99,7 @@ static int	find_next_tile_to_convert(t_tileset *tileset)
 
 int	manager_convert_hdr_to_rgb(t_render *render)
 {
-	int tile_id;
+	int	tile_id;
 
 	while (1)
 	{
@@ -111,5 +111,5 @@ int	manager_convert_hdr_to_rgb(t_render *render)
 		render->manager.tileset.tiles_done++;
 		render->manager.tileset.tiles_ready--;
 	}
-return (1);
+	return (1);
 }

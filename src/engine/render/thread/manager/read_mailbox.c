@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 18:47:20 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/11 21:41:58 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/17 23:07:14 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ static void	copy_request(t_render_view *view, const t_camera *src)
 	view->forward = src->forward;
 	view->right = src->right;
 	view->fov_deg = src->fov_deg;
-	
 }
+
 static void	apply_cam_request(t_render *render)
 {
 	t_mgr			*manager;

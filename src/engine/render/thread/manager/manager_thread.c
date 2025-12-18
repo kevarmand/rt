@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 22:04:44 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/12 10:13:47 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/17 23:21:36 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 #include "errors.h"
 #include "new_rt.h"
 #include <stdlib.h>
-
+#include <stdio.h>
 
 typedef struct s_manager_args
 {
@@ -35,15 +35,16 @@ static void	manager_idle(t_render *render)
 		return ;
 	usleep(200);
 }
-#include <stdio.h>
-static void manager_loop(t_render *render, atomic_int *cancel_flag,t_mgr *manager)
+
+static void	manager_loop(t_render *render, atomic_int *cancel_flag,
+				t_mgr *manager)
 {
 	int		has_work;
 
 	while (atomic_load(cancel_flag) == 0)
 	{
 		has_work = 0;
-		if(manager->render_in_progress == 0)
+		if (manager->render_in_progress == 0)
 		{
 			manager_idle(render);
 			continue ;
@@ -53,10 +54,11 @@ static void manager_loop(t_render *render, atomic_int *cancel_flag,t_mgr *manage
 			has_work |= manager_collect_tiles(render);
 			has_work |= manager_assign_jobs(render);
 			has_work |= manager_convert_hdr_to_rgb(render);
-			if (!(manager->render_view.mode == QUALITY_FAST
-			&& manager->tileset.tiles_done != manager->tileset.tiles_total))
+			if (!(manager->render_view.mode == QUALITY_FAST && manager
+					->tileset.tiles_done != manager->tileset.tiles_total))
 				break ;
 		}
+		has_work |= manager_run_tonemap(manager, render->width, render->height);
 		has_work |= manager_update_display(render);
 		has_work |= manager_read_mailbox(render);
 		if (has_work == 0)
@@ -81,7 +83,7 @@ void	*manager_thread(void *arg)
 	return (NULL);
 }
 
-int		manager_thread_start(t_data *data)
+int	manager_thread_start(t_data *data)
 {
 	t_manager_args	*args;
 
@@ -99,4 +101,3 @@ int		manager_thread_start(t_data *data)
 	}
 	return (SUCCESS);
 }
-	

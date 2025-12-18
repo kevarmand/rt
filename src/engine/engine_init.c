@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 13:04:56 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/17 03:47:07 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/17 22:05:55 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static int	init_bvh(t_scene *scene)
 {
 	t_primitive	*tmp;
 
-	t_bvh_buf	buf __attribute__((cleanup(cleanup_bvh_buf)));
+	__attribute__((cleanup(cleanup_bvh_buf))) t_bvh_buf buf ;
 	ft_memset(&buf, 0, sizeof(t_bvh_buf));
 	scene->bvh_nodes = malloc(sizeof(t_bvhnode) * scene->primitive_count);
 	if (scene->bvh_nodes == NULL)
@@ -54,7 +54,7 @@ static int	init_bvh(t_scene *scene)
 	scene->bvh_node_count = buf.nodecount;
 	scene->bvh_root_id = 0;
 	tmp = reorder_prims(scene->primitives, buf.pref_idx,
-		scene->primitive_count);
+			scene->primitive_count);
 	if (tmp == NULL)
 		return (ERR_MALLOC);
 	free(scene->primitives);
@@ -69,7 +69,6 @@ int	engine_init(t_engine *engine, t_scene *scene)
 	engine_set_defaults(engine, scene);
 	init_cam_views(scene);
 	log_step(LOGSTEP_ENGINE_INIT_CAM_VIEWS, 0);
-	
 	status = init_bvh(scene);
 	log_step(LOGSTEP_ENGINE_INIT_BVH, 0);
 	if (status != SUCCESS)
