@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 17:33:50 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/17 22:47:47 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/18 16:28:38 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "libft.h"
 #include "errors.h"
 #include <stdio.h>
-#include "pars/parsing_internal.h"
+#include "parse/parsing_internal.h"
 
 void	free_parsed_scene(t_scene_parsed *parsed)
 {

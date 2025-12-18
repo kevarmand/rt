@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 12:48:46 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/17 17:39:48 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/18 16:16:10 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	run_app(t_data *data)
 	if (status == SUCCESS)
 		status = display_init(&data->display, data);
 	if (status == SUCCESS)
-		status = engine_start_threads(data);
+		status = threads_start(data);
 	if (status == SUCCESS)
 		init_surface_uv(&data->scene);
 	if (status == SUCCESS)

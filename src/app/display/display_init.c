@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 18:42:36 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/17 22:37:08 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/18 13:21:52 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ int		display_init_frames(t_display *display, const t_scene *scene);
 int		init_cam_ctrl(t_data *data);
 void	init_sky_texture(t_scene *scene);
 int		xpm_load(t_scene *scene, t_display *display);
-
 
 static int	init_core(t_display *display, int width, int height)
 {

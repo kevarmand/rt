@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 20:14:44 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/16 18:08:18 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/18 13:42:40 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static void	display_update_ui(t_data *data)
 int	frame_tick(t_data *data)
 {
 	display_update_camera(data);
-	engine_sync_display(data);
+	sync_engine_tick(data);
 	display_refresh_main_image(data);
 	display_update_ui(data);
 	display_draw_base(data);

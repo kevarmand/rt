@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 12:27:50 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/17 22:36:42 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/18 13:42:40 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ typedef struct s_ds_sync
  *
  * The system follows a strict pipeline, executed once per frame:
  *    1. display_update_camera()
- *    3. engine_sync_display()
+ *    3. sync_engine_tick()
  *    4. display_update_main_image()
  *    5. display_update_ui()
  *    6. display_draw_base()
@@ -112,7 +112,7 @@ typedef struct s_ds_sync
  *
  * flag_img
  * --------
- *  - Set to 1 exclusively by engine_sync_display() when a new RGB buffer has
+ *  - Set to 1 exclusively by sync_engine_tick() when a new RGB buffer has
  *    been copied into display_pixels and must be presented on screen.
  *  - Consumed and reset to 0 by display_update_main_image() once the image
  *    has been uploaded to the MLX texture.
@@ -121,7 +121,7 @@ typedef struct s_ds_sync
  *
  * flag_ui
  * -------
- *  - Set by engine_sync_display() or UI modules when the user interface
+ *  - Set by sync_engine_tick() or UI modules when the user interface
  *    requires a redraw (progress bar update, camera info, etc.).
  *  - Consumed by display_update_ui().
  *  - Behavior similar to flag_img but reserved for UI widgets.
@@ -129,7 +129,7 @@ typedef struct s_ds_sync
  *
  * cam_to_render
  * -------------
- *  - Owned exclusively by engine_sync_display().
+ *  - Owned exclusively by sync_engine_tick().
  *  - Holds the index of the camera currently being rendered by the engine.
  *  - Set when a render request is sent; reset to -1 when a full frame is
  *    received and stored.
@@ -139,7 +139,7 @@ typedef struct s_ds_sync
  * frame[i].is_dirty
  * -----------------
  *  - Indicates whether camera i requires a full rerender.
- *  - Reset only by engine_sync_display() when the engine delivers a complete
+ *  - Reset only by sync_engine_tick() when the engine delivers a complete
  *    image for that camera.
  *  - This field is never written directly by UI or input hooks.
  *
@@ -147,7 +147,7 @@ typedef struct s_ds_sync
  * display_pixels
  * --------------
  *  - Temporary buffer used for progressive / partial updates.
- *  - Written by engine_sync_display() whenever new tiles arrive.
+ *  - Written by sync_engine_tick() whenever new tiles arrive.
  *  - Read by display_update_main_image().
  *
  *

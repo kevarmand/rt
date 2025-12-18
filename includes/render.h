@@ -144,7 +144,7 @@ int		render_init(t_render *render, int width, int height);
  * @param arg pointer to the render structure
  * @return NULL
  */
-void *manager_thread(void *arg);
+void *manager_entry(void *arg);
 
 
 /***
@@ -152,7 +152,7 @@ void *manager_thread(void *arg);
  * @param arg pointer to the worker structure
  * @return NULL
  */
-void *worker_thread(void *arg);
+void *worker_entry(void *arg);
 
 
 /* ************************************************************************** */
@@ -177,8 +177,8 @@ int  init_worker_tile(t_tileset *tileset, t_tile *tile,
                       int image_width, int image_height);
 
 /* threads */
-void *worker_thread(void *arg);
-void *manager_thread(void *arg);
+void *worker_entry(void *arg);
+void *manager_entry(void *arg);
 
 
 

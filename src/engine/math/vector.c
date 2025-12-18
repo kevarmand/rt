@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vector.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: norivier <norivier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 20:38:58 by norivier          #+#    #+#             */
-/*   Updated: 2025/10/02 09:47:18 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/18 17:38:27 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,4 +117,10 @@ FORCEINLINE
 extern inline t_vec3f proj_on_plane(t_vec3f v, t_vec3f n)
 {
 	return (vec3f_sub(v, vec3f_scale(n, vec3f_dot(v, n))));
+}
+
+FORCEINLINE
+extern inline t_vec3f	vec3f_lerp(t_vec3f a, t_vec3f b, float t)
+{
+	return (vec3f_add(vec3f_scale(a, 1.0f - t), vec3f_scale(b, t)));
 }

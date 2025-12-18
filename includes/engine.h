@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 22:00:12 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/17 04:07:12 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/18 17:25:57 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ typedef struct s_hit {
 	float		t;
 	t_vec3f		point;
 	t_vec3f		normal;
+	t_vec3f		geo_normal;
 	t_vec3f		view_dir;
 	int			primitive_id;
 	int			surface_id;
@@ -127,7 +128,7 @@ t_vec3f	shade_refraction(const t_scene *scene,
 			const t_hit *hit, t_shading_ctx *ctx, float factor);
 			
 void	apply_surface_shading(const t_scene *sc, t_hit *hit);
-t_ray	build_ray(t_vec3f origin, t_vec3f direction);
+t_ray	ray_finalize(t_vec3f origin, t_vec3f direction);
 void	skybox_eval(t_vec3f dir, const t_scene *scene, t_vec3f *color_out);
 
 /* ************************************************************************** */
@@ -157,7 +158,7 @@ void		init_cam_views(t_scene *scene);
  * @param engine pointer to the engine structure
  * @return 0 on SUCCESS, error code otherwise
  */
-int		engine_start_threads(t_data *data);
+int		threads_start(t_data *data);
 
 void	build_ray_for_pixel(const t_render_view *view,
 			float img_x, float img_y, t_ray *ray);
