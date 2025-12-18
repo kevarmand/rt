@@ -6,18 +6,17 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 12:27:50 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/18 13:42:40 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/18 21:41:27 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef DISPLAY_H
 # define DISPLAY_H
 
-	// # include "ui.h"
 # include "mouse.h"
 # include "cam_ctrl.h"
 
-typedef struct s_data t_data;
+typedef struct s_data	t_data;
 
 typedef struct s_image
 {
@@ -32,7 +31,7 @@ typedef struct s_image
 
 typedef enum e_quality
 {
-	QUALITY_NONE = 0,   /* pas d'image ou obsolète */
+	QUALITY_NONE = 0,
 	QUALITY_FAST = 1,
 	QUALITY_NORMAL = 2,
 	QUALITY_SUPER = 3,
@@ -46,7 +45,6 @@ typedef enum e_user_render_mode
 	USER_RENDER_LOCK_SUPER = 3
 }	t_user_render_mode;
 
-
 typedef struct s_frame
 {
 	int			*rgb_pixels;
@@ -55,9 +53,8 @@ typedef struct s_frame
 
 typedef struct s_ui
 {
-	int 	visible;
+	int	visible;
 }	t_ui;
-
 
 typedef struct s_ds_sync
 {
@@ -66,7 +63,6 @@ typedef struct s_ds_sync
 	int	req_mode;
 	int	req_cam;
 }	t_ds_sync;
-
 
 /**
  * @brief Display system state and communication flags.
@@ -160,29 +156,28 @@ typedef struct s_ds_sync
  */
 typedef struct s_display
 {
-	void	*mlx;
-	void	*win;
-	t_image	main_img;
-	 t_ui	ui;
+	void			*mlx;
+	void			*win;
+	t_image			main_img;
+	t_ui			ui;
 
-	t_frame	*frame;
-	int		total_cams;
-	int		pixel_count;
+	t_frame			*frame;
+	int				total_cams;
+	int				pixel_count;
 
-	int		current_cam;
-	int		cam_to_render;
+	int				current_cam;
+	int				cam_to_render;
 
-	int		flag_ui;
-	int		flag_camera_changed;
-	int		flag_request_render;
-	int		flag_img_buffer;
-	int		flag_img_window;
-	int		user_render_mode;
-	t_ds_sync	ds_sync;
+	int				flag_ui;
+	int				flag_camera_changed;
+	int				flag_request_render;
+	int				flag_img_buffer;
+	int				flag_img_window;
+	int				user_render_mode;
+	t_ds_sync		ds_sync;
 	t_mouse_state	mouse;
 	t_cam_ctrl		cam_ctrl;
 }	t_display;
-
 
 /* ************************************************************************** */
 /*         					     DISPLAY FUNCTIONS                            */
@@ -192,11 +187,11 @@ typedef struct s_display
  * Initializes the display system.
  * Allocates necessary resources and sets up the main window and image.
  * @param display Pointer to the display structure to initialize.
- * @param data Pointer to the main data structure containing scene and engine info.
+ * @param data Pointer to the main data structure containing scene and 
+ * engine info.
  * @return SUCCESS on success, error code otherwise.
  */
 int		display_init(t_display *display, t_data *data);
-
 
 void	display_update_camera(t_data *data);
 

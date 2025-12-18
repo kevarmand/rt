@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   prim_centroid.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: norivier <norivier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/31 02:05:45 by norivier          #+#    #+#             */
-/*   Updated: 2025/12/10 04:05:17 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/18 21:28:37 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt_math.h"
 #include "scene.h"
-#include "types.h"
+#include "attributes.h"
 #include "vector.h"
 
 FORCEINLINE

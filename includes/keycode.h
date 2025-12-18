@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/10 14:01:53 by karmand           #+#    #+#             */
-/*   Updated: 2025/12/12 15:45:33 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/18 21:53:07 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,6 @@
 # define KEY_MOINS	65453
 # define KEY_FOIS	65450
 # define KEY_DIV	65455
-
-
 
 /***
  * Function keys

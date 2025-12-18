@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   prim_inter.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: norivier <norivier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/31 02:11:27 by norivier          #+#    #+#             */
-/*   Updated: 2025/12/10 19:10:07 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/18 21:28:41 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <float.h>
 #include <math.h>
 #include "bvh.h"
-#include "types.h"
+#include "attributes.h"
 #include "rt_math.h"
 #include "vector.h"
 

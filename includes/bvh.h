@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   bvh.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: norivier <norivier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 20:01:56 by norivier          #+#    #+#             */
-/*   Updated: 2025/12/10 04:30:06 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/18 21:37:38 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdint.h>
 #ifndef BVH_H
 # define BVH_H 1
 
+# include <stdint.h>
 # include <stddef.h>
 # include "vector.h"
 # include "scene.h"
@@ -35,7 +35,6 @@ typedef struct s_bin
 	t_aabb	bounds;
 	int		count;
 }	t_bin;
-
 
 typedef struct s_primref
 {

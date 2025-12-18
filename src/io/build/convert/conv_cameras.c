@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 16:31:33 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/16 16:31:34 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/18 21:48:47 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@
 
 static void	cam_from_parsed(const t_parsed_element *src, t_camera *dst)
 {
-	vec3f_load3(&dst->origin, src->data.camera.position);
-	vec3f_load3(&dst->forward, src->data.camera.orientation);
-	dst->fov_deg = (float)src->data.camera.fov;
+	vec3f_load3(&dst->origin, src->u_data.camera.position);
+	vec3f_load3(&dst->forward, src->u_data.camera.orientation);
+	dst->fov_deg = (float)src->u_data.camera.fov;
 }
 
 int	conv_cameras(t_scene_parsed *parsed, t_conv_ctx *cx)

@@ -6,17 +6,17 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 22:00:12 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/18 17:25:57 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/18 21:45:05 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ENGINE_H
 # define ENGINE_H
 
-#include "vector.h"
-#include "scene.h"
-#include "render.h"
-#include <stdint.h>
+# include "vector.h"
+# include "scene.h"
+# include "render.h"
+# include <stdint.h>
 
 typedef struct s_engine
 {
@@ -71,53 +71,53 @@ typedef struct s_shading_ctx
 	float	contribution;
 }	t_shading_ctx;
 
-
-typedef struct s_scene t_scene;
-typedef struct s_primitive t_primitive;
-typedef struct s_plane t_plane;
-typedef struct s_sphere t_sphere;
-typedef struct s_cylinder t_cylinder;
-typedef struct s_triangle t_triangle;
-typedef struct s_torus t_torus;
-
+typedef struct s_scene		t_scene;
+typedef struct s_primitive	t_primitive;
+typedef struct s_plane		t_plane;
+typedef struct s_sphere		t_sphere;
+typedef struct s_cylinder	t_cylinder;
+typedef struct s_triangle	t_triangle;
+typedef struct s_torus		t_torus;
 /* ************************************************************************** */
 /*								INTERSECTION								  */
 /* ************************************************************************** */
 
-double equa_second(double a, double b, double c);
+double	equa_second(double a, double b, double c);
 
-int scene_hit(const t_scene *scene, const t_ray *ray, t_hit *out_hit);
+int		scene_hit(const t_scene *scene, const t_ray *ray, t_hit *out_hit);
 
-int	inter_plane(const t_plane *plane, const t_ray *ray, float *dist);
+int		inter_plane(const t_plane *plane, const t_ray *ray, float *dist);
 
-int	inter_sphere(const t_sphere *sphere, const t_ray *ray, float *dist);
+int		inter_sphere(const t_sphere *sphere, const t_ray *ray, float *dist);
 
-int	inter_cylinder(const t_cylinder *cylinder, const t_ray *ray, float *dist);
+int		inter_cylinder(const t_cylinder *cylinder, const t_ray *ray,
+			float *dist);
+int		inter_triangle(const t_triangle *triangle, const t_ray *ray,
+			float *dist);
 
-int	inter_triangle(const t_triangle *triangle, const t_ray *ray, float *dist);
-
-int	inter_torus(const t_torus *torus, const t_ray *ray, float *dist);
-int	inter_primitive(const t_primitive *primitive,
+int		inter_torus(const t_torus *torus, const t_ray *ray, float *dist);
+int		inter_primitive(const t_primitive *primitive,
 			const t_ray *ray, float *out_distance);
 
-int	scene_is_occluded(const t_scene *scene, const t_ray *ray,
-				float max_distance, t_hit *hit);
+int		scene_is_occluded(const t_scene *scene, const t_ray *ray,
+			float max_distance, t_hit *hit);
 
 /* ************************************************************************** */
 /*  							Shading									  	  */
 /* ************************************************************************** */
 
+int		shading_ray(const t_scene *scene, const t_ray *ray,
+			t_shading_ctx *ctx, t_vec3f *color_out);
 
-int	shading_ray(const t_scene *scene, const t_ray *ray,
-	t_shading_ctx *ctx, t_vec3f *color_out);
+int		shading_ray_fast(const t_scene *scene, const t_ray *ray,
+			t_shading_ctx *ctx, t_vec3f *color_out);
+int		shade_hit(const t_scene *scene, const t_hit *hit,
+			t_shading_ctx *ctx, t_vec3f *color_out);
 
-int shading_ray_fast(const t_scene *scene, const t_ray *ray, 
-	t_shading_ctx *ctx, t_vec3f *color_out);
-
-int	shade_hit(const t_scene *scene, const t_hit *hit, t_shading_ctx *ctx, t_vec3f *color_out);
-
-void	shade_direct_lights(const t_scene *scene, const t_hit *hit, t_vec3f *color);
-void	hit_build_geometry(const t_scene *scene, const t_ray *ray, t_hit *hit);
+void	shade_direct_lights(const t_scene *scene, const t_hit *hit,
+			t_vec3f *color);
+void	hit_build_geometry(const t_scene *scene, const t_ray *ray,
+			t_hit *hit);
 
 void	shade_ambient(const t_scene *scene, const t_hit *hit, t_vec3f *color);
 
@@ -126,7 +126,7 @@ t_vec3f	shade_reflection(const t_scene *scene,
 
 t_vec3f	shade_refraction(const t_scene *scene,
 			const t_hit *hit, t_shading_ctx *ctx, float factor);
-			
+
 void	apply_surface_shading(const t_scene *sc, t_hit *hit);
 t_ray	ray_finalize(t_vec3f origin, t_vec3f direction);
 void	skybox_eval(t_vec3f dir, const t_scene *scene, t_vec3f *color_out);
@@ -150,7 +150,7 @@ int		engine_init(t_engine *engine, t_scene *scene);
  * @param engine pointer to the engine structure
  * @return 0 on SUCCESS, error code otherwise
  */
-void		init_cam_views(t_scene *scene);
+void	init_cam_views(t_scene *scene);
 
 /***
  * Start the rendering threads

@@ -6,11 +6,11 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 19:21:07 by norivier          #+#    #+#             */
-/*   Updated: 2025/12/12 15:33:44 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/18 21:27:44 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "types.h"
+#include "attributes.h"
 #include "vector.h"
 
 // FORCEINLINE

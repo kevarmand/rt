@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   order.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: norivier <norivier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/31 02:13:04 by norivier          #+#    #+#             */
-/*   Updated: 2025/10/31 02:16:20 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/18 21:27:08 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "types.h"
+#include "attributes.h"
 
 FORCEINLINE
 extern inline void	swap_int(int *a, int *b)

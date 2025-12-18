@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 16:32:30 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/16 16:32:49 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/18 21:48:47 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@
 
 void	light_from_parsed(t_parsed_element *src, t_light *dst)
 {
-	vec3f_load3(&dst->position, src->data.light.position);
-	rgb8_to_linear_vec(src->data.light.rgb, &dst->color);
-	dst->intensity = src->data.light.brightness;
+	vec3f_load3(&dst->position, src->u_data.light.position);
+	rgb8_to_linear_vec(src->u_data.light.rgb, &dst->color);
+	dst->intensity = src->u_data.light.brightness;
 }
 
 static void	reset_light(t_light *light)

@@ -6,12 +6,11 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 16:46:49 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/16 16:46:53 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/18 21:48:47 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "io.h"
-#include "type.h"
 #include "errors.h"
 #include "../parsing_internal.h"
 
@@ -24,13 +23,13 @@ int	pars_triangle(t_pars_state *st, t_scene_parsed *scene)
 	init_parsed_element(&parsed_element, scene);
 	parsed_element.type = ELEM_TRIANGLE;
 	if (!pars_next_tok(st, &token) || scan_point(token,
-			parsed_element.data.triangle.vertex1))
+			parsed_element.u_data.triangle.vertex1))
 		return (ERR_PARS);
 	if (!pars_next_tok(st, &token) || scan_point(token,
-			parsed_element.data.triangle.vertex2))
+			parsed_element.u_data.triangle.vertex2))
 		return (ERR_PARS);
 	if (!pars_next_tok(st, &token) || scan_point(token,
-			parsed_element.data.triangle.vertex3))
+			parsed_element.u_data.triangle.vertex3))
 		return (ERR_PARS);
 	if (!pars_next_tok(st, &token) || scan_color(token,
 			parsed_element.rgb))

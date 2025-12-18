@@ -6,13 +6,13 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 20:45:35 by norivier          #+#    #+#             */
-/*   Updated: 2025/12/14 13:15:22 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/18 21:28:33 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bvh.h"
 #include "rt_config.h"
-#include "types.h"
+#include "attributes.h"
 #include "vector.h"
 #include <float.h>
 #include <math.h>

@@ -6,12 +6,11 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 16:20:10 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/16 10:46:52 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/18 21:32:15 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "io.h"
-#include "type.h"
 #include "errors.h"
 #include "../../parsing_internal.h"
 #include <stdint.h>

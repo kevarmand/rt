@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 16:34:12 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/16 16:36:40 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/18 21:48:47 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,18 @@ int	copy_triangle_to_primitive(const t_parsed_element *src, t_primitive *dst)
 {
 	dst->type = PRIM_TRIANGLE;
 	dst->tr.v0 = ((t_vec3f){
-			src->data.triangle.vertex1[0],
-			src->data.triangle.vertex1[1],
-			src->data.triangle.vertex1[2]});
+			src->u_data.triangle.vertex1[0],
+			src->u_data.triangle.vertex1[1],
+			src->u_data.triangle.vertex1[2]});
 	dst->tr.edge1 = vec3f_sub((t_vec3f){
-			src->data.triangle.vertex2[0],
-			src->data.triangle.vertex2[1],
-			src->data.triangle.vertex2[2]},
+			src->u_data.triangle.vertex2[0],
+			src->u_data.triangle.vertex2[1],
+			src->u_data.triangle.vertex2[2]},
 			dst->tr.v0);
 	dst->tr.edge2 = vec3f_sub((t_vec3f){
-			src->data.triangle.vertex3[0],
-			src->data.triangle.vertex3[1],
-			src->data.triangle.vertex3[2]},
+			src->u_data.triangle.vertex3[0],
+			src->u_data.triangle.vertex3[1],
+			src->u_data.triangle.vertex3[2]},
 			dst->tr.v0);
 	return (SUCCESS);
 }
@@ -39,10 +39,10 @@ int	copy_sphere_to_primitive(const t_parsed_element *src, t_primitive *dst)
 {
 	dst->type = PRIM_SPHERE;
 	dst->sp.center = ((t_vec3f){
-			src->data.sphere.center[0],
-			src->data.sphere.center[1],
-			src->data.sphere.center[2]});
-	dst->sp.radius = (src->data.sphere.diameter / 2.0f);
+			src->u_data.sphere.center[0],
+			src->u_data.sphere.center[1],
+			src->u_data.sphere.center[2]});
+	dst->sp.radius = (src->u_data.sphere.diameter / 2.0f);
 	dst->sp.r_squared = dst->sp.radius * dst->sp.radius;
 	return (SUCCESS);
 }
@@ -56,16 +56,16 @@ int	copy_cylinder_to_primitive(const t_parsed_element *src, t_primitive *dst)
 
 	dst->type = PRIM_CYLINDER;
 	center = (t_vec3f){
-		src->data.cylinder.origin[0],
-		src->data.cylinder.origin[1],
-		src->data.cylinder.origin[2]};
+		src->u_data.cylinder.origin[0],
+		src->u_data.cylinder.origin[1],
+		src->u_data.cylinder.origin[2]};
 	axis = (t_vec3f){
-		src->data.cylinder.axis[0],
-		src->data.cylinder.axis[1],
-		src->data.cylinder.axis[2]};
+		src->u_data.cylinder.axis[0],
+		src->u_data.cylinder.axis[1],
+		src->u_data.cylinder.axis[2]};
 	axis = vec3f_normalize(axis);
-	height = src->data.cylinder.height;
-	radius = src->data.cylinder.diameter * 0.5f;
+	height = src->u_data.cylinder.height;
+	radius = src->u_data.cylinder.diameter * 0.5f;
 	dst->cy.axis = axis;
 	dst->cy.height = height;
 	dst->cy.radius = radius;
@@ -78,12 +78,12 @@ int	copy_plane_to_primitive(const t_parsed_element *src, t_primitive *dst)
 {
 	dst->type = PRIM_PLANE;
 	dst->pl.normal = ((t_vec3f){
-			src->data.plane.normal[0],
-			src->data.plane.normal[1],
-			src->data.plane.normal[2]});
-	dst->pl.d = -(dst->pl.normal[0] * src->data.plane.origin[0]
-			+ dst->pl.normal[1] * src->data.plane.origin[1]
-			+ dst->pl.normal[2] * src->data.plane.origin[2]);
+			src->u_data.plane.normal[0],
+			src->u_data.plane.normal[1],
+			src->u_data.plane.normal[2]});
+	dst->pl.d = -(dst->pl.normal[0] * src->u_data.plane.origin[0]
+			+ dst->pl.normal[1] * src->u_data.plane.origin[1]
+			+ dst->pl.normal[2] * src->u_data.plane.origin[2]);
 	return (SUCCESS);
 }
 
@@ -91,15 +91,15 @@ int	copy_torus_to_primitive(const t_parsed_element *src, t_primitive *dst)
 {
 	dst->type = PRIM_TORUS;
 	dst->to.center = ((t_vec3f){
-			src->data.torus.center[0],
-			src->data.torus.center[1],
-			src->data.torus.center[2]});
+			src->u_data.torus.center[0],
+			src->u_data.torus.center[1],
+			src->u_data.torus.center[2]});
 	dst->to.normal = vec3f_normalize((t_vec3f){
-			src->data.torus.normal[0],
-			src->data.torus.normal[1],
-			src->data.torus.normal[2]});
-	dst->to.R = src->data.torus.major_radius;
-	dst->to.r = src->data.torus.minor_radius;
+			src->u_data.torus.normal[0],
+			src->u_data.torus.normal[1],
+			src->u_data.torus.normal[2]});
+	dst->to.R = src->u_data.torus.major_radius;
+	dst->to.r = src->u_data.torus.minor_radius;
 	dst->to.R_square = dst->to.R * dst->to.R;
 	dst->to.r_square = dst->to.r * dst->to.r;
 	return (SUCCESS);

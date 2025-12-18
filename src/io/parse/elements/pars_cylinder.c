@@ -6,12 +6,11 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 16:44:07 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/16 16:44:08 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/18 21:48:47 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "io.h"
-#include "type.h"
 #include "errors.h"
 #include "../parsing_internal.h"
 
@@ -24,16 +23,16 @@ int	pars_cylinder(t_pars_state *st, t_scene_parsed *scene)
 	init_parsed_element(&parsed_element, scene);
 	parsed_element.type = ELEM_CYLINDER;
 	if (!pars_next_tok(st, &token)
-		|| scan_point(token, parsed_element.data.cylinder.origin))
+		|| scan_point(token, parsed_element.u_data.cylinder.origin))
 		return (ERR_PARS);
 	if (!pars_next_tok(st, &token)
-		|| scan_vec3(token, parsed_element.data.cylinder.axis))
+		|| scan_vec3(token, parsed_element.u_data.cylinder.axis))
 		return (ERR_PARS);
 	if (!pars_next_tok(st, &token)
-		|| scan_float(token, &parsed_element.data.cylinder.diameter))
+		|| scan_float(token, &parsed_element.u_data.cylinder.diameter))
 		return (ERR_PARS);
 	if (!pars_next_tok(st, &token)
-		|| scan_float(token, &parsed_element.data.cylinder.height))
+		|| scan_float(token, &parsed_element.u_data.cylinder.height))
 		return (ERR_PARS);
 	if (!pars_next_tok(st, &token)
 		|| scan_color(token, parsed_element.rgb))

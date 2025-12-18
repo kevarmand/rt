@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   equation_solvers.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: norivier <norivier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/31 02:20:09 by norivier          #+#    #+#             */
-/*   Updated: 2025/12/10 04:29:45 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/18 21:27:57 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <math.h>
-#include "types.h"
+#include "attributes.h"
 #include "rt_math.h"
 #include "bvh.h"
 

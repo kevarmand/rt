@@ -6,12 +6,12 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 23:05:12 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/12 16:15:31 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/18 21:55:04 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef UI2_H
-# define UI2_H
+#ifndef MOUSE_H
+# define MOUSE_H
 
 typedef enum e_mouse_button
 {
@@ -29,7 +29,6 @@ typedef struct s_mouse_state
 	int		current_x;
 	int		current_y;
 	int		scroll_delta;
-	
 }	t_mouse_state;
 
 #endif

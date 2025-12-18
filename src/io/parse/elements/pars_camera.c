@@ -6,12 +6,11 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 16:43:59 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/16 16:44:00 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/18 21:48:47 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "io.h"
-#include "type.h"
 #include "errors.h"
 #include "vector.h"
 #include "../parsing_internal.h"
@@ -26,17 +25,17 @@ int	pars_camera(t_pars_state *st, t_scene_parsed *scene, t_elem_role role)
 	init_parsed_element(&parsed_element, scene);
 	parsed_element.type = ELEM_CAMERA;
 	if (!pars_next_tok(st, &token) || scan_point(token,
-			parsed_element.data.camera.position))
+			parsed_element.u_data.camera.position))
 		return (ERR_PARS);
 	if (!pars_next_tok(st, &token) || scan_vec3(token,
-			parsed_element.data.camera.orientation))
+			parsed_element.u_data.camera.orientation))
 		return (ERR_PARS);
 	if (!pars_next_tok(st, &token) || scan_float(token,
 			&fov_as_float))
 		return (ERR_PARS);
-	parsed_element.data.camera.fov = (int)fov_as_float;
-	if (parsed_element.data.camera.fov < 1
-		|| parsed_element.data.camera.fov > 179)
+	parsed_element.u_data.camera.fov = (int)fov_as_float;
+	if (parsed_element.u_data.camera.fov < 1
+		|| parsed_element.u_data.camera.fov > 179)
 		return (ERR_PARS);
 	status = pars_options(st, &parsed_element.options, &scene->textures);
 	if (status != 0)

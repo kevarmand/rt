@@ -1,5 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ui_settings.h                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/18 22:01:39 by kearmand          #+#    #+#             */
+/*   Updated: 2025/12/18 22:02:42 by kearmand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef UI_SETTINGS_H
-#define UI_SETTINGS_H
+# define UI_SETTINGS_H
 
 /***
  * Diferent modes for the UI.
@@ -9,7 +21,6 @@ enum e_ui_mode {
 	UI_MODE_OBJECT = 1,
 	UI_MODE_EDITOR = 2
 };
-
 
 /**
  * Color session for different UI elements.
@@ -22,13 +33,10 @@ typedef enum e_ui_color {
 	UI_COLOR_FIELD_ACTIVE =0xB0C4DE,
 	UI_COLOR_INACTIVE = 0xA9A9A9,
 	UI_COLOR_PANEL = 0xD3D3D3,
-
 	UI_COLOR_ACCENT = 0x00FF00,
 	UI_COLOR_TEXT = 0xFFFFFF,
 	UI_COLOR_TEST_MUTED = 555555
-	
 }	t_ui_color;
-
 
 /*
  * Dimensions and positions for different UI elements.
@@ -91,9 +99,9 @@ typedef enum e_ui_color {
 /***
  * Labels for UI elements.
  */
-#define UI_LABEL_OBJECT      "Object"
-#define UI_LABEL_NAME        "Name"
-#define UI_LABEL_TRANSLATION "        Translation"
-#define UI_LABEL_ROTATION    "          Rotation"
+# define UI_LABEL_OBJECT      "Object"
+# define UI_LABEL_NAME        "Name"
+# define UI_LABEL_TRANSLATION "        Translation"
+# define UI_LABEL_ROTATION    "          Rotation"
 
 #endif // UI_SETTINGS_H

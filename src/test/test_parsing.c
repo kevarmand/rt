@@ -45,17 +45,17 @@ static void print_globals(const t_param *p)
 static void print_camera_elem(const t_parsed_element *e, int index)
 {
 	printf("- camera[%d]\n", index);
-	print_vec3("position", e->data.camera.position);
-	print_vec3("orientation", e->data.camera.orientation);
-	printf("  fov=%d\n", e->data.camera.fov);
+	print_vec3("position", e->u_data.camera.position);
+	print_vec3("orientation", e->u_data.camera.orientation);
+	printf("  fov=%d\n", e->u_data.camera.fov);
 }
 
 static void print_light_elem(const t_parsed_element *e, int index)
 {
 	printf("- light[%d]\n", index);
-	print_vec3("position", e->data.light.position);
-	printf("  brightness=%.3f\n", e->data.light.brightness);
-	print_rgb("rgb", e->data.light.rgb);
+	print_vec3("position", e->u_data.light.position);
+	printf("  brightness=%.3f\n", e->u_data.light.brightness);
+	print_rgb("rgb", e->u_data.light.rgb);
 }
 
 static void print_object_elem(const t_parsed_element *e, int index)
@@ -63,29 +63,29 @@ static void print_object_elem(const t_parsed_element *e, int index)
 	printf("- object[%d] kind=%s\n", index, kind_to_str(e->type));
 	if (e->type == ELEM_SPHERE)
 	{
-		print_vec3("center", e->data.sphere.center);
-		printf("  diameter=%.6f\n", e->data.sphere.diameter);
+		print_vec3("center", e->u_data.sphere.center);
+		printf("  diameter=%.6f\n", e->u_data.sphere.diameter);
 		print_rgb("rgb", e->rgb);
 	}
 	else if (e->type == ELEM_PLANE)
 	{
-		print_vec3("origin", e->data.plane.origin);
-		print_vec3("normal", e->data.plane.normal);
+		print_vec3("origin", e->u_data.plane.origin);
+		print_vec3("normal", e->u_data.plane.normal);
 		print_rgb("rgb", e->rgb);
 	}
 	else if (e->type == ELEM_CYLINDER)
 	{
-		print_vec3("origin", e->data.cylinder.origin);
-		print_vec3("axis", e->data.cylinder.axis);
+		print_vec3("origin", e->u_data.cylinder.origin);
+		print_vec3("axis", e->u_data.cylinder.axis);
 		printf("  diameter=%.6f height=%.6f\n",
-			e->data.cylinder.diameter, e->data.cylinder.height);
+			e->u_data.cylinder.diameter, e->u_data.cylinder.height);
 		print_rgb("rgb", e->rgb);
 	}
 	else if (e->type == ELEM_TRIANGLE)
 	{
-		print_vec3("A", e->data.triangle.vertex1);
-		print_vec3("B", e->data.triangle.vertex2);
-		print_vec3("C", e->data.triangle.vertex3);
+		print_vec3("A", e->u_data.triangle.vertex1);
+		print_vec3("B", e->u_data.triangle.vertex2);
+		print_vec3("C", e->u_data.triangle.vertex3);
 		print_rgb("rgb", e->rgb);
 	}
 }

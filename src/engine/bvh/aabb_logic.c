@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   aabb_logic.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: norivier <norivier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/31 02:01:43 by norivier          #+#    #+#             */
-/*   Updated: 2025/12/10 03:55:28 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/18 21:28:07 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt_math.h"
-#include "types.h"
+#include "attributes.h"
 #include "math.h"
 #include "bvh.h"
 #include "scene.h"

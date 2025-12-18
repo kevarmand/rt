@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "io.h"
-#include "type.h"
 #include "errors.h"
 #include "../parsing_internal.h"
 
@@ -20,19 +19,19 @@ static int	pars_torus_mandatory(t_pars_state *st, t_parsed_element *parsed)
 	t_tok	token;
 
 	if (!pars_next_tok(st, &token) || scan_point(token,
-			parsed->data.torus.center))
+			parsed->u_data.torus.center))
 		return (ERR_PARS);
 	if (!pars_next_tok(st, &token) || scan_vec3(token,
-			parsed->data.torus.normal))
+			parsed->u_data.torus.normal))
 		return (ERR_PARS);
 	if (!pars_next_tok(st, &token)
-		|| scan_float(token, &parsed->data.torus.major_radius))
+		|| scan_float(token, &parsed->u_data.torus.major_radius))
 		return (ERR_PARS);
 	if (!pars_next_tok(st, &token)
-		|| scan_float(token, &parsed->data.torus.minor_radius))
+		|| scan_float(token, &parsed->u_data.torus.minor_radius))
 		return (ERR_PARS);
-	if (parsed->data.torus.major_radius <= 0.0f
-		|| parsed->data.torus.minor_radius <= 0.0f)
+	if (parsed->u_data.torus.major_radius <= 0.0f
+		|| parsed->u_data.torus.minor_radius <= 0.0f)
 		return (ERR_PARS);
 	if (!pars_next_tok(st, &token) || scan_color(token, parsed->rgb))
 		return (ERR_PARS);

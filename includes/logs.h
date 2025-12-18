@@ -6,12 +6,12 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 00:00:00 by kevin             #+#    #+#             */
-/*   Updated: 2025/12/17 23:27:59 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/18 21:53:50 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LOG_H
-# define LOG_H
+#ifndef LOGS_H
+# define LOGS_H
 
 # include <unistd.h>
 
@@ -78,7 +78,7 @@ typedef enum e_logstep
 
 void	log_step(t_logstep step, int status);
 
-typedef struct s_scene t_scene;
+typedef struct s_scene	t_scene;
 
 void	log_info_parsed(const t_scene *scene, const char *path);
 

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   render.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/18 21:55:31 by kearmand          #+#    #+#             */
+/*   Updated: 2025/12/18 21:58:37 by kearmand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef RENDER_H
 # define RENDER_H
 
@@ -9,7 +21,7 @@
 # include "scene.h"
 # include "bitmap.h"
 
-typedef struct s_data t_data;
+typedef struct s_data	t_data;
 
 typedef struct s_render_view
 {
@@ -22,7 +34,7 @@ typedef struct s_render_view
 	t_vec3f	dy;
 	float	fov_deg;
 	int		frame_seq;
-	int 	mode;
+	int		mode;
 }	t_render_view;
 
 typedef struct s_tile
@@ -72,14 +84,12 @@ typedef struct s_tileset
 
 typedef struct s_display_mailbox
 {
-	/* Request MLX -> Manager */
 	t_camera	cam;
 	int			request_camera_id;
 	int			req_job_id;
 	int			request_render_mode;
 	atomic_int	request_ready;
 
-	/* Snapshot Manager -> MLX */
 	int			*rgb_pixels;
 	int			tile_count;
 	int			tiles_done;
@@ -88,7 +98,6 @@ typedef struct s_display_mailbox
 	int			snapshot_render_mode;
 	atomic_int	snapshot_ready;
 }	t_display_mailbox;
-
 
 typedef struct s_mgr
 {
@@ -100,7 +109,7 @@ typedef struct s_mgr
 	int				*rgb_buffer;
 	t_vec3f			*hdr_buffer;
 	t_render_view	render_view;
-	float			*tonemap_exposure; //champ ajouter
+	float			*tonemap_exposure;
 }	t_mgr;
 
 typedef struct s_display_thread
@@ -114,14 +123,11 @@ typedef struct s_render
 	int					width;
 	int					height;
 
-	t_workers			workers;     // pool de workers
-	t_mgr				manager;     // thread "Karen"
-	t_display_mailbox	mailbox;     // partagé manager <-> mlx_thread
-	atomic_int			cancel_flag;  // ou stop_requested
-
+	t_workers			workers;
+	t_mgr				manager;
+	t_display_mailbox	mailbox;
+	atomic_int			cancel_flag;
 }	t_render;
-
-
 
 /***
  * Initialize the render structure
@@ -133,8 +139,6 @@ typedef struct s_render
  */
 int		render_init(t_render *render, int width, int height);
 
-
-
 /* ************************************************************************** */
 /*         					     RENDER FUNCTIONS                            */
 /* ************************************************************************** */
@@ -144,19 +148,17 @@ int		render_init(t_render *render, int width, int height);
  * @param arg pointer to the render structure
  * @return NULL
  */
-void *manager_entry(void *arg);
-
+void	*manager_entry(void *arg);
 
 /***
  * Worker thread function
  * @param arg pointer to the worker structure
  * @return NULL
  */
-void *worker_entry(void *arg);
-
+void	*worker_entry(void *arg);
 
 /* ************************************************************************** */
-/*         					     MANAGER FUNCTIONS                              */
+/*         					     MANAGER FUNCTIONS                            */
 /* ************************************************************************** */
 
 /***
@@ -166,34 +168,34 @@ void *worker_entry(void *arg);
  */
 int		manager_dispatch_tile(t_tileset *tileset);
 
-int init_worker_tile(t_tileset *tileset, t_tile *tile,
+int		init_worker_tile(t_tileset *tileset, t_tile *tile,
 			int image_width, int image_height);
 
 /* dispatch */
-int  manager_dispatch_tile(t_tileset *tileset);
+int		manager_dispatch_tile(t_tileset *tileset);
 
 /* worker tile */
-int  init_worker_tile(t_tileset *tileset, t_tile *tile,
-                      int image_width, int image_height);
+int		init_worker_tile(t_tileset *tileset, t_tile *tile,
+			int image_width, int image_height);
 
 /* threads */
-void *worker_entry(void *arg);
-void *manager_entry(void *arg);
-
-
+void	*worker_entry(void *arg);
+void	*manager_entry(void *arg);
 
 /* view */
-void view_setup(t_render_view *view, int width, int height);
+void	view_setup(t_render_view *view, int width, int height);
 
 /* render tile */
-int	render_tile_normal(t_data *data, t_tile *tile, const t_render_view *view);
+int		render_tile_normal(t_data *data, t_tile *tile,
+			const t_render_view *view);
 
-int	render_tile_fast(t_data *data, t_tile *tile, const t_render_view *view);
+int		render_tile_fast(t_data *data, t_tile *tile,
+			const t_render_view *view);
 
-int  render_tile_super(t_data *data, t_tile *tile, const t_render_view *view);
+int		render_tile_super(t_data *data, t_tile *tile,
+			const t_render_view *view);
 
 /* init */
-int  render_init(t_render *render, int width, int height);
-
+int		render_init(t_render *render, int width, int height);
 
 #endif

@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   sah.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: norivier <norivier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 18:43:46 by norivier          #+#    #+#             */
-/*   Updated: 2025/12/10 03:51:23 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/18 21:28:50 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bvh.h"
-#include "types.h"
+#include "attributes.h"
 #include "float.h"
 
 FORCEINLINE

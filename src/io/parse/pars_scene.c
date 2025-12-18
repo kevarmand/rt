@@ -6,12 +6,11 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 16:50:27 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/16 16:51:08 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/18 21:32:52 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "io.h"
-#include "type.h"
 #include "libft.h"
 #include <stdlib.h>
 #include <unistd.h>

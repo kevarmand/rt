@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   io.h                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/18 21:46:45 by kearmand          #+#    #+#             */
+/*   Updated: 2025/12/18 21:52:48 by kearmand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef IO_H
 # define IO_H
 
@@ -17,9 +29,9 @@ typedef enum e_elem_role
 	ELEM_ROLE_EXTRA
 }	t_elem_role;
 
-typedef struct s_scene t_scene;
-typedef struct s_tok t_tok;
-typedef struct s_pars_state t_pars_state;
+typedef struct s_scene		t_scene;
+typedef struct s_tok		t_tok;
+typedef struct s_pars_state	t_pars_state;
 
 typedef enum e_pmask
 {
@@ -38,8 +50,6 @@ typedef struct s_param
 	float	color[3];
 }	t_param;
 
-
-
 typedef struct s_element_options
 {
 	float		ior;
@@ -49,7 +59,7 @@ typedef struct s_element_options
 	float		diffuse_weight;
 	float		specular_weight;
 	float		ambient_occlusion;
-	float	 	uv[6];
+	float		uv[6];
 	int			uv_mod;
 	int			texture_id;
 	int			bumpmap_id;
@@ -166,21 +176,19 @@ typedef struct s_parsed_element
 		t_parsed_torus		torus;
 		t_parsed_camera		camera;
 		t_parsed_light		light;
-	}	data;
+	}	u_data;
 	int						rgb[3];
 }	t_parsed_element;
-
 
 /* ************************************************************************** */
 /*                             PARSING - SCENE                                */
 /* ************************************************************************** */
 
-
-
 /**
  * @brief Parse a scene from a file into a temporary builder.
  * @param filename The path to the scene file to be parsed. (no_null)
- * @param scene Builder receiving parsed elements (lists, presence mask). (no_null)
+ * @param scene Builder receiving parsed elements (lists, presence mask).
+ * (no_null)
  * @return SUCCESS on success, otherwise a parsing/I-O error code.
  */
 int	pars_scene(const char *filename, t_scene_parsed *scene);
@@ -199,8 +207,7 @@ int	load_scene(const char *path, t_scene *out_scene);
  * @param parsed     The parsed scene data. (no_null)
  * @return SUCCESS on success, error code on failure
  */
-int build_scene(t_scene *scene, t_scene_parsed *parsed);
-
+int	build_scene(t_scene *scene, t_scene_parsed *parsed);
 
 /**
  * @brief Parse a single line: read first word span, dispatch by tag.
@@ -215,7 +222,6 @@ int	pars_line(char *line, t_scene_parsed *scene, t_pars_state *st);
  * @return 1 if found, 0 if EOL or comment start.
  */
 int	pars_next_tok(t_pars_state *st, t_tok *out);
-
 
 /***
  * @brief Dispatch a token to the appropriate parsing function based on its tag.
@@ -238,7 +244,7 @@ int	pars_tok_eq(t_tok t, const char *lit);
 /*                             UTILS - PARSING                                */
 /* ************************************************************************** */
 
- /***
+/***
  * @brief Scan a floating-point number from a token span.
  * @param tok	The token span containing the float representation. (no_null)
  * @param out_value Pointer to store the parsed float value. (no_null)
@@ -293,7 +299,7 @@ int	scan_point(t_tok tok, float out_vec[3]);
  * Each option is expected to be in the format "key=value".
  */
 int	pars_options(t_pars_state *st, t_element_options *options,
-			t_texture_parsed *tex_parsed);
+		t_texture_parsed *tex_parsed);
 
 /**
  * @brief Split a token of the form "key=value" into key and value tokens.
@@ -307,19 +313,28 @@ int	pars_options(t_pars_state *st, t_element_options *options,
 int	scan_option(t_tok tok, t_element_options *opts, t_texture_parsed *texture);
 
 int	scan_opt_ior(t_tok tok, t_element_options *opts, t_texture_parsed *texture);
-int	scan_opt_refraction(t_tok tok, t_element_options *opts, t_texture_parsed *texture);
-int	scan_opt_reflection(t_tok tok, t_element_options *opts, t_texture_parsed *texture);
-int	scan_opt_shininess(t_tok tok, t_element_options *opts, t_texture_parsed *texture);
-int	scan_opt_diffuse(t_tok tok, t_element_options *opts, t_texture_parsed *texture);
-int	scan_opt_specular(t_tok tok, t_element_options *opts, t_texture_parsed *texture);
-int	scan_opt_ambient(t_tok tok, t_element_options *opts, t_texture_parsed *texture);
-int	scan_opt_bump(t_tok tok, t_element_options *opts, t_texture_parsed *texture);
-int	scan_opt_texture(t_tok tok, t_element_options *opts, t_texture_parsed *texture);
-int	scan_opt_uv(t_tok tok, t_element_options *opts, t_texture_parsed *texture);
+int	scan_opt_refraction(t_tok tok, t_element_options *opts,
+		t_texture_parsed *texture);
+int	scan_opt_reflection(t_tok tok, t_element_options *opts,
+		t_texture_parsed *texture);
+int	scan_opt_shininess(t_tok tok, t_element_options *opts,
+		t_texture_parsed *texture);
+int	scan_opt_diffuse(t_tok tok, t_element_options *opts,
+		t_texture_parsed *texture);
+int	scan_opt_specular(t_tok tok, t_element_options *opts,
+		t_texture_parsed *texture);
+int	scan_opt_ambient(t_tok tok, t_element_options *opts,
+		t_texture_parsed *texture);
+int	scan_opt_bump(t_tok tok, t_element_options *opts,
+		t_texture_parsed *texture);
+int	scan_opt_texture(t_tok tok, t_element_options *opts,
+		t_texture_parsed *texture);
+int	scan_opt_uv(t_tok tok, t_element_options *opts,
+		t_texture_parsed *texture);
 int	scan_opt_checkerboard(t_tok tok, t_element_options *opts,
-			t_texture_parsed *textures);
+		t_texture_parsed *textures);
 int	scan_opt_bscale(t_tok tok, t_element_options *opts,
-			t_texture_parsed *texture);
+		t_texture_parsed *texture);
 
 /* ************************************************************************** */
 /*                             PARSING - OBJECT                               */
@@ -347,9 +362,9 @@ int	pars_triangle(t_pars_state *st, t_scene_parsed *scene);
 int	pars_torus(t_pars_state *st, t_scene_parsed *scene);
 int	pars_skybox(t_pars_state *st, t_scene_parsed *scene);
 int	pars_camera(t_pars_state *st, t_scene_parsed *scene,
-			t_elem_role role);
+		t_elem_role role);
 int	pars_light(t_pars_state *st, t_scene_parsed *scene,
-			t_elem_role role);
+		t_elem_role role);
 int	pars_ambient(t_pars_state *st, t_scene_parsed *scene);
 int	pars_resolution(t_pars_state *st, t_scene_parsed *scene);
 
@@ -370,6 +385,6 @@ int	pars_default_option(t_pars_state *st, t_scene_parsed *scene);
  * that required elements are present.
  */
 int	pars_register_element(t_scene_parsed *scene,
-			const t_parsed_element *elem, t_elem_role role);
+		const t_parsed_element *elem, t_elem_role role);
 
 #endif

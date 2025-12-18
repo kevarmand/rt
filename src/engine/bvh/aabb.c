@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   aabb.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: norivier <norivier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/31 01:56:51 by norivier          #+#    #+#             */
-/*   Updated: 2025/12/10 04:04:41 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/18 21:28:14 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bvh.h"
 #include "scene.h"
-#include "types.h"
+#include "attributes.h"
 
 FORCEINLINE
 static inline t_aabb	triangle_bound(t_triangle t)

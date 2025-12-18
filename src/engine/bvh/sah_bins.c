@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   sah_bins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: norivier <norivier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 18:47:49 by norivier          #+#    #+#             */
-/*   Updated: 2025/12/10 04:22:23 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/18 21:28:46 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stddef.h>
-#include "types.h"
+#include "attributes.h"
 #include "bvh.h"
 #include "float.h"
 
