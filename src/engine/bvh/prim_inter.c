@@ -6,10 +6,11 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/31 02:11:27 by norivier          #+#    #+#             */
-/*   Updated: 2025/12/18 21:28:41 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/19 18:10:57 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <assert.h>
 #include <float.h>
 #include <math.h>
 #include "bvh.h"
@@ -178,75 +179,255 @@ extern inline int	cylinder_inter(t_ray r, t_cylinder *cl, t_hit *hit)
 		}
 		i += 1;
 	}
-	// if (fabsf(rd.y) > EPSILON) {
-	// 	// if (cylinder_cap(r, cl, hit))
-	// 	// 	hit_happened = 1;
-	// }
 	return (hit_happened);
+}
+
+void	frisvad(const t_vec3d axis, t_vec3d *b1, t_vec3d *b2)
+{
+	double	a;
+	double	b;
+
+	if (axis.y < -0.9999999)
+	{
+		*b1 = (t_vec3d){0.0, 0.0, -1.0, 0.0};
+		*b2 = (t_vec3d){-1.0, 0.0, 0.0, 0.0};
+		return ;
+	}
+	a = 1 / (1.0 + axis.y);
+	b = -axis.x * axis.z * a;
+	*b1 = (t_vec3d){1.0 - axis.x * axis.x * a, -axis.x, b, 0.0};
+	*b2 = (t_vec3d){b, -axis.z, 1.0 - axis.z * axis.z * a, 0.0};
+}
+
+t_vec3d	to_local(t_vec3d p, t_vec3d ux, t_vec3d uy, t_vec3d uz)
+{
+	return ((t_vec3d){
+		vec3d_dot(p, ux),
+		vec3d_dot(p, uy),
+		vec3d_dot(p, uz),
+	});
+}
+
+t_vec3d	from_local(t_vec3d p, t_vec3d ux, t_vec3d uy, t_vec3d uz)
+{
+	return ((t_vec3d){
+		p.x * ux.x + p.y * uy.x + p.z * uz.x,
+		p.x * ux.y + p.y * uy.y + p.z * uz.y,
+		p.x * ux.z + p.y * uy.z + p.z * uz.z,
+	});
+}
+
+int	inside_torus(t_torus *t, t_vec3d *point)
+{
+	double	t2;
+	double	f;
+
+	t2 = t->R - sqrt(point->x * point->x + point->z * point->z);
+	f = t2 * t2 + point->y * point->y - t->r_square;
+	return (f < 1e-12);
+}
+
+static inline t_vec3d	newton_torus(double *t, t_torus *to, t_vec3d ro, t_vec3d rd)
+{
+	int		i;
+	t_vec3d	p;
+	double	sum;
+	double	f;
+	t_vec3d	grad;
+	double	df;
+
+	i = 0;
+	while (i < 6)
+	{
+		p = ro + *t * rd;
+		sum = vec3d_dot(p, p) + to->R_square - to->r_square;
+		f = sum * sum - 4.0 * to->R_square * (p.x * p.x + p.z * p.z);
+		grad.x = 4.0 * p.x * sum - 8.0 * to->R_square * p.x;
+		grad.y = 4.0 * p.y * sum;
+		grad.z = 4.0 * p.z * sum - 8.0 * to->R_square * p.z;
+		df = vec3d_dot(grad, rd);
+		if (fabs(df) < 1e-12)
+			break ;
+		*t -= f / df;
+		i += 1;
+	}
+	return (grad);
 }
 
 // Looks ok ?
 FORCEINLINE
 extern inline int	torus_inter(t_ray r, t_torus *t, t_hit *hit)
 {
-	t_ray	r_local;
-	t_vec3f	p;
-	float	m;
-	float	k;
+
+	t_vec3d	ro;
+	t_vec3d	rd;
+	t_cequ	eq;
+	complex double	croots[4];
+	double	roots[4];
+	double	g;
+	double	h;
+	double	i;
+	double	j;
+	double	k;
+	double	l;
+	int		nroots;
+
+	ro = vec3f_to_vec3d(vec3f_sub(r.origin, t->center));
+	rd = vec3f_to_vec3d(r.dir);
+	t_vec3d	uy = vec3f_to_vec3d(t->normal);
+	t_vec3d	ux,uz;
+	frisvad(uy, &ux, &uz);
+	ro = to_local(ro, ux, uy, uz);
+	rd = to_local(rd, ux, uy, uz);
+	g = 4.0 * t->R_square * (rd.x * rd.x + rd.z * rd.z);
+	h = 8.0 * t->R_square * (ro.x * rd.x + ro.z * rd.z);
+	i = 4.0 * t->R_square * (ro.x * ro.x + ro.z * ro.z);
+	j = 1.0;
+	k = 2.0 * vec3d_dot(ro, rd);
+	l = vec3d_dot(ro, ro) + t->R_square - t->r_square;
+	eq.a = j * j;
+	eq.b = 2.0 * j * k;
+	eq.c = 2.0 * j * l + k * k - g;
+	eq.d = 2.0 * k * l - h;
+	eq.e = l * l - i;
+	nroots = csolve_quartic(eq, croots);
+	nroots = filter_real_numbers(nroots, croots, roots);
+	int		hit_happened = 0;
+	for (int z = 0; z < nroots; ++z)
+	{
+		if (roots[z] > 1e-6 && roots[z] < hit->t)
+		{
+			hit->t = roots[z];
+			hit_happened = 1;
+		}
+	}
+	if (hit_happened)
+	{
+		t_vec3d	p_local;
+		t_vec3d	grad;
+		t_vec3d	normal;
+
+		grad = newton_torus(&hit->t, t, ro, rd);
+		normal = vec3d_normalize(grad);
+		p_local = ro + hit->t * rd;
+		hit->inside = inside_torus(t, &p_local);
+		if (hit->inside)
+			normal = -normal;
+		hit->normal = vec3d_to_vec3f(from_local(normal, ux, uy, uz));
+	}
+	return (hit_happened);
+}
+
+void	frisvadf(const t_vec3f axis, t_vec3f *b1, t_vec3f *b2)
+{
+	float	a;
+	float	b;
+
+	if (axis.y < -0.9999999)
+	{
+		*b1 = (t_vec3f){0.0, 0.0, -1.0, 0.0};
+		*b2 = (t_vec3f){-1.0, 0.0, 0.0, 0.0};
+		return ;
+	}
+	a = 1 / (1.0 + axis.y);
+	b = -axis.x * axis.z * a;
+	*b1 = (t_vec3f){1.0 - axis.x * axis.x * a, -axis.x, b, 0.0};
+	*b2 = (t_vec3f){b, -axis.z, 1.0 - axis.z * axis.z * a, 0.0};
+}
+
+t_vec3f	to_localf(t_vec3f p, t_vec3f ux, t_vec3f uy, t_vec3f uz)
+{
+	return ((t_vec3f){
+		vec3f_dot(p, ux),
+		vec3f_dot(p, uy),
+		vec3f_dot(p, uz),
+	});
+}
+
+t_vec3f	from_localf(t_vec3f p, t_vec3f ux, t_vec3f uy, t_vec3f uz)
+{
+	return ((t_vec3f){
+		p.x * ux.x + p.y * uy.x + p.z * uz.x,
+		p.x * ux.y + p.y * uy.y + p.z * uz.y,
+		p.x * ux.z + p.y * uy.z + p.z * uz.z,
+	});
+}
+
+// Looks ok ?
+FORCEINLINE
+extern inline int	torus_interf(t_ray r, t_torus *t, t_hit *hit)
+{
+
+	t_vec3f	ro;
+	t_vec3f	rd;
 	t_equ	eq;
 	float	roots[4];
+	float	g;
+	float	h;
+	float	i;
+	float	j;
+	float	k;
+	float	l;
 	int		nroots;
-	float	tmin;
-	// t_vec3f	hit_local;
-	// t_vec3f	normal_local;
-	// float	tmp;
-	float	p_dot_d;
 
-	r_local.origin = r.origin;
-	r_local.dir = r.dir;
-	p = r_local.origin;
-	m = vec3f_dot(r_local.dir, r_local.dir);
-	k = vec3f_dot(p, p) + t->R * t->R - t->r * t->r;
-	p_dot_d = vec3f_dot(p, r_local.dir);
-	eq.a = m * m;
-	eq.b = 4.0f * m * p_dot_d;
-	eq.c = 2.0f * m * k + 4.0f * p_dot_d * p_dot_d - 4.0f * t->R * t->R
-		* (r_local.dir.x * r_local.dir.x + r_local.dir.y * r_local.dir.y);
-	eq.d = 4.0f * p_dot_d * k
-		- 8.0f * t->R * t->R * (p.x * r_local.dir.x + p.y * r_local.dir.y);
-	eq.e = k * k - 4.0f * t->R * t->R * (p.x * p.x + p.y * p.y);
-	nroots = solve_quartic(eq, roots);
-	if (nroots == 0)
-		return 0;
-	tmin = -1.0f;
-	for (int i = 0; i < nroots; ++i)
-		if (roots[i] > 0.0f && (tmin < 0.0f || roots[i] < tmin))
-			tmin = roots[i];
-	if (tmin < 0.0f)
-		return 0;
-	// hit_local = vec3f_add(r_local.origin, vec3f_scale(r_local.dir, tmin));
-	// p = hit_local;
-	// tmp = vec3f_dot(p, p) + t->R * t->R - t->r * t->r;
-	// normal_local.x = 4.0f * p.x * tmp - 8.0f * t->R * t->R * p.x;
-	// normal_local.y = 4.0f * p.y * tmp - 8.0f * t->R * t->R * p.y;
-	// normal_local.z = 4.0f * p.z * tmp;
-	// normal_local = vec3f_normalize(normal_local);
-	hit->t = tmin;
-	// hit->point = vec3f_add(t->center, mat3x3_mulv(t->basis, hit_local));
-	// hit->normal = vec3f_normalize(mat3x3_mulv(t->basis, normal_local)); //assuming orthonormal otherwise replace basis by transpose of invbasis
-	return 1;
+	ro = r.origin - t->center;
+	rd = r.dir;
+	t_vec3f	uy = t->normal;
+	t_vec3f	ux,uz;
+	frisvadf(uy, &ux, &uz);
+	ro = to_localf(ro, ux, uy, uz);
+	rd = to_localf(rd, ux, uy, uz);
+	float	inv_r = 1.0 / t->R;
+	ro *= inv_r;
+	float	r_scaled = t->r * inv_r;
+	g = 4.0 * (rd.x * rd.x + rd.z * rd.z);
+	h = 8.0 * (ro.x * rd.x + ro.z * rd.z);
+	i = 4.0 * (ro.x * ro.x + ro.z * ro.z);
+	j = 1.0;
+	k = 2.0 * vec3f_dot(ro, rd);
+	l = vec3f_dot(ro, ro) + 1.0 - r_scaled * r_scaled;
+	eq.a = j * j;
+	eq.b = 2.0 * j * k;
+	eq.c = 2.0 * j * l + k * k - g;
+	eq.d = 2.0 * k * l - h;
+	eq.e = l * l - i;
+	nroots = solve_quarticf(eq, roots);
+	int		hit_happened = 0;
+	for (int z = 0; z < nroots; ++z)
+	{
+		roots[z] *= t->R;
+		if (roots[z] > 1e-6 && roots[z] < hit->t)
+		{
+			hit->t = roots[z];
+			hit_happened = 1;
+		}
+	}
+	return (hit_happened);
 }
 
 FORCEINLINE
-extern inline int	prim_inter(t_ray r, t_primitive *p, t_hit *out)
+extern inline int	prim_inter(t_ray r, t_primitive *p,
+	t_hit *out, float tnear)
 {
+	t_vec3f	tmp_origin;
+	float	bias;
+	int		status;
+
+	tmp_origin = r.origin;
+	bias = 0.0f;
+	if (tnear > 0.0f)
+		bias = tnear -1.0f;
+	r.origin += bias * r.dir;
+	status = 0;
 	if (p->type == PRIM_TRIANGLE)
-		return (triangle_inter(r, &p->tr, out));
+		status = triangle_inter(r, &p->tr, out);
 	else if (p->type == PRIM_SPHERE)
-		return (sphere_inter(r, &p->sp, out));
+		status = sphere_inter(r, &p->sp, out);
 	else if (p->type == PRIM_CYLINDER)
-		return (cylinder_inter(r, &p->cy, out));
+		status = cylinder_inter(r, &p->cy, out);
 	else if (p->type == PRIM_TORUS)
-		return (torus_inter(r, &p->to, out));
-	return (0);
+		status = torus_interf(r, &p->to, out);
+	out->t += bias;
+	r.origin = tmp_origin;
+	return (status);
 }

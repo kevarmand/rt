@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:47:11 by norivier          #+#    #+#             */
-/*   Updated: 2025/12/19 17:29:07 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/19 18:13:39 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,13 @@ t_vec3f	vec3f_min(t_vec3f a, t_vec3f b);
 t_vec3f	vec3f_max(t_vec3f a, t_vec3f b);
 t_vec3f	vec3f_cross(t_vec3f a, t_vec3f b);
 float	vec3f_dot(t_vec3f a, t_vec3f b);
+float	vec3d_dot(t_vec3d a, t_vec3d b);
 t_vec3f	vec3f_scale(t_vec3f a, float s);
+t_vec3d	vec3d_scale(t_vec3d a, double s);
 t_vec3f	vec3f_add(t_vec3f a, t_vec3f b);
 t_vec3f	vec3f_sub(t_vec3f a, t_vec3f b);
 t_vec3f	vec3f_normalize(t_vec3f a);
+t_vec3d	vec3d_normalize(t_vec3d a);
 void	vec3f_load3(t_vec3f *dst, const float src[3]);
 float	vec3f_length(t_vec3f a);
 t_vec3f	vec3f_mul(t_vec3f a, t_vec3f b);

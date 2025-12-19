@@ -77,10 +77,8 @@ extern inline int	bound_intersect(t_ray r, t_aabb bound, float *near,
 	tmax = fminf(fminf(b.tmaxx, b.tmaxy), b.tmaxz);
 	if (tmax < fmaxf(tmin, 0.0f))
 		return (0);
-	if (near != ((void *)0))
-		near[0] = tmin;
-	if (far != ((void *)0))
-		far[0] = tmax;
+	near[0] = tmin;
+	far[0] = tmax;
 	return (1);
 }
 

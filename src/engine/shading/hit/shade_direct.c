@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 15:04:24 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/18 19:04:12 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/19 18:09:38 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,23 +90,29 @@ static void	shade_specular_blinn(const t_ctx_light *ctx, t_vec3f *color)
 }
 
 void	shade_one_light(const t_scene *scene,
-			const t_hit *hit, int light_i, t_vec3f *color)
+			t_hit *hit, int light_i, t_vec3f *color)
 {
 	t_ctx_light	ctx;
 	t_ray		shadow_ray;
-	t_vec3f		offset;
+	float		offset;
 	t_hit		hit_tmp;
 
 	init_ctx_light(scene, hit, light_i, &ctx);
 	if (ctx.light_dist <= 0.0f)
 		return ;
 	if (hit->kind == HIT_PLANE)
+	{
 		offset = 0.0f;
+	}
+	// else if (scene->primitives[hit->primitive_id].type == PRIM_TORUS)
+	// {
+	// 	offset = vec3f_scale(ctx.light_dir, TMIN_SHADOW * fminf(scene->primitives[hit->primitive_id].to.R, scene->primitives[hit->primitive_id].to.r));
+	// }
 	else
-		offset = vec3f_scale(ctx.normal, TMIN_SHADOW);
-	shadow_ray.origin = vec3f_add(ctx.point, offset);
-	shadow_ray = ray_finalize(shadow_ray.origin, ctx.light_dir);
+		offset = fmaxf(TMIN_SHADOW, TMIN_SHADOW * hit->t);
 	hit_tmp = *hit;
+	shadow_ray.origin = vec3f_add(ctx.point, ctx.normal * offset);
+	shadow_ray = ray_finalize(shadow_ray.origin, ctx.light_dir);
 	if (scene_is_occluded(scene, &shadow_ray, ctx.light_dist, &hit_tmp))
 		return ;
 	shade_diffuse(&ctx, color);

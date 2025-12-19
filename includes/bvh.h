@@ -6,10 +6,12 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 20:01:56 by norivier          #+#    #+#             */
-/*   Updated: 2025/12/18 21:37:38 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/19 18:11:59 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <complex.h>
+#include <stdint.h>
 #ifndef BVH_H
 # define BVH_H 1
 
@@ -115,6 +117,15 @@ typedef struct s_equ
 	float	e;
 }	t_equ;
 
+typedef struct s_cequ
+{
+	float	complex a;
+	float	complex b;
+	float	complex c;
+	float	complex d;
+	float	complex e;
+}	t_cequ;
+
 // AABB
 t_aabb	prim_bound(t_primitive *p);
 t_aabb	bound_merge(t_aabb a, t_aabb b);
@@ -131,7 +142,9 @@ void	sortf3(float *a, float *b, float *c);
 void	sortf4(float *a, float *b, float *c, float *d);
 // Equations
 int		solve_quad(t_equ arg, float roots[]);
-int		solve_quartic(t_equ arg, float roots[]);
+int		csolve_quartic(t_cequ arg, complex double roots[]);
+int		solve_quarticf(t_equ arg, float roots[]);
+int		filter_real_numbers(int numvalues, complex double in[], double out[]);
 // Inter math
 t_vec3f	mat3x3_mulv(t_mat3x3f m, t_vec3f v);
 // SAH
@@ -145,7 +158,8 @@ int	triangle_inter(t_ray r, t_triangle *tr, t_hit *hit);
 int	sphere_inter(t_ray r, t_sphere *s, t_hit *hit);
 int	cylinder_inter(t_ray r, t_cylinder *cl, t_hit *hit);
 int	torus_inter(t_ray r, t_torus *t, t_hit *hit);
-int	prim_inter(t_ray r, t_primitive *p, t_hit *out);
+int	torus_inter_shadowf(t_ray r, t_torus *t, t_hit *hit);
+int	prim_inter(t_ray r, t_primitive *p, t_hit *out, float tnear);
 void	build_bvh(t_bvhnode *nodes, t_bvh_buf *buf, int primcount);
 t_primitive	*reorder_prims(t_primitive *prims, int *idx, size_t count);
 int	bvh_inter(t_ray r, t_bvhnode *nodes, t_primitive *prims, t_hit *out);

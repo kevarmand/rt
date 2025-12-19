@@ -6,14 +6,21 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/31 02:20:09 by norivier          #+#    #+#             */
-/*   Updated: 2025/12/18 21:27:57 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/19 18:14:39 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <complex.h>
 #include <math.h>
 #include "attributes.h"
 #include "rt_math.h"
 #include "bvh.h"
+
+FORCEINLINE
+static inline int	is_zero(float x)
+{
+	return (fabsf(x) < ZEROF);
+}
 
 // Stable version
 FORCEINLINE
@@ -23,24 +30,42 @@ extern inline int	solve_quad(t_equ arg, float roots[])
 	float	disc_sqrt;
 	float	q;
 
-	if (fabsf(arg.a) < (float)EPSILON)
+	if (is_zero(arg.a))
 	{
-		if (fabsf(arg.b) < (float)EPSILON)
+		if (is_zero(arg.b))
 			return (0);
 		roots[0] = -arg.c / arg.b;
 		return (1);
 	}
 	disc = arg.b * arg.b - 4.0f * arg.a * arg.c;
-	if (disc < 0.0f)
+	if (disc < -ZEROF)
 		return (0);
-	disc_sqrt = sqrtf(disc);
-	q = -0.5f * (arg.b + copysignf(disc_sqrt, arg.b));
+	disc_sqrt = sqrtf(fmaxf(disc, 0.0f));
+	q = -RCP_2 * (arg.b + copysignf(disc_sqrt, arg.b));
 	roots[0] = q / arg.a;
 	roots[1] = arg.c / q;
 	sortf2(&roots[0], &roots[1]);
-	if (disc > (float)EPSILON)
+	if (disc > ZEROF)
 		return (2);
 	return (1);
+}
+
+FORCEINLINE
+static inline int	geometric_fallback(float q_half, float p_third,
+		float shift, float roots[])
+{
+	float	r;
+	float	r2;
+	float	phi;
+
+	r = sqrtf(fmaxf(-p_third, 0.0f));
+	phi = acosf(fmaxf(fminf(-q_half / (r * r * r), 1.0f), -1.0f));
+	r2 = 2.0f * r;
+	roots[0] = r2 * cosf(phi * RCP_3) - shift;
+	roots[1] = r2 * cosf((phi + 2.0f * (float)M_PI) * RCP_3) - shift;
+	roots[2] = r2 * cosf((phi + 4.0f * (float)M_PI) * RCP_3) - shift;
+	sortf3(&roots[0], &roots[1], &roots[2]);
+	return (3);
 }
 
 // Cardano with Viete fallback cubic solver. i don't think i can
@@ -48,110 +73,161 @@ extern inline int	solve_quad(t_equ arg, float roots[])
 FORCEINLINE
 extern inline int	solve_cubic(t_equ arg, float roots[])
 {
-	float	inv_a;
-	float	b_over_3;
-	float	b_squared_over_3;
+	float	s;
 	float	q_half;
 	float	p_third;
-	float	p;
-	float	q;
 	float	cardano_disc;
 	float	disc_sqrt;
-	float	t1;
-	float	t2;
-	float	r;
-	float	r2;
-	float	phi;
 
-	if (fabsf(arg.a) < EPSILON)
+	if (is_zero(arg.a))
 		return (solve_quad((t_equ){arg.b, arg.c, arg.d, 0, 0}, roots));
-	inv_a = ft_rcpf(arg.a);
-	arg.b *= inv_a;
-	arg.c *= inv_a;
-	arg.d *= inv_a;
-	b_over_3 = arg.b * RCP_3;
-	b_squared_over_3 = arg.b * b_over_3;
-	p = arg.c - b_squared_over_3;
-	q = (2.0f * b_squared_over_3 * arg.b * RCP_9)
-		- (arg.c * b_over_3) + arg.d;
-	q_half = q * 0.5f;
-	p_third = p * RCP_3;
+	arg.b /= arg.a;
+	arg.c /= arg.a;
+	arg.d /= arg.a;
+	s = arg.b * RCP_3;
+	p_third = arg.c * RCP_3 - s * s;
+	q_half = s * s * s + (arg.d - s * arg.c) * RCP_2;
 	cardano_disc = q_half * q_half + p_third * p_third * p_third;
-	if (cardano_disc > 0.0f)
+	if (cardano_disc > ZEROF)
 	{
 		disc_sqrt = sqrtf(cardano_disc);
-		t1 = -q_half + disc_sqrt;
-		t2 = -q_half - disc_sqrt;
-		roots[0] = copysignf(cbrtf(fabsf(t1)), t1)
-			+ copysignf(cbrtf(fabsf(t2)), t2) - b_over_3;
+		roots[0] = cbrtf(disc_sqrt - q_half) + cbrtf(-disc_sqrt - q_half) - s;
 		return (1);
+	}
+	return (geometric_fallback(q_half, p_third, s, roots));
+}
+
+float	dcubic(float p, float q)
+{
+	float	h;
+	float	r;
+	float	u;
+	float	k;
+
+	h = q * q + 4.0 * p * p * p;
+	r = sqrtf(fabsf(h));
+	if (h >= 0.0)
+	{
+		u = cbrtf(-0.5 * (q + copysignf(r, q)));
+		return (u - p / u);
 	}
 	else
 	{
-		r = sqrtf(-p_third);
-		phi = acosf(fmaxf(fminf(-q_half / (r * r * r), 1.0f), -1.0f));
-		r2 = 2.0f * r;
-		roots[0] = r2 * cosf(phi * RCP_3) - b_over_3;
-		roots[1] = r2 * cosf((phi + 2.0f * (float)M_PI) * RCP_3) - b_over_3;
-		roots[2] = r2 * cosf((phi + 4.0f * (float)M_PI) * RCP_3) - b_over_3;
-		sortf3(&roots[0], &roots[1], &roots[2]);
-		return (3);
+		k = 2.0 * sqrtf(fabsf(p));
+		return (k * cosf(atan2f(r, -q) * (1.0 / 3.0)));
 	}
 }
 
-// ferrari it appears
-FORCEINLINE
-extern inline int	solve_quartic(t_equ arg, float roots[])
+float	qcubic1(float b, float c, float d)
 {
-	float	inv_a;
-	float	b2;
 	float	p;
 	float	q;
-	float	r;
-	float	z;
-	float	u;
-	float	disc;
-	float	v;
-	int		n;
-	int		i;
-	float	substitute;
+	float	x;
 
-	if (fabsf(arg.a) < EPSILON)
-		return (solve_cubic((t_equ){arg.b, arg.c, arg.d, arg.e, 0}, roots));
-	inv_a = ft_rcpf(arg.a);
-	arg.b *= inv_a;
-	arg.c *= inv_a;
-	arg.d *= inv_a;
-	arg.e *= inv_a;
-	b2 = arg.b * arg.b;
-	p = arg.c - THREE_OVER_8 * b2;
-	q = RCP_8 * b2 * arg.b - (RCP_2 * arg.b * arg.c) + arg.d;
-	r = -THREE_OVER_256 * b2 * b2 + RCP_16 * b2 * arg.c
-		- RCP_4 * arg.b * arg.d + arg.e;
-	// z3 - z2p/2 - rz + (rp/2 - q2/8) one root;
-	(void)solve_cubic((t_equ){1.0f, -RCP_2 * p, -r,
-		-RCP_2 * r * p - RCP_8 * q * q, 0}, roots);
-	z = roots[0];
-	u = sqrtf(fmaxf(2.0f * z - p, 0.0f));
-	disc = -4.0f * z * z + 4.0f * r + (q * q) / (u * u);
-	if (fabsf(u) < EPSILON || fabsf(disc) < EPSILON)
-		v = 0.0f;
-	else
-		v = -q / (2.0f * u);
-	n = solve_quad((t_equ){1.0f, u, z - v, 0, 0}, roots);
-	n += solve_quad((t_equ){1.0f, -u, z + v, 0, 0}, roots + n);
-	substitute = arg.b * RCP_4;
+	b *= (1.0 / 3.0);
+	c *= (1.0 / 3.0);
+	p = c - b * b;
+	q = 2.0 * b * b * b - 3.0 * b * c + d;
+	x = dcubic(p, q);
+	x -= b;
+	return (x);
+}
+
+float	qcubic(float b, float c, float d)
+{
+	float	x;
+	float	fx;
+	float	f1x;
+	int		i;
+
+	x = qcubic1(b, c, d);
 	i = 0;
-	while (i < n)
+	while (i < 1)
 	{
-		roots[i] -= substitute; // x = y - b/4
+		fx = d + x * (c + x * (b + x));
+		f1x = c + x * (2.0 * b + 3.0 * x);
+		if (fabsf(f1x) > ZEROF)
+			x -= fx / f1x;
 		i += 1;
 	}
-	if (n == 2)
-		sortf2(&roots[0], &roots[1]);
-	else if (n == 3)
-		sortf3(&roots[0], &roots[1], &roots[2]);
-	else if (n == 4)
-		sortf4(&roots[0], &roots[1], &roots[2], &roots[3]);
-	return (n);
+	return (x);
+}
+
+// Lanczos
+FORCEINLINE
+extern inline int	solve_quartic0(t_equ arg, float roots[])
+{
+	float	alpha;
+	float	A;
+	float	B;
+	float	a;
+	float	b;
+	float	beta;
+	float	psi;
+	int		n0;
+	int		n1;
+
+	alpha = 0.5 * arg.b;
+	A = arg.c - alpha * alpha;
+	B = arg.d - alpha * A;
+	psi = qcubic(2.0 * A - alpha * alpha, A * A + 2.0 * B * alpha - 4.0 * arg.e, -B * B);
+	psi = fmaxf(0.0, psi);
+	a = sqrtf(psi);
+	beta = 0.5 * (A + psi);
+	if (psi <= 0.0)
+		b = sqrtf(fmaxf(beta * beta - arg.e, 0.0));
+	else
+		b = 0.5 * a * (alpha - B / psi);
+	n0 = solve_quad((t_equ){1.0, alpha + a, beta + b, 0, 0}, roots);
+	n1 = solve_quad((t_equ){1.0, alpha - a, beta - b, 0, 0}, roots + 2);
+	if (n0 == 0)
+	{
+		roots[0] = roots[2];
+		roots[1] = roots[3];
+	}
+	return (n0 + n1);
+}
+
+FORCEINLINE
+extern inline int	solve_quarticf(t_equ arg, float roots[])
+{
+	int	nroots;
+	int	flip;
+	float	b;
+	float	c;
+	float	d;
+	float	e;
+
+	flip = fabsf(arg.b / arg.a) >= fabsf(arg.d / arg.e);
+	if (!flip)
+	{
+		b = arg.b / arg.a;
+		c = arg.c / arg.a;
+		d = arg.d / arg.a;
+		e = arg.e / arg.a;
+	}
+	else
+	{
+		b = arg.d / arg.e;
+		c = arg.c / arg.e;
+		d = arg.b / arg.e;
+		e = arg.a / arg.e;
+	}
+	roots[0] = 0.0;
+	roots[1] = 0.0;
+	roots[2] = 0.0;
+	roots[3] = 0.0;
+	nroots = solve_quartic0((t_equ){1.0, b, c, d, e}, roots);
+	if (flip)
+	{
+		int	i;
+
+		i = 0;
+		while (i < 4)
+		{
+			roots[i] = 1.0 / roots[i];
+			i += 1;
+		}
+	}
+	return (nroots);
 }

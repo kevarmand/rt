@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 22:00:12 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/18 21:45:05 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/19 18:12:33 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,9 @@ typedef enum e_hit_kind
 
 typedef struct s_hit {
 	t_hit_kind	kind;
-	float		t;
+	double		t;
+	float		tnear;
+	uint8_t		inside; // for torus;
 	t_vec3f		point;
 	t_vec3f		normal;
 	t_vec3f		geo_normal;

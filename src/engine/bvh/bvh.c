@@ -103,7 +103,7 @@ int	bvh_inter(t_ray r, t_bvhnode *nodes, t_primitive *prims, t_hit *out)
 			{
 				int	prim_id = node->leaf.start + i;
 				t_hit	local_hit = *out;
-				if (prim_inter(r, &prims[prim_id], &local_hit) != 0)
+				if (prim_inter(r, &prims[prim_id], &local_hit, tnear) != 0)
 				{
 					if (local_hit.t > TMIN_PRIM && local_hit.t < out->t)
 					{
