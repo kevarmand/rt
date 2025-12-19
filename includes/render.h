@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 21:55:31 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/18 21:58:37 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/19 16:20:08 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef struct s_render_view
 	float	fov_deg;
 	int		frame_seq;
 	int		mode;
+	int		ssaa;
 }	t_render_view;
 
 typedef struct s_tile
@@ -88,6 +89,8 @@ typedef struct s_display_mailbox
 	int			request_camera_id;
 	int			req_job_id;
 	int			request_render_mode;
+	int			request_ssaa;
+	int			request_tonemap;
 	atomic_int	request_ready;
 
 	int			*rgb_pixels;
@@ -104,7 +107,7 @@ typedef struct s_mgr
 	pthread_t		thread_id;
 	int				render_in_progress;
 	int				current_cam_id;
-
+	int				tonemap_enabled;
 	t_tileset		tileset;
 	int				*rgb_buffer;
 	t_vec3f			*hdr_buffer;

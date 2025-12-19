@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 17:15:48 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/17 17:35:31 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/19 16:22:05 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ int	manager_run_tonemap(t_mgr *mgr, int width, int height)
 	t_tileset	*tileset;
 
 	tileset = &mgr->tileset;
+	if (mgr->tonemap_enabled == 0)
+		return (0);
 	if (mgr->render_view.mode == QUALITY_FAST
 		|| !(tileset->tiles_done >= tileset->tiles_total))
 		return (0);

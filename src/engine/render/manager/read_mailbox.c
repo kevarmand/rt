@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 18:47:20 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/17 23:07:14 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/19 16:21:32 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ int	manager_read_mailbox(t_render *render)
 	copy_request(view, &mailbox->cam);
 	view->frame_seq = mailbox->req_job_id;
 	view->mode = mailbox->request_render_mode;
+	view->ssaa = mailbox->request_ssaa;
+	manager->tonemap_enabled = mailbox->request_tonemap;
 	manager->current_cam_id = mailbox->request_camera_id;
 	atomic_store(&mailbox->request_ready, 0);
 	apply_cam_request(render);

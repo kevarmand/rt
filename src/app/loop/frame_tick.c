@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 20:14:44 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/18 13:42:40 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/19 15:50:46 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,25 +50,41 @@ void	display_draw_base(t_data *data)
 	data->display.flag_img_window = 0;
 }
 
+
+// static void	display_update_ui(t_data *data)
+// {
+// 	t_display	*display;
+// 	int			changed;
+
+// 	display = &data->display;
+// 	changed = ui_tick(data);
+// 	if (changed)
+// 		display->flag_ui = 1;
+// }
+
+void	display_update_ui(t_display *display);
+void	print_txt_ui(t_data *data);
+
 static void	display_draw_ui(t_data *data)
 {
-	if (!data->display.flag_ui)
+	t_display	*display;
+
+	display = &data->display;
+	if (!display->ui.visible)
 		return ;
-	data->display.flag_ui = 0;
-	(void)data;
+	mlx_put_image_to_window(display->mlx, display->win,
+		display->ui.img.img_ptr, display->ui.x, display->ui.y);
+	print_txt_ui(data);
 }
 
-static void	display_update_ui(t_data *data)
-{
-	(void)data;
-}
+
 
 int	frame_tick(t_data *data)
 {
+	display_update_ui(&data->display);
 	display_update_camera(data);
 	sync_engine_tick(data);
 	display_refresh_main_image(data);
-	display_update_ui(data);
 	display_draw_base(data);
 	display_draw_ui(data);
 	return (0);

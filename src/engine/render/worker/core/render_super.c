@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 10:20:00 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/18 15:48:58 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/19 16:51:56 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,16 @@
 #include "vector.h"
 #include "errors.h"
 #include "new_rt.h"
+
+typedef struct s_super_ctx
+{
+	int		ssaa;
+	float	inv_ssaa;
+	int		sx;;
+	int		sy;
+	float	fx;
+	float	fy;
+}	t_super_ctx;
 
 static t_vec3f	trace_sample_full(t_data *data,
 			const t_render_view *view, float fx, float fy)
@@ -36,22 +46,29 @@ static t_vec3f	trace_sample_full(t_data *data,
 static t_vec3f	calcul_pixel_color_super(t_data *data,
 			const t_render_view *view, int x, int y)
 {
-	t_vec3f	accum;
-	float	offset;
-	int		k;
+	t_vec3f		accum;
+	t_super_ctx	ctx;
 
-	accum = (t_vec3f){0, 0, 0};
-	offset = 1.0f / 3.0f;
-	k = 0;
-	while (k < 9)
+	accum = (t_vec3f){0.0f, 0.0f, 0.0f};
+	ctx.ssaa = view->ssaa;
+	if (ctx.ssaa < 1)
+		ctx.ssaa = 1;
+	ctx.inv_ssaa = 1.0f / (float)ctx.ssaa;
+	ctx.sy = 0;
+	while (ctx.sy < ctx.ssaa)
 	{
-		accum = vec3f_add(accum,
-				trace_sample_full(data, view,
-					(float)x + (((k % 3) - 1) * offset),
-					(float)y + (((k / 3) - 1) * offset)));
-		k++;
+		ctx.sx = 0;
+		while (ctx.sx < ctx.ssaa)
+		{
+			ctx.fx = (float)x + ((float)ctx.sx + 0.5f) * ctx.inv_ssaa;
+			ctx.fy = (float)y + ((float)ctx.sy + 0.5f) * ctx.inv_ssaa;
+			accum = vec3f_add(accum, trace_sample_full(data, view, ctx.fx,
+					ctx.fy));
+			ctx.sx++;
+		}
+		ctx.sy++;
 	}
-	return (vec3f_scale(accum, 1.0f / 9.0f));
+	return (vec3f_scale(accum, 1.0f / (float)(ctx.ssaa * ctx.ssaa)));
 }
 
 int	render_tile_super(t_data *data, t_tile *tile, const t_render_view *view)

@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 23:13:26 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/16 21:00:33 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/19 01:41:55 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ void	display_update_camera(t_data *data)
 
 	display = &data->display;
 	changed = 0;
+	if (display->ui.visible)
+		return ;
 	if (display->cam_ctrl.mode == CAM_MODE_STANDARD)
 	{
 		changed |= camera_handle_orbit(data);

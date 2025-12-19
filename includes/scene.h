@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 22:07:39 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/18 22:17:29 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/18 23:10:10 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ typedef struct s_torus
 	float	R;
 	float	r;
 	float	r_squared;
-	float	R_square;
+	float	R_squared;
 }	t_torus;
 
 typedef struct s_plane

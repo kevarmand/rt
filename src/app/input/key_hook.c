@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 19:23:24 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/17 22:50:00 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/19 15:47:55 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,20 +73,25 @@ int	key_hook(int keycode, t_data *data)
 	if (keycode == KEY_ESCAPE)
 		return (display_exit(data));
 	if (keycode == KEY_TAB)
+	{
 		data->display.ui.visible = !data->display.ui.visible;
+		data->display.flag_img_buffer = 1;
+		printf("Toggled UI visibility to %d\n",
+			data->display.ui.visible);
+	}
 	if (keycode == KEY_PLUS)
 		data->display.cam_ctrl.nav_mul *= 1.2f;
 	if (keycode == KEY_MOINS)
 		data->display.cam_ctrl.nav_mul /= 1.2f;
 	if (keycode == KEY_CTRL)
 		data->display.cam_ctrl.mode = !(data->display.cam_ctrl.mode);
-	if (keycode == KEY_TAB)
-	{
-		data->display.current_cam++;
-		if (data->display.current_cam >= data->display.total_cams)
-			data->display.current_cam = 0;
-		data->display.flag_img_buffer = 1;
-	}
+	// if (keycode == KEY_TAB)
+	// {
+	// 	data->display.current_cam++;
+	// 	if (data->display.current_cam >= data->display.total_cams)
+	// 		data->display.current_cam = 0;
+	// 	data->display.flag_img_buffer = 1;
+	// }
 	key_hook_qual(keycode, data);
 	key_hook_cam_show(keycode, data);
 	return (SUCCESS);

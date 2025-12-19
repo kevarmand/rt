@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 21:50:45 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/17 22:46:40 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/18 23:08:15 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	display_init_frames(t_display *display, const t_scene *scene)
 		index++;
 	}
 	display->current_cam = 0;
-	display->cam_to_render = -1;
+	//display->cam_to_render = -1;
 	display->flag_camera_changed = 1;
 	return (SUCCESS);
 }

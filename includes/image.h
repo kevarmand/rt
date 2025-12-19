@@ -1,34 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cam_ctrl.h                                         :+:      :+:    :+:   */
+/*   image.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/12 15:16:40 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/19 16:42:15 by kearmand         ###   ########.fr       */
+/*   Created: 2025/12/19 01:36:40 by kearmand          #+#    #+#             */
+/*   Updated: 2025/12/19 01:36:41 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CAM_CTRL_H
-# define CAM_CTRL_H
-# include "vector.h"
+#ifndef IMAGE_H
+# define IMAGE_H
 
-typedef enum e_cam_mode
+typedef struct s_image
 {
-	CAM_MODE_LOCK,
-	CAM_MODE_STANDARD,
-	CAM_MODE_ROLL
-}	t_cam_mode;
-
-typedef struct s_cam_ctrl
-{
-	int			flag_level;
-	float		nav_scale;
-	float		nav_mul;
-	t_vec3f		center;
-	float		roll_prev_angle;
-	t_cam_mode	mode;
-}	t_cam_ctrl;
+	void	*img_ptr;
+	char	*data;
+	int		bpp;
+	int		size_l;
+	int		endian;
+	int		width;
+	int		height;
+}	t_image;
 
 #endif

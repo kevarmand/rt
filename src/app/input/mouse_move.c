@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 19:18:14 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/17 22:01:24 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/18 23:37:52 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,6 @@ int	mouse_move(int x, int y, t_data *data)
 	t_mouse_state	*mouse;
 
 	mouse = &data->display.mouse;
-	if (mouse->is_down == 0)
-		return (0);
 	mouse->current_x = x;
 	mouse->current_y = y;
 	return (0);

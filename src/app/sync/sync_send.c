@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 18:29:44 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/17 03:50:30 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/19 16:35:12 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,8 @@ void	display_engine_send(t_scene *scene, t_display *display,
 	mailbox->request_camera_id = camera_index;
 	mailbox->request_render_mode = sync->req_mode;
 	mailbox->req_job_id++;
-	// ft_printf("Display requests render: cam %d mode %d [job_id %d]\n",
-	// 	mailbox->request_camera_id,
-	// 	mailbox->request_render_mode,
-	// 	mailbox->req_job_id);
+	mailbox->request_ssaa = display->render_ssaa;
+	mailbox->request_tonemap = display->render_tonemap;
 	atomic_store(&mailbox->request_ready, 1);
 	sync->in_flight = 1;
 	sync->pending = 0;

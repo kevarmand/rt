@@ -264,11 +264,6 @@ typedef struct		s_image
 	int				height;
 }					t_image;
 
-typedef enum e_ui_tab {
-	UI_TAB_OBJECT = 0,
-	UI_TAB_LIGHT,
-	UI_TAB_CAMERA
-}	t_ui_tab;
 
 typedef int t_index;
 
@@ -288,9 +283,15 @@ typedef struct s_select
 **	test[2]	ambiance
 */
 
+typedef enum e_ui_tab {
+	UI_TAB_OBJECT = 0,
+	UI_TAB_LIGHT,
+	UI_TAB_CAMERA
+}	t_ui_tab;
+
 typedef struct s_button
 {
-	int		x;           
+	int		x;
 	int		y;
 	int		width;
 	int		height;
@@ -298,17 +299,15 @@ typedef struct s_button
 	char	*txt;
 	int		color_bg;
 	int		color_txt;
-	void	(*on_click)(t_data *data); // action à effectuer
 }	t_button;
 
 typedef struct s_ui {
 	int		visible;
 	t_image	img;
+	int		event;
 	int		x;
 	int		y;
 	int		dragging;
-	int		drag_offset_x;
-	int		drag_offset_y;
 	t_button	buttons[MAX_UI_BUTTONS]; // tableau de boutons
 	int		button_count;
 }	t_ui;

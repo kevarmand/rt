@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 12:27:50 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/18 21:41:27 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/19 16:34:20 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,10 @@
 
 # include "mouse.h"
 # include "cam_ctrl.h"
+# include "../src/app/UI/ui_int.h"
+# include "image.h"
 
 typedef struct s_data	t_data;
-
-typedef struct s_image
-{
-	void	*img_ptr;
-	char	*data;
-	int		bpp;
-	int		size_l;
-	int		endian;
-	int		width;
-	int		height;
-}	t_image;
 
 typedef enum e_quality
 {
@@ -50,11 +41,6 @@ typedef struct s_frame
 	int			*rgb_pixels;
 	t_quality	quality;
 }	t_frame;
-
-typedef struct s_ui
-{
-	int	visible;
-}	t_ui;
 
 typedef struct s_ds_sync
 {
@@ -166,7 +152,6 @@ typedef struct s_display
 	int				pixel_count;
 
 	int				current_cam;
-	int				cam_to_render;
 
 	int				flag_ui;
 	int				flag_camera_changed;
@@ -174,6 +159,8 @@ typedef struct s_display
 	int				flag_img_buffer;
 	int				flag_img_window;
 	int				user_render_mode;
+	int				render_ssaa;
+	int				render_tonemap;
 	t_ds_sync		ds_sync;
 	t_mouse_state	mouse;
 	t_cam_ctrl		cam_ctrl;
