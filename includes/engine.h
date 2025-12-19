@@ -52,7 +52,7 @@ typedef enum e_hit_kind
 typedef struct s_hit {
 	t_hit_kind	kind;
 	double		t;
-	float		tmin;
+	float		tnear;
 	uint8_t		inside; // for torus;
 	t_vec3f		point;
 	t_vec3f		normal;

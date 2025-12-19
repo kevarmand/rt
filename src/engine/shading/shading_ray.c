@@ -85,7 +85,7 @@ int shading_ray(const t_scene *scene, const t_ray *ray,
 	}
 	return (0);
 }
-int shading_ray_fast(const t_scene *scene, const t_ray *ray, 
+int shading_ray_fast(const t_scene *scene, const t_ray *ray,
 	t_shading_ctx *ctx, t_vec3f *color_out)
 {
 	t_hit	hit;

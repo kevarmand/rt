@@ -109,6 +109,26 @@ static void	build_normal_triangle(const t_triangle *triangle,
 	*normal = vec3f_normalize(cross);
 }
 
+static void	build_normal_torus(const t_torus *t,
+			const t_hit *hit, t_vec3f *normal)
+{
+	t_vec3f	ro;
+	t_vec3f	ro_perp;
+	float	ro_dot_axis;
+	t_vec3f	ring_point;
+	float	len_perp;
+
+	ro = hit->point - t->center;
+	ro_dot_axis = vec3f_dot(ro, t->normal);
+	ro_perp = ro - t->normal * ro_dot_axis;
+	len_perp = vec3f_length(ro_perp);
+	if (len_perp > 0.0f)
+		ring_point = ro_perp * t->R / vec3f_length(ro_perp);
+	else
+		ring_point = (t_vec3f){0, 0, 0, 0};
+	*normal = vec3f_normalize(ro - ring_point + t->normal * ro_dot_axis);
+}
+
 static void	build_normal_primitive(const t_primitive *primitive,
 			const t_hit *hit, t_vec3f *normal)
 {
@@ -119,7 +139,7 @@ static void	build_normal_primitive(const t_primitive *primitive,
 	else if (primitive->type == PRIM_TRIANGLE)
 		build_normal_triangle(&primitive->tr, normal);
 	else if (primitive->type == PRIM_TORUS)
-			*normal = vec3f_normalize(hit->normal);
+		build_normal_torus(&primitive->to, hit, normal);
 }
 #include <stdio.h>
 void	hit_build_geometry(const t_scene *scene,
@@ -157,11 +177,6 @@ void	hit_build_geometry(const t_scene *scene,
 
 	hit->view_dir = vec3f_scale(ray->dir, -1.0f);
 	hit->normal = normal;
-	if (hit->kind == HIT_PRIMITIVE && primitive->type == PRIM_TORUS)
-		;
-	else
-	{
-		if (vec3f_dot(hit->normal, ray->dir) > 0.0f)
-			hit->normal = vec3f_scale(hit->normal, -1.0f);
-	}
+	if (vec3f_dot(hit->normal, ray->dir) > 0.0f)
+		hit->normal = vec3f_scale(hit->normal, -1.0f);
 }

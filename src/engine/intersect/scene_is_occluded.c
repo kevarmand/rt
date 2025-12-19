@@ -61,34 +61,13 @@ static int	scene_is_occluded_primitives(const t_scene *scene,
 	return (0);
 }
 
-FORCEINLINE
-extern inline int	ocult_inter(t_ray r, t_primitive *p, t_hit *out)
-{
-	// if (p->type == PRIM_TRIANGLE)
-	// 	return (triangle_inter(r, &p->tr, out));
-	// else if (p->type == PRIM_SPHERE)
-	// 	return (sphere_inter(r, &p->sp, out));
-	// else if (p->type == PRIM_CYLINDER)
-	// 	return (cylinder_inter(r, &p->cy, out));
-	// else if (p->type == PRIM_TORUS)
-	// 	return (torus_ocult(r, &p->to, out));
-	return (0);
-}
-
 int	bvh_ocult(t_ray r, t_bvhnode *nodes, t_primitive *prims, t_hit *out)
 {
 	uint32_t	stack[64];
 	int			sp;
-	float		tmin;
 
 	sp = 0;
 	stack[sp++] = 0;
-	if (out->kind == HIT_PLANE || prims[out->primitive_id].type == PRIM_TRIANGLE)
-		tmin = 0.0f;
-	else if (prims[out->primitive_id].type == PRIM_TORUS)
-		tmin = 1e-2f;
-	else
-		tmin = TMIN_SHADOW;
 	while (sp > 0)
 	{
 		uint32_t	idx = stack[--sp];
@@ -108,9 +87,9 @@ int	bvh_ocult(t_ray r, t_bvhnode *nodes, t_primitive *prims, t_hit *out)
 			{
 				int	prim_id = node->leaf.start + i;
 				t_hit	local_hit = *out;
-				if (prim_inter(r, &prims[prim_id], &local_hit) != 0)
+				if (prim_inter(r, &prims[prim_id], &local_hit, tnear) != 0)
 				{
-					if (local_hit.t > tmin && local_hit.t < out->t)
+					if (local_hit.t > 0.0f && local_hit.t < out->t)
 						return (1);
 				}
 				i += 1;
@@ -153,12 +132,9 @@ int	scene_is_occluded(const t_scene *scene, const t_ray *ray,
 {
 	if (scene_is_occluded_planes(scene, ray, max_distance, hit))
 		return (1);
-	t_hit	out_hit = {};
+	t_hit	out_hit;
+	out_hit = *hit;
 	out_hit.t = max_distance;
-	out_hit.primitive_id = hit->primitive_id;
-	out_hit.kind = hit->kind;
-	out_hit.tmin = hit->tmin;
-	out_hit.inside = hit->inside;
 	int status = bvh_ocult(*ray, scene->bvh_nodes, scene->primitives, &out_hit);
 	return (status);
 	// if (scene_is_occluded_primitives(scene, ray, max_distance))

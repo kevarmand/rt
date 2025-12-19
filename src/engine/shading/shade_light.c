@@ -147,26 +147,22 @@ void	shade_one_light(const t_scene *scene,
 {
 	t_ctx_light	ctx;
 	t_ray		shadow_ray;
-	t_vec3f		offset;
+	float		offset;
 
 	init_ctx_light(scene, hit, light_i, &ctx);
 	if (ctx.light_dist <= 0.0f)
 		return ;
 	if (hit->kind == HIT_PLANE)
 	{
-		hit->tmin = 0.0f;
 		offset = 0.0f;
 	}
-	else if (scene->primitives[hit->primitive_id].type == PRIM_TORUS)
-	{
-		offset = vec3f_scale(ctx.light_dir, fmax(fmax(1e-4 * scene->primitives[hit->primitive_id].to.R, 1e-6 * hit->t), 1e-5));
-	}
+	// else if (scene->primitives[hit->primitive_id].type == PRIM_TORUS)
+	// {
+	// 	offset = vec3f_scale(ctx.light_dir, TMIN_SHADOW * fminf(scene->primitives[hit->primitive_id].to.R, scene->primitives[hit->primitive_id].to.r));
+	// }
 	else
-	{
-		hit->tmin = fmaxf(TMIN_SHADOW, TMIN_SHADOW_BIAS * hit->t);
-		offset = vec3f_scale(ctx.normal, hit->tmin);
-	}
-	shadow_ray.origin = vec3f_add(ctx.point, offset);
+		offset = fmaxf(TMIN_SHADOW, TMIN_SHADOW * hit->t);
+	shadow_ray.origin = vec3f_add(ctx.point, ctx.normal * offset);
 	// shadow_ray.origin = vec3f_add(shadow_ray.origin,
 	// 		vec3f_scale(ctx.light_dir, 0.0f));
 	shadow_ray = build_ray(shadow_ray.origin, ctx.light_dir);
