@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   build_hit_geometry.c                               :+:      :+:    :+:   */
+/*   hit_build_geometry.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 19:09:30 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/18 19:28:27 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/20 00:01:40 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,6 @@ void	hit_build_geometry(const t_scene *scene, const t_ray *ray, t_hit *hit)
 		build_geo_cylinder(scene, ray, &primitive->cy, hit);
 	else if (primitive->type == PRIM_TRIANGLE)
 		build_geo_triangle(scene, ray, surface, hit);
+	else if (primitive->type == PRIM_TORUS)
+		build_geo_torus(scene, ray, &primitive->to, hit);
 }

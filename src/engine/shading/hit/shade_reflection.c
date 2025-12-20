@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 13:22:44 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/18 18:55:42 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/20 01:05:10 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static t_ray	build_reflection_ray(const t_hit *hit)
 	refl_dir = vec3f_sub(in_dir, tmp);
 	refl_dir = vec3f_normalize(refl_dir);
 	return (ray_finalize(vec3f_add(hit->point,
-				vec3f_scale(hit->normal, 0.01f)), refl_dir));
+				vec3f_scale(hit->geo_normal, 0.0001f)), refl_dir));
 }
 
 t_vec3f	shade_reflection(const t_scene *scene,

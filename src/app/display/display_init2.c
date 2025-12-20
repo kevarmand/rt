@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 21:50:45 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/18 23:08:15 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/19 21:36:20 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ int	display_init_frames(t_display *display, const t_scene *scene)
 		display->frame[index].rgb_pixels = malloc(bytes);
 		if (!display->frame[index].rgb_pixels)
 			return (ERR_MALLOC);
-		ft_memset(display->frame[index].rgb_pixels, 0, bytes);
 		display->frame[index].quality = QUALITY_NONE;
 		index++;
 	}

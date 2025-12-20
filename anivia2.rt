@@ -32,7 +32,7 @@ sp	20,150,-20	70	255,255,255	specular=0 ambient=0.3 diffuse=0.7 bump=lunar_bump.
 #une jupiter devan en haut a gauche (orange)
 
 
-sp	-350,150,-85	120	255,150,50	diffuse=0.6 specular=0.04 shininess=100 texture=jupiter.xpm uv=1,0,0,1,-0.20,0.2
+#sp	-350,150,-85	120	255,150,50	diffuse=0.6 specular=0.04 shininess=100 texture=jupiter.xpm uv=1,0,0,1,-0.20,0.2
 
 # sp 0.45,35,-48 1.2 255,0,0	diffuse=1 specular=0 shininess=0
 # sp -0.45,35,-48 1.1 255,0,0	diffuse=1 specular=0 shininess=0

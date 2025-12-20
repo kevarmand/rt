@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 18:42:36 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/18 13:21:52 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/19 21:59:14 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,11 @@ int		xpm_load(t_scene *scene, t_display *display);
 
 static int	init_core(t_display *display, int width, int height)
 {
+	ft_putstr_fd("Initializing display core0...\n", 1);
 	display->mlx = mlx_init();
 	if (!display->mlx)
 		return (ERR_INTERNAL);
+	ft_putstr_fd("Initializing display core...\n", 1);
 	display->win = mlx_new_window(display->mlx, width, height, RT_NAME);
 	if (!display->win)
 	{
@@ -39,6 +41,7 @@ static int	init_core(t_display *display, int width, int height)
 		free(display->mlx);
 		return (ERR_INTERNAL);
 	}
+	ft_putstr_fd("Initializing display core2...\n", 1);
 	display->main_img.img_ptr = mlx_new_image(display->mlx, width, height);
 	if (!display->main_img.img_ptr)
 	{
@@ -69,12 +72,20 @@ static int	init_loop(t_display *display, t_data *data)
 {
 	mlx_hook(display->win, DestroyNotify, 0, ft_exit, data);
 	mlx_key_hook(display->win, &key_hook, data);
-	mlx_loop_hook(display->mlx, &frame_tick, data);
+	mlx_loop_hook(display->mlx, frame_tick, data);
 	mlx_hook(display->win, 4, 1L << 2, mouse_press, data);
 	mlx_hook(display->win, 5, 1L << 3, mouse_release, data);
 	mlx_hook(display->win, 6, 1L << 6, mouse_move, data);
 	return (SUCCESS);
 }
+
+
+	// mlx_hook(game.win, 2, 1L << 0, handle_press_key, &game);
+	// mlx_hook(game.win, 3, 1L << 1, handle_release_key, &game);
+	// mlx_hook(game.win, 17, 0, close_win, &game);
+	// mlx_hook(game.win, 4, 1L << 2, handle_mouse_press, &game);
+	// mlx_hook(game.win, 6, 1L << 6, handle_mouse_move, &game);
+	// mlx_loop_hook(game.mlx, update_player_movement, &game);
 
 static void	display_reset_struct(t_display *display, int pixel_count)
 {

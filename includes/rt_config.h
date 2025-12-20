@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 21:59:50 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/18 21:58:54 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/19 21:54:37 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # define RT_NAME "RayonTraceur 2999.7"
 
 # define TILE_SIZE 64
-# define MAX_WORKER_THREADS 25
+# define MAX_WORKER_THREADS 2
 # define RGB_CHANNELS 3
 # define SCROLL_PIXEL 120.0f
 # ifndef EPSILON

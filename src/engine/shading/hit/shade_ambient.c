@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 15:00:07 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/18 18:52:24 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/20 00:58:52 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,4 +27,5 @@ void	shade_ambient(const t_scene *scene,
 	tmp = vec3f_scale(hit->albedo, material->ambient);
 	ambient_color = vec3f_mul(tmp, scene->ambient_color);
 	*color_out = vec3f_add(*color_out, ambient_color);
+	// *color_out = hit->albedo;
 }

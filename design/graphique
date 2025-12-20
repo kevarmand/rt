@@ -38,7 +38,7 @@
 
 
 +-------------------+        +----------------------------+
-|     t_material    |        |         t_surface          |
+|     t_material    |        |         t_surface_map          |
 |  (réaction à la   |        | (d’où viennent albedo/N)   |
 |   lumière)        |        +----------------------------+
 | - brdf: ka,kd,ks  |        |  albedo:  sampler          |

@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 19:18:17 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/18 23:37:41 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/19 21:02:09 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,12 @@
 // 	return (0);
 // }
 
-int	mouse_release(int button, int x, int y, t_data *data)
+int	mouse_release(int button, int x, int y, void *data2)
 {
+	t_data			*data;
 	t_mouse_state	*mouse;
 
+	data = (t_data *)data2;
 	(void)x;
 	(void)y;
 	mouse = &data->display.mouse;

@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 00:00:00 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/17 19:02:36 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/19 18:38:31 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ int	xpm_load(t_scene *scene, t_display *display)
 	index = 0;
 	while (index < scene->texture_count)
 	{
+		ft_printf("[%i/%i] (%s)", index + 1, scene->texture_count, scene->textures[index].path);
 		if (scene->textures[index].path)
 			if (!load_one_texture(&scene->textures[index], display, 0))
 				return (1);

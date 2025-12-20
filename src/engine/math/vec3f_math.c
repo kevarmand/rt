@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vec3f_math.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: norivier <norivier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 20:38:58 by norivier          #+#    #+#             */
-/*   Updated: 2025/12/18 18:05:36 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/19 18:32:56 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,4 +36,10 @@ FORCEINLINE
 extern inline t_vec3f	vec3f_scale(t_vec3f a, float s)
 {
 	return (a * (t_vec3f){s, s, s, 0});
+}
+
+FORCEINLINE
+extern inline t_vec3f	vec3f_lerp(t_vec3f a, t_vec3f b, float t)
+{
+	return (vec3f_add(vec3f_scale(a, 1.0f - t), vec3f_scale(b, t)));
 }

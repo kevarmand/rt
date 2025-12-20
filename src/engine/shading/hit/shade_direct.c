@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 15:04:24 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/19 18:09:38 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/20 01:10:14 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static void	init_ctx_light(const t_scene *scene,
 	ctx->light = &scene->lights[light_index];
 	ctx->albedo = hit->albedo;
 	ctx->point = hit->point;
-	ctx->normal = hit->normal;
+	ctx->normal = hit->geo_normal;
 	ctx->view_dir = hit->view_dir;
 	tmp = vec3f_sub(ctx->light->position, ctx->point);
 	ctx->light_dist = vec3f_length(tmp);

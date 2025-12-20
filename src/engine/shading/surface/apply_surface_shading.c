@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 17:16:59 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/18 18:53:03 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/19 18:47:27 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static int	is_checker_odd(float u, float v)
 	return ((u_i + v_i) & 1);
 }
 
-static t_vec3f	get_surface_color(const t_scene *sc,
+t_vec3f	get_surface_color(const t_scene *sc,
 				const t_surface_map *surf,
 				t_index tex_id,
 				t_hit *hit)
