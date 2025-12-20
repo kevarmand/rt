@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   build_ui.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/19 15:13:29 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/19 16:46:11 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/20 12:30:43 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ui_int.h"
 #include "ui_settings.h"
+#include "display.h"
 
 static const char	*ui_ssaa_txt(int idx)
 {
@@ -36,6 +37,14 @@ static const char	*ui_onoff_txt(int enabled)
 static int	ui_is_mode_selected(t_ui *ui, int mode_idx)
 {
 	if (ui->mode_selected == mode_idx)
+		return (1);
+	return (0);
+}
+
+
+static int	ui_is_render_selected(t_ui *ui, int render_mode)
+{
+	if (ui->render_mode_selected == render_mode)
 		return (1);
 	return (0);
 }
@@ -190,12 +199,85 @@ static void	ui_add_apply(t_ui *ui)
 	ui_push_button(ui, &btn);
 }
 
+static void	ui_add_render_auto(t_ui *ui)
+{
+	t_button	btn;
+
+	btn.x = UI_RENDER_AUTO_X;
+	btn.y = UI_RENDER_AUTO_Y;
+	btn.width = UI_RENDER_AUTO_W;
+	btn.height = UI_RENDER_AUTO_H;
+	btn.label = UI_BTN_RENDER_AUTO;
+	btn.txt = UI_TXT_AUTO;
+	btn.color_bg = ui_is_render_selected(ui, USER_RENDER_AUTO)
+		? UI_COLOR_ACTIVE : UI_COLOR_INACTIVE;
+	btn.color_txt = ui_is_render_selected(ui, USER_RENDER_AUTO)
+		? UI_COLOR_TEXT_SELECTED : UI_COLOR_TEXT;
+	ui_push_button(ui, &btn);
+}
+
+
+static void	ui_add_render_fast(t_ui *ui)
+{
+	t_button	btn;
+
+	btn.x = UI_RENDER_FAST_X;
+	btn.y = UI_RENDER_FAST_Y;
+	btn.width = UI_RENDER_FAST_W;
+	btn.height = UI_RENDER_FAST_H;
+	btn.label = UI_BTN_RENDER_FAST;
+	btn.txt = UI_TXT_FAST;
+	btn.color_bg = ui_is_render_selected(ui, USER_RENDER_LOCK_FAST)
+		? UI_COLOR_ACTIVE : UI_COLOR_INACTIVE;
+	btn.color_txt = ui_is_render_selected(ui, USER_RENDER_LOCK_FAST)
+		? UI_COLOR_TEXT_SELECTED : UI_COLOR_TEXT;
+	ui_push_button(ui, &btn);
+}
+
+static void	ui_add_render_normal(t_ui *ui)
+{
+	t_button	btn;
+
+	btn.x = UI_RENDER_NORMAL_X;
+	btn.y = UI_RENDER_NORMAL_Y;
+	btn.width = UI_RENDER_NORMAL_W;
+	btn.height = UI_RENDER_NORMAL_H;
+	btn.label = UI_BTN_RENDER_NORMAL;
+	btn.txt = UI_TXT_NORMAL;
+	btn.color_bg = ui_is_render_selected(ui, USER_RENDER_LOCK_NORMAL)
+		? UI_COLOR_ACTIVE : UI_COLOR_INACTIVE;
+	btn.color_txt = ui_is_render_selected(ui, USER_RENDER_LOCK_NORMAL)
+		? UI_COLOR_TEXT_SELECTED : UI_COLOR_TEXT;
+	ui_push_button(ui, &btn);
+}
+
+static void	ui_add_render_super(t_ui *ui)
+{
+	t_button	btn;
+
+	btn.x = UI_RENDER_SUPER_X;
+	btn.y = UI_RENDER_SUPER_Y;
+	btn.width = UI_RENDER_SUPER_W;
+	btn.height = UI_RENDER_SUPER_H;
+	btn.label = UI_BTN_RENDER_SUPER;
+	btn.txt = UI_TXT_SUPER;
+	btn.color_bg = ui_is_render_selected(ui, USER_RENDER_LOCK_SUPER)
+		? UI_COLOR_ACTIVE : UI_COLOR_INACTIVE;
+	btn.color_txt = ui_is_render_selected(ui, USER_RENDER_LOCK_SUPER)
+		? UI_COLOR_TEXT_SELECTED : UI_COLOR_TEXT;
+	ui_push_button(ui, &btn);
+}
+
 void	ui_build_buttons(t_ui *ui)
 {
 	ui->button_count = 0;
 	ui_add_close(ui);
 	ui_add_tonemap_label(ui);
 	ui_add_tonemap_toggle(ui);
+	ui_add_render_auto(ui);
+	ui_add_render_fast(ui);
+	ui_add_render_normal(ui);
+	ui_add_render_super(ui);
 	ui_add_ssaa(ui);
 	ui_add_mode_lock(ui);
 	ui_add_mode_roll(ui);

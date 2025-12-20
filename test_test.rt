@@ -66,4 +66,4 @@ cy 0,0,-5 1,0,0  1 6  100,100,255 ambient=0.3 diffuse=0.8 specular=0.6 shininess
 
 #to -5,5,5  0,1,1  2 1  0,255,0 texture=terre.xpm
 
-to -5,0,5  0,1,0  2 1  0,255,0 texture=terre.xpm uv=1,0,0,1,-0.3,0.5
+to -5,3,0  1,1,1  2 1  0,255,0 texture=terre.xpm uv=1,0,0,1,-0.3,0.5

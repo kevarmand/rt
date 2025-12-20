@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sync_receive.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 18:13:40 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/19 16:35:02 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/20 12:52:09 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ void	display_engine_receive(t_display *display,
 	camera_id = mailbox->snap_camera_id;
 	snapshot_job_id = mailbox->snap_job_id;
 	snapshot_mode = mailbox->snapshot_render_mode;
+	display->frame[camera_id].tiles_received = mailbox->tiles_done;
+	display->frame[camera_id].tiles_total = mailbox->tile_count;
 	is_full_frame = (mailbox->tiles_done >= mailbox->tile_count);
 	if (is_full_frame || display->current_cam == camera_id)
 	{

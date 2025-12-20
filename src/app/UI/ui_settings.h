@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ui_settings.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/19 01:10:48 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/19 16:48:49 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/20 12:20:08 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 **  UI PANEL SIZE / POSITION
 ** ========================= */
 # define UI_W 200
-# define UI_H 160
+# define UI_H 180
 # define UI_POS_X_DEFAULT 50
 # define UI_POS_Y_DEFAULT 50
 # define UI_HEADER_H 30
@@ -60,6 +60,10 @@ typedef enum e_ui_color
 # define UI_TXT_FREE "FREE"
 # define UI_TXT_ON "ON"
 # define UI_TXT_OFF "OFF"
+# define UI_TXT_AUTO "AUTO"
+# define UI_TXT_FAST "FAST"
+# define UI_TXT_NORMAL "NORM"
+# define UI_TXT_SUPER "SSAA"
 
 /* =========================
 **  BUTTON LAYOUT
@@ -84,35 +88,56 @@ typedef enum e_ui_color
 	+ UI_TONEMAP_GAP)
 # define UI_TONEMAP_TOGGLE_Y UI_TONEMAP_LABEL_Y
 
+/* Render mode */
+# define UI_RENDER_AUTO_X 10
+# define UI_RENDER_AUTO_Y 70
+# define UI_RENDER_AUTO_W 40
+# define UI_RENDER_AUTO_H 16
+
+# define UI_RENDER_FAST_X 55
+# define UI_RENDER_FAST_Y 70
+# define UI_RENDER_FAST_W 40
+# define UI_RENDER_FAST_H 16
+
+# define UI_RENDER_NORMAL_X 100
+# define UI_RENDER_NORMAL_Y 70
+# define UI_RENDER_NORMAL_W 50
+# define UI_RENDER_NORMAL_H 16
+
+# define UI_RENDER_SUPER_X 155
+# define UI_RENDER_SUPER_Y 70
+# define UI_RENDER_SUPER_W 40
+# define UI_RENDER_SUPER_H 16
+
 /* SSAA */
 # define UI_SSAA_MINUS_X 10
-# define UI_SSAA_MINUS_Y 70
+# define UI_SSAA_MINUS_Y 90
 # define UI_SSAA_MINUS_W 16
 # define UI_SSAA_MINUS_H 16
 
 # define UI_SSAA_VALUE_X 30
-# define UI_SSAA_VALUE_Y 70
+# define UI_SSAA_VALUE_Y 90
 # define UI_SSAA_VALUE_W 40
 # define UI_SSAA_VALUE_H 16
 
 # define UI_SSAA_PLUS_X 75
-# define UI_SSAA_PLUS_Y 70
+# define UI_SSAA_PLUS_Y 90
 # define UI_SSAA_PLUS_W 16
 # define UI_SSAA_PLUS_H 16
 
 /* Camera mode */
 # define UI_MODE_LOCK_X 10
-# define UI_MODE_LOCK_Y 100
+# define UI_MODE_LOCK_Y 120
 # define UI_MODE_LOCK_W 50
 # define UI_MODE_LOCK_H 16
 
 # define UI_MODE_ROLL_X 65
-# define UI_MODE_ROLL_Y 100
+# define UI_MODE_ROLL_Y 120
 # define UI_MODE_ROLL_W 50
 # define UI_MODE_ROLL_H 16
 
 # define UI_MODE_FREE_X 120
-# define UI_MODE_FREE_Y 100
+# define UI_MODE_FREE_Y 120
 # define UI_MODE_FREE_W 50
 # define UI_MODE_FREE_H 16
 
@@ -120,7 +145,7 @@ typedef enum e_ui_color
 # define UI_APPLY_W 60
 # define UI_APPLY_H 18
 # define UI_APPLY_X 70
-# define UI_APPLY_Y 125
+# define UI_APPLY_Y 145
 # define UI_TXT_APPLY "APPLY"
 
 

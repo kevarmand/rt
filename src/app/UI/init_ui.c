@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_ui.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/19 01:04:11 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/19 15:38:56 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/20 12:34:59 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,9 @@ static void	ui_init_state(t_ui *ui)
 	ui->ssaa_idx = 0;
 	ui->tonemap_enabled = 0;
 	ui->mode_selected = 0;
+	ui->render_mode_selected = USER_RENDER_AUTO;
+	ui->dirty = 0;
+	ui->was_visible = 0;
 }
 
 static void	ui_init_image(t_display *display)

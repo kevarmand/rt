@@ -1,6 +1,7 @@
 #include "ui_int.h"
 #include "ui_settings.h"
 #include "display.h"
+#include <stdio.h>
 
 static int	ui_mouse_just_pressed(t_ui *ui, t_mouse_state *mouse)
 {
@@ -121,6 +122,14 @@ static void	ui_apply_event(t_ui *ui, int event_id)
 		ui->visible = 0;
 	else if (event_id == UI_BTN_TONEMAP)
 		ui->tonemap_enabled = !ui->tonemap_enabled;
+	else if (event_id == UI_BTN_RENDER_AUTO)
+		ui->render_mode_selected = USER_RENDER_AUTO;
+	else if (event_id == UI_BTN_RENDER_FAST)
+		ui->render_mode_selected = USER_RENDER_LOCK_FAST;
+	else if (event_id == UI_BTN_RENDER_NORMAL)
+		ui->render_mode_selected = USER_RENDER_LOCK_NORMAL;
+	else if (event_id == UI_BTN_RENDER_SUPER)
+		ui->render_mode_selected = USER_RENDER_LOCK_SUPER;
 	else if (event_id == UI_BTN_SSAA_MINUS && ui->ssaa_idx > UI_SSAA_IDX_MIN)
 		ui->ssaa_idx--;
 	else if (event_id == UI_BTN_SSAA_PLUS && ui->ssaa_idx < UI_SSAA_IDX_MAX)
@@ -141,7 +150,9 @@ static void	apply_event(t_display *display, t_ui *ui)
 	display->render_tonemap = ui->tonemap_enabled;
 	display->flag_request_render = 1;
 	display->cam_ctrl.mode = ui->mode_selected;
+	display->user_render_mode = ui->render_mode_selected;
 	display->ui.visible = 0;
+	display->ui.was_visible = 0;
 	i = 0;
 	while (i < display->total_cams)
 	{
@@ -179,6 +190,30 @@ static void	ui_rebuild_if_needed(t_display *display)
 	display->flag_img_buffer = 1;
 }
 
+static void	ui_load_from_display(t_display *display)
+{
+	t_ui	*ui;
+
+	ui = &display->ui;
+	ui->render_mode_selected = display->user_render_mode;
+	ui->ssaa_idx = display->render_ssaa;
+	ui->tonemap_enabled = display->render_tonemap;
+	ui->mode_selected = display->cam_ctrl.mode;
+	ui->dirty = 1;
+}
+
+static void	ui_on_open_if_needed(t_display *display)
+{
+	t_ui	*ui;
+
+	ui = &display->ui;
+	if (ui->visible == 0)
+		return ;
+	if (ui->was_visible == 1)
+		return ;
+	ui_load_from_display(display);
+}
+
 void	display_update_ui(t_display *display)
 {
 	t_ui			*ui;
@@ -187,7 +222,11 @@ void	display_update_ui(t_display *display)
 	ui = &display->ui;
 	mouse = &display->mouse;
 	if (ui->visible == 0)
+	{
+		ui->was_visible = 0;
 		return ;
+	}
+	ui_on_open_if_needed(display);
 	ui_try_click_button(ui, mouse);
 	ui_try_start_drag(ui, mouse);
 	if (ui->dragging == 1)
@@ -195,4 +234,5 @@ void	display_update_ui(t_display *display)
 	ui->mouse_was_down = mouse->is_down;
 	ui_commit_event(display);
 	ui_rebuild_if_needed(display);
+	ui->was_visible = 1;
 }

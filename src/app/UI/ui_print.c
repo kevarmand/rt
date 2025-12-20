@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ui_print.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/19 01:53:49 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/19 15:29:25 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/20 13:03:43 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,5 @@ void	print_txt_ui(t_data *data)
 		}
 		i++;
 	}
+	ui_print_cam_status(data);
 }

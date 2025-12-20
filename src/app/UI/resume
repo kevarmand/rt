@@ -446,6 +446,7 @@ void	init_ui(t_display *display)
 #include "ui_int.h"
 #include "ui_settings.h"
 #include "display.h"
+#include <stdio.h>
 
 static int	ui_mouse_just_pressed(t_ui *ui, t_mouse_state *mouse)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ui_int.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/19 01:50:29 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/19 16:37:18 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/20 13:04:22 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,17 @@ typedef struct s_data		t_data;
 
 # include "image.h"
 
-# define MAX_UI_BUTTONS 16
+# define MAX_UI_BUTTONS 20
 
 typedef enum e_ui_btn
 {
 	UI_BTN_NONE = -1,
 	UI_BTN_CLOSE = 1,
 	UI_BTN_TONEMAP,
+	UI_BTN_RENDER_AUTO,
+	UI_BTN_RENDER_FAST,
+	UI_BTN_RENDER_NORMAL,
+	UI_BTN_RENDER_SUPER,
 	UI_BTN_SSAA_MINUS,
 	UI_BTN_SSAA_VALUE,
 	UI_BTN_SSAA_PLUS,
@@ -62,6 +66,8 @@ typedef struct s_ui
 	int			ssaa_idx;
 	int			tonemap_enabled;
 	int			mode_selected;
+	int			render_mode_selected;
+	int			was_visible;
 }	t_ui;
 
 void	init_ui(t_display *display);
@@ -69,5 +75,6 @@ void	display_update_ui(t_display *display);
 void	print_txt_ui(t_data *data);
 void	draw_ui(t_ui *ui);
 void	ui_build_buttons(t_ui *ui);
+void	ui_print_cam_status(t_data *data);
 
 #endif
