@@ -76,8 +76,6 @@ int	key_hook(int keycode, t_data *data)
 	{
 		data->display.ui.visible = !data->display.ui.visible;
 		data->display.flag_img_buffer = 1;
-		printf("Toggled UI visibility to %d\n",
-			data->display.ui.visible);
 	}
 	if (keycode == KEY_PLUS)
 		data->display.cam_ctrl.nav_mul *= 1.2f;

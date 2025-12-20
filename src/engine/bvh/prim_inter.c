@@ -277,11 +277,14 @@ extern inline int	prim_inter(t_ray r, t_primitive *p,
 	float	bias;
 	int		status;
 
-	// tmp_origin = r.origin;
-	// bias = 0.0f;
-	// if (tnear > 0.0f)
-	// 	bias = tnear -1.0f;
-	// r.origin += bias * r.dir;
+	tmp_origin = r.origin;
+	bias = 0.0f;
+	if (tnear > 0.0f)
+	{
+		bias = tnear - 1.0f;
+		out->t -= bias;
+	}
+	r.origin += bias * r.dir;
 	status = 0;
 	if (p->type == PRIM_TRIANGLE)
 		status = triangle_inter(r, &p->tr, out);
@@ -291,7 +294,7 @@ extern inline int	prim_inter(t_ray r, t_primitive *p,
 		status = cylinder_inter(r, &p->cy, out);
 	else if (p->type == PRIM_TORUS)
 		status = torus_interf(r, &p->to, out);
-	// out->t += bias;
-	// r.origin = tmp_origin;
+	out->t += bias;
+	r.origin = tmp_origin;
 	return (status);
 }

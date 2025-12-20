@@ -16,7 +16,7 @@
 # define RT_NAME "RayonTraceur 2999.7"
 
 # define TILE_SIZE 64
-# define MAX_WORKER_THREADS 2
+# define MAX_WORKER_THREADS 25
 # define RGB_CHANNELS 3
 # define SCROLL_PIXEL 120.0f
 # ifndef EPSILON

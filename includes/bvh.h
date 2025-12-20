@@ -57,6 +57,7 @@ typedef struct s_bvh_buf
 	t_primref	*pref;
 	int			*pref_idx;
 	t_bvh_child	stack[STACK_MAX_DEPTH];
+	int			sp;
 	t_bin		bins[BIN_COUNT];
 	t_aabb		prefix[BIN_COUNT];
 	t_aabb		suffix[BIN_COUNT];

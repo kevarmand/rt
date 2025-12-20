@@ -55,13 +55,11 @@ void	display_draw_base(t_data *data)
 {
 	if (data->display.flag_img_window == 0)
 		return ;
-	ft_putstr_fd("Drawing base image to window...\n", 1);
 	mlx_put_image_to_window(
 		data->display.mlx,
 		data->display.win,
 		data->display.main_img.img_ptr,
 		0, 0);
-	ft_putstr_fd("Drawing base image to window\n", 1);
 	data->display.flag_img_window = 0;
 }
 
