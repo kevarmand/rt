@@ -6,16 +6,15 @@
 /*   By: norivier <norivier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 15:52:39 by norivier          #+#    #+#             */
-/*   Updated: 2025/12/10 04:27:12 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/21 06:41:25 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "attributes.h"
 #include <immintrin.h>
 
 #if defined(__SSE__)
 
-FORCEINLINE
+__attribute__((always_inline))
 extern inline float	ft_rcpf(float x)
 {
 	__m128			res;
@@ -31,7 +30,7 @@ extern inline float	ft_rcpf(float x)
 
 #else
 
-FORCEINLINE
+__attribute__((always_inline))
 extern inline float	ft_rcpf(float x)
 {
 	return (1.0f / x);

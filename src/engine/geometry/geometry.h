@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 19:07:56 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/18 20:06:15 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 06:45:01 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 # include "engine.h"
 # include "scene.h"
 # include <math.h>
-# include "attributes.h"
 
 typedef struct s_bump_apply
 {

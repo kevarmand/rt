@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/31 02:20:09 by norivier          #+#    #+#             */
-/*   Updated: 2025/12/21 06:11:47 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/21 06:48:31 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ extern inline int	solve_quad(t_equ arg, float roots[])
 	if (disc < -ZEROF)
 		return (0);
 	disc_sqrt = sqrtf(fmaxf(disc, 0.0f));
-	q = -RCP_2 * (arg.b + copysignf(disc_sqrt, arg.b));
+	q = -0.5f * (arg.b + copysignf(disc_sqrt, arg.b));
 	roots[0] = q / arg.a;
 	roots[1] = arg.c / q;
 	sortf2(&roots[0], &roots[1]);
@@ -60,9 +60,9 @@ static inline int	geometric_fallback(float q_half, float p_third,
 	r = sqrtf(fmaxf(-p_third, 0.0f));
 	phi = acosf(fmaxf(fminf(-q_half / (r * r * r), 1.0f), -1.0f));
 	r2 = 2.0f * r;
-	roots[0] = r2 * cosf(phi * RCP_3) - shift;
-	roots[1] = r2 * cosf((phi + 2.0f * (float)M_PI) * RCP_3) - shift;
-	roots[2] = r2 * cosf((phi + 4.0f * (float)M_PI) * RCP_3) - shift;
+	roots[0] = r2 * cosf(phi * (1.0f / 3.0f)) - shift;
+	roots[1] = r2 * cosf((phi + 2.0f * (float)M_PI) * (1.0f / 3.0f)) - shift;
+	roots[2] = r2 * cosf((phi + 4.0f * (float)M_PI) * (1.0f / 3.0f)) - shift;
 	sortf3(&roots[0], &roots[1], &roots[2]);
 	return (3);
 }
@@ -83,9 +83,9 @@ extern inline int	solve_cubic(t_equ arg, float roots[])
 	arg.b /= arg.a;
 	arg.c /= arg.a;
 	arg.d /= arg.a;
-	s = arg.b * RCP_3;
-	p_third = arg.c * RCP_3 - s * s;
-	q_half = s * s * s + (arg.d - s * arg.c) * RCP_2;
+	s = arg.b * (1.0f / 3.0f);
+	p_third = arg.c * (1.0f / 3.0f) - s * s;
+	q_half = s * s * s + (arg.d - s * arg.c) * 0.5f;
 	cardano_disc = q_half * q_half + p_third * p_third * p_third;
 	if (cardano_disc > ZEROF)
 	{

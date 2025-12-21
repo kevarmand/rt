@@ -6,14 +6,13 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 19:21:07 by norivier          #+#    #+#             */
-/*   Updated: 2025/12/18 21:27:44 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 06:40:44 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "attributes.h"
-#include "vector.h"
+//#include "vector.h"
 
-// FORCEINLINE
+//__attribute__((always_inline))
 // extern inline	t_mat3x3f	mat3x3_inv(t_mat3x3f m)
 // {
 // 	t_mat3x3f	cofactor;

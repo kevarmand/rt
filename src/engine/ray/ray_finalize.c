@@ -1,21 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_ray.c                                         :+:      :+:    :+:   */
+/*   ray_finalize.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 16:14:40 by norivier          #+#    #+#             */
-/*   Updated: 2025/12/18 15:06:36 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 06:39:38 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vector.h"
 #include "engine.h"
-#include "attributes.h"
 #include <stdint.h>
 
-FORCEINLINE
+__attribute__((always_inline))
 t_ray	ray_finalize(t_vec3f origin, t_vec3f direction)
 {
 	t_ray	out;

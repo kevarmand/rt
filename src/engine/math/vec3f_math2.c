@@ -6,14 +6,13 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 17:53:39 by norivier          #+#    #+#             */
-/*   Updated: 2025/12/19 18:15:15 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 06:41:44 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vector.h"
-#include "attributes.h"
 
-FORCEINLINE
+__attribute__((always_inline))
 extern inline float	vec3f_dot(t_vec3f a, t_vec3f b)
 {
 	t_vec3f	tmp;
@@ -22,7 +21,7 @@ extern inline float	vec3f_dot(t_vec3f a, t_vec3f b)
 	return (tmp.x + tmp.y + tmp.z);
 }
 
-FORCEINLINE
+__attribute__((always_inline))
 extern inline t_vec3f	vec3f_cross(t_vec3f a, t_vec3f b)
 {
 	return ((t_vec3f){
@@ -32,7 +31,7 @@ extern inline t_vec3f	vec3f_cross(t_vec3f a, t_vec3f b)
 	});
 }
 
-FORCEINLINE
+__attribute__((always_inline))
 extern inline t_vec3f	vec3f_mul(t_vec3f a, t_vec3f b)
 {
 	return ((t_vec3f){
@@ -42,13 +41,13 @@ extern inline t_vec3f	vec3f_mul(t_vec3f a, t_vec3f b)
 	});
 }
 
-FORCEINLINE
+__attribute__((always_inline))
 extern inline t_vec3f	proj_on_plane(t_vec3f v, t_vec3f n)
 {
 	return (vec3f_sub(v, vec3f_scale(n, vec3f_dot(v, n))));
 }
 
-FORCEINLINE
+__attribute__((always_inline))
 extern inline void	vec3f_load3(t_vec3f *dst, const float src[3])
 {
 	(*dst)[0] = src[0];

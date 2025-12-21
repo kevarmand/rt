@@ -6,17 +6,16 @@
 /*   By: norivier <norivier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 15:53:19 by norivier          #+#    #+#             */
-/*   Updated: 2025/12/10 04:27:26 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/21 06:40:01 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "attributes.h"
 #include <immintrin.h>
 #include <math.h>
 
 #if defined(__SSE__)
 
-FORCEINLINE
+__attribute__((always_inline))
 extern inline float	ft_rsqrtf(float x)
 {
 	const __m128	three = _mm_set_ss(3.0f);
@@ -34,7 +33,7 @@ extern inline float	ft_rsqrtf(float x)
 
 #else
 
-FORCEINLINE
+__attribute__((always_inline))
 extern inline float	ft_rsqrtf(float x)
 {
 	return (1.0f / sqrtf(x));

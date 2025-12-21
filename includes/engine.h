@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 22:00:12 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/19 18:12:33 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 06:46:36 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ typedef struct s_hit {
 	t_hit_kind	kind;
 	double		t;
 	float		tnear;
-	uint8_t		inside; // for torus;
+	uint8_t		inside;
 	t_vec3f		point;
 	t_vec3f		normal;
 	t_vec3f		geo_normal;
