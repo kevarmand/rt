@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/19 01:10:48 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/20 12:20:08 by marvin           ###   ########.fr       */
+/*   Updated: 2025/12/21 07:03:39 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,7 @@ typedef enum e_ui_color
 # define UI_TONEMAP_GAP 6
 # define UI_TONEMAP_TOGGLE_W 40
 # define UI_TONEMAP_TOGGLE_H UI_TONEMAP_LABEL_H
-# define UI_TONEMAP_TOGGLE_X (UI_TONEMAP_LABEL_X + UI_TONEMAP_LABEL_W \
-	+ UI_TONEMAP_GAP)
+# define UI_TONEMAP_TOGGLE_X 96
 # define UI_TONEMAP_TOGGLE_Y UI_TONEMAP_LABEL_Y
 
 /* Render mode */
@@ -147,8 +146,6 @@ typedef enum e_ui_color
 # define UI_APPLY_X 70
 # define UI_APPLY_Y 145
 # define UI_TXT_APPLY "APPLY"
-
-
 
 /* =========================
 **  DRAW SETTINGS (ICONS / FRAME)
