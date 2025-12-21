@@ -10,6 +10,6 @@ C -5,1,4  0,0,-1  70
 L 3,6,3  0.9  255,255,255
 l -9,1,0 0.9 255,0,255
 # Sol gris
-pl 0,-6,0  0,1,0  120,120,120 texture=pavage.xpm uv=1,0,0,1,0,0
+pl 0,-6,0  0,1,0  120,120,120 texture=texture/pavage.xpm uv=1,0,0,1,0,0
 to -5,1,0 0,1,0  5 3  255,100,100 ambient=0.0 diffuse=0.0 specular=0.7 shininess=300 reflection=1 refraction=0 ior=1.5
 sp	-5,1,-4	0.5	255,255,2

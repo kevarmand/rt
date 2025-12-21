@@ -5,11 +5,11 @@ l 700,900,600   0.412456   255,255,255
 l 400,200,0     0.412456   90,130,255
 l 200,500,300   0.412456   150,180,255
 l 1000,300,400  0.412456   230,240,255
-pl	0,-200,0	0,1,0	200,200,200	texture=ground.xpm	uv=0.005,0.00,0.00,0.005,0,0 checkerboard=pavage.xpm
+pl	0,-200,0	0,1,0	200,200,200	texture=texture/ground.xpm	uv=0.005,0.00,0.00,0.005,0,0 checkerboard=texture/pavage.xpm
 
 #grossse shere en plein milieu de la cam
-sp	0,0,20	10	255,255,255	texture=terre.xpm checkerboard=pavage.xpm uv=20,0,0,10,0,0
+sp	0,0,20	10	255,255,255	texture=texture/terre.xpm checkerboard=texture/pavage.xpm uv=20,0,0,10,0,0
 #diffuse=0.1 specular=0.9 shininess=300 reflection=0.5
 
-skybox puresky.xpm sp 0.5,0.5,0.5
+skybox texture/puresky.xpm sp 0.5,0.5,0.5
 

@@ -11,18 +11,18 @@ C 0,3,10  0,0,-1  70
 L 3,6,3  0.9  255,255,255
 
 # Sol gris
-pl 0,0,0  0,1,0  120,120,120 texture=pavage.xpm uv=0.5,0,0,0.5,0,0
+pl 0,0,0  0,1,0  120,120,120 texture=texture/pavage.xpm uv=0.5,0,0,0.5,0,0
 
 #mur de brique avec bumpmap
-pl -7,0,0  1,0,0  200,50,50 uv=0.02,0,0,0.02,0,0 bump=wall_bump.xpm bscale=2000
+pl -7,0,0  1,0,0  200,50,50 uv=0.02,0,0,0.02,0,0 bump=texture/wall_bump.xpm bscale=2000
 
-sp -2,3,0 1	 180,200,120 uv=1,0,0,1,0,0 bump=wall_bump.xpm bscale=10
+sp -2,3,0 1	 180,200,120 uv=1,0,0,1,0,0 bump=texture/wall_bump.xpm bscale=10
 
 ###############################
 
 
 
-sp 5,3,0 6 180,200,120 ambient=0.02 uv=1,0,0,1,0,0 texture=wall.xpm bump=wall_bump.xpm bscale=100 uv=3,0,-3,3,0,0
+sp 5,3,0 6 180,200,120 ambient=0.02 uv=1,0,0,1,0,0 texture=texture/wall.xpm bump=texture/wall_bump.xpm bscale=100 uv=3,0,-3,3,0,0
 
 # une sphere avec texture :
-sp 0,5,0 2 255,255,255 texture=terre.xpm  bscale=50 uv=3,0,0,3,0,0
+sp 0,5,0 2 255,255,255 texture=texture/terre.xpm  bscale=50 uv=3,0,0,3,0,0

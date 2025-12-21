@@ -8,11 +8,11 @@ l	1000,300,400	0.412456	255,255,0
 
 sp	0,47,100	170	0,0,255	diffuse=0 ior=1.1 ambient=0.1 refraction=1 bump=lunar_bump.xpm bscale=10
 
-pl	0,0,0	0,1,0	200,200,200	texture=pavage.xpm	uv=0.01,0,0,.01,0,0
+pl	0,0,0	0,1,0	200,200,200	texture=texture/pavage.xpm	uv=0.01,0,0,.01,0,0
 
-skybox puresky.xpm sp 0.5,0.5,0.5
+skybox texture/puresky.xpm sp 0.5,0.5,0.5
 
-mat texture=ground.xpm uv=0,0,0,0.3,0.3,0 shininess=10 specular=0.05
+mat texture=texture/ground.xpm uv=0,0,0,0.3,0.3,0 shininess=10 specular=0.05
 
 
 tr	-7.275685,68.988579,-46.549747	-8.165553,69.730293,-46.661087	-7.414551,70.002747,-46.619446	255,127,0
