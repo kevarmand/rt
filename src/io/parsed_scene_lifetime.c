@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 17:33:50 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/18 16:28:38 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 03:08:34 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,14 @@
 #include <stdio.h>
 #include "parse/parsing_internal.h"
 
+void	parsed_textures_destroy(t_texture_parsed *parsed);
+
 void	free_parsed_scene(t_scene_parsed *parsed)
 {
 	ft_lstclear(&parsed->objects, free);
 	ft_lstclear(&parsed->cameras, free);
 	ft_lstclear(&parsed->lights, free);
+	parsed_textures_destroy(&parsed->textures);
 	parsed->objects = NULL;
 	parsed->cameras = NULL;
 	parsed->lights = NULL;

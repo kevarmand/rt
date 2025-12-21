@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 16:20:19 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/17 03:43:05 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 03:10:11 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,7 @@
 #include "libft.h"
 #include "logs.h"
 
-int	print_scene(const t_scene *scene); //provisoire
-
-void	free_data(t_data *data)
-{
-	(void)data;
-	//free_engine(&data->engine); //à implémenter plus tard
-	//free_display(&data->display); //à implémenter plus tard
-}
+void	destroy_scene(t_scene *scene);
 
 int main(int argc, char **argv)
 {
@@ -36,7 +29,7 @@ int main(int argc, char **argv)
 	if (status == SUCCESS)
 		status = load_scene(argv[1], &data.scene);
 	if (status == SUCCESS)
-		status = run_app(&data);
-	free_data(&data);
+	 	status = run_app(&data);
+	destroy_scene(&data.scene);
 	return (status);
 }

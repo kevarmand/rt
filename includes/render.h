@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 21:55:31 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/20 23:48:38 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 01:59:20 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,12 +114,6 @@ typedef struct s_mgr
 	t_render_view	render_view;
 	float			*tonemap_exposure;
 }	t_mgr;
-
-typedef struct s_display_thread
-{
-	int			*front_pixels;
-	t_camera	current_cam;
-}	t_display_thread;
 
 typedef struct s_render
 {

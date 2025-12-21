@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 16:15:00 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/18 16:28:28 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 02:22:36 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int	load_scene(const char *path, t_scene *out_scene)
 	log_step(LOGSTEP_PARSE_BUILD_CONVERT, status);
 	free_parsed_scene(&parsed);
 	log_step(LOGSTEP_PARSE_FREE_PARSED, 0);
-	log_info_parsed(out_scene, path);
+	if (status == SUCCESS)
+		log_info_parsed(out_scene, path);
 	return (status);
 }
