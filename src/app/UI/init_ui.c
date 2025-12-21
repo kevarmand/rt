@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/19 01:04:11 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/21 07:39:39 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 08:47:15 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ static void	ui_init_state(t_ui *ui)
 	ui->render_mode_selected = USER_RENDER_AUTO;
 	ui->dirty = 0;
 	ui->was_visible = 0;
+	ui->cam_info = 1;
 }
 
 static int	ui_init_image(t_display *display)
@@ -54,7 +55,6 @@ int	init_ui(t_display *display)
 	if (ui_init_image(display))
 		return (ERR_MLX);
 	ui_build_buttons(&display->ui);
-	display->flag_ui = 1;
 	display->ui.dirty = 1;
 	return (SUCCESS);
 }

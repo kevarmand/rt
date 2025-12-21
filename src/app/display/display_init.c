@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 18:42:36 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/21 07:25:50 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 08:05:13 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ static void	display_reset_struct(t_display *display, int pixel_count)
 	display->flag_img_buffer = 1;
 	display->flag_img_window = 1;
 	display->flag_camera_changed = 1;
-	display->flag_ui = 1;
 	display->user_render_mode = USER_RENDER_AUTO;
 	display->render_ssaa = 1;
 	display->render_tonemap = 1;

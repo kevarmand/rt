@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sync_receive.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 18:13:40 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/20 12:52:09 by marvin           ###   ########.fr       */
+/*   Updated: 2025/12/21 08:46:43 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,17 +25,17 @@ void	display_engine_receive(t_display *display,
 {
 	int	camera_id;
 	int	is_full_frame;
-	int	snapshot_job_id;
 	int	snapshot_mode;
 
 	if (atomic_load(&mailbox->snapshot_ready) == 0)
 		return ;
 	camera_id = mailbox->snap_camera_id;
-	snapshot_job_id = mailbox->snap_job_id;
 	snapshot_mode = mailbox->snapshot_render_mode;
 	display->frame[camera_id].tiles_received = mailbox->tiles_done;
 	display->frame[camera_id].tiles_total = mailbox->tile_count;
 	is_full_frame = (mailbox->tiles_done >= mailbox->tile_count);
+	if (display->ui.cam_info)
+		display->flag_img_window = 1;
 	if (is_full_frame || display->current_cam == camera_id)
 	{
 		ft_memcpy(display->frame[camera_id].rgb_pixels, mailbox->rgb_pixels,
@@ -45,7 +45,7 @@ void	display_engine_receive(t_display *display,
 		if (display->current_cam == camera_id)
 			display->flag_img_buffer = 1;
 	}
-	if (is_full_frame && mailbox->req_job_id == snapshot_job_id)
+	if (is_full_frame && mailbox->req_job_id == mailbox->snap_job_id)
 		display->ds_sync.in_flight = 0;
 	atomic_store(&mailbox->snapshot_ready, 0);
 }

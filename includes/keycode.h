@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/10 14:01:53 by karmand           #+#    #+#             */
-/*   Updated: 2025/12/18 21:53:07 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 08:13:14 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,5 +95,6 @@
  * control key
  */
 # define KEY_CTRL	65507
+# define KEY_ENTER	65293
 
 #endif

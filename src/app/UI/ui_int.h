@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/19 01:50:29 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/21 07:45:25 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 08:40:21 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ typedef struct s_button
 	int			width;
 	int			height;
 	int			label;
-	const char	*txt;
+	char		*txt;
 	int			color_bg;
 	int			color_txt;
 }	t_button;
@@ -66,6 +66,7 @@ typedef struct s_ui
 	int			mode_selected;
 	int			render_mode_selected;
 	int			was_visible;
+	int			cam_info;
 }	t_ui;
 
 int		init_ui(t_display *display);

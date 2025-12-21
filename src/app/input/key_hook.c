@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 19:23:24 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/21 02:46:57 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 08:45:11 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,30 @@ void	key_hook_qual(int keycode, t_data *data)
 	}
 }
 
+void	key_hook_2(int keycode, t_data *data)
+{
+	int	active_cam;
+
+	if (keycode == KEY_I)
+	{
+		data->display.ui.cam_info = !data->display.ui.cam_info;
+		data->display.flag_img_buffer = 1;
+	}
+	if (keycode == KEY_ENTER)
+	{
+		active_cam = data->display.current_cam;
+		printf("Camera %d/%d\n", active_cam, data->display.total_cams);
+		printf("Position : (%.3f, %.3f, %.3f)\n",
+			data->scene.cameras[active_cam].origin.x,
+			data->scene.cameras[active_cam].origin.y,
+			data->scene.cameras[active_cam].origin.z);
+		printf("Orientation : (%f, %f, %f)\n",
+			data->scene.cameras[active_cam].forward.x,
+			data->scene.cameras[active_cam].forward.y,
+			data->scene.cameras[active_cam].forward.z);
+	}
+}
+
 int	key_hook(int keycode, t_data *data)
 {
 	if (keycode == KEY_ESCAPE)
@@ -70,6 +94,7 @@ int	key_hook(int keycode, t_data *data)
 			data->display.current_cam = 0;
 		data->display.flag_img_buffer = 1;
 	}
+	key_hook_2(keycode, data);
 	key_hook_qual(keycode, data);
 	return (SUCCESS);
 }

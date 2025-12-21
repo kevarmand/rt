@@ -1,32 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mouse_release.c                                    :+:      :+:    :+:   */
+/*   draw_ui.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/23 19:18:17 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/21 08:01:55 by kearmand         ###   ########.fr       */
+/*   Created: 2025/12/19 11:20:00 by kearmand          #+#    #+#             */
+/*   Updated: 2025/12/21 09:10:44 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "new_rt.h"
-#include "display.h"
+#include "draw_ui.h"
 
-int	mouse_release(int button, int x, int y, void *data2)
+
+void	draw_ui(t_ui *ui)
 {
-	t_data			*data;
-	t_mouse_state	*mouse;
+	int	index;
 
-	data = (t_data *)data2;
-	(void)x;
-	(void)y;
-	mouse = &data->display.mouse;
-	if ((button == 1 && mouse->button == MOUSE_BUTTON_LEFT)
-		|| (button == 3 && mouse->button == MOUSE_BUTTON_RIGHT))
+	ui_draw_base(ui);
+	index = 0;
+	while (index < ui->button_count)
 	{
-		mouse->is_down = 0;
-		mouse->button = MOUSE_BUTTON_NONE;
+		ui_draw_one_button(ui, &ui->buttons[index]);
+		index++;
 	}
-	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   display.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 12:27:50 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/20 12:50:34 by marvin           ###   ########.fr       */
+/*   Updated: 2025/12/21 08:05:55 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,13 +103,6 @@ typedef struct s_ds_sync
  *  - No other module is allowed to modify this flag.
  *
  *
- * flag_ui
- * -------
- *  - Set by sync_engine_tick() or UI modules when the user interface
- *    requires a redraw (progress bar update, camera info, etc.).
- *  - Consumed by display_update_ui().
- *  - Behavior similar to flag_img but reserved for UI widgets.
- *
  *
  * cam_to_render
  * -------------
@@ -155,7 +148,6 @@ typedef struct s_display
 
 	int				current_cam;
 
-	int				flag_ui;
 	int				flag_camera_changed;
 	int				flag_request_render;
 	int				flag_img_buffer;
