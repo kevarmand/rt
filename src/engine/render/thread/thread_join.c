@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/20 22:34:23 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/20 22:46:22 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 01:50:09 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,18 @@
 #include "errors.h"
 #include "new_rt.h"
 
-int	threads_cancel_and_join(t_data *data)
+void	threads_cancel_and_join(t_data *data)
 {
 	int	index;
 
 	atomic_store(&data->engine.render.cancel_flag, 1);
 	index = 0;
-	while (index < data->engine.render.workers.count)
+	while (index < data->engine.render.workers_count)
 	{
-		pthread_join(
-			data->engine.render.workers.array[index].thread_id,
+		pthread_join(data->engine.render.workers.array[index].thread_id,
 			NULL);
 		index++;
 	}
-	pthread_join(data->engine.render.manager.thread_id, NULL);
+	if (data->engine.render.manager_started)
+		pthread_join(data->engine.render.manager.thread_id, NULL);
 }
