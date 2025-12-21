@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 19:09:30 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/20 00:01:40 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 06:17:18 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void	hit_build_geometry(const t_scene *scene, const t_ray *ray, t_hit *hit)
 	if (hit->kind == HIT_PLANE)
 	{
 		primitive = &scene->planes[hit->primitive_id];
-		surface = &scene->surfaces[primitive->surface_id];
 		hit->surface_id = primitive->surface_id;
 		hit->material_id = primitive->material_id;
 		build_geo_plane(scene, ray, &primitive->pl, hit);

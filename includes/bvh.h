@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 20:01:56 by norivier          #+#    #+#             */
-/*   Updated: 2025/12/21 03:06:05 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/21 06:11:30 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,6 +188,7 @@ void	build_bvh(t_bvhnode *nodes, t_bvh_buf *buf, int primcount);
 t_primitive	*reorder_prims(t_primitive *prims, int *idx, size_t count);
 int	bvh_inter(t_ray r, t_bvhnode *nodes, t_primitive *prims, t_hit *out);
 int	bvh_shadow(t_ray r, t_bvhnode *nodes, t_primitive *prims, t_hit *out);
+void	set_equ(t_equ *equ, t_equ arg, int *flip);
 // Centroid
 t_vec3f	prim_centroid(t_primitive *p);
 #endif // !BVH_H

@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 16:53:48 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/21 03:08:03 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/21 06:15:33 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include "rt_config.h"
 #include "scene.h"
 #include "bvh.h"
-#include "attributes.h"
 
 static int	scene_is_occluded_planes(const t_scene *scene,
 			const t_ray *ray, float max_distance, t_hit *hit)
@@ -65,9 +64,15 @@ int	scene_is_occluded(const t_scene *scene, const t_ray *ray,
 				float max_distance, t_hit *hit)
 {
 	t_hit	local_hit;
+	int		status;
+
 	if (scene_is_occluded_planes(scene, ray, max_distance, hit))
 		return (1);
 	local_hit = *hit;
 	local_hit.t = max_distance;
-	return (bvh_shadow(*ray, scene->bvh_nodes, scene->primitives, &local_hit));
+	status = 0;
+	if (scene->bvh_node_count > 0)
+		status = bvh_shadow(*ray, scene->bvh_nodes, scene->primitives,
+				&local_hit);
+	return (status);
 }

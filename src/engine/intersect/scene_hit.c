@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 21:25:56 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/21 01:22:19 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 06:15:11 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ static void	hit_try_update(t_hit *hit, t_hit_kind kind,
 	hit->kind = kind;
 }
 
-
 static void	scene_hit_prims(const t_scene *scene,
 			const t_ray *ray, t_hit *out_hit)
 {
@@ -38,13 +37,12 @@ static void	scene_hit_prims(const t_scene *scene,
 
 	if (scene->bvh_node_count == 0)
 		return ;
-	status = bvh_inter(*ray, scene->bvh_nodes, scene->primitives,
-					out_hit);
+	status = bvh_inter(*ray, scene->bvh_nodes, scene->primitives, out_hit);
 	if (status != 0)
 		out_hit->kind = HIT_PRIMITIVE;
 }
 
-int inter_plane(const t_plane *plane, const t_ray *ray, float *out_distance)
+int	inter_plane(const t_plane *plane, const t_ray *ray, float *out_distance)
 {
 	float	denom;
 	float	numerator;

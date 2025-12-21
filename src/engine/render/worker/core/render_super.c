@@ -6,14 +6,12 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 10:20:00 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/19 16:51:56 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 06:18:56 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "engine.h"
 #include "render.h"
-#include "scene.h"
-#include "rt_config.h"
 #include "vector.h"
 #include "errors.h"
 #include "new_rt.h"
@@ -22,7 +20,7 @@ typedef struct s_super_ctx
 {
 	int		ssaa;
 	float	inv_ssaa;
-	int		sx;;
+	int		sx;
 	int		sy;
 	float	fx;
 	float	fy;
@@ -63,7 +61,7 @@ static t_vec3f	calcul_pixel_color_super(t_data *data,
 			ctx.fx = (float)x + ((float)ctx.sx + 0.5f) * ctx.inv_ssaa;
 			ctx.fy = (float)y + ((float)ctx.sy + 0.5f) * ctx.inv_ssaa;
 			accum = vec3f_add(accum, trace_sample_full(data, view, ctx.fx,
-					ctx.fy));
+						ctx.fy));
 			ctx.sx++;
 		}
 		ctx.sy++;
