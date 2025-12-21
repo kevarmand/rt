@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 10:24:15 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/14 16:02:12 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 06:55:30 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static int	assemble_array(t_vector *vec, size_t elem_size,
 		return (SUCCESS);
 	*out_array = malloc(elem_size * count);
 	if (!*out_array)
-		return (ERR_MALLOC);
+		return (perr(ERR_MALLOC, PERR_M_ARRAY));
 	src_ptr = vector_data(vec);
 	ft_memcpy(*out_array, src_ptr, elem_size * count);
 	return (SUCCESS);

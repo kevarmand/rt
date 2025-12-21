@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 00:00:00 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/21 07:01:39 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/21 07:47:06 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static int	xpm_convert_texture(t_texture *tex, t_display *display,
 	int		bpp_line[2];
 
 	if (!texture_alloc_pixels_vec3(tex))
-		return (0);
+		return (perr(ERR_MALLOC, PERR_M_TEX_PIXELS));
 	addr = mlx_get_data_addr(img, &bpp, &line_len, &endian);
 	bpp_line[0] = line_len;
 	bpp_line[1] = bpp;
@@ -76,12 +76,12 @@ static int	load_one_texture(t_texture *tex, t_display *display, int is_bump)
 	int		ok;
 
 	if (!tex->path || !texture_has_xpm_ext(tex->path))
-		return (0);
+		return (perr(0, ERR_EXT_XPM));
 	ft_printf("\t\tLoading XPM file : %s\n", tex->path);
 	img = mlx_xpm_file_to_image(display->mlx, tex->path,
 			&tex->width, &tex->height);
 	if (!img)
-		return (0);
+		return (perr(ERR_MLX, PERR_MLX_IMGXPM));
 	if (is_bump == 0)
 		ft_printf("\t\t\t-> Albedo conversion\n");
 	else

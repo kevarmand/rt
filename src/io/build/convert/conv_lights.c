@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 16:32:30 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/18 21:48:47 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 06:58:23 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	conv_lights(t_scene_parsed *parsed, t_conv_ctx *cx)
 		reset_light(&light_tmp);
 		light_from_parsed(list_node->content, &light_tmp);
 		if (vector_push_back(&cx->light_v, &light_tmp) != SUCCESS)
-			return (ERR_MALLOC);
+			return (perr(ERR_MALLOC, PERR_M_VEC_PUSH));
 		list_node = list_node->next;
 	}
 	return (SUCCESS);

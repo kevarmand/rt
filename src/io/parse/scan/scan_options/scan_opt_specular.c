@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 16:09:49 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/18 21:32:12 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 06:31:56 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ int	scan_opt_specular(t_tok tok, t_element_options *opts,
 
 	(void)texture;
 	if (scan_float(tok, &value))
-		return (ERR_PARSE_FLOAT);
+		return (ERR_PARS);
 	if (value < 0.0f || value > 1.0f)
-		return (ERR_PARSE_FLOAT);
+		return (ERR_PARS);
 	opts->specular_weight = value;
 	return (0);
 }

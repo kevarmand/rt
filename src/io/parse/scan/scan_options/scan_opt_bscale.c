@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 13:39:47 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/18 21:31:52 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 06:32:29 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ int	scan_opt_bscale(t_tok tok,
 
 	(void)texture;
 	if (scan_float(tok, &value))
-		return (ERR_PARSE_FLOAT);
+		return (ERR_PARS);
 	if (value < 0.0f)
-		return (ERR_PARSE_FLOAT);
+		return (ERR_PARS);
 	opts->bscale = value;
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 16:20:10 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/18 21:32:15 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 06:35:04 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	intern_texture_tok(t_texture_parsed *textures, t_tok tok, int *out_id)
 			(void *)(intptr_t)(new_id + 1));
 	tok.start[tok.len] = saved_char;
 	if (insert_ret < 0)
-		return (ERR_MALLOC);
+		return (perr(ERR_MALLOC, PERR_M_HASH_INSERT));
 	textures->index_t++;
 	*out_id = new_id;
 	return (SUCCESS);
@@ -63,7 +63,7 @@ int	intern_bumpmap_tok(t_texture_parsed *textures, t_tok tok, int *out_id)
 			(void *)(intptr_t)(new_id + 1));
 	tok.start[tok.len] = saved_char;
 	if (insert_ret < 0)
-		return (ERR_MALLOC);
+		return (perr(ERR_MALLOC, PERR_M_HASH_INSERT));
 	textures->index_b++;
 	*out_id = new_id;
 	return (SUCCESS);

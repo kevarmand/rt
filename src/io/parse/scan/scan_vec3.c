@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 16:48:14 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/18 21:32:38 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 06:30:43 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <math.h>
 #include <unistd.h>
 #include <stdio.h>
+#include "libft.h"
 #include "../parsing_internal.h"
 
 static const char	g_col_orange[] = "\033[0;33m";
@@ -48,7 +49,7 @@ static void	check_range(const float vec[3])
 	if (has_out)
 	{
 		put_warn_prefix();
-		write(2, g_msg_range, sizeof(g_msg_range) - 1);
+		ft_putstr_fd(g_msg_range, 2);
 	}
 }
 
@@ -60,13 +61,13 @@ static int	normalise_vec(float vec[3])
 	len2 = vec[0] * vec[0] + vec[1] * vec[1] + vec[2] * vec[2];
 	if (len2 < __FLT_EPSILON__)
 	{
-		write(2, g_msg_zerolen, sizeof(g_msg_zerolen) - 1);
-		return (ERR_PARSE_FLOAT);
+		ft_putstr_fd(g_msg_zerolen, 2);
+		return (ERR_PARS);
 	}
 	if (fabsf(len2 - 1.0f) >= __FLT_EPSILON__)
 	{
 		put_warn_prefix();
-		write(2, g_msg_norm, sizeof(g_msg_norm) - 1);
+		ft_putstr_fd(g_msg_norm, 2);
 		inv_len = 1.0f / sqrtf(len2);
 		vec[0] *= inv_len;
 		vec[1] *= inv_len;
@@ -80,10 +81,10 @@ int	scan_vec3(t_tok tok, float vec[3])
 	float	tmp[3];
 
 	if (scan_point(tok, tmp))
-		return (ERR_PARSE_FLOAT);
+		return (ERR_PARS);
 	check_range(tmp);
 	if (normalise_vec(tmp))
-		return (ERR_PARSE_FLOAT);
+		return (ERR_PARS);
 	vec[0] = tmp[0];
 	vec[1] = tmp[1];
 	vec[2] = tmp[2];

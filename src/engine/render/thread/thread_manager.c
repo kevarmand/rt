@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 15:56:09 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/21 01:50:50 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 07:23:23 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	thread_start_manager(t_data *data)
 
 	args = malloc(sizeof(t_manager_args));
 	if (args == NULL)
-		return (ERR_MALLOC);
+		return (perr(ERR_MALLOC, PERR_M_THREAD_ARGS));
 	args->data = data;
 	args->manager = &data->engine.render.manager;
 	args->cancel_flag = &data->engine.render.cancel_flag;
@@ -39,7 +39,7 @@ int	thread_start_manager(t_data *data)
 			NULL, manager_entry, args) != 0)
 	{
 		free(args);
-		return (ERR_THREAD_CREATE);
+		return (perr(ERR_THREAD, PERR_M_THREAD_CREATE));
 	}
 	return (SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 21:50:45 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/21 07:40:33 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/21 07:46:41 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,17 @@ int	display_init_frames(t_display *display, const t_scene *scene)
 	display->total_cams = camera_count;
 	display->frame = malloc(sizeof(t_frame) * (size_t)camera_count);
 	if (!display->frame)
-		return (ERR_MALLOC);
+		return (perr(ERR_MALLOC, PERR_M_DISPLAY_FRAME));
+	display->pixel_count = scene->resolution_width * scene->resolution_height;
 	bytes = sizeof(int) * (size_t)display->pixel_count;
+	ft_memset(display->frame, 0, sizeof(t_frame) * (size_t)camera_count);
 	index = 0;
 	while (index < camera_count)
 	{
 		display->frame[index].rgb_pixels = malloc(bytes);
 		if (!display->frame[index].rgb_pixels)
-			return (ERR_MALLOC);
+			return (perr(ERR_MALLOC, PERR_M_DISPLAY_FRAME_PIX));
+		ft_memset(display->frame[index].rgb_pixels, 0, bytes);
 		display->frame[index].quality = QUALITY_NONE;
 		index++;
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ui_int.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/19 01:50:29 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/21 07:38:06 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/21 07:45:25 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ typedef struct s_ui
 	int			was_visible;
 }	t_ui;
 
-void	init_ui(t_display *display);
+int		init_ui(t_display *display);
 void	display_update_ui(t_display *display);
 void	print_txt_ui(t_data *data);
 void	draw_ui(t_ui *ui);

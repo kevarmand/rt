@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 01:56:09 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/21 06:23:48 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/21 07:48:53 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	destroy_render(t_render *render)
 	int	i;
 
 	i = 0;
-	while (i < render->workers_count)
+	while (i < render->workers.count)
 	{
 		free(render->workers.array[i].tile.hdr_pixels);
 		i++;
@@ -51,7 +51,8 @@ void	destroy_display(t_display *display)
 	free(display->frame);
 	if (!display->mlx)
 		return ;
-	mlx_destroy_image(display->mlx, display->ui.img.img_ptr);
+	if (display->ui.img.img_ptr)
+		mlx_destroy_image(display->mlx, display->ui.img.img_ptr);
 	mlx_destroy_image(display->mlx, display->main_img.img_ptr);
 	mlx_destroy_window(display->mlx, display->win);
 	mlx_destroy_display(display->mlx);

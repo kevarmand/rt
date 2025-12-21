@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   init_ui.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/19 01:04:11 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/20 12:34:59 by marvin           ###   ########.fr       */
+/*   Updated: 2025/12/21 07:39:39 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ui_int.h"
 #include "ui_settings.h"
 #include "mlx.h"
+#include "errors.h"
 #include "display.h"
 
 static void	ui_init_state(t_ui *ui)
@@ -32,7 +33,7 @@ static void	ui_init_state(t_ui *ui)
 	ui->was_visible = 0;
 }
 
-static void	ui_init_image(t_display *display)
+static int	ui_init_image(t_display *display)
 {
 	t_image	*img;
 
@@ -40,15 +41,20 @@ static void	ui_init_image(t_display *display)
 	img->width = UI_W;
 	img->height = UI_H;
 	img->img_ptr = mlx_new_image(display->mlx, img->width, img->height);
+	if (img->img_ptr == 0)
+		return (perr(ERR_MLX, PERR_MLX_NEW_IMG));
 	img->data = mlx_get_data_addr(img->img_ptr,
 			&img->bpp, &img->size_l, &img->endian);
+	return (SUCCESS);
 }
 
-void	init_ui(t_display *display)
+int	init_ui(t_display *display)
 {
 	ui_init_state(&display->ui);
-	ui_init_image(display);
+	if(ui_init_image(display))
+		return (ERR_MLX);
 	ui_build_buttons(&display->ui);
 	display->flag_ui = 1;
 	display->ui.dirty = 1;
+	return (SUCCESS);
 }
