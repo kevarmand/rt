@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 16:48:06 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/18 21:32:33 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 06:31:05 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,11 @@ static int	read_component(
 	segment.start = tok.start + start_idx;
 	segment.len = *index_pos - start_idx;
 	if (segment.len <= 0 || scan_float(segment, value_out))
-		return (ERR_PARSE_FLOAT);
+		return (ERR_PARS);
 	if (require_comma)
 	{
 		if (*index_pos >= tok.len || tok.start[*index_pos] != ',')
-			return (ERR_PARSE_FLOAT);
+			return (ERR_PARS);
 		(*index_pos)++;
 	}
 	return (SUCCESS);
@@ -43,13 +43,13 @@ int	scan_point(t_tok tok, float out_vec[3])
 
 	index_pos = 0;
 	if (read_component(tok, &index_pos, &tmp[0], 1))
-		return (ERR_PARSE_FLOAT);
+		return (ERR_PARS);
 	if (read_component(tok, &index_pos, &tmp[1], 1))
-		return (ERR_PARSE_FLOAT);
+		return (ERR_PARS);
 	if (read_component(tok, &index_pos, &tmp[2], 0))
-		return (ERR_PARSE_FLOAT);
+		return (ERR_PARS);
 	if (index_pos != tok.len)
-		return (ERR_PARSE_FLOAT);
+		return (ERR_PARS);
 	out_vec[0] = tmp[0];
 	out_vec[1] = tmp[1];
 	out_vec[2] = tmp[2];

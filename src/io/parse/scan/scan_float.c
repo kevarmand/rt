@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 16:47:49 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/18 21:32:30 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 06:31:14 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,13 +98,13 @@ int	scan_float(t_tok tok, float *out_value)
 	scan_sign(tok, &index_pos, &sign);
 	int_digits = scan_integer(tok, &index_pos, &value);
 	if (int_digits < 0)
-		return (ERR_PARSE_FLOAT);
+		return (ERR_PARS);
 	frac_digits = scan_optional_dot_and_fraction(tok, &index_pos, &value);
 	if ((int_digits + frac_digits) == 0 || index_pos != tok.len)
-		return (ERR_PARSE_FLOAT);
+		return (ERR_PARS);
 	value *= (double)sign;
 	if (value > g_max_abs || value < -g_max_abs)
-		return (ERR_PARSE_FLOAT);
+		return (ERR_PARS);
 	*out_value = (float)value;
 	return (SUCCESS);
 }

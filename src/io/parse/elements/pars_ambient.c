@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 16:43:50 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/18 21:31:01 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 06:41:09 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@ int	pars_ambient(t_pars_state *st, t_scene_parsed *scene)
 	int		rgb[3];
 
 	if (scene->presence_mask & PRESENCE_AMBIENT)
-		return (ERR_PARS_AMBIANT);
+		return (perr(ERR_PARS, PERR_AMBIENT_REDEF));
 	if (!pars_next_tok(st, &token)
 		|| scan_float(token, &brightness)
 		|| brightness < 0.0f || brightness > 1.0f)
-		return (ERR_PARS_AMBIANT);
+		return (ERR_PARS);
 	if (!pars_next_tok(st, &token)
 		|| scan_color(token, rgb))
 		return (ERR_PARS);

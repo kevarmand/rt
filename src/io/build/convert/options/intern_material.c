@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 13:23:38 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/16 16:37:41 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 06:59:34 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,11 @@ int	intern_material(t_conv_ctx *cx,
 		return (SUCCESS);
 	idx = vector_push_back(&cx->mat_v, &new_mat);
 	if (idx < 0)
-		return (ERR_MALLOC);
+		return (perr(ERR_MALLOC, PERR_M_VEC_PUSH));
 	idx = vector_size(&cx->mat_v) - 1;
 	if (hashmap_insert(cx->mat_m, key,
 			(void *)(intptr_t)(idx + 1)) < 0)
-		return (ERR_MALLOC);
+		return (perr(ERR_MALLOC, PERR_M_HASH_INSERT));
 	*out_mat = idx;
 	return (SUCCESS);
 }

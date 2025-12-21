@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 17:46:18 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/17 22:41:17 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 07:21:30 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include "rt_config.h"
 #include "bitmap.h"
 #include "libft.h"
+#include <stdatomic.h>
 
 /* ---------- Forward declarations ---------- */
 int	render_init_workers(t_render *render);
@@ -86,19 +87,19 @@ int	render_init(t_render *render, int width, int height)
 	render_init_struct(render, width, height);
 	status = render_init_main_buffers(render);
 	if (status != SUCCESS)
-		return (status);
+		return (perr(status, PERR_M_MAIN_BUFFERS));
 	status = render_init_mailbox(render);
 	if (status != SUCCESS)
-		return (status);
+		return (perr(status, PERR_M_MAILBOX));
 	status = render_init_workers(render);
 	if (status != SUCCESS)
-		return (status);
+		return (perr(status, PERR_M_WORKERS));
 	status = render_init_worker_tiles(render);
 	if (status != SUCCESS)
-		return (status);
+		return (perr(status, PERR_M_WORKER_TILES));
 	status = render_init_tileset(render);
 	if (status != SUCCESS)
-		return (status);
+		return (perr(status, PERR_M_TILESET));
 	render->manager.render_in_progress = 0;
 	render->manager.thread_id = 0;
 	return (SUCCESS);

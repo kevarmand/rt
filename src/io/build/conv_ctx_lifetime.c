@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 19:30:25 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/16 16:30:56 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 06:48:48 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,19 @@ int	init_ctx(t_conv_ctx *cx)
 	ft_memset(cx, 0, sizeof(t_conv_ctx));
 	cx->mat_m = hashmap_create(256);
 	if (cx->mat_m == NULL)
-		return (ERR_MALLOC);
+		return (perr(ERR_MALLOC, PERR_M_HASH_MAT));
 	if (vector_init(&cx->mat_v, 0, sizeof(t_material)))
-		return (ERR_MALLOC);
+		return (perr(ERR_MALLOC, PERR_M_VEC_MAT));
 	if (vector_init(&cx->surf_v, 0, sizeof(t_surface_map)))
-		return (ERR_MALLOC);
+		return (perr(ERR_MALLOC, PERR_M_VEC_SURF));
 	if (vector_init(&cx->cam_v, 0, sizeof(t_camera)))
-		return (ERR_MALLOC);
+		return (perr(ERR_MALLOC, PERR_M_VEC_CAM));
 	if (vector_init(&cx->light_v, 0, sizeof(t_light)))
-		return (ERR_MALLOC);
+		return (perr(ERR_MALLOC, PERR_M_VEC_LIGHT));
 	if (vector_init(&cx->plane_v, 0, sizeof(t_primitive)))
-		return (ERR_MALLOC);
+		return (perr(ERR_MALLOC, PERR_M_VEC_PLANE));
 	if (vector_init(&cx->obj_v, 0, sizeof(t_primitive)))
-		return (ERR_MALLOC);
+		return (perr(ERR_MALLOC, PERR_M_VEC_OBJ));
 	return (SUCCESS);
 }
 

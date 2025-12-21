@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/25 20:38:59 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/16 17:03:09 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 06:13:14 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	bitmap_init(t_bitmap *bmp, int bit_count)
 	bmp->word_count = word_count;
 	bmp->words = malloc(sizeof(uint64_t) * word_count);
 	if (bmp->words == NULL)
-		return (ERR_MALLOC);
+		return (perr(ERR_MALLOC, PERR_MALLOC_BIT));
 	index = 0;
 	while (index < word_count)
 	{

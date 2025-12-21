@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 12:48:46 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/21 02:49:11 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 07:31:25 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include "logs.h"
 
 void	init_surface_uv(t_scene *scene);
-void	init_ui(t_display *display);
+int		init_ui(t_display *display);
 int		threads_start(t_data *data);
 void	threads_cancel_and_join(t_data *data);
 void	destroy_render(t_render *render);
@@ -33,7 +33,7 @@ int	run_app(t_data *data)
 	if (status == SUCCESS)
 		init_surface_uv(&data->scene);
 	if (status == SUCCESS)
-		init_ui(&data->display);
+		status = init_ui(&data->display);
 	if (status == SUCCESS)
 		status = threads_start(data);
 	if (status == SUCCESS)

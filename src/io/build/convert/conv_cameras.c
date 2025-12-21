@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 16:31:33 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/18 21:48:47 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 06:58:46 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,13 @@ int	conv_cameras(t_scene_parsed *parsed, t_conv_ctx *cx)
 	t_camera	camera_tmp;
 
 	if (vector_reserve(&cx->cam_v, cx->camera_count) != SUCCESS)
-		return (ERR_MALLOC);
+		return (perr(ERR_MALLOC, PERR_M_VEC_CAM));
 	list_node = parsed->cameras;
 	while (list_node)
 	{
 		cam_from_parsed(list_node->content, &camera_tmp);
 		if (vector_push_back(&cx->cam_v, &camera_tmp) != SUCCESS)
-			return (ERR_MALLOC);
+			return (perr(ERR_MALLOC, PERR_M_VEC_PUSH));
 		list_node = list_node->next;
 	}
 	return (SUCCESS);

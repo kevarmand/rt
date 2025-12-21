@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 13:04:56 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/21 01:14:49 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/21 07:33:14 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,8 @@ int	engine_init(t_engine *engine, t_scene *scene)
 	status = 0;
 	if (scene->primitive_count)
 		status = init_bvh(scene);
+	if (status == SUCCESS)
+		perr(ERR_MALLOC, PERR_BVH_INIT);
 	log_step(LOGSTEP_ENGINE_INIT_BVH, 0);
 	if (status != SUCCESS)
 		return (status);

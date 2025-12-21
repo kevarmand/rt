@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 16:18:36 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/20 23:49:35 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 07:23:41 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	thread_start_worker(t_data *data, int worker_index)
 
 	args = malloc(sizeof(t_worker_args));
 	if (args == NULL)
-		return (ERR_MALLOC);
+		return (perr(ERR_MALLOC, PERR_M_THREAD_ARGS));
 	args->worker = &data->engine.render.workers.array[worker_index];
 	args->data = data;
 	args->cancel_flag = &data->engine.render.cancel_flag;
@@ -41,7 +41,7 @@ int	thread_start_worker(t_data *data, int worker_index)
 			NULL, worker_entry, args) != 0)
 	{
 		free(args);
-		return (ERR_THREAD_CREATE);
+		return (perr(ERR_THREAD, PERR_M_THREAD_CREATE));
 	}
 	return (SUCCESS);
 }

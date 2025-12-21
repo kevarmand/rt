@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 13:23:52 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/16 13:46:28 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 06:59:54 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	intern_surface(t_conv_ctx *cx,
 	rgb8_to_linear_vec(opt->checker_color, &new_surf.checker_color);
 	status = vector_push_back(&cx->surf_v, &new_surf);
 	if (status < 0)
-		return (ERR_MALLOC);
+		return (perr(ERR_MALLOC, PERR_M_VEC_PUSH));
 	*out_surf = (vector_size(&cx->surf_v) - 1);
 	return (SUCCESS);
 }

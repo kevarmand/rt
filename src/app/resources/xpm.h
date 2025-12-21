@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 17:57:47 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/17 18:05:52 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 07:11:48 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define XPM_H
 
 # include "scene.h"
+# include "errors.h"
 # include "display.h"
 # include "mlx.h"
 # include <stdlib.h>

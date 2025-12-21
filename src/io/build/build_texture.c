@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 16:34:12 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/18 21:29:34 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 06:54:31 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	build_textures(t_scene *scene, t_texture_parsed *parsed)
 	{
 		scene->textures = ft_calloc((size_t)count, sizeof(t_texture));
 		if (!scene->textures)
-			return (ERR_MALLOC);
+			return (perr(ERR_MALLOC, PERR_M_ARRAY_TEXT));
 		textures_detach_all(scene->textures, parsed->h_texture);
 	}
 	count = parsed->index_b;
@@ -74,7 +74,7 @@ int	build_textures(t_scene *scene, t_texture_parsed *parsed)
 	{
 		scene->bumpmaps = ft_calloc((size_t)count, sizeof(t_texture));
 		if (!scene->bumpmaps)
-			return (ERR_MALLOC);
+			return (perr(ERR_MALLOC, PERR_M_ARRAY_BUMP));
 		textures_detach_all(scene->bumpmaps, parsed->h_bumpmap);
 	}
 	return (SUCCESS);

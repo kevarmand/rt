@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 18:42:36 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/21 02:45:05 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 07:25:50 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,13 @@ static int	init_core(t_display *display, int width, int height)
 {
 	display->mlx = mlx_init();
 	if (!display->mlx)
-		return (ERR_INTERNAL);
+		return (perr(ERR_MLX, PERR_MLX_INIT));
 	display->win = mlx_new_window(display->mlx, width, height, RT_NAME);
 	if (!display->win)
 	{
 		mlx_destroy_display(display->mlx);
 		free(display->mlx);
-		return (ERR_INTERNAL);
+		return (perr(ERR_MLX, PERR_MLX_WIN));
 	}
 	display->main_img.img_ptr = mlx_new_image(display->mlx, width, height);
 	if (!display->main_img.img_ptr)
@@ -46,7 +46,7 @@ static int	init_core(t_display *display, int width, int height)
 		mlx_destroy_window(display->mlx, display->win);
 		mlx_destroy_display(display->mlx);
 		free(display->mlx);
-		return (ERR_INTERNAL);
+		return (perr(ERR_MLX, PERR_MLX_IMG));
 	}
 	display->main_img.data = mlx_get_data_addr(display->main_img.img_ptr,
 			&display->main_img.bpp,

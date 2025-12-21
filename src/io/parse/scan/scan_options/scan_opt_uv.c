@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 16:49:03 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/18 21:32:19 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 06:31:44 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,11 @@ static int	read_f32_segment(
 	seg.start = tok.start + start;
 	seg.len = *index_pos - start;
 	if (seg.len <= 0 || scan_float(seg, out_value))
-		return (ERR_PARSE_FLOAT);
+		return (ERR_PARS);
 	if (require_comma)
 	{
 		if (*index_pos >= tok.len || tok.start[*index_pos] != ',')
-			return (ERR_PARSE_FLOAT);
+			return (ERR_PARS);
 		(*index_pos)++;
 	}
 	return (SUCCESS);
@@ -46,7 +46,7 @@ static int	copy_floats_to_opts(
 	else if (count == 6)
 		*uv_mod = 2;
 	else
-		return (ERR_PARSE_FLOAT);
+		return (ERR_PARS);
 	i = 0;
 	while (i < count)
 	{
@@ -73,7 +73,7 @@ int	scan_opt_uv(t_tok tok, t_element_options *opts, t_texture_parsed *texture)
 		if (pos == tok.len)
 			break ;
 		if (tok.start[pos] != ',')
-			return (ERR_PARSE_FLOAT);
+			return (ERR_PARS);
 		pos++;
 	}
 	return (copy_floats_to_opts(opts, tmp, index, &opts->uv_mod));

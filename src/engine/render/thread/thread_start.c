@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 16:18:48 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/21 01:47:10 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 07:30:18 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static int	start_manager_thread(t_data *data)
 	status = thread_start_manager(data);
 	data->engine.render.manager_started = !status;
 	if (status != 0)
-		return (ERR_THREAD_CREATE);
+		return (ERR_THREAD);
 	return (SUCCESS);
 }
 
@@ -40,7 +40,7 @@ static int	start_worker_threads(t_data *data)
 	{
 		status = thread_start_worker(data, index);
 		if (status != 0)
-			return (ERR_THREAD_CREATE);
+			return (ERR_THREAD);
 		(data->engine.render.workers_count)++;
 		index++;
 	}

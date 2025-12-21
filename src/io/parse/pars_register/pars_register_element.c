@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 16:47:09 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/16 16:47:10 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 06:40:24 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,13 @@ static int	push_copy_to_list(t_list **list_head,
 
 	heap_copy = (t_parsed_element *)malloc(sizeof(*heap_copy));
 	if (heap_copy == NULL)
-		return (ERR_ALLOC);
+		return (perr(ERR_MALLOC, PERR_M_LIST_ELEM));
 	*heap_copy = *element;
 	new_node = ft_lstnew(heap_copy);
 	if (new_node == NULL)
 	{
 		free(heap_copy);
-		return (ERR_ALLOC);
+		return (perr(ERR_MALLOC, PERR_M_LIST));
 	}
 	ft_lstadd_back(list_head, new_node);
 	return (SUCCESS);
@@ -57,7 +57,7 @@ int	pars_register_element(t_scene_parsed *scene,
 	if (element->type == ELEM_CAMERA)
 	{
 		if (role == ELEM_ROLE_PRIMARY && (scene->presence_mask & PRESENCE_CAM))
-			return (ERR_PARS);
+			return (perr(ERR_PARS, PERR_CAM_REDEF));
 		if (role == ELEM_ROLE_PRIMARY)
 			scene->presence_mask |= PRESENCE_CAM;
 		return (push_copy_to_list(&scene->cameras, element));
@@ -66,10 +66,10 @@ int	pars_register_element(t_scene_parsed *scene,
 	{
 		if (role == ELEM_ROLE_PRIMARY
 			&& (scene->presence_mask & PRESENCE_LIGHT))
-			return (ERR_PARS);
+			return (perr(ERR_PARS, PERR_LIGHT_REDEF));
 		if (role == ELEM_ROLE_PRIMARY)
 			scene->presence_mask |= PRESENCE_LIGHT;
 		return (push_copy_to_list(&scene->lights, element));
 	}
-	return (ERR_PARS);
+	return (perr(ERR_PARS, "Unknown element type."));
 }

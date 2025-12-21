@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 16:34:38 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/17 01:32:31 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 06:57:38 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include "errors.h"
 #include <stdlib.h>
 
-//on fait les forward declarations pour eviter les warnings
+// Function prototypes for copying parsed elements to primitives
 int	copy_triangle_to_primitive(const t_parsed_element *src, t_primitive *dst);
 int	copy_sphere_to_primitive(const t_parsed_element *src, t_primitive *dst);
 int	copy_cylinder_to_primitive(const t_parsed_element *src, t_primitive *dst);
@@ -30,9 +30,9 @@ int	conv_option_primitive(t_primitive *prim, t_element_options *opt,
 static int	init_primitives(t_conv_ctx *cx)
 {
 	if (vector_reserve(&cx->obj_v, cx->object_count) != SUCCESS)
-		return (ERR_MALLOC);
+		return (perr(ERR_MALLOC, PERR_M_VEC_OBJ));
 	if (vector_reserve(&cx->plane_v, cx->plane_count) != SUCCESS)
-		return (ERR_MALLOC);
+		return (perr(ERR_MALLOC, PERR_M_VEC_PLANE));
 	return (SUCCESS);
 }
 
@@ -60,11 +60,11 @@ static int	push_elem_to_ctx(t_parsed_element *elem, t_conv_ctx *cx)
 	if (elem->type != ELEM_PLANE)
 	{
 		if (vector_push_back(&cx->obj_v, &prim_tmp) != SUCCESS)
-			return (ERR_MALLOC);
+			return (perr(ERR_MALLOC, PERR_M_VEC_PUSH));
 		return (SUCCESS);
 	}
 	if (vector_push_back(&cx->plane_v, &prim_tmp) != SUCCESS)
-		return (ERR_MALLOC);
+		return (perr(ERR_MALLOC, PERR_M_VEC_PUSH));
 	return (SUCCESS);
 }
 

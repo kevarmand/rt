@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 16:51:21 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/16 16:53:23 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 06:26:18 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,5 +69,5 @@ int	pars_dispatch_tok(t_tok tag, t_pars_state *st, t_scene_parsed *scene)
 			return (g_pars_tab[i].fn(st, scene));
 		i++;
 	}
-	return (ERR_PARS);
+	return (ERR_INTERNAL);
 }

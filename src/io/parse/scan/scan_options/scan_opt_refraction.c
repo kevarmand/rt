@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 16:09:16 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/18 21:32:06 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 06:32:08 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ int	scan_opt_refraction(t_tok tok, t_element_options *opts,
 
 	(void)texture;
 	if (scan_float(tok, &value))
-		return (ERR_PARSE_FLOAT);
+		return (ERR_PARS);
 	if (value < 0.0f)
-		return (ERR_PARSE_FLOAT);
+		return (ERR_PARS);
 	opts->refraction = value;
 	return (0);
 }
