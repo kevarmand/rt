@@ -77,13 +77,13 @@ NAME	= libft.a
 FLAGS	= -Wall -Wextra -Werror -I. -Ignl
 
 .c.o	:
-	@cc $(FLAGS) -c $< -o ${<:.c=.o}
+	cc $(FLAGS) -c $< -o ${<:.c=.o}
 
 $(NAME) : $(OBJS) $(OBJS_PRINT) $(OBONUS)
-	@ar -rcs $@ $^
+	ar -rcs $@ $?
 
 bonus	: $(NAME) $(OBJS) $(OBONUS)
-	ar -rcs $(NAME) $^
+	ar -rcs $(NAME) $?
 
 all	: $(NAME)
 
