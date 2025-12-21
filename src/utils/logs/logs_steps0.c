@@ -73,18 +73,18 @@ void	print_check_args(int status)
 	ft_putstr_fd(" check arguments\n", 1);
 }
 
-void	handle_section_step(t_logsec section, int *idxprinted,
+void	handle_section_step(t_logsec section, int *idxprinted[],
 			t_logstep step, int status)
 {
-	if (idxprinted[1] == 0)
+	if (idxprinted[1][0] == 0)
 	{
 		ft_putstr_fd("\n", 1);
 		ft_putstr_fd(section_header(section), 1);
 		ft_putstr_fd("\n", 1);
-		idxprinted[1] = 1;
+		idxprinted[1][0] = 1;
 	}
-	print_step_line((idxprinted[0]) + 1, section_total(section),
+	print_step_line((idxprinted[0][0]) + 1, section_total(section),
 		step_label(step), status);
 	if (status == 0)
-		(idxprinted[0])++;
+		(idxprinted[0][0])++;
 }

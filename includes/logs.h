@@ -78,8 +78,6 @@ typedef enum e_logstep
 
 void	log_step(t_logstep step, int status);
 void	print_check_args(int status);
-void	handle_section_step(t_logsec section, int *idxprinted,
-			t_logstep step, int status);
 int	section_total(t_logsec section);
 const char	*section_header(t_logsec section);
 t_logsec	step_section(t_logstep step);
@@ -89,6 +87,8 @@ void	print_line_features(const char *logo, const char *label,
 void	print_cyan_header(void);
 void	print_clear(void);
 void	print_geometry_lines(void);
+void	handle_section_step(t_logsec section, int *idxprinted[],
+			t_logstep step, int status);
 
 typedef struct s_scene	t_scene;
 

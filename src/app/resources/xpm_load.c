@@ -54,7 +54,7 @@ static int	xpm_convert_texture(t_texture *tex, t_display *display,
 	int		bpp_line[2];
 
 	if (!texture_alloc_pixels_vec3(tex))
-		return (perr(ERR_MALLOC, PERR_M_TEX_PIXELS));
+		return (perr(0, PERR_M_TEX_PIXELS));
 	addr = mlx_get_data_addr(img, &bpp, &line_len, &endian);
 	bpp_line[0] = line_len;
 	bpp_line[1] = bpp;
@@ -81,7 +81,7 @@ static int	load_one_texture(t_texture *tex, t_display *display, int is_bump)
 	img = mlx_xpm_file_to_image(display->mlx, tex->path,
 			&tex->width, &tex->height);
 	if (!img)
-		return (perr(ERR_MLX, PERR_MLX_IMGXPM));
+		return (perr(0, PERR_MLX_IMGXPM));
 	if (is_bump == 0)
 		ft_printf("\t\t\t-> Albedo conversion\n");
 	else

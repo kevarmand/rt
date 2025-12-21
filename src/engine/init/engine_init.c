@@ -72,7 +72,7 @@ int	engine_init(t_engine *engine, t_scene *scene)
 	status = 0;
 	if (scene->primitive_count)
 		status = init_bvh(scene);
-	if (status == SUCCESS)
+	if (status != SUCCESS)
 		perr(ERR_MALLOC, PERR_BVH_INIT);
 	log_step(LOGSTEP_ENGINE_INIT_BVH, 0);
 	if (status != SUCCESS)

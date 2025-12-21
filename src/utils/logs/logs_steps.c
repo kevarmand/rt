@@ -96,13 +96,13 @@ void	log_step(t_logstep step, int status)
 	if (section == LOGSEC_BOOT)
 		print_check_args(status);
 	else if (section == LOGSEC_PARSE)
-		handle_section_step(section, (int []){c.idx_parse, c.printed_parse},
+		handle_section_step(section, (int *[]){&c.idx_parse, &c.printed_parse},
 			step, status);
 	else if (section == LOGSEC_ENGINE)
-		handle_section_step(section, (int []){c.idx_engine, c.printed_engine},
+		handle_section_step(section, (int *[]){&c.idx_engine, &c.printed_engine},
 			step, status);
 	else
-		handle_section_step(section, (int []){c.idx_display, c.printed_display},
+		handle_section_step(section, (int *[]){&c.idx_display, &c.printed_display},
 			step, status);
 	if (status != 0)
 		c.latch_error = 1;
