@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 21:55:31 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/19 16:20:08 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/20 23:48:38 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,9 @@ typedef struct s_render
 	t_workers			workers;
 	t_mgr				manager;
 	t_display_mailbox	mailbox;
+
+	int					manager_started;
+	int					workers_count;
 	atomic_int			cancel_flag;
 }	t_render;
 
