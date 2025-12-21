@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 21:25:56 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/17 22:54:49 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 01:22:19 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,37 +43,6 @@ static void	hit_try_update(t_hit *hit, t_hit_kind kind,
 	hit->kind = kind;
 }
 
-//dispatcher d'intersection selon le type de primitive
-int	inter_primitive(const t_primitive *primitive,
-			const t_ray *ray, float *out_distance)
-{
-	if (primitive->type == PRIM_SPHERE)
-		return (inter_sphere(&primitive->sp, ray, out_distance));
-	else if (primitive->type == PRIM_CYLINDER)
-		return (inter_cylinder(&primitive->cy, ray, out_distance));
-	else if (primitive->type == PRIM_TRIANGLE)
-		return (inter_triangle(&primitive->tr, ray, out_distance));
-	else if (primitive->type == PRIM_TORUS)
-		return (inter_torus(&primitive->to, ray, out_distance));
-	return (0);
-}
-
-// static void	scene_hit_primitives(const t_scene *scene,
-// 			const t_ray *ray, t_hit *out_hit)
-// {
-// 	int		primitive_index;
-// 	float	hit_distance;
-
-// 	primitive_index = 0;
-// 	while (primitive_index < scene->primitive_count)
-// 	{
-// 		if (inter_primitive(&scene->primitives[primitive_index],
-// 				ray, &hit_distance))
-// 			hit_try_update(out_hit, HIT_PRIMITIVE,
-// 				primitive_index, hit_distance);
-// 		primitive_index++;
-// 	}
-// }
 
 static void	scene_hit_prims(const t_scene *scene,
 			const t_ray *ray, t_hit *out_hit)
@@ -84,6 +53,23 @@ static void	scene_hit_prims(const t_scene *scene,
 					out_hit);
 	if (status != 0)
 		out_hit->kind = HIT_PRIMITIVE;
+}
+
+int inter_plane(const t_plane *plane, const t_ray *ray, float *out_distance)
+{
+	float	denom;
+	float	numerator;
+	float	t;
+
+	denom = vec3f_dot(plane->normal, ray->dir);
+	if (fabsf(denom) < 1e-4f)
+		return (0);
+	numerator = - (vec3f_dot(plane->normal, ray->origin) + plane->d);
+	t = numerator / denom;
+	if (t <= 0.0f)
+		return (0);
+	*out_distance = t;
+	return (1);
 }
 
 static void	scene_hit_planes(const t_scene *scene,
