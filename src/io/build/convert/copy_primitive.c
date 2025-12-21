@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 16:34:12 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/21 01:08:07 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/21 02:15:04 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ int	copy_torus_to_primitive(const t_parsed_element *src, t_primitive *dst)
 			src->u_data.torus.normal[2]});
 	dst->to.r0 = src->u_data.torus.major_radius;
 	dst->to.r1 = src->u_data.torus.minor_radius;
-	dst->to.R_squared = dst->to.r0 * dst->to.r0;
-	dst->to.r_squared = dst->to.r1 * dst->to.r1;
+	dst->to.inv_r0 = 1.0 / dst->to.r0;
+	dst->to.r1_scaled = dst->to.r1 * dst->to.inv_r0;
 	return (SUCCESS);
 }

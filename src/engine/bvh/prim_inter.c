@@ -6,18 +6,15 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/31 02:11:27 by norivier          #+#    #+#             */
-/*   Updated: 2025/12/21 01:51:00 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/21 01:58:44 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <assert.h>
-#include <float.h>
 #include "bvh.h"
-#include "attributes.h"
 #include "scene.h"
 #include "vector.h"
 
-FORCEINLINE
+__attribute__((always_inline))
 extern inline int	triangle_inter(t_ray r, t_triangle *tr, t_hit *hit)
 {
 	t_moller	m;
@@ -43,7 +40,7 @@ extern inline int	triangle_inter(t_ray r, t_triangle *tr, t_hit *hit)
 	return (hit->t > 0.0f);
 }
 
-FORCEINLINE
+__attribute__((always_inline))
 extern inline int	sphere_inter(t_ray r, t_sphere *s, t_hit *hit)
 {
 	t_vec3f			ro;
@@ -71,7 +68,8 @@ extern inline int	sphere_inter(t_ray r, t_sphere *s, t_hit *hit)
 }
 
 __attribute__((always_inline))
-static inline int	cylinder_inter0(t_cylinder_inter_ctx *c, t_hit *hit, t_cylinder *cl)
+static inline int	cylinder_inter0(t_cylinder_inter_ctx *c, t_hit *hit,
+		t_cylinder *cl)
 {
 	int		hit_happened;
 	int		i;
@@ -118,7 +116,7 @@ extern inline int	cylinder_inter(t_ray r, t_cylinder *cl, t_hit *hit)
 	return (cylinder_inter0(&c, hit, cl));
 }
 
-FORCEINLINE
+__attribute__((always_inline))
 extern inline int	prim_inter(t_ray r, t_primitive *p,
 	t_hit *out, float tnear)
 {

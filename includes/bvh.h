@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 20:01:56 by norivier          #+#    #+#             */
-/*   Updated: 2025/12/21 01:47:38 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/21 02:10:58 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,16 @@ typedef struct s_equ
 	float	d;
 	float	e;
 }	t_equ;
+
+typedef struct s_torus_interf_ctx
+{
+	t_vec3f	ux;
+	t_vec3f	uy;
+	t_vec3f	uz;
+	t_equ	eq;
+	float	roots[4];
+	int		nroots;
+}	t_torus_interf_ctx;
 
 // AABB
 t_aabb	prim_bound(t_primitive *p);
