@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 01:56:09 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/21 02:42:22 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 06:23:48 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 void	destroy_render(t_render *render)
 {
 	int	i;
-	
+
 	i = 0;
 	while (i < render->workers_count)
 	{
@@ -58,13 +58,12 @@ void	destroy_display(t_display *display)
 	free(display->mlx);
 }
 
-void	destroy_texture(t_texture *texture,int size)
+void	destroy_texture(t_texture *texture, int size)
 {
 	int	i;
-	
+
 	if (!texture)
 		return ;
-	
 	i = 0;
 	while (i < size)
 	{
@@ -75,7 +74,7 @@ void	destroy_texture(t_texture *texture,int size)
 	free(texture);
 }
 
-void destroy_scene(t_scene *scene)
+void	destroy_scene(t_scene *scene)
 {
 	if (!scene)
 		return ;
