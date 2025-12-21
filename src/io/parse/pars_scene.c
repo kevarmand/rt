@@ -49,7 +49,7 @@ static int	pars_scene_fd(int fd, t_scene_parsed *scene)
 		state.line_no++;
 		err = pars_line(line, scene, &state);
 		if (err)
-			perr_line(err, line ,state.line_no);
+			perr_line(err, line, state.line_no);
 		free(line);
 		if (err)
 			return (err);

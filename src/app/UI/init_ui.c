@@ -51,7 +51,7 @@ static int	ui_init_image(t_display *display)
 int	init_ui(t_display *display)
 {
 	ui_init_state(&display->ui);
-	if(ui_init_image(display))
+	if (ui_init_image(display))
 		return (ERR_MLX);
 	ui_build_buttons(&display->ui);
 	display->flag_ui = 1;

@@ -13,13 +13,9 @@
 #include "new_rt.h"
 #include "display.h"
 #include "render.h"
-#include "engine.h"
 #include "app.h"
 #include "mlx.h"
 #include "libft.h"
-#include <stdio.h>
-#include <math.h>
-
 
 static void	cpy_image_by_line(char *dest, char *src, int n, int line_size)
 {

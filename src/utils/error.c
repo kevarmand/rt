@@ -27,7 +27,7 @@ int	perr(int err, const char *msg)
 
 int	perr_line(int err, const char *line, int line_no)
 {
-	ft_putstr_fd(RED "Error" RESET , 2);
+	ft_putstr_fd(RED "Error" RESET, 2);
 	ft_putstr_fd("Incorrect token at line : 	", 2);
 	ft_putnbr_fd(line_no, 2);
 	ft_putstr_fd("\n" YELLOW, 2);

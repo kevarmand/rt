@@ -11,15 +11,10 @@
 /* ************************************************************************** */
 
 #include "io.h"
-#include <stdio.h>
 #include <errors.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
 #include "scene.h"
 #include "parse/parsing_internal.h"
 #include "logs.h"
-
 
 static int	check_minimum_requirements(t_scene_parsed *parsed)
 {

@@ -1,4 +1,4 @@
-R	500 400
+R	1500 1100
 A	0.1	255,255,255
 
 #Position : (55.913727, 47.377861, 10.989453)
@@ -18,16 +18,16 @@ L 700,900,600   0.9412456   255,255,255
 l 400,200,0     0.9412456   90,130,255
 l 200,500,300   0.9412456   150,180,255
 l 1000,300,400  0.9412456   230,240,255
-pl	0,0,0	0,1,0	200,200,200	texture=texture/ground.xpm	uv=0.02,0.00,0.00,-0.02,0,0 checkerboard=pavage.xpm
+pl	0,0,0	0,1,0	200,200,200	texture=texture/ground.xpm	uv=0.02,0.00,0.00,-0.02,0,0 checkerboard=texture/pavage.xpm
 
-skybox texture/puresky.xpm sp 0.5,0.5,0.5
+skybox texture/puresky2.xpm sp 0.5,0.5,0.5
 
 #mettre la sphere au milieu de la cam
 sp	0,47,25	30	255,255,255	diffuse=0.1 specular=1 shininess=300 reflection=0.5
 
 
 #on se met
-sp	20,150,-20	70	255,255,255	specular=0 ambient=0.3 diffuse=0.7 bump=lunar_bump.xpm bscale=20
+sp	20,150,-20	70	255,255,255	specular=0 ambient=0.3 diffuse=0.7 bump=texture/lunar_bump.xpm bscale=20
 
 #une jupiter devan en haut a gauche (orange)
 

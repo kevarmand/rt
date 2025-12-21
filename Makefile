@@ -90,7 +90,7 @@ $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c
 
 # Convenience
 run: $(NAME)
-	./$(NAME) cat.rt
+	./$(NAME) scene/test_test.rt
 
 clean:
 	$(RM) $(OBJS_DIR)

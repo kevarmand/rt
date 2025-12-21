@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "bvh.h"
+#include <stdio.h>
 
 __attribute__((always_inline))
 static inline void	bvh_inter1(t_bvh_inter_ctx *c, t_ray r, t_hit *out)
