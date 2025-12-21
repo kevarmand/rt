@@ -6,17 +6,17 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 09:12:50 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/21 09:25:31 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 09:37:38 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CORE_H
 # define CORE_H
 
-#include "../ui_int.h"
-#include "../ui_settings.h"
-#include "display.h"
-#include <stdio.h>
+# include "../ui_int.h"
+# include "../ui_settings.h"
+# include "display.h"
+# include <stdio.h>
 
 int		ui_mouse_just_pressed(t_ui *ui, t_mouse_state *mouse);
 int		ui_mouse_in_header(t_ui *ui, t_mouse_state *mouse);

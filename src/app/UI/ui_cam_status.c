@@ -15,6 +15,8 @@
 #include "mlx.h"
 #include "new_rt.h"
 
+int	ui_current_cam(int current_cam, int index);
+
 static int	ui_quality_color(t_quality quality)
 {
 	if (quality == QUALITY_FAST)
@@ -53,13 +55,6 @@ static int	ui_itoa(int value, char *buf)
 		value /= 10;
 	}
 	return (out_len);
-}
-
-int ui_current_cam(int current_cam, int index)
-{
-	if (current_cam == index)
-		return ('*');
-	return (' ');
 }
 
 static void	ui_print_one_cam(t_display *display, int index, int x, int y)

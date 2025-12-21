@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 00:00:00 by kevin             #+#    #+#             */
-/*   Updated: 2025/12/21 07:36:15 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/21 09:41:21 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,22 +76,22 @@ typedef enum e_logstep
 	LOGSTEP_DISPLAY_INIT_SKY
 }	t_logstep;
 
-void	log_step(t_logstep step, int status);
-void	print_check_args(int status);
-int	section_total(t_logsec section);
+void		log_step(t_logstep step, int status);
+void		print_check_args(int status);
+int			section_total(t_logsec section);
 const char	*section_header(t_logsec section);
 t_logsec	step_section(t_logstep step);
-void	print_banner(void);
-void	print_line_features(const char *logo, const char *label,
+void		print_banner(void);
+void		print_line_features(const char *logo, const char *label,
 				const char *value);
-void	print_cyan_header(void);
-void	print_clear(void);
-void	print_geometry_lines(void);
-void	handle_section_step(t_logsec section, int *idxprinted[],
-			t_logstep step, int status);
+void		print_cyan_header(void);
+void		print_clear(void);
+void		print_geometry_lines(void);
+void		handle_section_step(t_logsec section, int *idxprinted[],
+				t_logstep step, int status);
 
 typedef struct s_scene	t_scene;
 
-void	log_info_parsed(const t_scene *scene, const char *path);
+void		log_info_parsed(const t_scene *scene, const char *path);
 
 #endif

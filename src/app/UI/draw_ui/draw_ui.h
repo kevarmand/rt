@@ -6,15 +6,15 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 09:09:27 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/21 09:28:31 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 09:38:25 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef DRAW_UI_H
 # define DRAW_UI_H
 
-#include "../ui_int.h"
-#include "../ui_settings.h"
+# include "../ui_int.h"
+# include "../ui_settings.h"
 
 typedef struct s_rect
 {

@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 20:14:44 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/21 09:33:47 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 09:36:39 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ void	display_draw_base(t_data *data)
 		0, 0);
 	data->display.flag_img_window = 0;
 }
-
 
 static void	display_draw_ui(t_data *data)
 {

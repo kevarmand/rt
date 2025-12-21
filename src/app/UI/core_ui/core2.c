@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 09:14:19 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/21 09:15:15 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 09:38:07 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void	ui_apply_event(t_ui *ui, int event_id)
 
 void	apply_event(t_display *display, t_ui *ui)
 {
-	int i;
+	int	i;
 
 	display->render_ssaa = ui->ssaa_idx;
 	display->render_tonemap = ui->tonemap_enabled;

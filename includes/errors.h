@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 21:45:42 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/21 07:29:38 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 09:41:53 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,14 +130,10 @@ typedef enum e_err
 
 # define PERR_MLX_NEW_IMG	"Failed to create new MLX image."
 
-
 //DISPLAY ERRORS
 
 # define PERR_M_DISPLAY_FRAME		"Failed to allocate display frames."
 # define PERR_M_DISPLAY_FRAME_PIX	"Failed to allocate display frame pixels."
-
-
-
 
 /***
  * print an error message corresponding to the error code

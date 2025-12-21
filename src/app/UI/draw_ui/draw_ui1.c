@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 09:08:05 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/21 09:10:19 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 09:38:36 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,4 +91,3 @@ void	ui_draw_base(t_ui *ui)
 	ui_draw_base_border_h(ui, thickness);
 	ui_draw_base_border_v(ui, thickness);
 }
-

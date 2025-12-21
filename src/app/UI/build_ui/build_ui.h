@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 09:00:17 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/21 09:06:17 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 09:37:15 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include "../ui_int.h"
 # include "../ui_settings.h"
-#include "display.h"
+# include "display.h"
 
 void	ui_btn_set_rect(t_button *btn, int x, int y, int width);
 void	ui_btn_set_height(t_button *btn, int height);
