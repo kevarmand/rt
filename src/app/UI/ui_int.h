@@ -6,17 +6,16 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/19 01:50:29 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/20 13:04:22 by marvin           ###   ########.fr       */
+/*   Updated: 2025/12/21 07:38:06 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef UI_INT_H
 # define UI_INT_H
+# include "image.h"
 
 typedef struct s_display	t_display;
 typedef struct s_data		t_data;
-
-# include "image.h"
 
 # define MAX_UI_BUTTONS 20
 
@@ -36,7 +35,6 @@ typedef enum e_ui_btn
 	UI_BTN_MODE_ROLL,
 	UI_BTN_MODE_FREE,
 	UI_BTN_APPLY
-
 }	t_ui_btn;
 
 typedef struct s_button
