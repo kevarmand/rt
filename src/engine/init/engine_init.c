@@ -40,8 +40,6 @@ static int	init_bvh(t_scene *scene)
 
 	__attribute__((cleanup(cleanup_bvh_buf))) t_bvh_buf buf ;
 	ft_memset(&buf, 0, sizeof(t_bvh_buf));
-	if (scene->primitive_count == 0)
-		return (0);
 	scene->bvh_nodes = malloc(sizeof(t_bvhnode) * scene->primitive_count);
 	if (scene->bvh_nodes == NULL)
 		return (ERR_MALLOC);
@@ -71,7 +69,9 @@ int	engine_init(t_engine *engine, t_scene *scene)
 	engine_set_defaults(engine, scene);
 	init_cam_views(scene);
 	log_step(LOGSTEP_ENGINE_INIT_CAM_VIEWS, 0);
-	status = init_bvh(scene);
+	status = 0;
+	if (scene->primitive_count)
+		status = init_bvh(scene);
 	log_step(LOGSTEP_ENGINE_INIT_BVH, 0);
 	if (status != SUCCESS)
 		return (status);

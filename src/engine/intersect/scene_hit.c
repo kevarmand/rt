@@ -6,31 +6,14 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 21:25:56 by kearmand          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/12/21 01:17:18 by norivier         ###   ########.fr       */
-=======
 /*   Updated: 2025/12/21 01:22:19 by kearmand         ###   ########.fr       */
->>>>>>> yolo_master
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "engine.h"
 #include "scene.h"
 #include "bvh.h"
-#include <stdio.h>
-
-
-// static void	hit_try_update(t_hit *hit, t_hit_kind kind,
-// 			int primitive_index, float distance)
-// {
-// 	if (distance <= 0.0f)
-// 		return ;
-// 	if (distance >= hit->t)
-// 		return ;
-// 	hit->t = distance;
-// 	hit->primitive_id = primitive_index;
-// 	hit->kind = kind;
-// }
+#include <math.h>
 
 #define RED     "\x1b[31m"
 #define RESET   "\x1b[0m"
@@ -68,7 +51,7 @@ int inter_plane(const t_plane *plane, const t_ray *ray, float *out_distance)
 	float	t;
 
 	denom = vec3f_dot(plane->normal, ray->dir);
-	if (fabsf(denom) < 1e-4f)
+	if (fabsf(denom) < 1.0e-4f)
 		return (0);
 	numerator = - (vec3f_dot(plane->normal, ray->origin) + plane->d);
 	t = numerator / denom;
