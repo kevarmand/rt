@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 21:10:33 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/21 01:52:14 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/21 03:21:41 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ t_vec3f	get_surface_color(const t_scene *sc,
 				const t_surface_map *surf,
 				t_index tex_id,
 				t_hit *hit);
-
 
 int	shading_ray_fast(const t_scene *scene, const t_ray *ray,
 	t_shading_ctx *ctx, t_vec3f *color_out)

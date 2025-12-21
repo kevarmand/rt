@@ -6,15 +6,12 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/31 02:01:43 by norivier          #+#    #+#             */
-/*   Updated: 2025/12/21 01:06:43 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/21 03:13:59 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "rt_math.h"
-#include "math.h"
+#include <math.h>
 #include "bvh.h"
-#include "scene.h"
-#include "vector.h"
 
 __attribute__((always_inline))
 extern inline t_aabb	bound_merge(const t_aabb a, const t_aabb b)
@@ -29,7 +26,7 @@ extern inline t_aabb	bound_merge(const t_aabb a, const t_aabb b)
 __attribute__((always_inline))
 static inline t_vec3f	aabb_centroid(const t_aabb a)
 {
-	return ((a.b[0] + a.b[1]) * RCP_2);
+	return ((a.b[0] + a.b[1]) * (1.0f / 2.0f));
 }
 
 __attribute__((always_inline))
@@ -76,7 +73,9 @@ extern inline int	bound_intersect(t_ray r, t_aabb bound, float *near,
 	tmax = fminf(fminf(b.tmaxx, b.tmaxy), b.tmaxz);
 	if (tmax < fmaxf(tmin, 0.0f))
 		return (0);
-	near[0] = tmin;
-	far[0] = tmax;
+	if (near)
+		near[0] = tmin;
+	if (far)
+		far[0] = tmax;
 	return (1);
 }

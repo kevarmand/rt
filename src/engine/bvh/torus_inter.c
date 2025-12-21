@@ -6,7 +6,7 @@
 /*   By: norivier <norivier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 01:37:05 by norivier          #+#    #+#             */
-/*   Updated: 2025/12/21 02:15:55 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/21 03:18:27 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ static void	frisvadf(const t_vec3f axis, t_vec3f *b1, t_vec3f *b2)
 }
 
 __attribute__((always_inline))
-static t_vec3f	to_localf(t_vec3f p, t_vec3f ux, t_vec3f uy, t_vec3f uz)
+static inline t_vec3f	to_localf(t_vec3f p, t_vec3f ux,
+		t_vec3f uy, t_vec3f uz)
 {
 	return ((t_vec3f){
 		vec3f_dot(p, ux),
@@ -52,6 +53,7 @@ static t_vec3f	to_localf(t_vec3f p, t_vec3f ux, t_vec3f uy, t_vec3f uz)
 // 	});
 // }
 
+__attribute__((always_inline))
 static inline int	torus_interf0(t_torus_interf_ctx *c, t_torus *t,
 		t_hit *hit)
 {

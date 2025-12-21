@@ -6,16 +6,15 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 18:47:49 by norivier          #+#    #+#             */
-/*   Updated: 2025/12/21 01:42:13 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/21 03:17:35 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stddef.h>
-#include "attributes.h"
 #include "bvh.h"
 #include "float.h"
 
-FORCEINLINE
+__attribute__((always_inline))
 extern inline float	prim_centroid_axis(const t_primref *p, int axis)
 {
 	if (axis == 0)
@@ -25,7 +24,7 @@ extern inline float	prim_centroid_axis(const t_primref *p, int axis)
 	return (p->centroid.z);
 }
 
-FORCEINLINE
+__attribute__((always_inline))
 extern inline void	zero_bins(t_bin *bins, size_t siz)
 {
 	size_t	i;
@@ -40,7 +39,7 @@ extern inline void	zero_bins(t_bin *bins, size_t siz)
 	}
 }
 
-FORCEINLINE
+__attribute__((always_inline))
 extern inline void	instance_cbounds(t_bvh_buf *b, t_bvh_child e,
 	t_vec3f *cbounds)
 {
@@ -59,7 +58,7 @@ extern inline void	instance_cbounds(t_bvh_buf *b, t_bvh_child e,
 	}
 }
 
-FORCEINLINE
+__attribute__((always_inline))
 extern inline int	fill_bins(t_bvh_buf *b, t_bvh_child e, t_vec3f *cbounds,
 		int axis)
 {

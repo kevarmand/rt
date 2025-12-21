@@ -6,83 +6,135 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 20:45:35 by norivier          #+#    #+#             */
-/*   Updated: 2025/12/21 01:39:56 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/21 03:11:00 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bvh.h"
-#include "rt_config.h"
-#include <float.h>
-#include <stddef.h>
-#include <stdint.h>
+
+__attribute__((always_inline))
+static inline void	bvh_inter1(t_bvh_inter_ctx *c, t_ray r, t_hit *out)
+{
+	c->valid_l = (bound_intersect(r, *c->left_bounds, &c->tnear, NULL)
+			&& c->tnear < out->t);
+	c->valid_r = (bound_intersect(r, *c->right_bounds, &c->tnearr, NULL)
+			&& c->tnearr < out->t);
+	if (c->valid_l && c->valid_r)
+	{
+		if (c->tnear < c->tnearr)
+		{
+			c->stack[c->sp++] = c->node->node.right;
+			c->stack[c->sp++] = c->node->node.left;
+		}
+		else
+		{
+			c->stack[c->sp++] = c->node->node.left;
+			c->stack[c->sp++] = c->node->node.right;
+		}
+	}
+	else if (c->valid_l)
+		c->stack[c->sp++] = c->node->node.left;
+	else if (c->valid_r)
+		c->stack[c->sp++] = c->node->node.right;
+}
+
+__attribute__((always_inline))
+static inline void	bvh_inter0(t_bvh_inter_ctx *c, t_ray r,
+		t_primitive *prims, t_hit *out)
+{
+	uint32_t	i;
+	int			prim_id;
+	t_hit		local_hit;
+
+	i = 0;
+	while (i < c->node->leaf.count)
+	{
+		prim_id = c->node->leaf.start + i;
+		local_hit = *out;
+		if (prim_inter(r, &prims[prim_id], &local_hit, c->tnear) != 0)
+		{
+			if (local_hit.t > TMIN_PRIM && local_hit.t < out->t)
+			{
+				*out = local_hit;
+				out->primitive_id = prim_id;
+				c->hit_happened = 1;
+			}
+		}
+		i += 1;
+	}
+}
 
 int	bvh_inter(t_ray r, t_bvhnode *nodes, t_primitive *prims, t_hit *out)
 {
-	uint32_t	stack[64];
-	int			sp;
-	int			hit_happened;
+	t_bvh_inter_ctx	c;
 
-	hit_happened = 0;
-	sp = 0;
-	stack[sp++] = 0;
-	while (sp > 0)
+	c.hit_happened = 0;
+	c.sp = 0;
+	c.stack[c.sp++] = 0;
+	while (c.sp > 0)
 	{
-		uint32_t	idx = stack[--sp];
-		t_bvhnode	*node = &nodes[idx];
-		float		tnear;
-		float		tfar;
-		if (bound_intersect(r, node->bounds, &tnear, &tfar) == 0)
+		c.node = &nodes[c.stack[--c.sp]];
+		if (bound_intersect(r, c.node->bounds, &c.tnear, NULL) == 0)
 			continue ;
-		if (tnear > out->t)
+		if (c.tnear > out->t)
 			continue ;
-		if (node->is_leaf)
+		if (c.node->is_leaf)
 		{
-			uint32_t	i;
-			i = 0;
-			while (i < node->leaf.count)
-			{
-				int	prim_id = node->leaf.start + i;
-				t_hit	local_hit = *out;
-				if (prim_inter(r, &prims[prim_id], &local_hit, tnear) != 0)
-				{
-					if (local_hit.t > TMIN_PRIM && local_hit.t < out->t)
-					{
-						*out = local_hit;
-						out->primitive_id = prim_id;
-						hit_happened = 1;
-					}
-				}
-				i += 1;
-			}
+			bvh_inter0(&c, r, prims, out);
 			continue ;
 		}
-		int	hitl; // so close
-		int	hitr;
-		float	tnearr;
-		float	tfarr;
-
-		hitl = bound_intersect(r, nodes[node->node.left].bounds, &tnear, &tfar);
-		hitr = bound_intersect(r, nodes[node->node.right].bounds, &tnearr, &tfarr);
-		if (hitl && tnear < out->t)
-		{
-			if (hitr && tnearr < out->t)
-			{
-				if (tnear < tnearr)
-				{
-					stack[sp++] = node->node.right;
-					stack[sp++] = node->node.left;
-				}
-				else
-				{
-					stack[sp++] = node->node.left;
-					stack[sp++] = node->node.right;
-				}
-			}
-			else
-				stack[sp++] = node->node.left;
-		}
-		else if (hitr && tnearr < out->t)
-			stack[sp++] = node->node.right;
+		c.left_bounds = &nodes[c.node->node.left].bounds;
+		c.right_bounds = &nodes[c.node->node.right].bounds;
+		bvh_inter1(&c, r, out);
 	}
-	return (hit_happened);
+	return (c.hit_happened);
+}
+
+__attribute__((always_inline))
+static inline int	bvh_shadow0(t_bvh_inter_ctx *c, t_ray r,
+		t_primitive *prims, t_hit *out)
+{
+	uint32_t	i;
+	int			prim_id;
+	t_hit		local_hit;
+
+	i = 0;
+	while (i < c->node->leaf.count)
+	{
+		prim_id = c->node->leaf.start + i;
+		local_hit = *out;
+		if (prim_inter(r, &prims[prim_id], &local_hit, c->tnear) != 0)
+		{
+			if (local_hit.t > 0.0f && local_hit.t < out->t)
+				return (1);
+		}
+		i += 1;
+	}
+	return (0);
+}
+
+int	bvh_shadow(t_ray r, t_bvhnode *nodes, t_primitive *prims, t_hit *out)
+{
+	t_bvh_inter_ctx	c;
+
+	c.sp = 0;
+	c.stack[c.sp++] = 0;
+	while (c.sp > 0)
+	{
+		c.node = &nodes[c.stack[--c.sp]];
+		if (bound_intersect(r, c.node->bounds, &c.tnear, NULL) == 0)
+			continue ;
+		if (c.tnear > out->t)
+			continue ;
+		if (c.node->is_leaf)
+		{
+			if (bvh_shadow0(&c, r, prims, out))
+				return (1);
+			continue ;
+		}
+		c.left_bounds = &nodes[c.node->node.left].bounds;
+		c.right_bounds = &nodes[c.node->node.right].bounds;
+		bvh_inter1(&c, r, out);
+	}
+	return (0);
 }

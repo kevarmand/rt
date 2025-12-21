@@ -6,15 +6,14 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 18:43:46 by norivier          #+#    #+#             */
-/*   Updated: 2025/12/21 01:40:21 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/21 03:17:06 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bvh.h"
-#include "attributes.h"
 #include "float.h"
 
-FORCEINLINE
+__attribute__((always_inline))
 static inline void	build_prefix_suffix(t_bvh_buf *b)
 {
 	int	i;
@@ -41,7 +40,7 @@ static inline void	build_prefix_suffix(t_bvh_buf *b)
 	}
 }
 
-FORCEINLINE
+__attribute__((always_inline))
 static inline void	prefix_suffix_count(t_bvh_buf *b)
 {
 	int	i;
@@ -57,7 +56,7 @@ static inline void	prefix_suffix_count(t_bvh_buf *b)
 	}
 }
 
-FORCEINLINE
+__attribute__((always_inline))
 static inline void	find_bestcost(t_bvh_buf *b, t_bvh_child e, int axis)
 {
 	int		i;
@@ -83,7 +82,7 @@ static inline void	find_bestcost(t_bvh_buf *b, t_bvh_child e, int axis)
 	}
 }
 
-FORCEINLINE
+__attribute__((always_inline))
 static inline int	partition_inplace(t_bvh_buf *b, t_bvh_child e,
 	t_vec3f *cbounds)
 {

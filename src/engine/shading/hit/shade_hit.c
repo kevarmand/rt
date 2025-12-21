@@ -6,13 +6,12 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 21:21:27 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/21 01:17:57 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/21 03:20:12 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "engine.h"
 #include "scene.h"
-#include <math.h>
 #include "../shading.h"
 
 static void	compute_secondary_weights(const t_material *mat,

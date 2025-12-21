@@ -6,15 +6,13 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/31 01:56:51 by norivier          #+#    #+#             */
-/*   Updated: 2025/12/21 01:11:17 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/21 03:12:10 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bvh.h"
-#include "scene.h"
-#include "attributes.h"
 
-FORCEINLINE
+__attribute__((always_inline))
 static inline t_aabb	triangle_bound(t_triangle t)
 {
 	t_aabb	out;
@@ -28,7 +26,7 @@ static inline t_aabb	triangle_bound(t_triangle t)
 	return (out);
 }
 
-FORCEINLINE
+__attribute__((always_inline))
 static inline t_aabb	sphere_bound(t_sphere s)
 {
 	t_aabb	out;
@@ -38,7 +36,7 @@ static inline t_aabb	sphere_bound(t_sphere s)
 	return (out);
 }
 
-FORCEINLINE
+__attribute__((always_inline))
 static inline t_aabb	cylinder_bound(t_cylinder c)
 {
 	t_aabb	out;
@@ -52,7 +50,7 @@ static inline t_aabb	cylinder_bound(t_cylinder c)
 	return (out);
 }
 
-FORCEINLINE
+__attribute__((always_inline))
 static inline t_aabb	torus_bound(t_torus t)
 {
 	float	extent;
@@ -64,7 +62,7 @@ static inline t_aabb	torus_bound(t_torus t)
 	return (out);
 }
 
-FORCEINLINE
+__attribute__((always_inline))
 extern inline t_aabb	prim_bound(t_primitive *p)
 {
 	t_aabb	out;

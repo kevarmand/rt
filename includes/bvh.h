@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 20:01:56 by norivier          #+#    #+#             */
-/*   Updated: 2025/12/21 02:10:58 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/21 03:06:05 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,20 @@ typedef struct s_torus_interf_ctx
 	int		nroots;
 }	t_torus_interf_ctx;
 
+typedef struct s_bvh_inter_ctx
+{
+	uint32_t	stack[64];
+	int			sp;
+	t_bvhnode	*node;
+	t_aabb		*left_bounds;
+	t_aabb		*right_bounds;
+	uint8_t		valid_l;
+	uint8_t		valid_r;
+	float		tnear;
+	float		tnearr;
+	int			hit_happened;
+}	t_bvh_inter_ctx;
+
 // AABB
 t_aabb	prim_bound(t_primitive *p);
 t_aabb	bound_merge(t_aabb a, t_aabb b);
@@ -173,6 +187,7 @@ int	torus_interf(t_ray r, t_torus *t, t_hit *hit);
 void	build_bvh(t_bvhnode *nodes, t_bvh_buf *buf, int primcount);
 t_primitive	*reorder_prims(t_primitive *prims, int *idx, size_t count);
 int	bvh_inter(t_ray r, t_bvhnode *nodes, t_primitive *prims, t_hit *out);
+int	bvh_shadow(t_ray r, t_bvhnode *nodes, t_primitive *prims, t_hit *out);
 // Centroid
 t_vec3f	prim_centroid(t_primitive *p);
 #endif // !BVH_H

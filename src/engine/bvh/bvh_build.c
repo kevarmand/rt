@@ -6,14 +6,11 @@
 /*   By: norivier <norivier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/20 15:55:16 by norivier          #+#    #+#             */
-/*   Updated: 2025/12/20 21:34:06 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/21 03:11:25 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bvh.h"
-#include "scene.h"
-#include <stddef.h>
-#include <stdint.h>
 #include <stdlib.h>
 
 __attribute__((always_inline))

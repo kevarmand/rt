@@ -6,12 +6,11 @@
 /*   By: norivier <norivier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 01:05:44 by norivier          #+#    #+#             */
-/*   Updated: 2025/12/21 01:06:54 by norivier         ###   ########.fr       */
+/*   Updated: 2025/12/21 03:15:34 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bvh.h"
-#include "scene.h"
 
 __attribute__((always_inline))
 t_aabb	prim_bound_range(t_primref *pref, int *indice, int start, int count)
