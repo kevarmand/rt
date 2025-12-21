@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 18:47:49 by norivier          #+#    #+#             */
-/*   Updated: 2025/12/18 21:28:46 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 01:42:13 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,8 @@ extern inline void	instance_cbounds(t_bvh_buf *b, t_bvh_child e,
 }
 
 FORCEINLINE
-extern inline int	fill_bins(t_bvh_buf *b,t_bvh_child e, t_vec3f *cbounds,
-	int axis)
+extern inline int	fill_bins(t_bvh_buf *b, t_bvh_child e, t_vec3f *cbounds,
+		int axis)
 {
 	int		i;
 	float	tmp_c;
@@ -75,12 +75,13 @@ extern inline int	fill_bins(t_bvh_buf *b,t_bvh_child e, t_vec3f *cbounds,
 	{
 		tmp_c = prim_centroid_axis(&b->pref[b->pref_idx[e.start + i]], axis);
 		bidx = (int)(((tmp_c - cbounds[0][axis])
-			/ (cbounds[1][axis] - cbounds[0][axis])) * (float)BIN_COUNT);
+					/ (cbounds[1][axis] - cbounds[0][axis]))
+				* (float)BIN_COUNT);
 		if (bidx == BIN_COUNT)
 			bidx = BIN_COUNT - 1;
 		bin = &b->bins[bidx];
 		bin->bounds = bound_merge(bin->bounds,
-			b->pref[b->pref_idx[e.start + i]].bounds);
+				b->pref[b->pref_idx[e.start + i]].bounds);
 		bin->count += 1;
 		i += 1;
 	}

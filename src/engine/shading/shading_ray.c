@@ -6,16 +6,18 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 21:10:33 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/20 00:33:59 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 01:52:14 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "engine.h"
 #include <math.h>
+#include "libft.h"
 #include "shading.h"
 
 static void	reset_hit(t_hit *hit)
 {
+	ft_bzero(hit, sizeof(*hit));
 	hit->kind = HIT_NONE;
 	hit->t = INFINITY;
 	hit->point = (t_vec3f){0.0f, 0.0f, 0.0f, 0.0f};

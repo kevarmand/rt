@@ -6,18 +6,17 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/31 02:01:43 by norivier          #+#    #+#             */
-/*   Updated: 2025/12/18 21:28:07 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 01:06:43 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt_math.h"
-#include "attributes.h"
 #include "math.h"
 #include "bvh.h"
 #include "scene.h"
 #include "vector.h"
 
-FORCEINLINE
+__attribute__((always_inline))
 extern inline t_aabb	bound_merge(const t_aabb a, const t_aabb b)
 {
 	t_aabb	out;
@@ -27,13 +26,13 @@ extern inline t_aabb	bound_merge(const t_aabb a, const t_aabb b)
 	return (out);
 }
 
-FORCEINLINE
+__attribute__((always_inline))
 static inline t_vec3f	aabb_centroid(const t_aabb a)
 {
 	return ((a.b[0] + a.b[1]) * RCP_2);
 }
 
-FORCEINLINE
+__attribute__((always_inline))
 extern inline float	bound_area(t_aabb b)
 {
 	t_vec3f	d;
@@ -42,7 +41,7 @@ extern inline float	bound_area(t_aabb b)
 	return (2.0f * (d.x * d.y + d.y * d.z + d.z * d.x));
 }
 
-FORCEINLINE
+__attribute__((always_inline))
 extern inline void	prim_bound_init(t_bvh_buf *buf, t_primitive *prims,
 	int count)
 {
@@ -59,7 +58,7 @@ extern inline void	prim_bound_init(t_bvh_buf *buf, t_primitive *prims,
 	}
 }
 
-FORCEINLINE
+__attribute__((always_inline))
 extern inline int	bound_intersect(t_ray r, t_aabb bound, float *near,
 	float *far)
 {
@@ -80,20 +79,4 @@ extern inline int	bound_intersect(t_ray r, t_aabb bound, float *near,
 	near[0] = tmin;
 	far[0] = tmax;
 	return (1);
-}
-
-FORCEINLINE
-t_aabb	prim_bound_range(t_primref *pref, int *indice, int start, int count)
-{
-	t_aabb	out;
-	int		i;
-
-	out = pref[indice[start]].bounds;
-	i = 1;
-	while (i < count)
-	{
-		out = bound_merge(out, pref[indice[start + i]].bounds);
-		i += 1;
-	}
-	return (out);
 }

@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 21:25:56 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/17 22:54:49 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 01:17:18 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,8 @@ static void	scene_hit_prims(const t_scene *scene,
 {
 	int	status;
 
+	if (scene->bvh_node_count == 0)
+		return ;
 	status = bvh_inter(*ray, scene->bvh_nodes, scene->primitives,
 					out_hit);
 	if (status != 0)
@@ -106,7 +108,6 @@ static void	scene_hit_planes(const t_scene *scene,
 int	scene_hit(const t_scene *scene, const t_ray *ray, t_hit *out_hit)
 {
 	scene_hit_planes(scene, ray, out_hit);
-	//scene_hit_primitives(scene, ray, out_hit);
 	scene_hit_prims(scene, ray, out_hit);
 	if (out_hit->kind == HIT_NONE)
 		return (0);

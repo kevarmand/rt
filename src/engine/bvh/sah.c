@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 18:43:46 by norivier          #+#    #+#             */
-/*   Updated: 2025/12/18 21:28:50 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 01:40:21 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,8 +98,8 @@ static inline int	partition_inplace(t_bvh_buf *b, t_bvh_child e,
 	{
 		cent = prim_centroid_axis(&b->pref[b->pref_idx[low]], b->bestaxis);
 		bidx = (int)(((cent - cbounds[0][b->bestaxis])
-			/ (cbounds[1][b->bestaxis]
-				- cbounds[0][b->bestaxis])) * BIN_COUNT);
+					/ (cbounds[1][b->bestaxis]
+						- cbounds[0][b->bestaxis])) * BIN_COUNT);
 		if (bidx >= BIN_COUNT)
 			bidx = BIN_COUNT - 1;
 		if (bidx > b->bin_split_idx)

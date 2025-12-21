@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 16:53:48 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/17 22:53:00 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 01:21:19 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,14 +130,10 @@ int	bvh_ocult(t_ray r, t_bvhnode *nodes, t_primitive *prims, t_hit *out)
 int	scene_is_occluded(const t_scene *scene, const t_ray *ray,
 				float max_distance, t_hit *hit)
 {
+	t_hit	local_hit;
 	if (scene_is_occluded_planes(scene, ray, max_distance, hit))
 		return (1);
-	t_hit	out_hit;
-	out_hit = *hit;
-	out_hit.t = max_distance;
-	int status = bvh_ocult(*ray, scene->bvh_nodes, scene->primitives, &out_hit);
-	return (status);
-	// if (scene_is_occluded_primitives(scene, ray, max_distance))
-	// 	return (0);
-	return (0);
+	local_hit = *hit;
+	local_hit.t = max_distance;
+	return (bvh_ocult(*ray, scene->bvh_nodes, scene->primitives, &local_hit));
 }

@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 19:54:50 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/18 20:17:28 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 01:11:45 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	build_geo_torus(const t_scene *scene,
 	surface = &scene->surfaces[hit->surface_id];
 	p = vec3f_sub(hit->point, torus->center);
 	radial = torus_compute_radial(torus, p);
-	normal = vec3f_normalize(vec3f_sub(p, vec3f_scale(radial, torus->R)));
+	normal = vec3f_normalize(vec3f_sub(p, vec3f_scale(radial, torus->r0)));
 	hit->geo_normal = normal;
 	if (surface_needs_uv(surface))
 	{

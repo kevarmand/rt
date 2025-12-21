@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 13:04:56 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/17 22:05:55 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 01:14:49 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ static int	init_bvh(t_scene *scene)
 
 	__attribute__((cleanup(cleanup_bvh_buf))) t_bvh_buf buf ;
 	ft_memset(&buf, 0, sizeof(t_bvh_buf));
+	if (scene->primitive_count == 0)
+		return (0);
 	scene->bvh_nodes = malloc(sizeof(t_bvhnode) * scene->primitive_count);
 	if (scene->bvh_nodes == NULL)
 		return (ERR_MALLOC);

@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 22:07:39 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/18 23:10:10 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 01:07:29 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,8 @@ typedef struct s_torus
 {
 	t_vec3f	center;
 	t_vec3f	normal;
-	float	R;
-	float	r;
+	float	r0;
+	float	r1;
 	float	r_squared;
 	float	R_squared;
 }	t_torus;

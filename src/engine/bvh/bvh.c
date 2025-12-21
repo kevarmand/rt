@@ -6,21 +6,15 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 20:45:35 by norivier          #+#    #+#             */
-/*   Updated: 2025/12/18 21:28:33 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 01:39:56 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bvh.h"
 #include "rt_config.h"
-#include "attributes.h"
-#include "vector.h"
 #include <float.h>
-#include <math.h>
 #include <stddef.h>
 #include <stdint.h>
-#include <stdlib.h>
-#include "libft.h"
-#include "rt_math.h"
 
 int	bvh_inter(t_ray r, t_bvhnode *nodes, t_primitive *prims, t_hit *out)
 {
@@ -29,7 +23,6 @@ int	bvh_inter(t_ray r, t_bvhnode *nodes, t_primitive *prims, t_hit *out)
 	int			hit_happened;
 
 	hit_happened = 0;
-	// out->t = FLT_MAX;
 	sp = 0;
 	stack[sp++] = 0;
 	while (sp > 0)

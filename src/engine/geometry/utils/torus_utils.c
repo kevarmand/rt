@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 20:01:01 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/18 20:09:41 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 01:12:11 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	torus_build_uv(const t_torus *torus, t_vec3f p, t_vec3f radial,
 
 	geo_build_frame(torus->normal, &t0, &b0);
 	theta = atan2f(vec3f_dot(radial, b0), vec3f_dot(radial, t0));
-	o = vec3f_scale(radial, torus->R);
+	o = vec3f_scale(radial, torus->r0);
 	q = vec3f_sub(p, o);
 	hit->u = wrap01(theta * (1.0f / (2.0f * (float)M_PI)));
 	hit->v = wrap01(atan2f(vec3f_dot(q, torus->normal), vec3f_dot(q, radial))

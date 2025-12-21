@@ -10,7 +10,7 @@
 /***
  * le but est de faire un petit programme de test pour verifier que le parsing et le chargement de scene fonctionne correctement
  * il affiche le contenue de la scene parsee element par element
- * 
+ *
 
  */
 void print_globals(const t_scene *scene)
@@ -94,7 +94,7 @@ static void	print_prim_torus(const t_torus *to)
 {
 	printf("  kind=torus\n");
 	print_vec3("center", to->center);
-	printf("  R=%.6f r=%.6f\n", to->R, to->r);
+	printf("  R=%.6f r=%.6f\n", to->r0, to->r1);
 }
 
 static void	print_prim_plane(const t_plane *pl)
@@ -151,7 +151,7 @@ void print_plane(const t_scene *scene)
 		printf("- plane[%d]\n", i);
 		printf("  primitive_type=%d\n", plane->type);
 	}
-} 
+}
 
 void print_surfaces(const t_scene *scene)
 {
@@ -183,6 +183,6 @@ void print_scene(const t_scene *scene)
 	printf("number of surfaces: %d\n", scene->surface_count);
 	printf("number of materials: %d\n", scene->material_count);
 	printf("number of textures: %d\n", scene->texture_count);
-	
+
 	printf("====================\n");
 }

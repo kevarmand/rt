@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/31 01:56:51 by norivier          #+#    #+#             */
-/*   Updated: 2025/12/19 18:10:22 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 01:11:17 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static inline t_aabb	torus_bound(t_torus t)
 	float	extent;
 	t_aabb	out;
 
-	extent = t.R + t.r;
+	extent = t.r0 + t.r1;
 	out.b[0] = t.center - extent;
 	out.b[1] = t.center + extent;
 	return (out);

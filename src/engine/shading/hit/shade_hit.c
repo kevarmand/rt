@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 21:21:27 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/20 00:59:01 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 01:17:57 by norivier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,6 @@ int	shade_hit(const t_scene *scene, const t_hit *hit,
 
 	direct_color = (t_vec3f){0.0f, 0.0f, 0.0f};
 	shade_ambient(scene, hit, &direct_color);
-	// *color_out = direct_color;
-	// return (0);
 	shade_direct_lights(scene, hit, &direct_color);
 	material = &scene->materials[hit->material_id];
 	compute_secondary_weights(material, hit, ctx, weights);
