@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 15:52:53 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/18 16:26:42 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 03:11:56 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	*worker_entry(void *arg)
 	worker = args->worker;
 	data = args->data;
 	cancel_flag = args->cancel_flag;
+	free(arg);
 	wait_for_job(&worker->worker_state, cancel_flag);
 	while (atomic_load(cancel_flag) == 0)
 	{

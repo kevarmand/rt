@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 19:23:24 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/19 15:47:55 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 02:46:57 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,26 +48,6 @@ void	key_hook_qual(int keycode, t_data *data)
 	}
 }
 
-void	key_hook_cam_show(int keycode, t_data *data)
-{
-	int	active_cam;
-
-	//TODO : DELTE LE PRINTF
-	active_cam = data->display.current_cam;
-	if (keycode == KEY_SPACE)
-	{
-		ft_printf("Camera %d/%d\n", active_cam, data->display.total_cams);
-		printf("Position : (%f, %f, %f)\n",
-			data->scene.cameras[active_cam].origin.x,
-			data->scene.cameras[active_cam].origin.y,
-			data->scene.cameras[active_cam].origin.z);
-		printf("Orientation : (%f, %f, %f)\n",
-			data->scene.cameras[active_cam].forward.x,
-			data->scene.cameras[active_cam].forward.y,
-			data->scene.cameras[active_cam].forward.z);
-	}
-}
-
 int	key_hook(int keycode, t_data *data)
 {
 	if (keycode == KEY_ESCAPE)
@@ -76,8 +56,6 @@ int	key_hook(int keycode, t_data *data)
 	{
 		data->display.ui.visible = !data->display.ui.visible;
 		data->display.flag_img_buffer = 1;
-		printf("Toggled UI visibility to %d\n",
-			data->display.ui.visible);
 	}
 	if (keycode == KEY_PLUS)
 		data->display.cam_ctrl.nav_mul *= 1.2f;
@@ -85,14 +63,13 @@ int	key_hook(int keycode, t_data *data)
 		data->display.cam_ctrl.nav_mul /= 1.2f;
 	if (keycode == KEY_CTRL)
 		data->display.cam_ctrl.mode = !(data->display.cam_ctrl.mode);
-	// if (keycode == KEY_TAB)
-	// {
-	// 	data->display.current_cam++;
-	// 	if (data->display.current_cam >= data->display.total_cams)
-	// 		data->display.current_cam = 0;
-	// 	data->display.flag_img_buffer = 1;
-	// }
+	if (keycode == KEY_SPACE)
+	{
+		data->display.current_cam++;
+		if (data->display.current_cam >= data->display.total_cams)
+			data->display.current_cam = 0;
+		data->display.flag_img_buffer = 1;
+	}
 	key_hook_qual(keycode, data);
-	key_hook_cam_show(keycode, data);
 	return (SUCCESS);
 }

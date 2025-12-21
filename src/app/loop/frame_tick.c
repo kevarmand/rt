@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 20:14:44 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/19 22:00:14 by kearmand         ###   ########.fr       */
+/*   Updated: 2025/12/21 03:09:38 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,27 +55,13 @@ void	display_draw_base(t_data *data)
 {
 	if (data->display.flag_img_window == 0)
 		return ;
-	ft_putstr_fd("Drawing base image to window...\n", 1);
 	mlx_put_image_to_window(
 		data->display.mlx,
 		data->display.win,
 		data->display.main_img.img_ptr,
 		0, 0);
-	ft_putstr_fd("Drawing base image to window\n", 1);
 	data->display.flag_img_window = 0;
 }
-
-
-// static void	display_update_ui(t_data *data)
-// {
-// 	t_display	*display;
-// 	int			changed;
-
-// 	display = &data->display;
-// 	changed = ui_tick(data);
-// 	if (changed)
-// 		display->flag_ui = 1;
-// }
 
 void	display_update_ui(t_display *display);
 void	print_txt_ui(t_data *data);
@@ -92,8 +78,6 @@ static void	display_draw_ui(t_data *data)
 	print_txt_ui(data);
 }
 
-
-
 int	frame_tick(t_data *data)
 {
 	display_update_ui(&data->display);
@@ -101,6 +85,6 @@ int	frame_tick(t_data *data)
 	sync_engine_tick(data);
 	display_refresh_main_image(data);
 	display_draw_base(data);
-	 display_draw_ui(data);
+	display_draw_ui(data);
 	return (0);
 }
