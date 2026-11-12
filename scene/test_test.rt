@@ -4,18 +4,21 @@ R  1600 1200
 A 0.02 255,255,255
 
 # Camera : position (0, 2, 12) regardant vers l'origine
-C 0,3,21  0,0,-1  70
+
+C 1.886,3.491,26.819  -0.070615,-0.018325,-0.997335 60
 c 0,3,21  0,0,-1  60
 c 0,3,21  0,0,-1  45
 
 #sphere jsute devant la cam distance - R dans le plan focal image
-sp 0,3,20.5 1 255,255,255  diffuse=0 specular=0 shininess=0 refraction=1 reflection=1 ior=1.01 bump=texture/lunar_bump.xpm bscale=5
+to 0,3,20.5 0,1,0 1 0.5 255,255,255  diffuse=0 specular=0 shininess=0 refraction=1 reflection=1 ior=1.15 bump=texture/lunar_bump.xpm bscale=0
 
 # Lumière blanche au-dessus à droite
 L 3,6,3  0.9  255,255,255
-
 # Sol gris
-pl 0,0,0  0,1,0  120,120,120 texture=texture/pavage.xpm uv=1,0,0,1,0,0
+pl 0,0,0  0,1,0  120,120,120 texture=texture/pavage.xpm checkerboard=texture/ground.xpm  uv=0.7,0,0,0.7,0,0
+
+
+skybox texture/puresky.xpm sp 0.5,0.5,0.5
 
 ###############################
 #   BANDE TEST SPECULAIRE     #
@@ -60,11 +63,40 @@ sp 1,4.5,0 1 255,255,255 diffuse=0 specular=0 shininess=0 reflection=1
 sp 0,1,10 2 0,255,255 ior=1.5 diffuse=1 specular=0.5 shininess=100  reflection=0.1 refraction=0.9
 
 #cylindre metalise
-cy 5,0,1 0,1,0  2 2  255,100,100 ambient=0.5 diffuse=0.3 specular=0.3 shininess=300 reflection=0.7 refraction=0.000
+cy 5,0,1 0,1,0  2 2  255,100,100 ambient=0.5 diffuse=0.3 specular=0.3 shininess=300 reflection=0.3 refraction=0.000
 
 # deuxieme cylyndre en longueur
-cy 0,0,-5 1,0,0  1 6  100,100,255 ambient=0.3 diffuse=0.8 specular=0.6 shininess=100
+cy 0,0,-5 1,0,0  1 6  100,100,255 ambient=0.1 diffuse=0.1 specular=0.2 shininess=100 reflection=1 refraction=0.001
 
-to -5,5,5  0,1,1  2 1  0,255,0 texture=texture/terre.xpm
+#to -5,5,5  0,1,1  2 1  0,255,0 texture=texture/terre.xpm 
 
-to -5,3,0  1,1,1  2 1  0,255,0 texture=texture/terre.xpm uv=1,0,0,1,-0.3,0.5
+to -5,3,0  1,1,1  2 1  0,255,0 texture=texture/2k_earth_daymap.xpm uv=1,0,0,1,0,0.5
+
+###############################
+#   ANNEAUX JO – DAMIER       #
+###############################
+
+# Ligne du haut
+to -4,6,-18  0,0,1  3.2 0.45  0,112,192   checkerboard=0,80,150    uv=100,0,0,10,0,0  diffuse=1 specular=0.3 shininess=64   # Bleu
+to  0,6,-18  0,0,1  3.2 0.45  0,0,0       checkerboard=40,40,40    uv=100,0,0,10,0,0  diffuse=1 specular=0.3 shininess=64   # Noir
+to  4,6,-18  0,0,1  3.2 0.45  221,0,49    checkerboard=170,0,40   uv=100,0,0,10,0,0  diffuse=1 specular=0.3 shininess=64   # Rouge
+
+# Ligne du bas
+to -2,4.2,-18  0,0,1  3.2 0.45  255,184,28 checkerboard=210,150,20 uv=100,0,0,10,0,0  diffuse=1 specular=0.3 shininess=64   # Jaune
+to  2,4.2,-18  0,0,1  3.2 0.45  0,166,81   checkerboard=0,120,60   uv=100,0,0,10,0,0  diffuse=1 specular=0.3 shininess=64   # Vert
+
+
+##################################
+#   2 tore sur les cote pour jouer #
+##################################
+
+#on va metre des checkerboard dessus avec un deuxieme violet plus fonce
+to -10,-3,0  1,0,0  15 5  255,0,255 diffuse=0.3 checkerboard=150,0,150  uv=210,0,0,70,0,0 reflection=1 refraction=0.0001
+
+#deuxieme tore avec dautee couleur 
+to  10,-3,0  1,0,0  15 5  0,0,255 checkerboard=0,0,150  uv=30,0,0,10,0,0 refraction=0.9 ior=1.01
+
+#petite sphere 
+sp 7,1,2 2 255,255,0 diffuse=1 specular=0.5 shininess=100 checkerboard=150,150,0 uv=60,-30,15,-30,0,0
+
+sp 5,1,6  1  255,100,100 ambient=0.5 diffuse=0.3 specular=0.3 shininess=300 reflection=0.3 refraction=0.000

@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 21:10:33 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/21 03:21:41 by norivier         ###   ########.fr       */
+/*   Updated: 2026/01/23 18:23:29 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,3 +71,4 @@ int	shading_ray_fast(const t_scene *scene, const t_ray *ray,
 		sky_color(ray->dir, color_out);
 	return (0);
 }
+	

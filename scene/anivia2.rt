@@ -20,7 +20,7 @@ l 200,500,300   0.9412456   150,180,255
 l 1000,300,400  0.9412456   230,240,255
 pl	0,0,0	0,1,0	200,200,200	texture=texture/ground.xpm	uv=0.02,0.00,0.00,-0.02,0,0 checkerboard=texture/pavage.xpm
 
-skybox texture/puresky2.xpm sp 0.5,0.5,0.5
+skybox texture/puresky.xpm sp 0.5,0.5,0.5
 
 #mettre la sphere au milieu de la cam
 sp	0,47,25	30	255,255,255	diffuse=0.1 specular=1 shininess=300 reflection=0.5
