@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 09:13:13 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/21 09:14:15 by kearmand         ###   ########.fr       */
+/*   Updated: 2026/11/12 14:32:33 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static void	ui_load_from_display(t_display *display)
 
 	ui = &display->ui;
 	ui->render_mode_selected = display->user_render_mode;
-	ui->ssaa_idx = display->render_ssaa;
+	ui->ssaa_idx = display->render_ssaa - 1;
 	ui->tonemap_enabled = display->render_tonemap;
 	ui->mode_selected = display->cam_ctrl.mode;
 	ui->dirty = 1;

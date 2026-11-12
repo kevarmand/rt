@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 09:14:19 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/21 09:38:07 by kearmand         ###   ########.fr       */
+/*   Updated: 2026/11/12 14:31:48 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void	apply_event(t_display *display, t_ui *ui)
 {
 	int	i;
 
-	display->render_ssaa = ui->ssaa_idx;
+	display->render_ssaa = ui->ssaa_idx + 1;
 	display->render_tonemap = ui->tonemap_enabled;
 	display->flag_request_render = 1;
 	display->cam_ctrl.mode = ui->mode_selected;
