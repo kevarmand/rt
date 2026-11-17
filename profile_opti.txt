@@ -1,0 +1,1678 @@
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls  ms/call  ms/call  name    
+ 40.00      0.02     0.02                             worker_entry
+ 20.00      0.03     0.01    65204     0.00     0.00  vec3f_scale
+ 20.00      0.04     0.01     4211     0.00     0.00  shade_one_light
+ 20.00      0.05     0.01                             ft_memcpy
+  0.00      0.05     0.00   281699     0.00     0.00  ui_current_cam
+  0.00      0.05     0.00   281689     0.00     0.00  sync_engine_tick
+  0.00      0.05     0.00   281687     0.00     0.00  display_request_policy
+  0.00      0.05     0.00   281685     0.00     0.00  camera_handle_level
+  0.00      0.05     0.00   281676     0.00     0.00  display_engine_send
+  0.00      0.05     0.00   281669     0.00     0.00  display_engine_receive
+  0.00      0.05     0.00   281666     0.00     0.00  camera_handle_pan
+  0.00      0.05     0.00   281656     0.00     0.00  ui_print_cam_status
+  0.00      0.05     0.00   281650     0.00     0.00  camera_handle_dolly
+  0.00      0.05     0.00   281617     0.00     0.00  camera_handle_orbit
+  0.00      0.05     0.00   281613     0.00     0.00  display_update_camera
+  0.00      0.05     0.00   281544     0.00     0.00  frame_tick
+  0.00      0.05     0.00   281532     0.00     0.00  display_update_ui
+  0.00      0.05     0.00   281133     0.00     0.00  get_active_target_quality
+  0.00      0.05     0.00   157393     0.00     0.00  linear_to_rgb8_vec
+  0.00      0.05     0.00   118574     0.00     0.00  tm_luminance
+  0.00      0.05     0.00    68262     0.00     0.00  vec3f_dot
+  0.00      0.05     0.00    49442     0.00     0.00  vec3f_add
+  0.00      0.05     0.00    39708     0.00     0.00  tm_bin_from_lum
+  0.00      0.05     0.00    14876     0.00     0.00  vec3f_sub
+  0.00      0.05     0.00    10421     0.00     0.00  manager_read_mailbox
+  0.00      0.05     0.00     9524     0.00     0.00  ray_finalize
+  0.00      0.05     0.00     9474     0.00     0.00  vec3f_normalize
+  0.00      0.05     0.00     9427     0.00     0.00  ft_rsqrtf
+  0.00      0.05     0.00     9215     0.00     0.00  solve_quad
+  0.00      0.05     0.00     8934     0.00     0.00  prim_inter
+  0.00      0.05     0.00     8043     0.00     0.00  bound_intersect
+  0.00      0.05     0.00     7538     0.00     0.00  vec3f_mul
+  0.00      0.05     0.00     4474     0.00     0.00  bvh_inter
+  0.00      0.05     0.00     4470     0.00     0.00  vec3f_length
+  0.00      0.05     0.00     4364     0.00     0.00  build_ray_for_pixel
+  0.00      0.05     0.00     4236     0.00     0.00  scene_hit
+  0.00      0.05     0.00     4141     0.00     0.00  shading_ray
+  0.00      0.05     0.00     4130     0.00     0.00  apply_surface_shading
+  0.00      0.05     0.00     4123     0.00     0.00  surface_needs_bump
+  0.00      0.05     0.00     4104     0.00     0.00  shade_ambient
+  0.00      0.05     0.00     4067     0.00     0.00  shade_direct_lights
+  0.00      0.05     0.00     4042     0.00     0.00  hit_faceforward
+  0.00      0.05     0.00     4008     0.00     0.00  shade_hit
+  0.00      0.05     0.00     3894     0.00     0.00  surface_needs_uv
+  0.00      0.05     0.00     3848     0.00     0.00  scene_is_occluded
+  0.00      0.05     0.00     3498     0.00     0.00  bvh_shadow
+  0.00      0.05     0.00     3347     0.00     0.00  build_geo_plane
+  0.00      0.05     0.00     3253     0.00     0.00  hit_build_geometry
+  0.00      0.05     0.00     3099     0.00     0.00  bitmap_get
+  0.00      0.05     0.00     2758     0.00     0.00  sortf2
+  0.00      0.05     0.00      540     0.00     0.00  skybox_eval
+  0.00      0.05     0.00      529     0.00     0.00  shade_reflection
+  0.00      0.05     0.00      501     0.00     0.00  sky_gradient_eval
+  0.00      0.05     0.00      492     0.00     0.00  vec3f_lerp
+  0.00      0.05     0.00      485     0.00     0.00  inter_plane
+  0.00      0.05     0.00      435     0.00     0.00  manager_dispatch_tile
+  0.00      0.05     0.00      407     0.00     0.00  init_worker_tile
+  0.00      0.05     0.00      336     0.00     0.00  build_geo_cylinder
+  0.00      0.05     0.00      197     0.00     0.00  shading_ray_fast
+  0.00      0.05     0.00      174     0.00     0.00  build_geo_sphere
+  0.00      0.05     0.00      100     0.00     0.00  manager_convert_hdr_to_rgb
+  0.00      0.05     0.00       93     0.00     0.00  manager_assign_jobs
+  0.00      0.05     0.00       93     0.00     0.00  sky_color
+  0.00      0.05     0.00       91     0.00     0.00  manager_collect_tiles
+  0.00      0.05     0.00       90     0.00     0.00  get_surface_color
+  0.00      0.05     0.00       73     0.00     0.00  pars_tok_eq
+  0.00      0.05     0.00       57     0.00     0.00  pars_next_tok
+  0.00      0.05     0.00       40     0.00     0.00  scan_float
+  0.00      0.05     0.00       28     0.00     0.00  mouse_move
+  0.00      0.05     0.00       25     0.00     0.00  thread_start_worker
+  0.00      0.05     0.00       24     0.00     0.00  pars_line
+  0.00      0.05     0.00       22     0.00     0.00  manager_update_display
+  0.00      0.05     0.00       21     0.00     0.00  bitmap_clear
+  0.00      0.05     0.00       19     0.00     0.00  manager_run_tonemap
+  0.00      0.05     0.00       14     0.00     0.00  bitmap_set
+  0.00      0.05     0.00       14     0.00     0.00  log_step
+  0.00      0.05     0.00       14     0.00     0.00  ui_btn_set_height
+  0.00      0.05     0.00       14     0.00     0.00  ui_btn_set_rect
+  0.00      0.05     0.00       14     0.00     0.00  ui_btn_set_style
+  0.00      0.05     0.00       14     0.00     0.00  ui_btn_set_txt_color
+  0.00      0.05     0.00       14     0.00     0.00  ui_push_button
+  0.00      0.05     0.00       13     0.00     0.00  put_nchar
+  0.00      0.05     0.00       13     0.00     0.00  step_section
+  0.00      0.05     0.00       12     0.00     0.00  handle_section_step
+  0.00      0.05     0.00       12     0.00     0.00  section_total
+  0.00      0.05     0.00       11     0.00     0.00  int_len
+  0.00      0.05     0.00       10     0.00     0.00  print_line_features
+  0.00      0.05     0.00        8     0.00     0.00  rgb8_to_linear_vec
+  0.00      0.05     0.00        8     0.00     0.00  scan_option
+  0.00      0.05     0.00        8     0.00     0.00  scan_point
+  0.00      0.05     0.00        7     0.00     0.00  pars_dispatch_tok
+  0.00      0.05     0.00        7     0.00     0.00  ui_colors_from_selected
+  0.00      0.05     0.00        5     0.00     0.00  init_parsed_element
+  0.00      0.05     0.00        5     0.00     0.00  pars_register_element
+  0.00      0.05     0.00        5     0.00     0.00  scan_color
+  0.00      0.05     0.00        5     0.00     0.00  vec3f_cross
+  0.00      0.05     0.00        4     0.00     0.00  col_left_width
+  0.00      0.05     0.00        4     0.00     0.00  pars_options
+  0.00      0.05     0.00        4     0.00     0.00  print_col_center_prefix
+  0.00      0.05     0.00        4     0.00     0.00  print_col_center_suffix
+  0.00      0.05     0.00        4     0.00     0.00  put_nstr
+  0.00      0.05     0.00        4     0.00     0.00  ui_is_render_selected
+  0.00      0.05     0.00        3     0.00     0.00  conv_option_primitive
+  0.00      0.05     0.00        3     0.00     0.00  generate_option_key
+  0.00      0.05     0.00        3     0.00     0.00  inner_width
+  0.00      0.05     0.00        3     0.00     0.00  intern_material
+  0.00      0.05     0.00        3     0.00     0.00  intern_surface
+  0.00      0.05     0.00        3     0.00     0.00  scan_vec3
+  0.00      0.05     0.00        3     0.00     0.00  section_header
+  0.00      0.05     0.00        3     0.00     0.00  ui_is_mode_selected
+  0.00      0.05     0.00        3     0.00     0.00  vec3f_load3
+  0.00      0.05     0.00        2     0.00     0.00  bitmap_zero
+  0.00      0.05     0.00        2     0.00     0.00  col_right_width
+  0.00      0.05     0.00        2     0.00     0.00  prim_bound
+  0.00      0.05     0.00        2     0.00     0.00  print_centered_prefix
+  0.00      0.05     0.00        2     0.00     0.00  print_centered_suffix
+  0.00      0.05     0.00        2     0.00     0.00  print_edge
+  0.00      0.05     0.00        2     0.00     0.00  print_empty_line
+  0.00      0.05     0.00        2     0.00     0.00  print_inner_hline
+  0.00      0.05     0.00        2     0.00     0.00  print_line_cols_begin
+  0.00      0.05     0.00        2     0.00     0.00  print_line_cols_end
+  0.00      0.05     0.00        2     0.00     7.59  render_tile_normal
+  0.00      0.05     0.00        2     0.00     0.00  scan_opt_diffuse
+  0.00      0.05     0.00        2     0.00     0.00  scan_opt_reflection
+  0.00      0.05     0.00        2     0.00     0.00  scan_opt_shininess
+  0.00      0.05     0.00        2     0.00     0.00  scan_opt_specular
+  0.00      0.05     0.00        2     0.00     0.00  vec3f_max
+  0.00      0.05     0.00        2     0.00     0.00  vec3f_min
+  0.00      0.05     0.00        2     0.00     0.00  view_setup
+  0.00      0.05     0.00        1     0.00     0.00  assemble_scene
+  0.00      0.05     0.00        1     0.00     0.00  bitmap_destroy
+  0.00      0.05     0.00        1     0.00     0.00  bitmap_init
+  0.00      0.05     0.00        1     0.00     0.00  bound_merge
+  0.00      0.05     0.00        1     0.00     0.00  build_bvh
+  0.00      0.05     0.00        1     0.00     0.00  build_scene
+  0.00      0.05     0.00        1     0.00     0.00  build_textures
+  0.00      0.05     0.00        1     0.00     0.00  check_args
+  0.00      0.05     0.00        1     0.00     0.00  conv_build_ctx
+  0.00      0.05     0.00        1     0.00     0.00  conv_cameras
+  0.00      0.05     0.00        1     0.00     0.00  conv_count_all
+  0.00      0.05     0.00        1     0.00     0.00  conv_globals
+  0.00      0.05     0.00        1     0.00     0.00  conv_lights
+  0.00      0.05     0.00        1     0.00     0.00  conv_primitives
+  0.00      0.05     0.00        1     0.00     0.00  copy_cylinder_to_primitive
+  0.00      0.05     0.00        1     0.00     0.00  copy_plane_to_primitive
+  0.00      0.05     0.00        1     0.00     0.00  copy_sphere_to_primitive
+  0.00      0.05     0.00        1     0.00     0.00  destroy_display
+  0.00      0.05     0.00        1     0.00     0.00  destroy_render
+  0.00      0.05     0.00        1     0.00     0.00  destroy_scene
+  0.00      0.05     0.00        1     0.00     0.00  display_init
+  0.00      0.05     0.00        1     0.00     0.00  display_init_frames
+  0.00      0.05     0.00        1     0.00     0.00  engine_init
+  0.00      0.05     0.00        1     0.00     0.00  free_ctx
+  0.00      0.05     0.00        1     0.00     0.00  free_parsed_scene
+  0.00      0.05     0.00        1     0.00     0.00  handle_camera_primary
+  0.00      0.05     0.00        1     0.00     0.00  handle_light_primary
+  0.00      0.05     0.00        1     0.00     0.00  init_cam_ctrl
+  0.00      0.05     0.00        1     0.00     0.00  init_cam_views
+  0.00      0.05     0.00        1     0.00     0.00  init_ctx
+  0.00      0.05     0.00        1     0.00     0.00  init_parsed_scene
+  0.00      0.05     0.00        1     0.00     0.00  init_sky_texture
+  0.00      0.05     0.00        1     0.00     0.00  init_surface_plane_cache
+  0.00      0.05     0.00        1     0.00     0.00  init_surface_uv
+  0.00      0.05     0.00        1     0.00     0.00  init_ui
+  0.00      0.05     0.00        1     0.00     4.77  interpolate_tile_blocks
+  0.00      0.05     0.00        1     0.00     0.00  key_hook
+  0.00      0.05     0.00        1     0.00     0.00  load_scene
+  0.00      0.05     0.00        1     0.00     0.00  log_info_parsed
+  0.00      0.05     0.00        1     0.00     0.00  pars_ambient
+  0.00      0.05     0.00        1     0.00     0.00  pars_camera
+  0.00      0.05     0.00        1     0.00     0.00  pars_cylinder
+  0.00      0.05     0.00        1     0.00     0.00  pars_light
+  0.00      0.05     0.00        1     0.00     0.00  pars_plane
+  0.00      0.05     0.00        1     0.00     0.00  pars_resolution
+  0.00      0.05     0.00        1     0.00     0.00  pars_scene
+  0.00      0.05     0.00        1     0.00     0.00  pars_sphere
+  0.00      0.05     0.00        1     0.00     0.00  parsed_textures_destroy
+  0.00      0.05     0.00        1     0.00     0.00  prim_bound_init
+  0.00      0.05     0.00        1     0.00     0.00  prim_bound_range
+  0.00      0.05     0.00        1     0.00     0.00  print_banner
+  0.00      0.05     0.00        1     0.00     0.00  print_cam_light_line
+  0.00      0.05     0.00        1     0.00     0.00  print_check_args
+  0.00      0.05     0.00        1     0.00     0.00  print_clear
+  0.00      0.05     0.00        1     0.00     0.00  print_cyan_header
+  0.00      0.05     0.00        1     0.00     0.00  print_geometry_lines
+  0.00      0.05     0.00        1     0.00     0.00  print_line_left_begin
+  0.00      0.05     0.00        1     0.00     0.00  print_line_left_end
+  0.00      0.05     0.00        1     0.00     0.00  print_mtsb_line
+  0.00      0.05     0.00        1     0.00     0.00  print_objects_line
+  0.00      0.05     0.00        1     0.00     0.00  print_resolution_line
+  0.00      0.05     0.00        1     0.00     0.00  print_title_line
+  0.00      0.05     0.00        1     0.00     0.00  render_init
+  0.00      0.05     0.00        1     0.00     0.00  render_init_tileset
+  0.00      0.05     0.00        1     0.00     0.00  render_init_worker_tiles
+  0.00      0.05     0.00        1     0.00     0.00  render_init_workers
+  0.00      0.05     0.00        1     0.00     0.00  reorder_prims
+  0.00      0.05     0.00        1     0.00     0.00  run_app
+  0.00      0.05     0.00        1     0.00     0.00  thread_start_manager
+  0.00      0.05     0.00        1     0.00     0.00  threads_cancel_and_join
+  0.00      0.05     0.00        1     0.00     0.00  threads_start
+  0.00      0.05     0.00        1     0.00     0.00  tm_apply_full_image
+  0.00      0.05     0.00        1     0.00     0.00  tm_build_hist_sampled
+  0.00      0.05     0.00        1     0.00     0.00  tm_exposure_from_lum
+  0.00      0.05     0.00        1     0.00     0.00  tm_hist_clear
+  0.00      0.05     0.00        1     0.00     0.00  tm_hist_total
+  0.00      0.05     0.00        1     0.00     0.00  tm_lum_from_bin
+  0.00      0.05     0.00        1     0.00     0.00  tm_percentile_lum
+  0.00      0.05     0.00        1     0.00     0.00  ui_add_apply
+  0.00      0.05     0.00        1     0.00     0.00  ui_add_close
+  0.00      0.05     0.00        1     0.00     0.00  ui_add_mode_free
+  0.00      0.05     0.00        1     0.00     0.00  ui_add_mode_lock
+  0.00      0.05     0.00        1     0.00     0.00  ui_add_mode_roll
+  0.00      0.05     0.00        1     0.00     0.00  ui_add_render_auto
+  0.00      0.05     0.00        1     0.00     0.00  ui_add_ssaa
+  0.00      0.05     0.00        1     0.00     0.00  ui_add_tonemap_label
+  0.00      0.05     0.00        1     0.00     0.00  ui_add_tonemap_toggle
+  0.00      0.05     0.00        1     0.00     0.00  ui_build_buttons
+  0.00      0.05     0.00        1     0.00     0.00  ui_colors_from_enabled
+  0.00      0.05     0.00        1     0.00     0.00  ui_onoff_txt
+  0.00      0.05     0.00        1     0.00     0.00  ui_ssaa_txt
+  0.00      0.05     0.00        1     0.00     0.00  xpm_load
+
+ %         the percentage of the total running time of the
+time       program used by this function.
+
+cumulative a running sum of the number of seconds accounted
+ seconds   for by this function and those listed above it.
+
+ self      the number of seconds accounted for by this
+seconds    function alone.  This is the major sort for this
+           listing.
+
+calls      the number of times this function was invoked, if
+           this function is profiled, else blank.
+
+ self      the average number of milliseconds spent in this
+ms/call    function per call, if this function is profiled,
+	   else blank.
+
+ total     the average number of milliseconds spent in this
+ms/call    function and its descendents per call, if this
+	   function is profiled, else blank.
+
+name       the name of the function.  This is the minor sort
+           for this listing. The index shows the location of
+	   the function in the gprof listing. If the index is
+	   in parenthesis it shows where it would appear in
+	   the gprof listing if it were to be printed.
+
+Copyright (C) 2012-2022 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+		     Call graph (explanation follows)
+
+
+granularity: each sample hit covers 4 byte(s) for 20.00% of 0.05 seconds
+
+index % time    self  children    called     name
+                                                 <spontaneous>
+[1]     70.4    0.02    0.02                 worker_entry [1]
+                0.00    0.02       2/2           render_tile_normal [2]
+-----------------------------------------------
+                0.00    0.02       2/2           worker_entry [1]
+[2]     30.4    0.00    0.02       2         render_tile_normal [2]
+                0.00    0.01    3624/3624        shading_ray <cycle 1> [12]
+                0.00    0.00    4193/4364        build_ray_for_pixel [11]
+-----------------------------------------------
+[3]     27.7    0.00    0.01    3624+5054    <cycle 1 as a whole> [3]
+                0.00    0.01    4008             shade_hit <cycle 1> [4]
+                0.00    0.00    4141             shading_ray <cycle 1> [12]
+                0.00    0.00     529             shade_reflection <cycle 1> [15]
+-----------------------------------------------
+                                4008             shading_ray <cycle 1> [12]
+[4]     24.7    0.00    0.01    4008         shade_hit <cycle 1> [4]
+                0.00    0.01    4067/4067        shade_direct_lights [6]
+                0.00    0.00    4104/4104        shade_ambient [14]
+                0.00    0.00     553/49442       vec3f_add [45]
+                                 529             shade_reflection <cycle 1> [15]
+-----------------------------------------------
+                0.01    0.00    4211/4211        shade_direct_lights [6]
+[5]     23.4    0.01    0.00    4211         shade_one_light [5]
+                0.00    0.00   11184/65204       vec3f_scale [7]
+                0.00    0.00   15193/49442       vec3f_add [45]
+                0.00    0.00    6730/68262       vec3f_dot [44]
+                0.00    0.00    4507/9524        ray_finalize [48]
+                0.00    0.00    4470/4470        vec3f_length [56]
+                0.00    0.00    4358/14876       vec3f_sub [47]
+                0.00    0.00    3848/3848        scene_is_occluded [62]
+                0.00    0.00    3735/9474        vec3f_normalize [49]
+                0.00    0.00    3265/7538        vec3f_mul [54]
+-----------------------------------------------
+                0.00    0.01    4067/4067        shade_hit <cycle 1> [4]
+[6]     23.4    0.00    0.01    4067         shade_direct_lights [6]
+                0.01    0.00    4211/4211        shade_one_light [5]
+-----------------------------------------------
+                0.00    0.00       1/65204       init_cam_ctrl [25]
+                0.00    0.00       1/65204       copy_cylinder_to_primitive [23]
+                0.00    0.00       8/65204       view_setup [18]
+                0.00    0.00     381/65204       build_geo_cylinder [16]
+                0.00    0.00    2227/65204       shade_reflection <cycle 1> [15]
+                0.00    0.00    4162/65204       shade_ambient [14]
+                0.00    0.00    7283/65204       hit_build_geometry [13]
+                0.00    0.00    8883/65204       build_ray_for_pixel [11]
+                0.00    0.00   11184/65204       shade_one_light [5]
+                0.00    0.00   31074/65204       interpolate_tile_blocks [10]
+[7]     20.0    0.01    0.00   65204         vec3f_scale [7]
+-----------------------------------------------
+                                                 <spontaneous>
+[8]     20.0    0.01    0.00                 ft_memcpy [8]
+-----------------------------------------------
+                                                 <spontaneous>
+[9]      9.6    0.00    0.00                 render_tile_fast [9]
+                0.00    0.00       1/1           interpolate_tile_blocks [10]
+                0.00    0.00     171/4364        build_ray_for_pixel [11]
+                0.00    0.00     197/197         shading_ray_fast [73]
+-----------------------------------------------
+                0.00    0.00       1/1           render_tile_fast [9]
+[10]     9.5    0.00    0.00       1         interpolate_tile_blocks [10]
+                0.00    0.00   31074/65204       vec3f_scale [7]
+                0.00    0.00   15350/49442       vec3f_add [45]
+-----------------------------------------------
+                0.00    0.00     171/4364        render_tile_fast [9]
+                0.00    0.00    4193/4364        render_tile_normal [2]
+[11]     2.7    0.00    0.00    4364         build_ray_for_pixel [11]
+                0.00    0.00    8883/65204       vec3f_scale [7]
+                0.00    0.00    9459/49442       vec3f_add [45]
+                0.00    0.00    4528/9474        vec3f_normalize [49]
+                0.00    0.00    4473/14876       vec3f_sub [47]
+                0.00    0.00    4459/9524        ray_finalize [48]
+-----------------------------------------------
+                                 517             shade_reflection <cycle 1> [15]
+                0.00    0.01    3624/3624        render_tile_normal [2]
+[12]     2.4    0.00    0.00    4141         shading_ray <cycle 1> [12]
+                0.00    0.00    3253/3253        hit_build_geometry [13]
+                0.00    0.00     336/336         build_geo_cylinder [16]
+                0.00    0.00    4130/4236        scene_hit [57]
+                0.00    0.00    4130/4130        apply_surface_shading [58]
+                0.00    0.00    3347/3347        build_geo_plane [64]
+                0.00    0.00     540/540         skybox_eval [67]
+                0.00    0.00     501/501         sky_gradient_eval [68]
+                0.00    0.00     174/174         build_geo_sphere [74]
+                                4008             shade_hit <cycle 1> [4]
+-----------------------------------------------
+                0.00    0.00    3253/3253        shading_ray <cycle 1> [12]
+[13]     2.2    0.00    0.00    3253         hit_build_geometry [13]
+                0.00    0.00    7283/65204       vec3f_scale [7]
+                0.00    0.00    3593/49442       vec3f_add [45]
+-----------------------------------------------
+                0.00    0.00    4104/4104        shade_hit <cycle 1> [4]
+[14]     1.3    0.00    0.00    4104         shade_ambient [14]
+                0.00    0.00    4162/65204       vec3f_scale [7]
+                0.00    0.00    4340/49442       vec3f_add [45]
+                0.00    0.00    4273/7538        vec3f_mul [54]
+-----------------------------------------------
+                                 529             shade_hit <cycle 1> [4]
+[15]     0.7    0.00    0.00     529         shade_reflection <cycle 1> [15]
+                0.00    0.00    2227/65204       vec3f_scale [7]
+                0.00    0.00     620/9474        vec3f_normalize [49]
+                0.00    0.00     612/14876       vec3f_sub [47]
+                0.00    0.00     560/49442       vec3f_add [45]
+                0.00    0.00     558/9524        ray_finalize [48]
+                0.00    0.00     533/68262       vec3f_dot [44]
+                                 517             shading_ray <cycle 1> [12]
+-----------------------------------------------
+                0.00    0.00     336/336         shading_ray <cycle 1> [12]
+[16]     0.1    0.00    0.00     336         build_geo_cylinder [16]
+                0.00    0.00     381/65204       vec3f_scale [7]
+                0.00    0.00     744/14876       vec3f_sub [47]
+                0.00    0.00     408/4042        hit_faceforward [60]
+                0.00    0.00     403/4123        surface_needs_bump [59]
+                0.00    0.00     400/9474        vec3f_normalize [49]
+                0.00    0.00     396/3894        surface_needs_uv [61]
+                0.00    0.00     387/49442       vec3f_add [45]
+                0.00    0.00     373/68262       vec3f_dot [44]
+-----------------------------------------------
+                0.00    0.00   10421/10421       manager_entry [19]
+[17]     0.0    0.00    0.00   10421         manager_read_mailbox [17]
+                0.00    0.00       2/2           view_setup [18]
+                0.00    0.00       2/2           bitmap_zero [126]
+-----------------------------------------------
+                0.00    0.00       2/2           manager_read_mailbox [17]
+[18]     0.0    0.00    0.00       2         view_setup [18]
+                0.00    0.00       8/65204       vec3f_scale [7]
+                0.00    0.00       6/9474        vec3f_normalize [49]
+                0.00    0.00       6/49442       vec3f_add [45]
+                0.00    0.00       2/5           vec3f_cross [110]
+-----------------------------------------------
+                                                 <spontaneous>
+[19]     0.0    0.00    0.00                 manager_entry [19]
+                0.00    0.00   10421/10421       manager_read_mailbox [17]
+                0.00    0.00     100/100         manager_convert_hdr_to_rgb [75]
+                0.00    0.00      93/93          manager_assign_jobs [76]
+                0.00    0.00      91/91          manager_collect_tiles [78]
+                0.00    0.00      22/22          manager_update_display [86]
+                0.00    0.00      19/19          manager_run_tonemap [88]
+-----------------------------------------------
+                                                 <spontaneous>
+[20]     0.0    0.00    0.00                 main [20]
+                0.00    0.00       1/1           load_scene [26]
+                0.00    0.00       1/1           run_app [27]
+                0.00    0.00       2/14          log_step [90]
+                0.00    0.00       1/1           print_banner [185]
+                0.00    0.00       1/1           check_args [148]
+                0.00    0.00       1/1           destroy_scene [158]
+-----------------------------------------------
+                0.00    0.00       1/1           load_scene [26]
+[21]     0.0    0.00    0.00       1         build_scene [21]
+                0.00    0.00       1/1           conv_primitives [22]
+                0.00    0.00       1/1           conv_globals [152]
+                0.00    0.00       1/1           init_ctx [166]
+                0.00    0.00       1/1           conv_build_ctx [149]
+                0.00    0.00       1/1           assemble_scene [142]
+                0.00    0.00       1/1           free_ctx [161]
+                0.00    0.00       1/1           build_textures [147]
+-----------------------------------------------
+                0.00    0.00       1/1           build_scene [21]
+[22]     0.0    0.00    0.00       1         conv_primitives [22]
+                0.00    0.00       1/1           copy_cylinder_to_primitive [23]
+                0.00    0.00       3/3           conv_option_primitive [117]
+                0.00    0.00       1/1           copy_sphere_to_primitive [155]
+                0.00    0.00       1/1           copy_plane_to_primitive [154]
+-----------------------------------------------
+                0.00    0.00       1/1           conv_primitives [22]
+[23]     0.0    0.00    0.00       1         copy_cylinder_to_primitive [23]
+                0.00    0.00       1/65204       vec3f_scale [7]
+                0.00    0.00       1/9474        vec3f_normalize [49]
+                0.00    0.00       1/14876       vec3f_sub [47]
+-----------------------------------------------
+                0.00    0.00       1/1           run_app [27]
+[24]     0.0    0.00    0.00       1         display_init [24]
+                0.00    0.00       1/1           init_cam_ctrl [25]
+                0.00    0.00       5/14          log_step [90]
+                0.00    0.00       1/1           display_init_frames [159]
+                0.00    0.00       1/1           xpm_load [225]
+                0.00    0.00       1/1           init_sky_texture [168]
+-----------------------------------------------
+                0.00    0.00       1/1           display_init [24]
+[25]     0.0    0.00    0.00       1         init_cam_ctrl [25]
+                0.00    0.00       1/65204       vec3f_scale [7]
+                0.00    0.00       1/14876       vec3f_sub [47]
+                0.00    0.00       1/49442       vec3f_add [45]
+-----------------------------------------------
+                0.00    0.00       1/1           main [20]
+[26]     0.0    0.00    0.00       1         load_scene [26]
+                0.00    0.00       1/1           build_scene [21]
+                0.00    0.00       4/14          log_step [90]
+                0.00    0.00       1/1           init_parsed_scene [167]
+                0.00    0.00       1/1           pars_scene [180]
+                0.00    0.00       1/1           free_parsed_scene [162]
+                0.00    0.00       1/1           log_info_parsed [173]
+-----------------------------------------------
+                0.00    0.00       1/1           main [20]
+[27]     0.0    0.00    0.00       1         run_app [27]
+                0.00    0.00       1/1           display_init [24]
+                0.00    0.00       1/1           engine_init [160]
+                0.00    0.00       1/1           init_surface_uv [170]
+                0.00    0.00       1/1           init_ui [171]
+                0.00    0.00       1/1           threads_start [204]
+                0.00    0.00       1/1           threads_cancel_and_join [203]
+                0.00    0.00       1/1           destroy_render [157]
+                0.00    0.00       1/1           destroy_display [156]
+-----------------------------------------------
+                0.00    0.00  281699/281699      ui_print_cam_status [35]
+[28]     0.0    0.00    0.00  281699         ui_current_cam [28]
+-----------------------------------------------
+                0.00    0.00  281689/281689      frame_tick [39]
+[29]     0.0    0.00    0.00  281689         sync_engine_tick [29]
+                0.00    0.00  281687/281687      display_request_policy [30]
+                0.00    0.00  281669/281669      display_engine_receive [33]
+-----------------------------------------------
+                0.00    0.00  281687/281687      sync_engine_tick [29]
+[30]     0.0    0.00    0.00  281687         display_request_policy [30]
+                0.00    0.00  281133/281133      get_active_target_quality [41]
+-----------------------------------------------
+                0.00    0.00  281685/281685      display_update_camera [38]
+[31]     0.0    0.00    0.00  281685         camera_handle_level [31]
+-----------------------------------------------
+                0.00    0.00  281676/281676      frame_tick [39]
+[32]     0.0    0.00    0.00  281676         display_engine_send [32]
+-----------------------------------------------
+                0.00    0.00  281669/281669      sync_engine_tick [29]
+[33]     0.0    0.00    0.00  281669         display_engine_receive [33]
+-----------------------------------------------
+                0.00    0.00  281666/281666      display_update_camera [38]
+[34]     0.0    0.00    0.00  281666         camera_handle_pan [34]
+-----------------------------------------------
+                0.00    0.00  281656/281656      frame_tick [39]
+[35]     0.0    0.00    0.00  281656         ui_print_cam_status [35]
+                0.00    0.00  281699/281699      ui_current_cam [28]
+-----------------------------------------------
+                0.00    0.00  281650/281650      display_update_camera [38]
+[36]     0.0    0.00    0.00  281650         camera_handle_dolly [36]
+-----------------------------------------------
+                0.00    0.00  281617/281617      display_update_camera [38]
+[37]     0.0    0.00    0.00  281617         camera_handle_orbit [37]
+-----------------------------------------------
+                0.00    0.00  281613/281613      frame_tick [39]
+[38]     0.0    0.00    0.00  281613         display_update_camera [38]
+                0.00    0.00  281685/281685      camera_handle_level [31]
+                0.00    0.00  281666/281666      camera_handle_pan [34]
+                0.00    0.00  281650/281650      camera_handle_dolly [36]
+                0.00    0.00  281617/281617      camera_handle_orbit [37]
+-----------------------------------------------
+                0.00    0.00  281544/281544      mlx_loop [370]
+[39]     0.0    0.00    0.00  281544         frame_tick [39]
+                0.00    0.00  281689/281689      sync_engine_tick [29]
+                0.00    0.00  281676/281676      display_engine_send [32]
+                0.00    0.00  281656/281656      ui_print_cam_status [35]
+                0.00    0.00  281613/281613      display_update_camera [38]
+                0.00    0.00  281532/281532      display_update_ui [40]
+-----------------------------------------------
+                0.00    0.00  281532/281532      frame_tick [39]
+[40]     0.0    0.00    0.00  281532         display_update_ui [40]
+-----------------------------------------------
+                0.00    0.00  281133/281133      display_request_policy [30]
+[41]     0.0    0.00    0.00  281133         get_active_target_quality [41]
+-----------------------------------------------
+                0.00    0.00   78488/157393      manager_convert_hdr_to_rgb [75]
+                0.00    0.00   78905/157393      tm_apply_full_image [205]
+[42]     0.0    0.00    0.00  157393         linear_to_rgb8_vec [42]
+-----------------------------------------------
+                0.00    0.00   39673/118574      tm_build_hist_sampled [206]
+                0.00    0.00   78901/118574      tm_apply_full_image [205]
+[43]     0.0    0.00    0.00  118574         tm_luminance [43]
+-----------------------------------------------
+                0.00    0.00       1/68262       init_cam_views [165]
+                0.00    0.00     373/68262       build_geo_cylinder [16]
+                0.00    0.00     533/68262       shade_reflection <cycle 1> [15]
+                0.00    0.00    1048/68262       inter_plane [70]
+                0.00    0.00    4044/68262       hit_faceforward [60]
+                0.00    0.00    4386/68262       vec3f_length [56]
+                0.00    0.00    6730/68262       shade_one_light [5]
+                0.00    0.00    8294/68262       scene_hit [57]
+                0.00    0.00    9120/68262       vec3f_normalize [49]
+                0.00    0.00   33733/68262       prim_inter [52]
+[44]     0.0    0.00    0.00   68262         vec3f_dot [44]
+-----------------------------------------------
+                0.00    0.00       1/49442       init_cam_ctrl [25]
+                0.00    0.00       6/49442       view_setup [18]
+                0.00    0.00     387/49442       build_geo_cylinder [16]
+                0.00    0.00     553/49442       shade_hit <cycle 1> [4]
+                0.00    0.00     560/49442       shade_reflection <cycle 1> [15]
+                0.00    0.00    3593/49442       hit_build_geometry [13]
+                0.00    0.00    4340/49442       shade_ambient [14]
+                0.00    0.00    9459/49442       build_ray_for_pixel [11]
+                0.00    0.00   15193/49442       shade_one_light [5]
+                0.00    0.00   15350/49442       interpolate_tile_blocks [10]
+[45]     0.0    0.00    0.00   49442         vec3f_add [45]
+-----------------------------------------------
+                0.00    0.00   39708/39708       tm_build_hist_sampled [206]
+[46]     0.0    0.00    0.00   39708         tm_bin_from_lum [46]
+-----------------------------------------------
+                0.00    0.00       1/14876       init_cam_ctrl [25]
+                0.00    0.00       1/14876       copy_cylinder_to_primitive [23]
+                0.00    0.00     172/14876       build_geo_sphere [74]
+                0.00    0.00     612/14876       shade_reflection <cycle 1> [15]
+                0.00    0.00     744/14876       build_geo_cylinder [16]
+                0.00    0.00    4358/14876       shade_one_light [5]
+                0.00    0.00    4473/14876       build_ray_for_pixel [11]
+                0.00    0.00    4515/14876       prim_inter [52]
+[47]     0.0    0.00    0.00   14876         vec3f_sub [47]
+-----------------------------------------------
+                0.00    0.00     558/9524        shade_reflection <cycle 1> [15]
+                0.00    0.00    4459/9524        build_ray_for_pixel [11]
+                0.00    0.00    4507/9524        shade_one_light [5]
+[48]     0.0    0.00    0.00    9524         ray_finalize [48]
+-----------------------------------------------
+                0.00    0.00       1/9474        init_cam_views [165]
+                0.00    0.00       1/9474        copy_cylinder_to_primitive [23]
+                0.00    0.00       2/9474        init_surface_plane_cache [169]
+                0.00    0.00       6/9474        view_setup [18]
+                0.00    0.00     181/9474        build_geo_sphere [74]
+                0.00    0.00     400/9474        build_geo_cylinder [16]
+                0.00    0.00     620/9474        shade_reflection <cycle 1> [15]
+                0.00    0.00    3735/9474        shade_one_light [5]
+                0.00    0.00    4528/9474        build_ray_for_pixel [11]
+[49]     0.0    0.00    0.00    9474         vec3f_normalize [49]
+                0.00    0.00    9427/9427        ft_rsqrtf [50]
+                0.00    0.00    9120/68262       vec3f_dot [44]
+-----------------------------------------------
+                0.00    0.00    9427/9427        vec3f_normalize [49]
+[50]     0.0    0.00    0.00    9427         ft_rsqrtf [50]
+-----------------------------------------------
+                0.00    0.00    9215/9215        prim_inter [52]
+[51]     0.0    0.00    0.00    9215         solve_quad [51]
+                0.00    0.00    2758/2758        sortf2 [66]
+-----------------------------------------------
+                0.00    0.00    3979/8934        bvh_inter [55]
+                0.00    0.00    4955/8934        bvh_shadow [63]
+[52]     0.0    0.00    0.00    8934         prim_inter [52]
+                0.00    0.00   33733/68262       vec3f_dot [44]
+                0.00    0.00    9215/9215        solve_quad [51]
+                0.00    0.00    4515/14876       vec3f_sub [47]
+-----------------------------------------------
+                0.00    0.00    4001/8043        bvh_shadow [63]
+                0.00    0.00    4042/8043        bvh_inter [55]
+[53]     0.0    0.00    0.00    8043         bound_intersect [53]
+-----------------------------------------------
+                0.00    0.00    3265/7538        shade_one_light [5]
+                0.00    0.00    4273/7538        shade_ambient [14]
+[54]     0.0    0.00    0.00    7538         vec3f_mul [54]
+-----------------------------------------------
+                0.00    0.00    4474/4474        scene_hit [57]
+[55]     0.0    0.00    0.00    4474         bvh_inter [55]
+                0.00    0.00    4042/8043        bound_intersect [53]
+                0.00    0.00    3979/8934        prim_inter [52]
+-----------------------------------------------
+                0.00    0.00    4470/4470        shade_one_light [5]
+[56]     0.0    0.00    0.00    4470         vec3f_length [56]
+                0.00    0.00    4386/68262       vec3f_dot [44]
+-----------------------------------------------
+                0.00    0.00     106/4236        shading_ray_fast [73]
+                0.00    0.00    4130/4236        shading_ray <cycle 1> [12]
+[57]     0.0    0.00    0.00    4236         scene_hit [57]
+                0.00    0.00    8294/68262       vec3f_dot [44]
+                0.00    0.00    4474/4474        bvh_inter [55]
+-----------------------------------------------
+                0.00    0.00    4130/4130        shading_ray <cycle 1> [12]
+[58]     0.0    0.00    0.00    4130         apply_surface_shading [58]
+-----------------------------------------------
+                0.00    0.00     174/4123        build_geo_sphere [74]
+                0.00    0.00     403/4123        build_geo_cylinder [16]
+                0.00    0.00    3546/4123        build_geo_plane [64]
+[59]     0.0    0.00    0.00    4123         surface_needs_bump [59]
+-----------------------------------------------
+                0.00    0.00     179/4042        build_geo_sphere [74]
+                0.00    0.00     408/4042        build_geo_cylinder [16]
+                0.00    0.00    3455/4042        build_geo_plane [64]
+[60]     0.0    0.00    0.00    4042         hit_faceforward [60]
+                0.00    0.00    4044/68262       vec3f_dot [44]
+-----------------------------------------------
+                0.00    0.00     178/3894        build_geo_sphere [74]
+                0.00    0.00     396/3894        build_geo_cylinder [16]
+                0.00    0.00    3320/3894        build_geo_plane [64]
+[61]     0.0    0.00    0.00    3894         surface_needs_uv [61]
+-----------------------------------------------
+                0.00    0.00    3848/3848        shade_one_light [5]
+[62]     0.0    0.00    0.00    3848         scene_is_occluded [62]
+                0.00    0.00    3498/3498        bvh_shadow [63]
+                0.00    0.00     485/485         inter_plane [70]
+-----------------------------------------------
+                0.00    0.00    3498/3498        scene_is_occluded [62]
+[63]     0.0    0.00    0.00    3498         bvh_shadow [63]
+                0.00    0.00    4955/8934        prim_inter [52]
+                0.00    0.00    4001/8043        bound_intersect [53]
+-----------------------------------------------
+                0.00    0.00    3347/3347        shading_ray <cycle 1> [12]
+[64]     0.0    0.00    0.00    3347         build_geo_plane [64]
+                0.00    0.00    3546/4123        surface_needs_bump [59]
+                0.00    0.00    3455/4042        hit_faceforward [60]
+                0.00    0.00    3320/3894        surface_needs_uv [61]
+-----------------------------------------------
+                0.00    0.00    3099/3099        manager_convert_hdr_to_rgb [75]
+[65]     0.0    0.00    0.00    3099         bitmap_get [65]
+-----------------------------------------------
+                0.00    0.00    2758/2758        solve_quad [51]
+[66]     0.0    0.00    0.00    2758         sortf2 [66]
+-----------------------------------------------
+                0.00    0.00     540/540         shading_ray <cycle 1> [12]
+[67]     0.0    0.00    0.00     540         skybox_eval [67]
+-----------------------------------------------
+                0.00    0.00     501/501         shading_ray <cycle 1> [12]
+[68]     0.0    0.00    0.00     501         sky_gradient_eval [68]
+                0.00    0.00     492/492         vec3f_lerp [69]
+-----------------------------------------------
+                0.00    0.00     492/492         sky_gradient_eval [68]
+[69]     0.0    0.00    0.00     492         vec3f_lerp [69]
+-----------------------------------------------
+                0.00    0.00     485/485         scene_is_occluded [62]
+[70]     0.0    0.00    0.00     485         inter_plane [70]
+                0.00    0.00    1048/68262       vec3f_dot [44]
+-----------------------------------------------
+                0.00    0.00     435/435         init_worker_tile [72]
+[71]     0.0    0.00    0.00     435         manager_dispatch_tile [71]
+-----------------------------------------------
+                0.00    0.00     407/407         manager_assign_jobs [76]
+[72]     0.0    0.00    0.00     407         init_worker_tile [72]
+                0.00    0.00     435/435         manager_dispatch_tile [71]
+-----------------------------------------------
+                0.00    0.00     197/197         render_tile_fast [9]
+[73]     0.0    0.00    0.00     197         shading_ray_fast [73]
+                0.00    0.00     106/4236        scene_hit [57]
+                0.00    0.00      93/93          sky_color [77]
+                0.00    0.00      90/90          get_surface_color [79]
+-----------------------------------------------
+                0.00    0.00     174/174         shading_ray <cycle 1> [12]
+[74]     0.0    0.00    0.00     174         build_geo_sphere [74]
+                0.00    0.00     181/9474        vec3f_normalize [49]
+                0.00    0.00     179/4042        hit_faceforward [60]
+                0.00    0.00     178/3894        surface_needs_uv [61]
+                0.00    0.00     174/4123        surface_needs_bump [59]
+                0.00    0.00     172/14876       vec3f_sub [47]
+-----------------------------------------------
+                0.00    0.00     100/100         manager_entry [19]
+[75]     0.0    0.00    0.00     100         manager_convert_hdr_to_rgb [75]
+                0.00    0.00   78488/157393      linear_to_rgb8_vec [42]
+                0.00    0.00    3099/3099        bitmap_get [65]
+                0.00    0.00      21/21          bitmap_clear [87]
+-----------------------------------------------
+                0.00    0.00      93/93          manager_entry [19]
+[76]     0.0    0.00    0.00      93         manager_assign_jobs [76]
+                0.00    0.00     407/407         init_worker_tile [72]
+-----------------------------------------------
+                0.00    0.00      93/93          shading_ray_fast [73]
+[77]     0.0    0.00    0.00      93         sky_color [77]
+-----------------------------------------------
+                0.00    0.00      91/91          manager_entry [19]
+[78]     0.0    0.00    0.00      91         manager_collect_tiles [78]
+                0.00    0.00      14/14          bitmap_set [89]
+-----------------------------------------------
+                0.00    0.00      90/90          shading_ray_fast [73]
+[79]     0.0    0.00    0.00      90         get_surface_color [79]
+-----------------------------------------------
+                0.00    0.00      36/73          scan_option [103]
+                0.00    0.00      37/73          pars_dispatch_tok [105]
+[80]     0.0    0.00    0.00      73         pars_tok_eq [80]
+-----------------------------------------------
+                0.00    0.00       2/57          pars_ambient [174]
+                0.00    0.00       2/57          pars_resolution [179]
+                0.00    0.00       3/57          pars_light [177]
+                0.00    0.00       3/57          pars_plane [178]
+                0.00    0.00       3/57          pars_sphere [181]
+                0.00    0.00       3/57          pars_camera [175]
+                0.00    0.00       5/57          pars_cylinder [176]
+                0.00    0.00      12/57          pars_options [112]
+                0.00    0.00      24/57          pars_line [85]
+[81]     0.0    0.00    0.00      57         pars_next_tok [81]
+-----------------------------------------------
+                0.00    0.00       1/40          pars_light [177]
+                0.00    0.00       1/40          pars_sphere [181]
+                0.00    0.00       1/40          pars_ambient [174]
+                0.00    0.00       1/40          pars_camera [175]
+                0.00    0.00       2/40          pars_cylinder [176]
+                0.00    0.00       2/40          pars_resolution [179]
+                0.00    0.00       2/40          scan_opt_diffuse [136]
+                0.00    0.00       2/40          scan_opt_reflection [137]
+                0.00    0.00       2/40          scan_opt_shininess [138]
+                0.00    0.00       2/40          scan_opt_specular [139]
+                0.00    0.00      24/40          scan_point [104]
+[82]     0.0    0.00    0.00      40         scan_float [82]
+-----------------------------------------------
+                0.00    0.00      28/28          mlx_loop [370]
+[83]     0.0    0.00    0.00      28         mouse_move [83]
+-----------------------------------------------
+                0.00    0.00      25/25          threads_start [204]
+[84]     0.0    0.00    0.00      25         thread_start_worker [84]
+-----------------------------------------------
+                0.00    0.00      24/24          pars_scene [180]
+[85]     0.0    0.00    0.00      24         pars_line [85]
+                0.00    0.00      24/57          pars_next_tok [81]
+                0.00    0.00       7/7           pars_dispatch_tok [105]
+                0.00    0.00       1/1           pars_sphere [181]
+                0.00    0.00       1/1           pars_cylinder [176]
+                0.00    0.00       1/1           pars_plane [178]
+                0.00    0.00       1/1           pars_light [177]
+                0.00    0.00       1/1           handle_light_primary [164]
+                0.00    0.00       1/1           pars_camera [175]
+                0.00    0.00       1/1           handle_camera_primary [163]
+                0.00    0.00       1/1           pars_ambient [174]
+                0.00    0.00       1/1           pars_resolution [179]
+-----------------------------------------------
+                0.00    0.00      22/22          manager_entry [19]
+[86]     0.0    0.00    0.00      22         manager_update_display [86]
+-----------------------------------------------
+                0.00    0.00      21/21          manager_convert_hdr_to_rgb [75]
+[87]     0.0    0.00    0.00      21         bitmap_clear [87]
+-----------------------------------------------
+                0.00    0.00      19/19          manager_entry [19]
+[88]     0.0    0.00    0.00      19         manager_run_tonemap [88]
+                0.00    0.00       1/1           tm_build_hist_sampled [206]
+                0.00    0.00       1/1           tm_lum_from_bin [210]
+                0.00    0.00       1/1           tm_percentile_lum [211]
+                0.00    0.00       1/1           tm_apply_full_image [205]
+                0.00    0.00       1/1           tm_exposure_from_lum [207]
+-----------------------------------------------
+                0.00    0.00      14/14          manager_collect_tiles [78]
+[89]     0.0    0.00    0.00      14         bitmap_set [89]
+-----------------------------------------------
+                0.00    0.00       2/14          main [20]
+                0.00    0.00       3/14          engine_init [160]
+                0.00    0.00       4/14          load_scene [26]
+                0.00    0.00       5/14          display_init [24]
+[90]     0.0    0.00    0.00      14         log_step [90]
+                0.00    0.00      13/13          step_section [97]
+                0.00    0.00      12/12          handle_section_step [98]
+                0.00    0.00       1/1           print_check_args [187]
+-----------------------------------------------
+                0.00    0.00       1/14          ui_add_close [213]
+                0.00    0.00       1/14          ui_add_mode_lock [215]
+                0.00    0.00       1/14          ui_add_mode_roll [216]
+                0.00    0.00       1/14          ui_add_mode_free [214]
+                0.00    0.00       1/14          ui_add_tonemap_label [219]
+                0.00    0.00       1/14          ui_add_tonemap_toggle [220]
+                0.00    0.00       1/14          ui_add_apply [212]
+                0.00    0.00       1/14          ui_add_render_auto [217]
+                0.00    0.00       3/14          ui_build_buttons [221]
+                0.00    0.00       3/14          ui_add_ssaa [218]
+[91]     0.0    0.00    0.00      14         ui_btn_set_height [91]
+-----------------------------------------------
+                0.00    0.00       1/14          ui_add_close [213]
+                0.00    0.00       1/14          ui_add_mode_lock [215]
+                0.00    0.00       1/14          ui_add_mode_roll [216]
+                0.00    0.00       1/14          ui_add_mode_free [214]
+                0.00    0.00       1/14          ui_add_tonemap_label [219]
+                0.00    0.00       1/14          ui_add_tonemap_toggle [220]
+                0.00    0.00       1/14          ui_add_apply [212]
+                0.00    0.00       1/14          ui_add_render_auto [217]
+                0.00    0.00       3/14          ui_build_buttons [221]
+                0.00    0.00       3/14          ui_add_ssaa [218]
+[92]     0.0    0.00    0.00      14         ui_btn_set_rect [92]
+-----------------------------------------------
+                0.00    0.00       1/14          ui_add_close [213]
+                0.00    0.00       1/14          ui_add_mode_lock [215]
+                0.00    0.00       1/14          ui_add_mode_roll [216]
+                0.00    0.00       1/14          ui_add_mode_free [214]
+                0.00    0.00       1/14          ui_add_tonemap_label [219]
+                0.00    0.00       1/14          ui_add_tonemap_toggle [220]
+                0.00    0.00       1/14          ui_add_apply [212]
+                0.00    0.00       1/14          ui_add_render_auto [217]
+                0.00    0.00       3/14          ui_build_buttons [221]
+                0.00    0.00       3/14          ui_add_ssaa [218]
+[93]     0.0    0.00    0.00      14         ui_btn_set_style [93]
+-----------------------------------------------
+                0.00    0.00       1/14          ui_add_close [213]
+                0.00    0.00       1/14          ui_add_mode_lock [215]
+                0.00    0.00       1/14          ui_add_mode_roll [216]
+                0.00    0.00       1/14          ui_add_mode_free [214]
+                0.00    0.00       1/14          ui_add_tonemap_label [219]
+                0.00    0.00       1/14          ui_add_tonemap_toggle [220]
+                0.00    0.00       1/14          ui_add_apply [212]
+                0.00    0.00       1/14          ui_add_render_auto [217]
+                0.00    0.00       3/14          ui_build_buttons [221]
+                0.00    0.00       3/14          ui_add_ssaa [218]
+[94]     0.0    0.00    0.00      14         ui_btn_set_txt_color [94]
+-----------------------------------------------
+                0.00    0.00       1/14          ui_add_close [213]
+                0.00    0.00       1/14          ui_add_mode_lock [215]
+                0.00    0.00       1/14          ui_add_mode_roll [216]
+                0.00    0.00       1/14          ui_add_mode_free [214]
+                0.00    0.00       1/14          ui_add_tonemap_label [219]
+                0.00    0.00       1/14          ui_add_tonemap_toggle [220]
+                0.00    0.00       1/14          ui_add_apply [212]
+                0.00    0.00       1/14          ui_add_render_auto [217]
+                0.00    0.00       3/14          ui_build_buttons [221]
+                0.00    0.00       3/14          ui_add_ssaa [218]
+[95]     0.0    0.00    0.00      14         ui_push_button [95]
+-----------------------------------------------
+                0.00    0.00       1/13          print_line_left_end [192]
+                0.00    0.00       2/13          print_centered_prefix [129]
+                0.00    0.00       2/13          print_centered_suffix [130]
+                0.00    0.00       4/13          print_cam_light_line [186]
+                0.00    0.00       4/13          print_mtsb_line [193]
+[96]     0.0    0.00    0.00      13         put_nchar [96]
+-----------------------------------------------
+                0.00    0.00      13/13          log_step [90]
+[97]     0.0    0.00    0.00      13         step_section [97]
+-----------------------------------------------
+                0.00    0.00      12/12          log_step [90]
+[98]     0.0    0.00    0.00      12         handle_section_step [98]
+                0.00    0.00      12/12          section_total [99]
+                0.00    0.00       3/3           section_header [123]
+-----------------------------------------------
+                0.00    0.00      12/12          handle_section_step [98]
+[99]     0.0    0.00    0.00      12         section_total [99]
+-----------------------------------------------
+                0.00    0.00       2/11          print_resolution_line [195]
+                0.00    0.00       2/11          print_cam_light_line [186]
+                0.00    0.00       3/11          print_objects_line [194]
+                0.00    0.00       4/11          print_mtsb_line [193]
+[100]    0.0    0.00    0.00      11         int_len [100]
+-----------------------------------------------
+                0.00    0.00      10/10          print_banner [185]
+[101]    0.0    0.00    0.00      10         print_line_features [101]
+-----------------------------------------------
+                0.00    0.00       1/8           conv_globals [152]
+                0.00    0.00       1/8           conv_lights [153]
+                0.00    0.00       6/8           intern_surface [121]
+[102]    0.0    0.00    0.00       8         rgb8_to_linear_vec [102]
+-----------------------------------------------
+                0.00    0.00       8/8           pars_options [112]
+[103]    0.0    0.00    0.00       8         scan_option [103]
+                0.00    0.00      36/73          pars_tok_eq [80]
+-----------------------------------------------
+                0.00    0.00       1/8           pars_cylinder [176]
+                0.00    0.00       1/8           pars_light [177]
+                0.00    0.00       1/8           pars_plane [178]
+                0.00    0.00       1/8           pars_sphere [181]
+                0.00    0.00       1/8           pars_camera [175]
+                0.00    0.00       3/8           scan_vec3 [122]
+[104]    0.0    0.00    0.00       8         scan_point [104]
+                0.00    0.00      24/40          scan_float [82]
+-----------------------------------------------
+                0.00    0.00       7/7           pars_line [85]
+[105]    0.0    0.00    0.00       7         pars_dispatch_tok [105]
+                0.00    0.00      37/73          pars_tok_eq [80]
+-----------------------------------------------
+                0.00    0.00       1/7           ui_add_mode_lock [215]
+                0.00    0.00       1/7           ui_add_mode_roll [216]
+                0.00    0.00       1/7           ui_add_mode_free [214]
+                0.00    0.00       1/7           ui_add_render_auto [217]
+                0.00    0.00       3/7           ui_build_buttons [221]
+[106]    0.0    0.00    0.00       7         ui_colors_from_selected [106]
+-----------------------------------------------
+                0.00    0.00       1/5           pars_cylinder [176]
+                0.00    0.00       1/5           pars_light [177]
+                0.00    0.00       1/5           pars_plane [178]
+                0.00    0.00       1/5           pars_sphere [181]
+                0.00    0.00       1/5           pars_camera [175]
+[107]    0.0    0.00    0.00       5         init_parsed_element [107]
+-----------------------------------------------
+                0.00    0.00       1/5           pars_cylinder [176]
+                0.00    0.00       1/5           pars_light [177]
+                0.00    0.00       1/5           pars_plane [178]
+                0.00    0.00       1/5           pars_sphere [181]
+                0.00    0.00       1/5           pars_camera [175]
+[108]    0.0    0.00    0.00       5         pars_register_element [108]
+-----------------------------------------------
+                0.00    0.00       1/5           pars_cylinder [176]
+                0.00    0.00       1/5           pars_light [177]
+                0.00    0.00       1/5           pars_plane [178]
+                0.00    0.00       1/5           pars_sphere [181]
+                0.00    0.00       1/5           pars_ambient [174]
+[109]    0.0    0.00    0.00       5         scan_color [109]
+-----------------------------------------------
+                0.00    0.00       1/5           init_cam_views [165]
+                0.00    0.00       2/5           init_surface_plane_cache [169]
+                0.00    0.00       2/5           view_setup [18]
+[110]    0.0    0.00    0.00       5         vec3f_cross [110]
+-----------------------------------------------
+                0.00    0.00       1/4           print_cam_light_line [186]
+                0.00    0.00       1/4           print_mtsb_line [193]
+                0.00    0.00       2/4           col_right_width [127]
+[111]    0.0    0.00    0.00       4         col_left_width [111]
+-----------------------------------------------
+                0.00    0.00       1/4           pars_cylinder [176]
+                0.00    0.00       1/4           pars_plane [178]
+                0.00    0.00       1/4           pars_sphere [181]
+                0.00    0.00       1/4           pars_camera [175]
+[112]    0.0    0.00    0.00       4         pars_options [112]
+                0.00    0.00      12/57          pars_next_tok [81]
+                0.00    0.00       8/8           scan_option [103]
+                0.00    0.00       2/2           scan_opt_reflection [137]
+                0.00    0.00       2/2           scan_opt_shininess [138]
+                0.00    0.00       2/2           scan_opt_specular [139]
+                0.00    0.00       2/2           scan_opt_diffuse [136]
+-----------------------------------------------
+                0.00    0.00       2/4           print_cam_light_line [186]
+                0.00    0.00       2/4           print_mtsb_line [193]
+[113]    0.0    0.00    0.00       4         print_col_center_prefix [113]
+-----------------------------------------------
+                0.00    0.00       2/4           print_cam_light_line [186]
+                0.00    0.00       2/4           print_mtsb_line [193]
+[114]    0.0    0.00    0.00       4         print_col_center_suffix [114]
+-----------------------------------------------
+                0.00    0.00       2/4           print_inner_hline [133]
+                0.00    0.00       2/4           print_edge [131]
+[115]    0.0    0.00    0.00       4         put_nstr [115]
+-----------------------------------------------
+                0.00    0.00       1/4           ui_add_render_auto [217]
+                0.00    0.00       3/4           ui_build_buttons [221]
+[116]    0.0    0.00    0.00       4         ui_is_render_selected [116]
+-----------------------------------------------
+                0.00    0.00       3/3           conv_primitives [22]
+[117]    0.0    0.00    0.00       3         conv_option_primitive [117]
+                0.00    0.00       3/3           intern_material [120]
+                0.00    0.00       3/3           intern_surface [121]
+-----------------------------------------------
+                0.00    0.00       3/3           intern_material [120]
+[118]    0.0    0.00    0.00       3         generate_option_key [118]
+-----------------------------------------------
+                0.00    0.00       1/3           print_line_left_end [192]
+                0.00    0.00       2/3           col_right_width [127]
+[119]    0.0    0.00    0.00       3         inner_width [119]
+-----------------------------------------------
+                0.00    0.00       3/3           conv_option_primitive [117]
+[120]    0.0    0.00    0.00       3         intern_material [120]
+                0.00    0.00       3/3           generate_option_key [118]
+-----------------------------------------------
+                0.00    0.00       3/3           conv_option_primitive [117]
+[121]    0.0    0.00    0.00       3         intern_surface [121]
+                0.00    0.00       6/8           rgb8_to_linear_vec [102]
+-----------------------------------------------
+                0.00    0.00       1/3           pars_cylinder [176]
+                0.00    0.00       1/3           pars_plane [178]
+                0.00    0.00       1/3           pars_camera [175]
+[122]    0.0    0.00    0.00       3         scan_vec3 [122]
+                0.00    0.00       3/8           scan_point [104]
+-----------------------------------------------
+                0.00    0.00       3/3           handle_section_step [98]
+[123]    0.0    0.00    0.00       3         section_header [123]
+-----------------------------------------------
+                0.00    0.00       1/3           ui_add_mode_lock [215]
+                0.00    0.00       1/3           ui_add_mode_roll [216]
+                0.00    0.00       1/3           ui_add_mode_free [214]
+[124]    0.0    0.00    0.00       3         ui_is_mode_selected [124]
+-----------------------------------------------
+                0.00    0.00       1/3           conv_lights [153]
+                0.00    0.00       2/3           conv_cameras [150]
+[125]    0.0    0.00    0.00       3         vec3f_load3 [125]
+-----------------------------------------------
+                0.00    0.00       2/2           manager_read_mailbox [17]
+[126]    0.0    0.00    0.00       2         bitmap_zero [126]
+-----------------------------------------------
+                0.00    0.00       1/2           print_cam_light_line [186]
+                0.00    0.00       1/2           print_mtsb_line [193]
+[127]    0.0    0.00    0.00       2         col_right_width [127]
+                0.00    0.00       2/4           col_left_width [111]
+                0.00    0.00       2/3           inner_width [119]
+-----------------------------------------------
+                0.00    0.00       2/2           prim_bound_init [183]
+[128]    0.0    0.00    0.00       2         prim_bound [128]
+                0.00    0.00       1/2           vec3f_min [141]
+                0.00    0.00       1/2           vec3f_max [140]
+-----------------------------------------------
+                0.00    0.00       1/2           print_title_line [196]
+                0.00    0.00       1/2           print_objects_line [194]
+[129]    0.0    0.00    0.00       2         print_centered_prefix [129]
+                0.00    0.00       2/13          put_nchar [96]
+-----------------------------------------------
+                0.00    0.00       2/2           log_info_parsed [173]
+[130]    0.0    0.00    0.00       2         print_centered_suffix [130]
+                0.00    0.00       2/13          put_nchar [96]
+-----------------------------------------------
+                0.00    0.00       2/2           log_info_parsed [173]
+[131]    0.0    0.00    0.00       2         print_edge [131]
+                0.00    0.00       2/4           put_nstr [115]
+-----------------------------------------------
+                0.00    0.00       2/2           log_info_parsed [173]
+[132]    0.0    0.00    0.00       2         print_empty_line [132]
+-----------------------------------------------
+                0.00    0.00       2/2           log_info_parsed [173]
+[133]    0.0    0.00    0.00       2         print_inner_hline [133]
+                0.00    0.00       2/4           put_nstr [115]
+-----------------------------------------------
+                0.00    0.00       1/2           print_cam_light_line [186]
+                0.00    0.00       1/2           print_mtsb_line [193]
+[134]    0.0    0.00    0.00       2         print_line_cols_begin [134]
+-----------------------------------------------
+                0.00    0.00       2/2           log_info_parsed [173]
+[135]    0.0    0.00    0.00       2         print_line_cols_end [135]
+-----------------------------------------------
+                0.00    0.00       2/2           pars_options [112]
+[136]    0.0    0.00    0.00       2         scan_opt_diffuse [136]
+                0.00    0.00       2/40          scan_float [82]
+-----------------------------------------------
+                0.00    0.00       2/2           pars_options [112]
+[137]    0.0    0.00    0.00       2         scan_opt_reflection [137]
+                0.00    0.00       2/40          scan_float [82]
+-----------------------------------------------
+                0.00    0.00       2/2           pars_options [112]
+[138]    0.0    0.00    0.00       2         scan_opt_shininess [138]
+                0.00    0.00       2/40          scan_float [82]
+-----------------------------------------------
+                0.00    0.00       2/2           pars_options [112]
+[139]    0.0    0.00    0.00       2         scan_opt_specular [139]
+                0.00    0.00       2/40          scan_float [82]
+-----------------------------------------------
+                0.00    0.00       1/2           prim_bound [128]
+                0.00    0.00       1/2           bound_merge [145]
+[140]    0.0    0.00    0.00       2         vec3f_max [140]
+-----------------------------------------------
+                0.00    0.00       1/2           prim_bound [128]
+                0.00    0.00       1/2           bound_merge [145]
+[141]    0.0    0.00    0.00       2         vec3f_min [141]
+-----------------------------------------------
+                0.00    0.00       1/1           build_scene [21]
+[142]    0.0    0.00    0.00       1         assemble_scene [142]
+-----------------------------------------------
+                0.00    0.00       1/1           destroy_render [157]
+[143]    0.0    0.00    0.00       1         bitmap_destroy [143]
+-----------------------------------------------
+                0.00    0.00       1/1           render_init_tileset [198]
+[144]    0.0    0.00    0.00       1         bitmap_init [144]
+-----------------------------------------------
+                0.00    0.00       1/1           prim_bound_range [184]
+[145]    0.0    0.00    0.00       1         bound_merge [145]
+                0.00    0.00       1/2           vec3f_min [141]
+                0.00    0.00       1/2           vec3f_max [140]
+-----------------------------------------------
+                0.00    0.00       1/1           engine_init [160]
+[146]    0.0    0.00    0.00       1         build_bvh [146]
+                0.00    0.00       1/1           prim_bound_range [184]
+-----------------------------------------------
+                0.00    0.00       1/1           build_scene [21]
+[147]    0.0    0.00    0.00       1         build_textures [147]
+-----------------------------------------------
+                0.00    0.00       1/1           main [20]
+[148]    0.0    0.00    0.00       1         check_args [148]
+-----------------------------------------------
+                0.00    0.00       1/1           build_scene [21]
+[149]    0.0    0.00    0.00       1         conv_build_ctx [149]
+                0.00    0.00       1/1           conv_count_all [151]
+                0.00    0.00       1/1           conv_cameras [150]
+                0.00    0.00       1/1           conv_lights [153]
+-----------------------------------------------
+                0.00    0.00       1/1           conv_build_ctx [149]
+[150]    0.0    0.00    0.00       1         conv_cameras [150]
+                0.00    0.00       2/3           vec3f_load3 [125]
+-----------------------------------------------
+                0.00    0.00       1/1           conv_build_ctx [149]
+[151]    0.0    0.00    0.00       1         conv_count_all [151]
+-----------------------------------------------
+                0.00    0.00       1/1           build_scene [21]
+[152]    0.0    0.00    0.00       1         conv_globals [152]
+                0.00    0.00       1/8           rgb8_to_linear_vec [102]
+-----------------------------------------------
+                0.00    0.00       1/1           conv_build_ctx [149]
+[153]    0.0    0.00    0.00       1         conv_lights [153]
+                0.00    0.00       1/3           vec3f_load3 [125]
+                0.00    0.00       1/8           rgb8_to_linear_vec [102]
+-----------------------------------------------
+                0.00    0.00       1/1           conv_primitives [22]
+[154]    0.0    0.00    0.00       1         copy_plane_to_primitive [154]
+-----------------------------------------------
+                0.00    0.00       1/1           conv_primitives [22]
+[155]    0.0    0.00    0.00       1         copy_sphere_to_primitive [155]
+-----------------------------------------------
+                0.00    0.00       1/1           run_app [27]
+[156]    0.0    0.00    0.00       1         destroy_display [156]
+-----------------------------------------------
+                0.00    0.00       1/1           run_app [27]
+[157]    0.0    0.00    0.00       1         destroy_render [157]
+                0.00    0.00       1/1           bitmap_destroy [143]
+-----------------------------------------------
+                0.00    0.00       1/1           main [20]
+[158]    0.0    0.00    0.00       1         destroy_scene [158]
+-----------------------------------------------
+                0.00    0.00       1/1           display_init [24]
+[159]    0.0    0.00    0.00       1         display_init_frames [159]
+-----------------------------------------------
+                0.00    0.00       1/1           run_app [27]
+[160]    0.0    0.00    0.00       1         engine_init [160]
+                0.00    0.00       3/14          log_step [90]
+                0.00    0.00       1/1           init_cam_views [165]
+                0.00    0.00       1/1           prim_bound_init [183]
+                0.00    0.00       1/1           build_bvh [146]
+                0.00    0.00       1/1           reorder_prims [201]
+                0.00    0.00       1/1           render_init [197]
+-----------------------------------------------
+                0.00    0.00       1/1           build_scene [21]
+[161]    0.0    0.00    0.00       1         free_ctx [161]
+-----------------------------------------------
+                0.00    0.00       1/1           load_scene [26]
+[162]    0.0    0.00    0.00       1         free_parsed_scene [162]
+                0.00    0.00       1/1           parsed_textures_destroy [182]
+-----------------------------------------------
+                0.00    0.00       1/1           pars_line [85]
+[163]    0.0    0.00    0.00       1         handle_camera_primary [163]
+-----------------------------------------------
+                0.00    0.00       1/1           pars_line [85]
+[164]    0.0    0.00    0.00       1         handle_light_primary [164]
+-----------------------------------------------
+                0.00    0.00       1/1           engine_init [160]
+[165]    0.0    0.00    0.00       1         init_cam_views [165]
+                0.00    0.00       1/9474        vec3f_normalize [49]
+                0.00    0.00       1/5           vec3f_cross [110]
+                0.00    0.00       1/68262       vec3f_dot [44]
+-----------------------------------------------
+                0.00    0.00       1/1           build_scene [21]
+[166]    0.0    0.00    0.00       1         init_ctx [166]
+-----------------------------------------------
+                0.00    0.00       1/1           load_scene [26]
+[167]    0.0    0.00    0.00       1         init_parsed_scene [167]
+-----------------------------------------------
+                0.00    0.00       1/1           display_init [24]
+[168]    0.0    0.00    0.00       1         init_sky_texture [168]
+-----------------------------------------------
+                0.00    0.00       1/1           init_surface_uv [170]
+[169]    0.0    0.00    0.00       1         init_surface_plane_cache [169]
+                0.00    0.00       2/5           vec3f_cross [110]
+                0.00    0.00       2/9474        vec3f_normalize [49]
+-----------------------------------------------
+                0.00    0.00       1/1           run_app [27]
+[170]    0.0    0.00    0.00       1         init_surface_uv [170]
+                0.00    0.00       1/1           init_surface_plane_cache [169]
+-----------------------------------------------
+                0.00    0.00       1/1           run_app [27]
+[171]    0.0    0.00    0.00       1         init_ui [171]
+                0.00    0.00       1/1           ui_build_buttons [221]
+-----------------------------------------------
+                0.00    0.00       1/1           mlx_loop [370]
+[172]    0.0    0.00    0.00       1         key_hook [172]
+-----------------------------------------------
+                0.00    0.00       1/1           load_scene [26]
+[173]    0.0    0.00    0.00       1         log_info_parsed [173]
+                0.00    0.00       2/2           print_inner_hline [133]
+                0.00    0.00       2/2           print_edge [131]
+                0.00    0.00       2/2           print_centered_suffix [130]
+                0.00    0.00       2/2           print_empty_line [132]
+                0.00    0.00       2/2           print_line_cols_end [135]
+                0.00    0.00       1/1           print_title_line [196]
+                0.00    0.00       1/1           print_line_left_end [192]
+                0.00    0.00       1/1           print_resolution_line [195]
+                0.00    0.00       1/1           print_mtsb_line [193]
+                0.00    0.00       1/1           print_cam_light_line [186]
+                0.00    0.00       1/1           print_objects_line [194]
+-----------------------------------------------
+                0.00    0.00       1/1           pars_line [85]
+[174]    0.0    0.00    0.00       1         pars_ambient [174]
+                0.00    0.00       2/57          pars_next_tok [81]
+                0.00    0.00       1/40          scan_float [82]
+                0.00    0.00       1/5           scan_color [109]
+-----------------------------------------------
+                0.00    0.00       1/1           pars_line [85]
+[175]    0.0    0.00    0.00       1         pars_camera [175]
+                0.00    0.00       3/57          pars_next_tok [81]
+                0.00    0.00       1/5           init_parsed_element [107]
+                0.00    0.00       1/8           scan_point [104]
+                0.00    0.00       1/3           scan_vec3 [122]
+                0.00    0.00       1/40          scan_float [82]
+                0.00    0.00       1/4           pars_options [112]
+                0.00    0.00       1/5           pars_register_element [108]
+-----------------------------------------------
+                0.00    0.00       1/1           pars_line [85]
+[176]    0.0    0.00    0.00       1         pars_cylinder [176]
+                0.00    0.00       5/57          pars_next_tok [81]
+                0.00    0.00       2/40          scan_float [82]
+                0.00    0.00       1/5           init_parsed_element [107]
+                0.00    0.00       1/8           scan_point [104]
+                0.00    0.00       1/3           scan_vec3 [122]
+                0.00    0.00       1/5           scan_color [109]
+                0.00    0.00       1/4           pars_options [112]
+                0.00    0.00       1/5           pars_register_element [108]
+-----------------------------------------------
+                0.00    0.00       1/1           pars_line [85]
+[177]    0.0    0.00    0.00       1         pars_light [177]
+                0.00    0.00       3/57          pars_next_tok [81]
+                0.00    0.00       1/5           init_parsed_element [107]
+                0.00    0.00       1/8           scan_point [104]
+                0.00    0.00       1/40          scan_float [82]
+                0.00    0.00       1/5           scan_color [109]
+                0.00    0.00       1/5           pars_register_element [108]
+-----------------------------------------------
+                0.00    0.00       1/1           pars_line [85]
+[178]    0.0    0.00    0.00       1         pars_plane [178]
+                0.00    0.00       3/57          pars_next_tok [81]
+                0.00    0.00       1/5           init_parsed_element [107]
+                0.00    0.00       1/8           scan_point [104]
+                0.00    0.00       1/3           scan_vec3 [122]
+                0.00    0.00       1/5           scan_color [109]
+                0.00    0.00       1/4           pars_options [112]
+                0.00    0.00       1/5           pars_register_element [108]
+-----------------------------------------------
+                0.00    0.00       1/1           pars_line [85]
+[179]    0.0    0.00    0.00       1         pars_resolution [179]
+                0.00    0.00       2/57          pars_next_tok [81]
+                0.00    0.00       2/40          scan_float [82]
+-----------------------------------------------
+                0.00    0.00       1/1           load_scene [26]
+[180]    0.0    0.00    0.00       1         pars_scene [180]
+                0.00    0.00      24/24          pars_line [85]
+-----------------------------------------------
+                0.00    0.00       1/1           pars_line [85]
+[181]    0.0    0.00    0.00       1         pars_sphere [181]
+                0.00    0.00       3/57          pars_next_tok [81]
+                0.00    0.00       1/5           init_parsed_element [107]
+                0.00    0.00       1/8           scan_point [104]
+                0.00    0.00       1/40          scan_float [82]
+                0.00    0.00       1/5           scan_color [109]
+                0.00    0.00       1/4           pars_options [112]
+                0.00    0.00       1/5           pars_register_element [108]
+-----------------------------------------------
+                0.00    0.00       1/1           free_parsed_scene [162]
+[182]    0.0    0.00    0.00       1         parsed_textures_destroy [182]
+-----------------------------------------------
+                0.00    0.00       1/1           engine_init [160]
+[183]    0.0    0.00    0.00       1         prim_bound_init [183]
+                0.00    0.00       2/2           prim_bound [128]
+-----------------------------------------------
+                0.00    0.00       1/1           build_bvh [146]
+[184]    0.0    0.00    0.00       1         prim_bound_range [184]
+                0.00    0.00       1/1           bound_merge [145]
+-----------------------------------------------
+                0.00    0.00       1/1           main [20]
+[185]    0.0    0.00    0.00       1         print_banner [185]
+                0.00    0.00      10/10          print_line_features [101]
+                0.00    0.00       1/1           print_clear [188]
+                0.00    0.00       1/1           print_cyan_header [189]
+                0.00    0.00       1/1           print_geometry_lines [190]
+-----------------------------------------------
+                0.00    0.00       1/1           log_info_parsed [173]
+[186]    0.0    0.00    0.00       1         print_cam_light_line [186]
+                0.00    0.00       4/13          put_nchar [96]
+                0.00    0.00       2/11          int_len [100]
+                0.00    0.00       2/4           print_col_center_prefix [113]
+                0.00    0.00       2/4           print_col_center_suffix [114]
+                0.00    0.00       1/2           col_right_width [127]
+                0.00    0.00       1/4           col_left_width [111]
+                0.00    0.00       1/2           print_line_cols_begin [134]
+-----------------------------------------------
+                0.00    0.00       1/1           log_step [90]
+[187]    0.0    0.00    0.00       1         print_check_args [187]
+-----------------------------------------------
+                0.00    0.00       1/1           print_banner [185]
+[188]    0.0    0.00    0.00       1         print_clear [188]
+-----------------------------------------------
+                0.00    0.00       1/1           print_banner [185]
+[189]    0.0    0.00    0.00       1         print_cyan_header [189]
+-----------------------------------------------
+                0.00    0.00       1/1           print_banner [185]
+[190]    0.0    0.00    0.00       1         print_geometry_lines [190]
+-----------------------------------------------
+                0.00    0.00       1/1           print_resolution_line [195]
+[191]    0.0    0.00    0.00       1         print_line_left_begin [191]
+-----------------------------------------------
+                0.00    0.00       1/1           log_info_parsed [173]
+[192]    0.0    0.00    0.00       1         print_line_left_end [192]
+                0.00    0.00       1/3           inner_width [119]
+                0.00    0.00       1/13          put_nchar [96]
+-----------------------------------------------
+                0.00    0.00       1/1           log_info_parsed [173]
+[193]    0.0    0.00    0.00       1         print_mtsb_line [193]
+                0.00    0.00       4/11          int_len [100]
+                0.00    0.00       4/13          put_nchar [96]
+                0.00    0.00       2/4           print_col_center_prefix [113]
+                0.00    0.00       2/4           print_col_center_suffix [114]
+                0.00    0.00       1/4           col_left_width [111]
+                0.00    0.00       1/2           col_right_width [127]
+                0.00    0.00       1/2           print_line_cols_begin [134]
+-----------------------------------------------
+                0.00    0.00       1/1           log_info_parsed [173]
+[194]    0.0    0.00    0.00       1         print_objects_line [194]
+                0.00    0.00       3/11          int_len [100]
+                0.00    0.00       1/2           print_centered_prefix [129]
+-----------------------------------------------
+                0.00    0.00       1/1           log_info_parsed [173]
+[195]    0.0    0.00    0.00       1         print_resolution_line [195]
+                0.00    0.00       2/11          int_len [100]
+                0.00    0.00       1/1           print_line_left_begin [191]
+-----------------------------------------------
+                0.00    0.00       1/1           log_info_parsed [173]
+[196]    0.0    0.00    0.00       1         print_title_line [196]
+                0.00    0.00       1/2           print_centered_prefix [129]
+-----------------------------------------------
+                0.00    0.00       1/1           engine_init [160]
+[197]    0.0    0.00    0.00       1         render_init [197]
+                0.00    0.00       1/1           render_init_workers [200]
+                0.00    0.00       1/1           render_init_worker_tiles [199]
+                0.00    0.00       1/1           render_init_tileset [198]
+-----------------------------------------------
+                0.00    0.00       1/1           render_init [197]
+[198]    0.0    0.00    0.00       1         render_init_tileset [198]
+                0.00    0.00       1/1           bitmap_init [144]
+-----------------------------------------------
+                0.00    0.00       1/1           render_init [197]
+[199]    0.0    0.00    0.00       1         render_init_worker_tiles [199]
+-----------------------------------------------
+                0.00    0.00       1/1           render_init [197]
+[200]    0.0    0.00    0.00       1         render_init_workers [200]
+-----------------------------------------------
+                0.00    0.00       1/1           engine_init [160]
+[201]    0.0    0.00    0.00       1         reorder_prims [201]
+-----------------------------------------------
+                0.00    0.00       1/1           threads_start [204]
+[202]    0.0    0.00    0.00       1         thread_start_manager [202]
+-----------------------------------------------
+                0.00    0.00       1/1           run_app [27]
+[203]    0.0    0.00    0.00       1         threads_cancel_and_join [203]
+-----------------------------------------------
+                0.00    0.00       1/1           run_app [27]
+[204]    0.0    0.00    0.00       1         threads_start [204]
+                0.00    0.00      25/25          thread_start_worker [84]
+                0.00    0.00       1/1           thread_start_manager [202]
+-----------------------------------------------
+                0.00    0.00       1/1           manager_run_tonemap [88]
+[205]    0.0    0.00    0.00       1         tm_apply_full_image [205]
+                0.00    0.00   78905/157393      linear_to_rgb8_vec [42]
+                0.00    0.00   78901/118574      tm_luminance [43]
+-----------------------------------------------
+                0.00    0.00       1/1           manager_run_tonemap [88]
+[206]    0.0    0.00    0.00       1         tm_build_hist_sampled [206]
+                0.00    0.00   39708/39708       tm_bin_from_lum [46]
+                0.00    0.00   39673/118574      tm_luminance [43]
+                0.00    0.00       1/1           tm_hist_clear [208]
+-----------------------------------------------
+                0.00    0.00       1/1           manager_run_tonemap [88]
+[207]    0.0    0.00    0.00       1         tm_exposure_from_lum [207]
+-----------------------------------------------
+                0.00    0.00       1/1           tm_build_hist_sampled [206]
+[208]    0.0    0.00    0.00       1         tm_hist_clear [208]
+-----------------------------------------------
+                0.00    0.00       1/1           tm_percentile_lum [211]
+[209]    0.0    0.00    0.00       1         tm_hist_total [209]
+-----------------------------------------------
+                0.00    0.00       1/1           manager_run_tonemap [88]
+[210]    0.0    0.00    0.00       1         tm_lum_from_bin [210]
+-----------------------------------------------
+                0.00    0.00       1/1           manager_run_tonemap [88]
+[211]    0.0    0.00    0.00       1         tm_percentile_lum [211]
+                0.00    0.00       1/1           tm_hist_total [209]
+-----------------------------------------------
+                0.00    0.00       1/1           ui_build_buttons [221]
+[212]    0.0    0.00    0.00       1         ui_add_apply [212]
+                0.00    0.00       1/14          ui_btn_set_rect [92]
+                0.00    0.00       1/14          ui_btn_set_height [91]
+                0.00    0.00       1/14          ui_btn_set_txt_color [94]
+                0.00    0.00       1/14          ui_btn_set_style [93]
+                0.00    0.00       1/14          ui_push_button [95]
+-----------------------------------------------
+                0.00    0.00       1/1           ui_build_buttons [221]
+[213]    0.0    0.00    0.00       1         ui_add_close [213]
+                0.00    0.00       1/14          ui_btn_set_rect [92]
+                0.00    0.00       1/14          ui_btn_set_height [91]
+                0.00    0.00       1/14          ui_btn_set_txt_color [94]
+                0.00    0.00       1/14          ui_btn_set_style [93]
+                0.00    0.00       1/14          ui_push_button [95]
+-----------------------------------------------
+                0.00    0.00       1/1           ui_build_buttons [221]
+[214]    0.0    0.00    0.00       1         ui_add_mode_free [214]
+                0.00    0.00       1/7           ui_colors_from_selected [106]
+                0.00    0.00       1/3           ui_is_mode_selected [124]
+                0.00    0.00       1/14          ui_btn_set_rect [92]
+                0.00    0.00       1/14          ui_btn_set_height [91]
+                0.00    0.00       1/14          ui_btn_set_style [93]
+                0.00    0.00       1/14          ui_btn_set_txt_color [94]
+                0.00    0.00       1/14          ui_push_button [95]
+-----------------------------------------------
+                0.00    0.00       1/1           ui_build_buttons [221]
+[215]    0.0    0.00    0.00       1         ui_add_mode_lock [215]
+                0.00    0.00       1/3           ui_is_mode_selected [124]
+                0.00    0.00       1/7           ui_colors_from_selected [106]
+                0.00    0.00       1/14          ui_btn_set_rect [92]
+                0.00    0.00       1/14          ui_btn_set_height [91]
+                0.00    0.00       1/14          ui_btn_set_style [93]
+                0.00    0.00       1/14          ui_push_button [95]
+                0.00    0.00       1/14          ui_btn_set_txt_color [94]
+-----------------------------------------------
+                0.00    0.00       1/1           ui_build_buttons [221]
+[216]    0.0    0.00    0.00       1         ui_add_mode_roll [216]
+                0.00    0.00       1/7           ui_colors_from_selected [106]
+                0.00    0.00       1/3           ui_is_mode_selected [124]
+                0.00    0.00       1/14          ui_btn_set_rect [92]
+                0.00    0.00       1/14          ui_btn_set_height [91]
+                0.00    0.00       1/14          ui_btn_set_style [93]
+                0.00    0.00       1/14          ui_btn_set_txt_color [94]
+                0.00    0.00       1/14          ui_push_button [95]
+-----------------------------------------------
+                0.00    0.00       1/1           ui_build_buttons [221]
+[217]    0.0    0.00    0.00       1         ui_add_render_auto [217]
+                0.00    0.00       1/4           ui_is_render_selected [116]
+                0.00    0.00       1/7           ui_colors_from_selected [106]
+                0.00    0.00       1/14          ui_btn_set_rect [92]
+                0.00    0.00       1/14          ui_btn_set_height [91]
+                0.00    0.00       1/14          ui_btn_set_style [93]
+                0.00    0.00       1/14          ui_push_button [95]
+                0.00    0.00       1/14          ui_btn_set_txt_color [94]
+-----------------------------------------------
+                0.00    0.00       1/1           ui_build_buttons [221]
+[218]    0.0    0.00    0.00       1         ui_add_ssaa [218]
+                0.00    0.00       3/14          ui_btn_set_rect [92]
+                0.00    0.00       3/14          ui_btn_set_height [91]
+                0.00    0.00       3/14          ui_btn_set_txt_color [94]
+                0.00    0.00       3/14          ui_btn_set_style [93]
+                0.00    0.00       3/14          ui_push_button [95]
+                0.00    0.00       1/1           ui_ssaa_txt [224]
+-----------------------------------------------
+                0.00    0.00       1/1           ui_build_buttons [221]
+[219]    0.0    0.00    0.00       1         ui_add_tonemap_label [219]
+                0.00    0.00       1/14          ui_btn_set_rect [92]
+                0.00    0.00       1/14          ui_btn_set_height [91]
+                0.00    0.00       1/14          ui_btn_set_txt_color [94]
+                0.00    0.00       1/14          ui_btn_set_style [93]
+                0.00    0.00       1/14          ui_push_button [95]
+-----------------------------------------------
+                0.00    0.00       1/1           ui_build_buttons [221]
+[220]    0.0    0.00    0.00       1         ui_add_tonemap_toggle [220]
+                0.00    0.00       1/1           ui_colors_from_enabled [222]
+                0.00    0.00       1/14          ui_btn_set_height [91]
+                0.00    0.00       1/14          ui_btn_set_rect [92]
+                0.00    0.00       1/1           ui_onoff_txt [223]
+                0.00    0.00       1/14          ui_btn_set_style [93]
+                0.00    0.00       1/14          ui_btn_set_txt_color [94]
+                0.00    0.00       1/14          ui_push_button [95]
+-----------------------------------------------
+                0.00    0.00       1/1           init_ui [171]
+[221]    0.0    0.00    0.00       1         ui_build_buttons [221]
+                0.00    0.00       3/4           ui_is_render_selected [116]
+                0.00    0.00       3/7           ui_colors_from_selected [106]
+                0.00    0.00       3/14          ui_btn_set_rect [92]
+                0.00    0.00       3/14          ui_btn_set_height [91]
+                0.00    0.00       3/14          ui_btn_set_style [93]
+                0.00    0.00       3/14          ui_push_button [95]
+                0.00    0.00       3/14          ui_btn_set_txt_color [94]
+                0.00    0.00       1/1           ui_add_tonemap_label [219]
+                0.00    0.00       1/1           ui_add_close [213]
+                0.00    0.00       1/1           ui_add_render_auto [217]
+                0.00    0.00       1/1           ui_add_tonemap_toggle [220]
+                0.00    0.00       1/1           ui_add_mode_lock [215]
+                0.00    0.00       1/1           ui_add_ssaa [218]
+                0.00    0.00       1/1           ui_add_mode_free [214]
+                0.00    0.00       1/1           ui_add_mode_roll [216]
+                0.00    0.00       1/1           ui_add_apply [212]
+-----------------------------------------------
+                0.00    0.00       1/1           ui_add_tonemap_toggle [220]
+[222]    0.0    0.00    0.00       1         ui_colors_from_enabled [222]
+-----------------------------------------------
+                0.00    0.00       1/1           ui_add_tonemap_toggle [220]
+[223]    0.0    0.00    0.00       1         ui_onoff_txt [223]
+-----------------------------------------------
+                0.00    0.00       1/1           ui_add_ssaa [218]
+[224]    0.0    0.00    0.00       1         ui_ssaa_txt [224]
+-----------------------------------------------
+                0.00    0.00       1/1           display_init [24]
+[225]    0.0    0.00    0.00       1         xpm_load [225]
+-----------------------------------------------
+
+ This table describes the call tree of the program, and was sorted by
+ the total amount of time spent in each function and its children.
+
+ Each entry in this table consists of several lines.  The line with the
+ index number at the left hand margin lists the current function.
+ The lines above it list the functions that called this function,
+ and the lines below it list the functions this one called.
+ This line lists:
+     index	A unique number given to each element of the table.
+		Index numbers are sorted numerically.
+		The index number is printed next to every function name so
+		it is easier to look up where the function is in the table.
+
+     % time	This is the percentage of the `total' time that was spent
+		in this function and its children.  Note that due to
+		different viewpoints, functions excluded by options, etc,
+		these numbers will NOT add up to 100%.
+
+     self	This is the total amount of time spent in this function.
+
+     children	This is the total amount of time propagated into this
+		function by its children.
+
+     called	This is the number of times the function was called.
+		If the function called itself recursively, the number
+		only includes non-recursive calls, and is followed by
+		a `+' and the number of recursive calls.
+
+     name	The name of the current function.  The index number is
+		printed after it.  If the function is a member of a
+		cycle, the cycle number is printed between the
+		function's name and the index number.
+
+
+ For the function's parents, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the function into this parent.
+
+     children	This is the amount of time that was propagated from
+		the function's children into this parent.
+
+     called	This is the number of times this parent called the
+		function `/' the total number of times the function
+		was called.  Recursive calls to the function are not
+		included in the number after the `/'.
+
+     name	This is the name of the parent.  The parent's index
+		number is printed after it.  If the parent is a
+		member of a cycle, the cycle number is printed between
+		the name and the index number.
+
+ If the parents of the function cannot be determined, the word
+ `<spontaneous>' is printed in the `name' field, and all the other
+ fields are blank.
+
+ For the function's children, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the child into the function.
+
+     children	This is the amount of time that was propagated from the
+		child's children to the function.
+
+     called	This is the number of times the function called
+		this child `/' the total number of times the child
+		was called.  Recursive calls by the child are not
+		listed in the number after the `/'.
+
+     name	This is the name of the child.  The child's index
+		number is printed after it.  If the child is a
+		member of a cycle, the cycle number is printed
+		between the name and the index number.
+
+ If there are any cycles (circles) in the call graph, there is an
+ entry for the cycle-as-a-whole.  This entry shows who called the
+ cycle (as parents) and the members of the cycle (as children.)
+ The `+' recursive calls entry shows the number of function calls that
+ were internal to the cycle, and the calls entry for each member shows,
+ for that member, how many times it was called from other members of
+ the cycle.
+
+Copyright (C) 2012-2022 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+Index by function name
+
+  [58] apply_surface_shading [121] intern_surface        [104] scan_point
+ [142] assemble_scene         [10] interpolate_tile_blocks [122] scan_vec3
+  [87] bitmap_clear          [172] key_hook               [57] scene_hit
+ [143] bitmap_destroy         [42] linear_to_rgb8_vec     [62] scene_is_occluded
+  [65] bitmap_get             [26] load_scene            [123] section_header
+ [144] bitmap_init           [173] log_info_parsed        [99] section_total
+  [89] bitmap_set             [90] log_step               [14] shade_ambient
+ [126] bitmap_zero            [76] manager_assign_jobs     [6] shade_direct_lights
+  [53] bound_intersect        [78] manager_collect_tiles   [4] shade_hit
+ [145] bound_merge            [75] manager_convert_hdr_to_rgb [5] shade_one_light
+ [146] build_bvh              [71] manager_dispatch_tile  [15] shade_reflection
+  [16] build_geo_cylinder     [17] manager_read_mailbox   [12] shading_ray
+  [64] build_geo_plane        [88] manager_run_tonemap    [73] shading_ray_fast
+  [74] build_geo_sphere       [86] manager_update_display [77] sky_color
+  [11] build_ray_for_pixel    [83] mouse_move             [68] sky_gradient_eval
+  [21] build_scene           [174] pars_ambient           [67] skybox_eval
+ [147] build_textures        [175] pars_camera            [51] solve_quad
+  [55] bvh_inter             [176] pars_cylinder          [66] sortf2
+  [63] bvh_shadow            [105] pars_dispatch_tok      [97] step_section
+  [36] camera_handle_dolly   [177] pars_light             [59] surface_needs_bump
+  [31] camera_handle_level    [85] pars_line              [61] surface_needs_uv
+  [37] camera_handle_orbit    [81] pars_next_tok          [29] sync_engine_tick
+  [34] camera_handle_pan     [112] pars_options          [202] thread_start_manager
+ [148] check_args            [178] pars_plane             [84] thread_start_worker
+ [111] col_left_width        [108] pars_register_element [203] threads_cancel_and_join
+ [127] col_right_width       [179] pars_resolution       [204] threads_start
+ [149] conv_build_ctx        [180] pars_scene            [205] tm_apply_full_image
+ [150] conv_cameras          [181] pars_sphere            [46] tm_bin_from_lum
+ [151] conv_count_all         [80] pars_tok_eq           [206] tm_build_hist_sampled
+ [152] conv_globals          [182] parsed_textures_destroy [207] tm_exposure_from_lum
+ [153] conv_lights           [128] prim_bound            [208] tm_hist_clear
+ [117] conv_option_primitive [183] prim_bound_init       [209] tm_hist_total
+  [22] conv_primitives       [184] prim_bound_range      [210] tm_lum_from_bin
+  [23] copy_cylinder_to_primitive [52] prim_inter         [43] tm_luminance
+ [154] copy_plane_to_primitive [185] print_banner        [211] tm_percentile_lum
+ [155] copy_sphere_to_primitive [186] print_cam_light_line [212] ui_add_apply
+ [156] destroy_display       [129] print_centered_prefix [213] ui_add_close
+ [157] destroy_render        [130] print_centered_suffix [214] ui_add_mode_free
+ [158] destroy_scene         [187] print_check_args      [215] ui_add_mode_lock
+  [33] display_engine_receive [188] print_clear          [216] ui_add_mode_roll
+  [32] display_engine_send   [113] print_col_center_prefix [217] ui_add_render_auto
+  [24] display_init          [114] print_col_center_suffix [218] ui_add_ssaa
+ [159] display_init_frames   [189] print_cyan_header     [219] ui_add_tonemap_label
+  [30] display_request_policy [131] print_edge           [220] ui_add_tonemap_toggle
+  [38] display_update_camera [132] print_empty_line       [91] ui_btn_set_height
+  [40] display_update_ui     [190] print_geometry_lines   [92] ui_btn_set_rect
+ [160] engine_init           [133] print_inner_hline      [93] ui_btn_set_style
+  [39] frame_tick            [134] print_line_cols_begin  [94] ui_btn_set_txt_color
+ [161] free_ctx              [135] print_line_cols_end   [221] ui_build_buttons
+ [162] free_parsed_scene     [101] print_line_features   [222] ui_colors_from_enabled
+   [8] ft_memcpy             [191] print_line_left_begin [106] ui_colors_from_selected
+  [50] ft_rsqrtf             [192] print_line_left_end    [28] ui_current_cam
+ [118] generate_option_key   [193] print_mtsb_line       [124] ui_is_mode_selected
+  [41] get_active_target_quality [194] print_objects_line [116] ui_is_render_selected
+  [79] get_surface_color     [195] print_resolution_line [223] ui_onoff_txt
+ [163] handle_camera_primary [196] print_title_line       [35] ui_print_cam_status
+ [164] handle_light_primary   [96] put_nchar              [95] ui_push_button
+  [98] handle_section_step   [115] put_nstr              [224] ui_ssaa_txt
+  [13] hit_build_geometry     [48] ray_finalize           [45] vec3f_add
+  [60] hit_faceforward       [197] render_init           [110] vec3f_cross
+  [25] init_cam_ctrl         [198] render_init_tileset    [44] vec3f_dot
+ [165] init_cam_views        [199] render_init_worker_tiles [56] vec3f_length
+ [166] init_ctx              [200] render_init_workers    [69] vec3f_lerp
+ [107] init_parsed_element     [2] render_tile_normal    [125] vec3f_load3
+ [167] init_parsed_scene     [201] reorder_prims         [140] vec3f_max
+ [168] init_sky_texture      [102] rgb8_to_linear_vec    [141] vec3f_min
+ [169] init_surface_plane_cache [27] run_app              [54] vec3f_mul
+ [170] init_surface_uv       [109] scan_color             [49] vec3f_normalize
+ [171] init_ui                [82] scan_float              [7] vec3f_scale
+  [72] init_worker_tile      [136] scan_opt_diffuse       [47] vec3f_sub
+ [119] inner_width           [137] scan_opt_reflection    [18] view_setup
+ [100] int_len               [138] scan_opt_shininess      [1] worker_entry
+  [70] inter_plane           [139] scan_opt_specular     [225] xpm_load
+ [120] intern_material       [103] scan_option             [3] <cycle 1>

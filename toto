@@ -1,0 +1,66 @@
+diff --git a/lib/libft/Makefile b/lib/libft/Makefile
+index 6b41e5e..ff40c42 100644
+--- a/lib/libft/Makefile
++++ b/lib/libft/Makefile
+@@ -74,7 +74,7 @@ OBJS_PRINT	= $(SRC_PRINT:.c=.o)
+ 
+ NAME	= libft.a
+ 
+-FLAGS	= -Wall -Wextra -Werror -I. -Ignl
++FLAGS	= -Wall -Wextra -I. -Ignl
+ 
+ .c.o	:
+ 	cc $(FLAGS) -c $< -o ${<:.c=.o}
+diff --git a/lib/minilibx/Makefile.gen b/lib/minilibx/Makefile.gen
+index 041cf0e..223e1bd 100644
+--- a/lib/minilibx/Makefile.gen
++++ b/lib/minilibx/Makefile.gen
+@@ -36,7 +36,7 @@ SRC	= mlx_init.c mlx_new_window.c mlx_pixel_put.c mlx_loop.c \
+ 
+ OBJ_DIR = obj
+ OBJ	= $(addprefix $(OBJ_DIR)/,$(SRC:%.c=%.o))
+-CFLAGS	= -O3 -I$(INC)
++CFLAGS	= -std=gnu17 -O3 -I$(INC)
+ 
+ all	: $(NAME)
+ 
+diff --git a/lib/minilibx/Makefile.mk b/lib/minilibx/Makefile.mk
+index 1bae8df..6e7e404 100644
+--- a/lib/minilibx/Makefile.mk
++++ b/lib/minilibx/Makefile.mk
+@@ -36,7 +36,7 @@ SRC	= mlx_init.c mlx_new_window.c mlx_pixel_put.c mlx_loop.c \
+ 
+ OBJ_DIR = obj
+ OBJ	= $(addprefix $(OBJ_DIR)/,$(SRC:%.c=%.o))
+-CFLAGS	= -O3 -I$(INC)
++CFLAGS	= -std=gnu17 -O3 -I$(INC)
+ 
+ all	: $(NAME)
+ 
+diff --git a/lib/minilibx/configure b/lib/minilibx/configure
+index 18d1e4d..7750462 100755
+--- a/lib/minilibx/configure
++++ b/lib/minilibx/configure
+@@ -119,8 +119,8 @@ main(){
+ 
+ 	log_info 'Execute "make all" from file "makefile.gen"'
+ 		${MAKE} -f Makefile.gen all
+-	log_info 'Execute "make all" from file "test/makefile.gen"'
+-		(cd test ; ${MAKE} -f Makefile.gen all )
++	# log_info 'Execute "make all" from file "test/makefile.gen"'
++	# 	(cd test ; ${MAKE} -f Makefile.gen all )
+ }
+ 
+ main "$@"
+diff --git a/lib/minilibx/mlx_int_anti_resize_win.c b/lib/minilibx/mlx_int_anti_resize_win.c
+index ae039be..2f20b44 100644
+--- a/lib/minilibx/mlx_int_anti_resize_win.c
++++ b/lib/minilibx/mlx_int_anti_resize_win.c
+@@ -16,7 +16,6 @@ int	mlx_int_anti_resize_win(t_xvar *xvar,Window win,int w,int h)
+   XSizeHints    hints;
+   long		toto;
+   
+-  bzero(&hints,sizeof(hints));
+   XGetWMNormalHints(xvar->display,win,&hints,&toto);
+   hints.width = w;
+   hints.height = h;

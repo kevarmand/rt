@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 21:59:50 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/21 09:55:40 by kearmand         ###   ########.fr       */
+/*   Updated: 2026/11/16 17:16:58 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # define TMIN_PRIM 1.0e-4f
 # define TMIN_SHADOW 1.0e-3f
 # define TMIN_SHADOW_BIAS 5.0e-5f
+# define TMAX_SHADOW_OFFSET 1.0e-3f
 
 # define MAX_RECURSION_DEPTH 20
 # define MIN_CONTRIBUTION 0.001f

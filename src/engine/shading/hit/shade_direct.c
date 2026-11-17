@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 15:04:24 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/21 01:22:05 by norivier         ###   ########.fr       */
+/*   Updated: 2026/11/16 17:12:43 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static void	init_ctx_light(const t_scene *scene,
 	ctx->light = &scene->lights[light_index];
 	ctx->albedo = hit->albedo;
 	ctx->point = hit->point;
-	ctx->normal = hit->geo_normal;
+	ctx->normal = hit->normal;
 	ctx->view_dir = hit->view_dir;
 	tmp = vec3f_sub(ctx->light->position, ctx->point);
 	ctx->light_dist = vec3f_length(tmp);
@@ -104,8 +104,8 @@ void	shade_one_light(const t_scene *scene,
 		offset = 0.0f;
 	}
 	else
-		offset = fmaxf(TMIN_SHADOW, TMIN_SHADOW * hit->t);
-	shadow_ray.origin = vec3f_add(ctx.point, ctx.normal * offset);
+		offset = fminf(TMAX_SHADOW_OFFSET, fmaxf(TMIN_SHADOW, TMIN_SHADOW * hit->t));
+	shadow_ray.origin = vec3f_add(ctx.point, hit->geo_normal * offset);
 	shadow_ray = ray_finalize(shadow_ray.origin, ctx.light_dir);
 	if (scene_is_occluded(scene, &shadow_ray, ctx.light_dist, hit))
 		return ;

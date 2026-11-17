@@ -1,0 +1,15 @@
+find_src.sh
+gmon.out
+includes
+lib
+Makefile
+miniRT
+objs
+profile_noopti.txt
+profile_opti_flto.txt
+profile_opti.txt
+scene
+src
+test
+test2
+texture

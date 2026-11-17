@@ -35,4 +35,7 @@ void	conv_globals(const t_scene_parsed *parsed, t_scene *scene)
 	scene->skybox.intensity[0] = parsed->skybox.intensity[0];
 	scene->skybox.intensity[1] = parsed->skybox.intensity[1];
 	scene->skybox.intensity[2] = parsed->skybox.intensity[2];
+	scene->skybox.uv_enabled = parsed->skybox.uv_enabled;
+	memcpy(scene->skybox.uv, parsed->skybox.uv,
+		sizeof(scene->skybox.uv));
 }

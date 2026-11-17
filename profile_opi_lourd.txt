@@ -1,0 +1,516 @@
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls  ms/call  ms/call  name    
+ 31.75      1.14     1.14   365362     0.00     0.01  shading_ray
+ 23.12      1.97     0.83  1500285     0.00     0.00  scene_hit
+ 12.53      2.42     0.45        5    90.00    90.00  load_one_texture
+  6.96      2.67     0.25                             ft_memcpy
+  6.41      2.90     0.23                             _init
+  6.13      3.12     0.22                             mlx_int_parse_xpm
+  4.74      3.29     0.17                             ft_memset
+  2.51      3.38     0.09                             mlx_int_str_str_cote
+  1.67      3.44     0.06                             main
+  1.39      3.49     0.05   882579     0.00     0.00  sample_texture
+  1.39      3.54     0.05                             mlx_int_str_str
+  0.84      3.57     0.03                             manager_entry
+  0.28      3.58     0.01  4122452     0.00     0.00  linear_to_rgb8_vec
+  0.28      3.59     0.01                             ft_bzero
+  0.00      3.59     0.00     7254     0.00     0.00  sync_engine_tick
+  0.00      3.59     0.00     6880     0.00     0.00  frame_tick
+  0.00      3.59     0.00      317     0.00     0.00  scan_float
+  0.00      3.59     0.00      234     0.00     0.00  manager_read_mailbox
+  0.00      3.59     0.00       45     0.00     0.00  scan_point
+  0.00      3.59     0.00       36     0.00     0.00  scan_color
+  0.00      3.59     0.00       29     0.00     0.00  pars_register_element
+  0.00      3.59     0.00       27     0.00     0.00  pars_options
+  0.00      3.59     0.00       21     0.00     0.00  scan_opt_diffuse
+  0.00      3.59     0.00       20     0.00     0.00  scan_opt_shininess
+  0.00      3.59     0.00       20     0.00     0.00  scan_opt_specular
+  0.00      3.59     0.00       16     0.00     0.00  scan_vec3
+  0.00      3.59     0.00       12     0.00     0.00  handle_section_step
+  0.00      3.59     0.00       12     0.00     0.00  pars_sphere
+  0.00      3.59     0.00       10     0.00     0.00  mouse_move
+  0.00      3.59     0.00       10     0.00     0.00  scan_opt_uv
+  0.00      3.59     0.00        9     0.00     0.00  pars_torus
+  0.00      3.59     0.00        9     0.00     0.00  scan_opt_checkerboard
+  0.00      3.59     0.00        8     0.00     0.00  scan_opt_reflection
+  0.00      3.59     0.00        5     0.00     0.00  scan_opt_refraction
+  0.00      3.59     0.00        3     0.00     0.00  pars_camera
+  0.00      3.59     0.00        3     0.00     0.00  scan_opt_ior
+  0.00      3.59     0.00        2     0.00     0.00  handle_camera_extra
+  0.00      3.59     0.00        2     0.00     0.00  pars_cylinder
+  0.00      3.59     0.00        2     0.00     0.00  pars_light
+  0.00      3.59     0.00        2     0.00     0.00  print_centered_suffix
+  0.00      3.59     0.00        2     0.00     0.00  print_empty_line
+  0.00      3.59     0.00        2     0.00     0.00  print_inner_hline
+  0.00      3.59     0.00        2     0.00     0.00  scan_opt_ambient
+  0.00      3.59     0.00        2     0.00     0.00  scan_opt_texture
+  0.00      3.59     0.00        1     0.00     0.00  handle_camera_primary
+  0.00      3.59     0.00        1     0.00     0.00  handle_light_extra
+  0.00      3.59     0.00        1     0.00     0.00  handle_light_primary
+  0.00      3.59     0.00        1     0.00     0.00  load_scene
+  0.00      3.59     0.00        1     0.00     0.00  mouse_release
+  0.00      3.59     0.00        1     0.00     0.00  pars_ambient
+  0.00      3.59     0.00        1     0.00     0.00  pars_plane
+  0.00      3.59     0.00        1     0.00     0.00  pars_resolution
+  0.00      3.59     0.00        1     0.00     0.00  pars_skybox
+  0.00      3.59     0.00        1     0.00     0.00  scan_opt_bscale
+  0.00      3.59     0.00        1     0.00     0.00  scan_opt_bump
+  0.00      3.59     0.00        1     0.00     0.00  ui_build_buttons
+
+ %         the percentage of the total running time of the
+time       program used by this function.
+
+cumulative a running sum of the number of seconds accounted
+ seconds   for by this function and those listed above it.
+
+ self      the number of seconds accounted for by this
+seconds    function alone.  This is the major sort for this
+           listing.
+
+calls      the number of times this function was invoked, if
+           this function is profiled, else blank.
+
+ self      the average number of milliseconds spent in this
+ms/call    function per call, if this function is profiled,
+	   else blank.
+
+ total     the average number of milliseconds spent in this
+ms/call    function and its descendents per call, if this
+	   function is profiled, else blank.
+
+name       the name of the function.  This is the minor sort
+           for this listing. The index shows the location of
+	   the function in the gprof listing. If the index is
+	   in parenthesis it shows where it would appear in
+	   the gprof listing if it were to be printed.
+
+Copyright (C) 2012-2022 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+		     Call graph (explanation follows)
+
+
+granularity: each sample hit covers 4 byte(s) for 0.28% of 3.59 seconds
+
+index % time    self  children    called     name
+                                                 <spontaneous>
+[1]     56.3    0.00    2.02                 worker_entry [1]
+                1.14    0.86  365362/365362      shading_ray [2]
+                0.02    0.00   35331/1500285     scene_hit [3]
+                0.00    0.00   11003/882579      sample_texture [11]
+-----------------------------------------------
+                              948167             shading_ray [2]
+                1.14    0.86  365362/365362      worker_entry [1]
+[2]     55.7    1.14    0.86  365362+948167  shading_ray [2]
+                0.81    0.00 1464954/1500285     scene_hit [3]
+                0.05    0.00  871576/882579      sample_texture [11]
+                              948167             shading_ray [2]
+-----------------------------------------------
+                0.02    0.00   35331/1500285     worker_entry [1]
+                0.81    0.00 1464954/1500285     shading_ray [2]
+[3]     23.1    0.83    0.00 1500285         scene_hit [3]
+-----------------------------------------------
+                                                 <spontaneous>
+[4]     14.2    0.06    0.45                 main [4]
+                0.45    0.00       5/5           load_one_texture [5]
+                0.00    0.00       8/12          handle_section_step [28]
+                0.00    0.00       1/1           load_scene [49]
+                0.00    0.00       1/1           ui_build_buttons [57]
+-----------------------------------------------
+                0.45    0.00       5/5           main [4]
+[5]     12.5    0.45    0.00       5         load_one_texture [5]
+-----------------------------------------------
+                                                 <spontaneous>
+[6]      7.0    0.25    0.00                 ft_memcpy [6]
+-----------------------------------------------
+                                                 <spontaneous>
+[7]      6.4    0.23    0.00                 _init [7]
+-----------------------------------------------
+                                                 <spontaneous>
+[8]      6.1    0.22    0.00                 mlx_int_parse_xpm [8]
+-----------------------------------------------
+                                                 <spontaneous>
+[9]      4.7    0.17    0.00                 ft_memset [9]
+-----------------------------------------------
+                                                 <spontaneous>
+[10]     2.5    0.09    0.00                 mlx_int_str_str_cote [10]
+-----------------------------------------------
+                0.00    0.00   11003/882579      worker_entry [1]
+                0.05    0.00  871576/882579      shading_ray [2]
+[11]     1.4    0.05    0.00  882579         sample_texture [11]
+-----------------------------------------------
+                                                 <spontaneous>
+[12]     1.4    0.05    0.00                 mlx_int_str_str [12]
+-----------------------------------------------
+                                                 <spontaneous>
+[13]     1.1    0.03    0.01                 manager_entry [13]
+                0.01    0.00 4122452/4122452     linear_to_rgb8_vec [14]
+                0.00    0.00     234/234         manager_read_mailbox [19]
+-----------------------------------------------
+                0.01    0.00 4122452/4122452     manager_entry [13]
+[14]     0.3    0.01    0.00 4122452         linear_to_rgb8_vec [14]
+-----------------------------------------------
+                                                 <spontaneous>
+[15]     0.3    0.01    0.00                 ft_bzero [15]
+-----------------------------------------------
+                0.00    0.00    7254/7254        frame_tick [17]
+[16]     0.0    0.00    0.00    7254         sync_engine_tick [16]
+-----------------------------------------------
+                0.00    0.00    6880/6880        mlx_loop [153]
+[17]     0.0    0.00    0.00    6880         frame_tick [17]
+                0.00    0.00    7254/7254        sync_engine_tick [16]
+-----------------------------------------------
+                0.00    0.00       1/317         pars_ambient [51]
+                0.00    0.00       1/317         scan_opt_bscale [55]
+                0.00    0.00       2/317         pars_light [40]
+                0.00    0.00       2/317         pars_resolution [53]
+                0.00    0.00       2/317         scan_opt_ambient [44]
+                0.00    0.00       3/317         pars_camera [36]
+                0.00    0.00       3/317         scan_opt_ior [37]
+                0.00    0.00       4/317         pars_cylinder [39]
+                0.00    0.00       5/317         scan_opt_refraction [35]
+                0.00    0.00       8/317         scan_opt_reflection [34]
+                0.00    0.00      12/317         pars_sphere [29]
+                0.00    0.00      18/317         pars_torus [32]
+                0.00    0.00      20/317         scan_opt_shininess [25]
+                0.00    0.00      20/317         scan_opt_specular [26]
+                0.00    0.00      21/317         scan_opt_diffuse [24]
+                0.00    0.00      60/317         scan_opt_uv [31]
+                0.00    0.00     135/317         scan_point [20]
+[18]     0.0    0.00    0.00     317         scan_float [18]
+-----------------------------------------------
+                0.00    0.00     234/234         manager_entry [13]
+[19]     0.0    0.00    0.00     234         manager_read_mailbox [19]
+-----------------------------------------------
+                0.00    0.00       1/45          pars_plane [52]
+                0.00    0.00       2/45          pars_cylinder [39]
+                0.00    0.00       2/45          pars_light [40]
+                0.00    0.00       3/45          pars_camera [36]
+                0.00    0.00       9/45          pars_torus [32]
+                0.00    0.00      12/45          pars_sphere [29]
+                0.00    0.00      16/45          scan_vec3 [27]
+[20]     0.0    0.00    0.00      45         scan_point [20]
+                0.00    0.00     135/317         scan_float [18]
+-----------------------------------------------
+                0.00    0.00       1/36          pars_plane [52]
+                0.00    0.00       1/36          pars_ambient [51]
+                0.00    0.00       2/36          pars_cylinder [39]
+                0.00    0.00       2/36          pars_light [40]
+                0.00    0.00       9/36          pars_torus [32]
+                0.00    0.00       9/36          scan_opt_checkerboard [33]
+                0.00    0.00      12/36          pars_sphere [29]
+[21]     0.0    0.00    0.00      36         scan_color [21]
+-----------------------------------------------
+                0.00    0.00       1/29          pars_plane [52]
+                0.00    0.00       2/29          pars_cylinder [39]
+                0.00    0.00       2/29          pars_light [40]
+                0.00    0.00       3/29          pars_camera [36]
+                0.00    0.00       9/29          pars_torus [32]
+                0.00    0.00      12/29          pars_sphere [29]
+[22]     0.0    0.00    0.00      29         pars_register_element [22]
+-----------------------------------------------
+                0.00    0.00       1/27          pars_plane [52]
+                0.00    0.00       2/27          pars_cylinder [39]
+                0.00    0.00       3/27          pars_camera [36]
+                0.00    0.00       9/27          pars_torus [32]
+                0.00    0.00      12/27          pars_sphere [29]
+[23]     0.0    0.00    0.00      27         pars_options [23]
+                0.00    0.00      21/21          scan_opt_diffuse [24]
+                0.00    0.00      20/20          scan_opt_shininess [25]
+                0.00    0.00      20/20          scan_opt_specular [26]
+                0.00    0.00      10/10          scan_opt_uv [31]
+                0.00    0.00       9/9           scan_opt_checkerboard [33]
+                0.00    0.00       8/8           scan_opt_reflection [34]
+                0.00    0.00       5/5           scan_opt_refraction [35]
+                0.00    0.00       3/3           scan_opt_ior [37]
+                0.00    0.00       2/2           scan_opt_texture [45]
+                0.00    0.00       2/2           scan_opt_ambient [44]
+                0.00    0.00       1/1           scan_opt_bscale [55]
+                0.00    0.00       1/1           scan_opt_bump [56]
+-----------------------------------------------
+                0.00    0.00      21/21          pars_options [23]
+[24]     0.0    0.00    0.00      21         scan_opt_diffuse [24]
+                0.00    0.00      21/317         scan_float [18]
+-----------------------------------------------
+                0.00    0.00      20/20          pars_options [23]
+[25]     0.0    0.00    0.00      20         scan_opt_shininess [25]
+                0.00    0.00      20/317         scan_float [18]
+-----------------------------------------------
+                0.00    0.00      20/20          pars_options [23]
+[26]     0.0    0.00    0.00      20         scan_opt_specular [26]
+                0.00    0.00      20/317         scan_float [18]
+-----------------------------------------------
+                0.00    0.00       1/16          pars_plane [52]
+                0.00    0.00       1/16          pars_skybox [54]
+                0.00    0.00       2/16          pars_cylinder [39]
+                0.00    0.00       3/16          pars_camera [36]
+                0.00    0.00       9/16          pars_torus [32]
+[27]     0.0    0.00    0.00      16         scan_vec3 [27]
+                0.00    0.00      16/45          scan_point [20]
+-----------------------------------------------
+                0.00    0.00       4/12          load_scene [49]
+                0.00    0.00       8/12          main [4]
+[28]     0.0    0.00    0.00      12         handle_section_step [28]
+-----------------------------------------------
+                0.00    0.00      12/12          load_scene [49]
+[29]     0.0    0.00    0.00      12         pars_sphere [29]
+                0.00    0.00      12/45          scan_point [20]
+                0.00    0.00      12/317         scan_float [18]
+                0.00    0.00      12/36          scan_color [21]
+                0.00    0.00      12/27          pars_options [23]
+                0.00    0.00      12/29          pars_register_element [22]
+-----------------------------------------------
+                0.00    0.00      10/10          mlx_loop [153]
+[30]     0.0    0.00    0.00      10         mouse_move [30]
+-----------------------------------------------
+                0.00    0.00      10/10          pars_options [23]
+[31]     0.0    0.00    0.00      10         scan_opt_uv [31]
+                0.00    0.00      60/317         scan_float [18]
+-----------------------------------------------
+                0.00    0.00       9/9           load_scene [49]
+[32]     0.0    0.00    0.00       9         pars_torus [32]
+                0.00    0.00      18/317         scan_float [18]
+                0.00    0.00       9/45          scan_point [20]
+                0.00    0.00       9/16          scan_vec3 [27]
+                0.00    0.00       9/36          scan_color [21]
+                0.00    0.00       9/27          pars_options [23]
+                0.00    0.00       9/29          pars_register_element [22]
+-----------------------------------------------
+                0.00    0.00       9/9           pars_options [23]
+[33]     0.0    0.00    0.00       9         scan_opt_checkerboard [33]
+                0.00    0.00       9/36          scan_color [21]
+-----------------------------------------------
+                0.00    0.00       8/8           pars_options [23]
+[34]     0.0    0.00    0.00       8         scan_opt_reflection [34]
+                0.00    0.00       8/317         scan_float [18]
+-----------------------------------------------
+                0.00    0.00       5/5           pars_options [23]
+[35]     0.0    0.00    0.00       5         scan_opt_refraction [35]
+                0.00    0.00       5/317         scan_float [18]
+-----------------------------------------------
+                0.00    0.00       3/3           load_scene [49]
+[36]     0.0    0.00    0.00       3         pars_camera [36]
+                0.00    0.00       3/45          scan_point [20]
+                0.00    0.00       3/16          scan_vec3 [27]
+                0.00    0.00       3/317         scan_float [18]
+                0.00    0.00       3/27          pars_options [23]
+                0.00    0.00       3/29          pars_register_element [22]
+-----------------------------------------------
+                0.00    0.00       3/3           pars_options [23]
+[37]     0.0    0.00    0.00       3         scan_opt_ior [37]
+                0.00    0.00       3/317         scan_float [18]
+-----------------------------------------------
+                0.00    0.00       2/2           load_scene [49]
+[38]     0.0    0.00    0.00       2         handle_camera_extra [38]
+-----------------------------------------------
+                0.00    0.00       2/2           load_scene [49]
+[39]     0.0    0.00    0.00       2         pars_cylinder [39]
+                0.00    0.00       4/317         scan_float [18]
+                0.00    0.00       2/45          scan_point [20]
+                0.00    0.00       2/16          scan_vec3 [27]
+                0.00    0.00       2/36          scan_color [21]
+                0.00    0.00       2/27          pars_options [23]
+                0.00    0.00       2/29          pars_register_element [22]
+-----------------------------------------------
+                0.00    0.00       2/2           load_scene [49]
+[40]     0.0    0.00    0.00       2         pars_light [40]
+                0.00    0.00       2/45          scan_point [20]
+                0.00    0.00       2/317         scan_float [18]
+                0.00    0.00       2/36          scan_color [21]
+                0.00    0.00       2/29          pars_register_element [22]
+-----------------------------------------------
+                0.00    0.00       2/2           load_scene [49]
+[41]     0.0    0.00    0.00       2         print_centered_suffix [41]
+-----------------------------------------------
+                0.00    0.00       2/2           load_scene [49]
+[42]     0.0    0.00    0.00       2         print_empty_line [42]
+-----------------------------------------------
+                0.00    0.00       2/2           load_scene [49]
+[43]     0.0    0.00    0.00       2         print_inner_hline [43]
+-----------------------------------------------
+                0.00    0.00       2/2           pars_options [23]
+[44]     0.0    0.00    0.00       2         scan_opt_ambient [44]
+                0.00    0.00       2/317         scan_float [18]
+-----------------------------------------------
+                0.00    0.00       2/2           pars_options [23]
+[45]     0.0    0.00    0.00       2         scan_opt_texture [45]
+-----------------------------------------------
+                0.00    0.00       1/1           load_scene [49]
+[46]     0.0    0.00    0.00       1         handle_camera_primary [46]
+-----------------------------------------------
+                0.00    0.00       1/1           load_scene [49]
+[47]     0.0    0.00    0.00       1         handle_light_extra [47]
+-----------------------------------------------
+                0.00    0.00       1/1           load_scene [49]
+[48]     0.0    0.00    0.00       1         handle_light_primary [48]
+-----------------------------------------------
+                0.00    0.00       1/1           main [4]
+[49]     0.0    0.00    0.00       1         load_scene [49]
+                0.00    0.00      12/12          pars_sphere [29]
+                0.00    0.00       9/9           pars_torus [32]
+                0.00    0.00       4/12          handle_section_step [28]
+                0.00    0.00       3/3           pars_camera [36]
+                0.00    0.00       2/2           pars_cylinder [39]
+                0.00    0.00       2/2           pars_light [40]
+                0.00    0.00       2/2           handle_camera_extra [38]
+                0.00    0.00       2/2           print_inner_hline [43]
+                0.00    0.00       2/2           print_centered_suffix [41]
+                0.00    0.00       2/2           print_empty_line [42]
+                0.00    0.00       1/1           handle_light_extra [47]
+                0.00    0.00       1/1           pars_skybox [54]
+                0.00    0.00       1/1           pars_plane [52]
+                0.00    0.00       1/1           handle_light_primary [48]
+                0.00    0.00       1/1           handle_camera_primary [46]
+                0.00    0.00       1/1           pars_ambient [51]
+                0.00    0.00       1/1           pars_resolution [53]
+-----------------------------------------------
+                0.00    0.00       1/1           mlx_loop [153]
+[50]     0.0    0.00    0.00       1         mouse_release [50]
+-----------------------------------------------
+                0.00    0.00       1/1           load_scene [49]
+[51]     0.0    0.00    0.00       1         pars_ambient [51]
+                0.00    0.00       1/317         scan_float [18]
+                0.00    0.00       1/36          scan_color [21]
+-----------------------------------------------
+                0.00    0.00       1/1           load_scene [49]
+[52]     0.0    0.00    0.00       1         pars_plane [52]
+                0.00    0.00       1/45          scan_point [20]
+                0.00    0.00       1/16          scan_vec3 [27]
+                0.00    0.00       1/36          scan_color [21]
+                0.00    0.00       1/27          pars_options [23]
+                0.00    0.00       1/29          pars_register_element [22]
+-----------------------------------------------
+                0.00    0.00       1/1           load_scene [49]
+[53]     0.0    0.00    0.00       1         pars_resolution [53]
+                0.00    0.00       2/317         scan_float [18]
+-----------------------------------------------
+                0.00    0.00       1/1           load_scene [49]
+[54]     0.0    0.00    0.00       1         pars_skybox [54]
+                0.00    0.00       1/16          scan_vec3 [27]
+-----------------------------------------------
+                0.00    0.00       1/1           pars_options [23]
+[55]     0.0    0.00    0.00       1         scan_opt_bscale [55]
+                0.00    0.00       1/317         scan_float [18]
+-----------------------------------------------
+                0.00    0.00       1/1           pars_options [23]
+[56]     0.0    0.00    0.00       1         scan_opt_bump [56]
+-----------------------------------------------
+                0.00    0.00       1/1           main [4]
+[57]     0.0    0.00    0.00       1         ui_build_buttons [57]
+-----------------------------------------------
+
+ This table describes the call tree of the program, and was sorted by
+ the total amount of time spent in each function and its children.
+
+ Each entry in this table consists of several lines.  The line with the
+ index number at the left hand margin lists the current function.
+ The lines above it list the functions that called this function,
+ and the lines below it list the functions this one called.
+ This line lists:
+     index	A unique number given to each element of the table.
+		Index numbers are sorted numerically.
+		The index number is printed next to every function name so
+		it is easier to look up where the function is in the table.
+
+     % time	This is the percentage of the `total' time that was spent
+		in this function and its children.  Note that due to
+		different viewpoints, functions excluded by options, etc,
+		these numbers will NOT add up to 100%.
+
+     self	This is the total amount of time spent in this function.
+
+     children	This is the total amount of time propagated into this
+		function by its children.
+
+     called	This is the number of times the function was called.
+		If the function called itself recursively, the number
+		only includes non-recursive calls, and is followed by
+		a `+' and the number of recursive calls.
+
+     name	The name of the current function.  The index number is
+		printed after it.  If the function is a member of a
+		cycle, the cycle number is printed between the
+		function's name and the index number.
+
+
+ For the function's parents, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the function into this parent.
+
+     children	This is the amount of time that was propagated from
+		the function's children into this parent.
+
+     called	This is the number of times this parent called the
+		function `/' the total number of times the function
+		was called.  Recursive calls to the function are not
+		included in the number after the `/'.
+
+     name	This is the name of the parent.  The parent's index
+		number is printed after it.  If the parent is a
+		member of a cycle, the cycle number is printed between
+		the name and the index number.
+
+ If the parents of the function cannot be determined, the word
+ `<spontaneous>' is printed in the `name' field, and all the other
+ fields are blank.
+
+ For the function's children, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the child into the function.
+
+     children	This is the amount of time that was propagated from the
+		child's children to the function.
+
+     called	This is the number of times the function called
+		this child `/' the total number of times the child
+		was called.  Recursive calls by the child are not
+		listed in the number after the `/'.
+
+     name	This is the name of the child.  The child's index
+		number is printed after it.  If the child is a
+		member of a cycle, the cycle number is printed
+		between the name and the index number.
+
+ If there are any cycles (circles) in the call graph, there is an
+ entry for the cycle-as-a-whole.  This entry shows who called the
+ cycle (as parents) and the members of the cycle (as children.)
+ The `+' recursive calls entry shows the number of function calls that
+ were internal to the cycle, and the calls entry for each member shows,
+ for that member, how many times it was called from other members of
+ the cycle.
+
+Copyright (C) 2012-2022 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+Index by function name
+
+   [7] _init                  [30] mouse_move             [44] scan_opt_ambient
+  [17] frame_tick             [50] mouse_release          [55] scan_opt_bscale
+  [15] ft_bzero               [51] pars_ambient           [56] scan_opt_bump
+   [6] ft_memcpy              [36] pars_camera            [33] scan_opt_checkerboard
+   [9] ft_memset              [39] pars_cylinder          [24] scan_opt_diffuse
+  [38] handle_camera_extra    [40] pars_light             [37] scan_opt_ior
+  [46] handle_camera_primary  [23] pars_options           [34] scan_opt_reflection
+  [47] handle_light_extra     [52] pars_plane             [35] scan_opt_refraction
+  [48] handle_light_primary   [22] pars_register_element  [25] scan_opt_shininess
+  [28] handle_section_step    [53] pars_resolution        [26] scan_opt_specular
+  [14] linear_to_rgb8_vec     [54] pars_skybox            [45] scan_opt_texture
+   [5] load_one_texture       [29] pars_sphere            [31] scan_opt_uv
+  [49] load_scene             [32] pars_torus             [20] scan_point
+   [4] main                   [41] print_centered_suffix  [27] scan_vec3
+  [13] manager_entry          [42] print_empty_line        [3] scene_hit
+  [19] manager_read_mailbox   [43] print_inner_hline       [2] shading_ray
+   [8] mlx_int_parse_xpm      [11] sample_texture         [16] sync_engine_tick
+  [12] mlx_int_str_str        [21] scan_color             [57] ui_build_buttons
+  [10] mlx_int_str_str_cote   [18] scan_float

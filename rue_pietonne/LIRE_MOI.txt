@@ -1,0 +1,50 @@
+RUE DU PASSAGE — scène miniRT, sans personnages
+
+INSTALLATION
+Décompresser l'archive à la racine de ton projet miniRT : le dossier
+rue_pietonne doit se trouver à côté de l'exécutable.
+Lancer les commandes depuis cette racine (les textures utilisent des chemins
+relatifs à ce répertoire).
+
+Rendu principal, 1500 × 1000 :
+./miniRT rue_pietonne/rue_pietonne.rt
+
+Première ouverture en 900 × 600 :
+./miniRT rue_pietonne/rue_pietonne_apercu.rt
+
+Les deux fichiers contiennent exactement la même scène ; seule la résolution
+change. Aucune modification de ton moteur, aucune bibliothèque supplémentaire
+et aucun téléchargement de texture ne sont nécessaires.
+
+RÉGLAGES
+Choisir le rendu NORMAL ou SUPER pour voir les lumières, reflets et matériaux.
+Le mode FAST de tes sources ne calcule pas leur rendu complet.
+Pour l'image finale, activer le SSAA à 2 ou davantage depuis ton interface.
+Le rendu de contrôle fourni utilise 2 × 2 échantillons par pixel, sans tonemapping.
+La scène est détaillée : le verre et les multiples lumières rendent le calcul
+plus lourd qu'une scène de quelques objets.
+
+CONTENU
+• Rue piétonne en perspective, sans aucun personnage.
+• 16 façades latérales, corniches, fenêtres à meneaux, vitrines en retrait.
+• Boutiques avec étagères et objets, enseignes, stores verts.
+• 12 arbres ramifiés, jardinières, buissons, 10 bancs.
+• 8 lampadaires, potelets, caniveaux et un vélo stationné.
+• Pavés et dalles humides avec relief et reflets.
+• Ciel panoramique de fin de journée, 27 lumières, 2 caméras.
+• Triangles, sphères, cylindres, tores et plan ; réflexion, réfraction,
+  indices optiques, textures XPM, UV, bump mapping et matériaux différenciés.
+
+VÉRIFICATION
+Le fichier a été accepté par le parseur C fourni. L'image apercu.png a été
+calculée avec les routines d'intersection, BVH, matériaux, éclairage et
+réflexion/réfraction de ces sources, dans un lanceur de contrôle sans fenêtre.
+Pour compiler ce lanceur avec GCC, la syntaxe d'accès aux composantes des
+vecteurs a été adaptée dans une copie temporaire des sources. Les textures
+ont été chargées en mémoire avec la même conversion sRGB et le même calcul
+des dérivées de relief. Aucun changement du moteur n'est fourni ni nécessaire.
+L'interface graphique MiniLibX n'a pas été exécutée ici.
+
+L'image est une interprétation géométrique de la référence, pas une promesse
+de rendu photographique. La caméra principale est déjà cadrée ; la seconde
+propose un point de vue légèrement décalé et plus bas dans la rue.

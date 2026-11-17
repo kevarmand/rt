@@ -63,7 +63,7 @@ sp 1,4.5,0 1 255,255,255 diffuse=0 specular=0 shininess=0 reflection=1
 sp 0,1,10 2 0,255,255 ior=1.5 diffuse=1 specular=0.5 shininess=100  reflection=0.1 refraction=0.9
 
 #cylindre metalise
-cy 5,0,1 0,1,0  2 2  255,100,100 ambient=0.5 diffuse=0.3 specular=0.3 shininess=300 reflection=0.3 refraction=0.000
+cy 5,0,1 0,1,0  2 200  255,100,100 ambient=0.5 diffuse=0.3 specular=0.3 shininess=300 reflection=0.3 refraction=0.000
 
 # deuxieme cylyndre en longueur
 cy 0,0,-5 1,0,0  1 6  100,100,255 ambient=0.1 diffuse=0.1 specular=0.2 shininess=100 reflection=1 refraction=0.001

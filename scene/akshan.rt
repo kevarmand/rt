@@ -1,12 +1,17 @@
 R	1500 1100
 A	0.1	255,255,255
 C	-5.889211,53.860535,123.521955	0.000000,0.000000,-1.000000	60
-L	700,900,600	0.412456	255,255,255
-l	400,200,0	0.412456	255,0,255
-l	200,500,300	0.412456	0,255,255
-l	1000,300,400	0.412456	255,255,0
+L	700,900,600	0.712456	255,255,255
 
-sp	0,47,100	170	0,0,255	diffuse=0 ior=1.05 ambient=0.1 refraction=1 bump=texture/lunar_bump.xpm bscale=2
+
+#sp	0,47,100	170	0,0,255	diffuse=0 ior=1.05 ambient=0.1 refraction=1 bump=texture/organic_soft_bump.xpm bscale=10
+#sp 0,47,100 170 255,255,255 diffuse=0 ambient=0 ior=1.08 reflection=1 refraction=1 bump=texture/lunar_bump.xpm bscale=0.35
+#sp 0,47,100 170 255,255,255 diffuse=0 ambient=0 ior=1.12 reflection=1 refraction=1 bump=texture/lunar_bump.xpm bscale=0.8
+#sp 0,47,100 170 255,255,255 diffuse=0 ambient=0 ior=1.03 reflection=1 refraction=1 bump=texture/lunar_bump.xpm bscale=0.1
+
+sp 0,47,100 170 30,120,120 diffuse=0.1 ambient=0 ior=1.05 reflection=0.1 refraction=0.9  bump=texture/lunar_bump.xpm texture=texture/lunar_bump.xpm  bscale=30   uv=1,0,0,-1,0,1
+sp 0,347,100 170 30,120,120 diffuse=1 ambient=0 ior=1.05 reflection=0 refraction=0  texture=texture/lunar_bump.xpm  bscale=30   uv=1,0,0,-1,0,1
+ 
 
 pl	0,0,0	0,1,0	200,200,200	texture=texture/pavage.xpm	uv=0.01,0.01,0.01,-0.01,0,0 checkerboard=texture/wood.xpm
 

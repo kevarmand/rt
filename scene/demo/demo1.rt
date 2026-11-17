@@ -1,0 +1,25 @@
+R 1600 1200
+A 0.03 255,255,255
+
+C 0,3,16   0,-0.08,-1   50
+c 0,3,16   0,-0.08,-1   50
+
+L 8,10,8   0.85 255,255,255
+l -6,6,10  0.25 255,240,220
+
+pl 0,0,0   0,1,0   180,180,180 texture=texture/pavage.xpm checkerboard=texture/ground.xpm uv=0.5,0,0,0.5,0,0
+
+skybox texture/puresky.xpm sp 0.5,0.5,0.5
+
+# Earth sphere
+sp -3,2.2,-2   2.2   255,255,255 texture=texture/2k_earth_daymap.xpm uv=-1,0,0,-1,-0.15,1 diffuse=1 specular=0.25 shininess=32
+# Glass sphere
+sp 2.7,1.7,-1   1.7   180,220,255 diffuse=0.05 specular=0.2 shininess=128 reflection=0.08 refraction=0.92 ior=1.45
+
+# Chrome torus
+to 0,2.2,-6   0,1,0   3.0 0.8   220,220,220 diffuse=0.08 specular=0.9 shininess=256 reflection=0.8
+
+# Small accent spheres
+sp -0.5,0.7,-2.5 0.7 255,120,80 diffuse=0.9 specular=0.2 shininess=32
+sp 4.8,0.9,-4.0 0.9 80,220,255 diffuse=0.8 specular=0.3 shininess=64
+sp -5.2,0.8,-5.5 0.8 220,220,220 diffuse=0.05 specular=0.8 shininess=180 reflection=0.6

@@ -1,0 +1,152 @@
+--- a/includes/io.h
++++ b/includes/io.h
+@@ -88,6 +88,8 @@
+ 	int				texture_id;
+ 	t_skybox_mode	mode;
+ 	float			intensity[3];
++	float			uv[6];
++	int				uv_enabled;
+ }	t_skybox_parsed;
+ 
+ typedef struct s_scene_parsed
+--- a/includes/scene.h
++++ b/includes/scene.h
+@@ -180,6 +180,8 @@
+ 	t_index		texture_id;
+ 	int			mode;
+ 	t_vec3f		intensity;
++	float		uv[6];
++	int			uv_enabled;
+ }	t_skybox;
+ 
+ typedef struct s_scene
+--- a/src/io/parse/elements/pars_skybox.c
++++ b/src/io/parse/elements/pars_skybox.c
+@@ -40,6 +40,41 @@
+ 	return (intern_texture_tok(&scene->textures, tok, out_id));
+ }
+ 
++static int	parse_skybox_uv(t_scene_parsed *scene, t_tok tok)
++{
++	t_element_options	opts;
++	t_tok				value;
++
++	if (tok.len <= 3 || tok.start[0] != 'u'
++		|| tok.start[1] != 'v' || tok.start[2] != '=')
++		return (ERR_PARS);
++	value.start = tok.start + 3;
++	value.len = tok.len - 3;
++	if (scan_opt_uv(value, &opts, &scene->textures) != SUCCESS
++		|| opts.uv_mod != 2)
++		return (ERR_PARS);
++	ft_memcpy(scene->skybox.uv, opts.uv, sizeof(scene->skybox.uv));
++	scene->skybox.uv_enabled = 1;
++	return (SUCCESS);
++}
++
++static int	parse_skybox_intensity(t_pars_state *st,
++		t_scene_parsed *scene, t_tok token)
++{
++	if (scan_vec3(token, scene->skybox.intensity) != SUCCESS
++		|| scene->skybox.intensity[0] < 0.0f
++		|| scene->skybox.intensity[1] < 0.0f
++		|| scene->skybox.intensity[2] < 0.0f)
++		return (ERR_PARS);
++	if (!pars_next_tok(st, &token))
++		return (SUCCESS);
++	if (parse_skybox_uv(scene, token) != SUCCESS)
++		return (ERR_PARS);
++	if (pars_next_tok(st, &token))
++		return (ERR_PARS);
++	return (SUCCESS);
++}
++
+ int	pars_skybox(t_pars_state *st, t_scene_parsed *scene)
+ {
+ 	t_tok	token;
+@@ -58,12 +93,5 @@
+ 		if (!pars_next_tok(st, &token))
+ 			return (SUCCESS);
+ 	}
+-	if (scan_vec3(token, scene->skybox.intensity) != SUCCESS
+-		|| scene->skybox.intensity[0] < 0.0f
+-		|| scene->skybox.intensity[1] < 0.0f
+-		|| scene->skybox.intensity[2] < 0.0f)
+-		return (ERR_PARS);
+-	if (pars_next_tok(st, &token))
+-		return (ERR_PARS);
+-	return (SUCCESS);
++	return (parse_skybox_intensity(st, scene, token));
+ }
+--- a/src/io/parsed_scene_lifetime.c
++++ b/src/io/parsed_scene_lifetime.c
+@@ -60,6 +60,7 @@
+ 	parsed->skybox.intensity[0] = 1.0f;
+ 	parsed->skybox.intensity[1] = 1.0f;
+ 	parsed->skybox.intensity[2] = 1.0f;
++	parsed->skybox.uv_enabled = 0;
+ 	parsed->textures.index_t = 0;
+ 	parsed->textures.index_b = 0;
+ 	if (init_heap_element(parsed) != SUCCESS)
+--- a/src/io/build/convert/conv_globals.c
++++ b/src/io/build/convert/conv_globals.c
+@@ -35,4 +35,7 @@
+ 	scene->skybox.intensity[0] = parsed->skybox.intensity[0];
+ 	scene->skybox.intensity[1] = parsed->skybox.intensity[1];
+ 	scene->skybox.intensity[2] = parsed->skybox.intensity[2];
++	scene->skybox.uv_enabled = parsed->skybox.uv_enabled;
++	memcpy(scene->skybox.uv, parsed->skybox.uv,
++		sizeof(scene->skybox.uv));
+ }
+--- a/src/engine/shading/skybox/skybox_eval.c
++++ b/src/engine/shading/skybox/skybox_eval.c
+@@ -18,6 +18,7 @@
+ void	sky_gradient_eval(t_vec3f dir, t_vec3f *out);
+ float	clampf(float value, float min_value, float max_value);
+ float	smoothstep(float edge0, float edge1, float value);
++void	skybox_apply_uv(const t_scene *scene, float *u, float *v);
+ 
+ typedef enum e_skybox_mode
+ {
+@@ -44,6 +45,7 @@
+ 
+ 	texture = &scene->textures[scene->skybox.texture_id];
+ 	sky_sphere_uv(dir, &u, &v);
++	skybox_apply_uv(scene, &u, &v);
+ 	*out = sample_texture(texture, u, v);
+ }
+ 
+@@ -84,6 +86,7 @@
+ 	}
+ 	texture = &scene->textures[scene->skybox.texture_id];
+ 	sky_cyl_uv(dir, ctx.y_limit, &ctx.u, &ctx.v);
++	skybox_apply_uv(scene, &ctx.u, &ctx.v);
+ 	horizon = sample_texture(texture, ctx.u, ctx.v);
+ 	ctx.blend = smoothstep(ctx.y_limit * 0.70f, ctx.y_limit, ctx.y_abs);
+ 	*out = vec3f_lerp(horizon, grad, ctx.blend);
+--- a/src/engine/shading/skybox/skybox_utils.c
++++ b/src/engine/shading/skybox/skybox_utils.c
+@@ -11,7 +11,23 @@
+ /* ************************************************************************** */
+ 
+ #include "vector.h"
++#include "scene.h"
+ #include <math.h>
++
++void	skybox_apply_uv(const t_scene *scene, float *u, float *v)
++{
++	float	old_u;
++	float	old_v;
++
++	if (!scene->skybox.uv_enabled)
++		return ;
++	old_u = *u;
++	old_v = *v;
++	*u = scene->skybox.uv[0] * old_u + scene->skybox.uv[1] * old_v
++		+ scene->skybox.uv[4];
++	*v = scene->skybox.uv[2] * old_u + scene->skybox.uv[3] * old_v
++		+ scene->skybox.uv[5];
++}
+ 
+ float	clampf(float value, float min_value, float max_value)
+ {

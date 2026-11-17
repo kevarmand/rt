@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 19:17:55 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/18 20:18:34 by kearmand         ###   ########.fr       */
+/*   Updated: 2026/11/12 18:06:55 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	surface_needs_bump(const t_surface_map *surface)
 
 void	hit_faceforward(const t_ray *ray, t_hit *hit)
 {
-	if (vec3f_dot(hit->normal, ray->dir) > 0.0f)
+	if (vec3f_dot(hit->geo_normal, ray->dir) > 0.0f)
 	{
 		hit->normal = vec3f_scale(hit->normal, -1.0f);
 		hit->geo_normal = vec3f_scale(hit->geo_normal, -1.0f);

@@ -60,6 +60,7 @@ int	init_parsed_scene(t_scene_parsed *parsed)
 	parsed->skybox.intensity[0] = 1.0f;
 	parsed->skybox.intensity[1] = 1.0f;
 	parsed->skybox.intensity[2] = 1.0f;
+	parsed->skybox.uv_enabled = 0;
 	parsed->textures.index_t = 0;
 	parsed->textures.index_b = 0;
 	if (init_heap_element(parsed) != SUCCESS)

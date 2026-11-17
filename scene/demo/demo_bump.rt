@@ -1,0 +1,60 @@
+# DEMO BUMP -- comparaison 5 textures x 3 intensites
+# Colonnes, de gauche a droite :
+# 1 lunar_bump.xpm
+# 2 organic_clouds_bump.xpm
+# 3 organic_soft_bump.xpm
+# 4 smooth_waves_bump.xpm
+# 5 neuron_bump.xpm
+# Lignes, de haut en bas : sans bump / bscale=5 / bscale=50
+# Toutes les spheres : meme couleur, diametre, materiau et UV.
+
+R 1500 1100
+A 0.10 255,255,255
+C 0,42,175 0,0,-1 52
+L -350,550,650 0.90 255,255,255
+
+# Sol neutre et fond neutre (pour comparer les reliefs)
+pl 0,0,0 0,1,0 85,85,90
+pl 0,0,-120 0,0,1 55,60,70
+
+# ============================================================
+# LISSE (REFERENCE) -- y=72
+# ============================================================
+# Colonne 1 : lunar_bump.xpm
+sp -60,72,0 24 200,200,200 diffuse=1 ambient=0.10 specular=0.08 shininess=32
+# Colonne 2 : organic_clouds_bump.xpm
+sp -30,72,0 24 200,200,200 diffuse=1 ambient=0.10 specular=0.08 shininess=32
+# Colonne 3 : organic_soft_bump.xpm
+sp 0,72,0 24 200,200,200 diffuse=1 ambient=0.10 specular=0.08 shininess=32
+# Colonne 4 : smooth_waves_bump.xpm
+sp 30,72,0 24 200,200,200 diffuse=1 ambient=0.10 specular=0.08 shininess=32
+# Colonne 5 : neuron_bump.xpm
+sp 60,72,0 24 200,200,200 diffuse=1 ambient=0.10 specular=0.08 shininess=32
+
+# ============================================================
+# BUMP FAIBLE -- y=42
+# ============================================================
+# Colonne 1 : lunar_bump.xpm
+sp -60,42,0 24 200,200,200 diffuse=1 ambient=0.10 specular=0.08 shininess=32 bump=texture/lunar_bump.xpm bscale=5 uv=1,0,0,-1,0,1
+# Colonne 2 : organic_clouds_bump.xpm
+sp -30,42,0 24 200,200,200 diffuse=1 ambient=0.10 specular=0.08 shininess=32 bump=texture/organic_clouds_bump.xpm bscale=15 uv=1,0,0,-1,0,1
+# Colonne 3 : organic_soft_bump.xpm
+sp 0,42,0 24 200,200,200 diffuse=1 ambient=0.10 specular=0.08 shininess=32 bump=texture/organic_soft_bump.xpm bscale=15 uv=1,0,0,-1,0,1
+# Colonne 4 : smooth_waves_bump.xpm
+sp 30,42,0 24 200,200,200 diffuse=1 ambient=0.10 specular=0.08 shininess=32 bump=texture/smooth_waves_bump.xpm bscale=5 uv=1,0,0,-1,0,1
+# Colonne 5 : neuron_bump.xpm
+sp 60,42,0 24 200,200,200 diffuse=1 ambient=0.10 specular=0.08 shininess=32 bump=texture/neuron_bump.xpm bscale=8 uv=1,0,0,-1,0,1
+
+# ============================================================
+# BUMP FORT -- y=12
+# ============================================================
+# Colonne 1 : lunar_bump.xpm
+sp -60,12,0 24 200,200,200 diffuse=1 ambient=0.10 specular=0.08 shininess=32 bump=texture/lunar_bump.xpm bscale=50 uv=1,0,0,-1,0,1
+# Colonne 2 : organic_clouds_bump.xpm
+sp -30,12,0 24 200,200,200 diffuse=1 ambient=0.10 specular=0.08 shininess=32 bump=texture/organic_clouds_bump.xpm bscale=50 uv=1,0,0,-1,0,1
+# Colonne 3 : organic_soft_bump.xpm
+sp 0,12,0 24 200,200,200 diffuse=1 ambient=0.10 specular=0.08 shininess=32 bump=texture/organic_soft_bump.xpm bscale=50 uv=1,0,0,-1,0,1
+# Colonne 4 : smooth_waves_bump.xpm
+sp 30,12,0 24 200,200,200 diffuse=1 ambient=0.10 specular=0.08 shininess=32 bump=texture/smooth_waves_bump.xpm bscale=50 uv=1,0,0,-1,0,1
+# Colonne 5 : neuron_bump.xpm
+sp 60,12,0 24 200,200,200 diffuse=1 ambient=0.10 specular=0.08 shininess=32 bump=texture/neuron_bump.xpm bscale=35 uv=1,0,0,-1,0,1

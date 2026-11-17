@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 19:23:19 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/18 19:51:21 by kearmand         ###   ########.fr       */
+/*   Updated: 2026/11/12 18:16:13 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ void	bump_apply_normal(const t_bump_apply *bump, t_vec3f *normal)
 	grad = sample_texture(&bump->scene->bumpmaps[bump->surface->bump_normal_id],
 			bump->u, bump->v);
 	surface_grad_to_base(bump->surface, grad, &base);
-	*normal = vec3f_add(*normal, vec3f_scale(bump->tangent,
+	*normal = vec3f_sub(*normal, vec3f_scale(bump->tangent,
 				base.x * bump->surface->bump_scale));
-	*normal = vec3f_add(*normal, vec3f_scale(bump->bitangent,
+	*normal = vec3f_sub(*normal, vec3f_scale(bump->bitangent,
 				base.y * bump->surface->bump_scale));
 	*normal = vec3f_normalize(*normal);
 }

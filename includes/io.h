@@ -88,6 +88,8 @@ typedef struct s_skybox_parsed
 	int				texture_id;
 	t_skybox_mode	mode;
 	float			intensity[3];
+	float			uv[6];
+	int				uv_enabled;
 }	t_skybox_parsed;
 
 typedef struct s_scene_parsed

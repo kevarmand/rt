@@ -1,0 +1,61 @@
+R	1500 1100
+A	0.08	255,255,255
+
+C	0,48,175	0.000000,-0.060000,-1.000000	55
+
+L	260,420,260	0.85	255,255,255
+l	-180,180,120	0.18	220,230,255
+
+# Sol + fond
+pl 0,0,0 0,1,0 200,200,200 texture=texture/pavage.xpm uv=0.02,0.02,0.02,-0.02,0,0 checkerboard=texture/wood.xpm
+skybox texture/puresky.xpm sp 0.5,0.5,0.5
+
+# ------------------------------------------------------------------
+# TORUS GRID
+# Colonnes :
+# 1 = lunar_bump.xpm
+# 2 = organic_clouds_bump.xpm
+# 3 = organic_soft_bump.xpm
+# 4 = smooth_waves_bump.xpm
+# 5 = neuron_bump.xpm
+#
+# Lignes :
+# 1 = lisse
+# 2 = bump faible
+# 3 = bump fort
+#
+# Axe 3/4 : 0.577350,0.577350,0.577350
+# ------------------------------------------------------------------
+
+# =========================
+# LIGNE 1 : LISSE
+# =========================
+
+
+to    -72,76,70	0.577350,0.577350,0.577350	11	3.8	170,180,195	diffuse=1	ambient=0	specular=0.08	shininess=18	uv=1,0,0,1,0,0
+to	-36,76,70	0.577350,0.577350,0.577350	11	3.8	150,205,210	diffuse=1	ambient=0	specular=0.08	shininess=18	uv=1,0,0,1,0,0
+to	0,76,70	    0.577350,0.577350,0.577350	11	3.8	220,210,190	diffuse=1    ambient=0	specular=0.08	shininess=18	uv=1,0,0,1,0,0
+to    36,76,70	0.577350,0.577350,0.577350	11	3.8	190,180,220	diffuse=1	ambient=0	specular=0.08	shininess=18	uv=1,0,0,1,0,0  
+to	72,76,70	0.577350,0.577350,0.577350	11	3.8	215,185,170	diffuse=1	ambient=0	specular=0.08	shininess=18	uv=1,0,0,1,0,0
+to  108,76,70	0.577350,0.577350,0.577350	11	3.8	145,205,165	diffuse=1	ambient=0	specular=0.08	shininess=18	uv=1,0,0,1,0,0
+
+
+
+# =========================
+# LIGNE 2 : BUMP FAIBLE
+# =========================
+to	-72,46,70	0.577350,0.577350,0.577350	11	3.8	170,180,195	diffuse=1	ambient=0	specular=0.08	shininess=18	bump=texture/lunar_bump.xpm				    bscale=5	uv=1,0,0,1,0,0
+to	-36,46,70	0.577350,0.577350,0.577350	11	3.8	150,205,210	diffuse=1	ambient=0	specular=0.08	shininess=18	bump=texture/organic_clouds_bump.xpm		bscale=15	uv=1,0,0,1,0,0
+to	0,46,70	0.577350,0.577350,0.577350	    11	3.8	220,210,190	diffuse=1	ambient=0	specular=0.08	shininess=18	bump=texture/organic_soft_bump.xpm			bscale=15	uv=1,0,0,1,0,0
+to	36,46,70	0.577350,0.577350,0.577350	11	3.8	190,180,220	diffuse=1	ambient=0	specular=0.08	shininess=18	bump=texture/smooth_waves_bump.xpm			bscale=15	uv=1,0,0,1,0,0
+to	72,46,70	0.577350,0.577350,0.577350	11	3.8	215,185,170	diffuse=1	ambient=0	specular=0.08	shininess=18	bump=texture/neuron_bump_2.xpm				bscale=7	uv=1,0,0,1,0,0
+to  108,46,70	0.577350,0.577350,0.577350	11	3.8	145,205,165	diffuse=1	ambient=0	specular=0.08	shininess=18	bump=texture/neuron_bump.xpm			    bscale=7	uv=2,0,0,2,0,0
+# =========================
+# LIGNE 3 : BUMP FORT
+# =========================
+to	-72,16,70	0.577350,0.577350,0.577350	11	3.8	170,180,195	diffuse=1	ambient=0	specular=0.08	shininess=18	bump=texture/lunar_bump.xpm				    bscale=30	uv=1,0,0,1,0,0
+to	-36,16,70	0.577350,0.577350,0.577350	11	3.8	150,205,210	diffuse=1	ambient=0	specular=0.08	shininess=18	bump=texture/organic_clouds_bump.xpm		bscale=50	uv=1,0,0,1,0,0
+to	0,16,70	0.577350,0.577350,0.577350  	11	3.8	220,210,190	diffuse=1	ambient=0	specular=0.08	shininess=18	bump=texture/organic_soft_bump.xpm			bscale=50	uv=1,0,0,1,0,0
+to	36,16,70	0.577350,0.577350,0.577350	11	3.8	190,180,220	diffuse=1	ambient=0	specular=0.08	shininess=18	bump=texture/smooth_waves_bump.xpm			bscale=70	uv=1,0,0,1,0,0
+to	72,16,70	0.577350,0.577350,0.577350	11	3.8	215,185,170	diffuse=1	ambient=0	specular=0.08	shininess=18	bump=texture/neuron_bump_2.xpm				bscale=35	uv=1,0,0,1,0,0
+to  108,16,70	0.577350,0.577350,0.577350	11	3.8	145,205,165	diffuse=1	ambient=0	specular=0.08	shininess=18	bump=texture/neuron_bump.xpm			    bscale=30	uv=2,0,0,2,0,0

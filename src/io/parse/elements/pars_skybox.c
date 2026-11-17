@@ -40,6 +40,41 @@ static int	parse_skybox_texture(t_scene_parsed *scene, t_tok tok, int *out_id)
 	return (intern_texture_tok(&scene->textures, tok, out_id));
 }
 
+static int	parse_skybox_uv(t_scene_parsed *scene, t_tok tok)
+{
+	t_element_options	opts;
+	t_tok				value;
+
+	if (tok.len <= 3 || tok.start[0] != 'u'
+		|| tok.start[1] != 'v' || tok.start[2] != '=')
+		return (ERR_PARS);
+	value.start = tok.start + 3;
+	value.len = tok.len - 3;
+	if (scan_opt_uv(value, &opts, &scene->textures) != SUCCESS
+		|| opts.uv_mod != 2)
+		return (ERR_PARS);
+	ft_memcpy(scene->skybox.uv, opts.uv, sizeof(scene->skybox.uv));
+	scene->skybox.uv_enabled = 1;
+	return (SUCCESS);
+}
+
+static int	parse_skybox_intensity(t_pars_state *st,
+		t_scene_parsed *scene, t_tok token)
+{
+	if (scan_vec3(token, scene->skybox.intensity) != SUCCESS
+		|| scene->skybox.intensity[0] < 0.0f
+		|| scene->skybox.intensity[1] < 0.0f
+		|| scene->skybox.intensity[2] < 0.0f)
+		return (ERR_PARS);
+	if (!pars_next_tok(st, &token))
+		return (SUCCESS);
+	if (parse_skybox_uv(scene, token) != SUCCESS)
+		return (ERR_PARS);
+	if (pars_next_tok(st, &token))
+		return (ERR_PARS);
+	return (SUCCESS);
+}
+
 int	pars_skybox(t_pars_state *st, t_scene_parsed *scene)
 {
 	t_tok	token;
@@ -58,12 +93,5 @@ int	pars_skybox(t_pars_state *st, t_scene_parsed *scene)
 		if (!pars_next_tok(st, &token))
 			return (SUCCESS);
 	}
-	if (scan_vec3(token, scene->skybox.intensity) != SUCCESS
-		|| scene->skybox.intensity[0] < 0.0f
-		|| scene->skybox.intensity[1] < 0.0f
-		|| scene->skybox.intensity[2] < 0.0f)
-		return (ERR_PARS);
-	if (pars_next_tok(st, &token))
-		return (ERR_PARS);
-	return (SUCCESS);
+	return (parse_skybox_intensity(st, scene, token));
 }

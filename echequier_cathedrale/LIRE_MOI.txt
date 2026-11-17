@@ -1,0 +1,62 @@
+LE JEU DE LA LUMIERE — ECHIQUIER CATHEDRALE
+
+INSTALLATION
+Décompresser l'archive à la racine du projet miniRT, à côté de l'exécutable.
+Lancer depuis cette racine : les chemins des textures partent de là.
+Aucune modification du moteur n'est nécessaire.
+
+VERSION D'EXPOSITION, 1500 × 1000
+./miniRT echequier_cathedrale/echequier_cathedrale.rt
+
+MÊME GÉOMÉTRIE EN 900 × 600 (calcul de l'image plus court)
+./miniRT echequier_cathedrale/echequier_cathedrale_apercu.rt
+
+VERSION DE NAVIGATION, 900 × 600 (chargement plus court)
+./miniRT echequier_cathedrale/echequier_cathedrale_navigation.rt
+Cette variante conserve les 32 pièces, les arcades et les matériaux.
+Les courbes sont moins finement découpées : les facettes seront plus visibles.
+
+RÉGLAGES CONSEILLÉS
+Mode NORMAL ou SUPER pour les lumières et les réflexions ; le mode FAST
+ne représente pas l'apparence finale des matériaux.
+SSAA 2 ou davantage pour les reflets fins, les couronnes et les crénelures.
+L'aperçu fourni est un rendu 1500 × 1000, 2 × 2 échantillons par pixel,
+sans tonemapping. Les trois caméras sont définies dans chaque scène.
+
+COMPOSITION
+Échiquier 8 × 8 de 17,6 m de côté, bordure sombre et filets métalliques.
+Cases en marbre ivoire et marbre noir, reflets modérés.
+32 pièces monumentales : camp champagne poli et camp acier sombre poli.
+Position après 1.e4 e5 2.Nf3 Nc6 3.Bc4 Bc5 4.O-O Nf6.
+Pièces d'environ 2 à 4 m de haut, avec socles profilés, tours crénelées,
+fous fendus, cavaliers sculptés, couronnes et croix des rois.
+Galerie voûtée à arcades ouvertes, colonnes composites, nervures, dallage,
+prairie et panorama nuageux. Aucun personnage.
+Sept lumières combinent une direction extérieure chaude, des éclairages
+intérieurs plus doux et des accents froids sur les métaux.
+
+MATÉRIAUX ET GÉOMÉTRIE
+Les fichiers utilisent uniquement les primitives et options de tes sources.
+Les cylindres sont ouverts dans ton moteur : les extrémités visibles sont
+fermées par d'autres volumes ou intégrées aux bases, chapiteaux et ornements.
+Les surfaces métalliques utilisent réflexion, spéculaire et brillance.
+La pierre utilise des textures XPM et un relief fin ; les cases ont leurs
+propres textures et UV. Le damier ne s'étend pas au reste du sol.
+Toutes les textures sont incluses ; aucun téléchargement supplémentaire.
+
+CHARGEMENT
+La version d'exposition comporte plus de 338 000 primitives. Le parseur
+fourni reparcourt la liste à chaque ajout d'objet (ft_lstadd_back) : sur cette
+scène, l'ouverture peut être particulièrement longue avant le premier rendu.
+Réduire seulement la résolution ne raccourcit pas cette étape.
+Utiliser la version de navigation pour une première ouverture plus rapide.
+
+VALIDATION ET APERÇU
+L'aperçu a été calculé à partir de tes routines C de géométrie, BVH,
+éclairage, ombres, textures et réflexion, dans un lanceur sans fenêtre.
+Dans cette copie de contrôle uniquement, la syntaxe d'accès aux vecteurs a
+été adaptée à GCC, le chargement des textures réalisé en mémoire, et l'ajout
+à la liste du parseur accéléré en conservant l'ordre des éléments. La grammaire
+et les calculs de rendu restent ceux des sources fournies.
+Le programme graphique MiniLibX n'a pas été exécuté ici. Aucun de ces
+ajustements du lanceur de contrôle n'est livré ni requis pour lire la scène.

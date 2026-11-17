@@ -11,7 +11,23 @@
 /* ************************************************************************** */
 
 #include "vector.h"
+#include "scene.h"
 #include <math.h>
+
+void	skybox_apply_uv(const t_scene *scene, float *u, float *v)
+{
+	float	old_u;
+	float	old_v;
+
+	if (!scene->skybox.uv_enabled)
+		return ;
+	old_u = *u;
+	old_v = *v;
+	*u = scene->skybox.uv[0] * old_u + scene->skybox.uv[1] * old_v
+		+ scene->skybox.uv[4];
+	*v = scene->skybox.uv[2] * old_u + scene->skybox.uv[3] * old_v
+		+ scene->skybox.uv[5];
+}
 
 float	clampf(float value, float min_value, float max_value)
 {

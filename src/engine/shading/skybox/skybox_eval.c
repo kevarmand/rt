@@ -6,7 +6,7 @@
 /*   By: kearmand <kearmand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 23:44:01 by kearmand          #+#    #+#             */
-/*   Updated: 2025/12/18 18:43:03 by kearmand         ###   ########.fr       */
+/*   Updated: 2026/11/13 17:17:02 by kearmand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 void	sky_gradient_eval(t_vec3f dir, t_vec3f *out);
 float	clampf(float value, float min_value, float max_value);
 float	smoothstep(float edge0, float edge1, float value);
+void	skybox_apply_uv(const t_scene *scene, float *u, float *v);
 
 typedef enum e_skybox_mode
 {
@@ -44,6 +45,7 @@ static void	sky_sphere_eval(const t_scene *scene, t_vec3f dir, t_vec3f *out)
 
 	texture = &scene->textures[scene->skybox.texture_id];
 	sky_sphere_uv(dir, &u, &v);
+	skybox_apply_uv(scene, &u, &v);
 	*out = sample_texture(texture, u, v);
 }
 
@@ -84,6 +86,7 @@ static void	sky_cylinder_eval(const t_scene *scene, t_vec3f dir, t_vec3f *out)
 	}
 	texture = &scene->textures[scene->skybox.texture_id];
 	sky_cyl_uv(dir, ctx.y_limit, &ctx.u, &ctx.v);
+	skybox_apply_uv(scene, &ctx.u, &ctx.v);
 	horizon = sample_texture(texture, ctx.u, ctx.v);
 	ctx.blend = smoothstep(ctx.y_limit * 0.70f, ctx.y_limit, ctx.y_abs);
 	*out = vec3f_lerp(horizon, grad, ctx.blend);

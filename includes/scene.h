@@ -180,6 +180,8 @@ typedef struct s_skybox
 	t_index		texture_id;
 	int			mode;
 	t_vec3f		intensity;
+	float		uv[6];
+	int			uv_enabled;
 }	t_skybox;
 
 typedef struct s_scene

@@ -1,0 +1,89 @@
+R	1500 1100
+A	0.10	255,245,235
+
+C	0,34,210	0.000000,-0.050000,-1.000000	55
+
+L	0,140,120	0.95	255,244,230
+l	-120,55,80	0.18	190,200,255
+l	120,55,80	0.18	190,200,255
+
+# ------------------------------------------------------------------
+# SOL + FOND
+# ------------------------------------------------------------------
+
+pl	0,0,0	0,1,0	200,200,200	texture=texture/pavage.xpm	uv=0.02,0.02,0.02,-0.02,0,0	checkerboard=texture/wood.xpm
+
+# murs latéraux pour enfermer un peu l'espace
+pl	-115,0,0	1,0,0	135,132,128	ambient=0.08	diffuse=0.75	specular=0.02	shininess=8
+pl	115,0,0	-1,0,0	135,132,128	ambient=0.08	diffuse=0.75	specular=0.02	shininess=8
+
+# mur du fond
+pl	0,0,-155	0,0,1	145,140,135	ambient=0.10	diffuse=0.78	specular=0.02	shininess=8
+
+skybox texture/puresky.xpm sp 0.45,0.45,0.45
+
+# ------------------------------------------------------------------
+# ESTRADE CENTRALE
+# ------------------------------------------------------------------
+
+# grande estrade basse
+cy	0,3,20	0,1,0	90	6	165,160,152	ambient=0.14	diffuse=0.80	specular=0.04	shininess=14
+
+# petite estrade haute centrale
+cy	0,7,20	0,1,0	48	8	182,176,168	ambient=0.14	diffuse=0.80	specular=0.05	shininess=16
+
+# ------------------------------------------------------------------
+# PILIERS PIERRE - rangée gauche
+# 8 piliers
+# ------------------------------------------------------------------
+
+cy	-55,37.5,120	0,1,0	8	75	166,160,150	ambient=0.12	diffuse=0.82	specular=0.04	shininess=10
+cy	-55,37.5,90	0,1,0	8	75	166,160,150	ambient=0.12	diffuse=0.82	specular=0.04	shininess=10
+cy	-55,37.5,60	0,1,0	8	75	166,160,150	ambient=0.12	diffuse=0.82	specular=0.04	shininess=10
+cy	-55,37.5,30	0,1,0	8	75	166,160,150	ambient=0.12	diffuse=0.82	specular=0.04	shininess=10
+cy	-55,37.5,0	0,1,0	8	75	166,160,150	ambient=0.12	diffuse=0.82	specular=0.04	shininess=10
+cy	-55,37.5,-30	0,1,0	8	75	166,160,150	ambient=0.12	diffuse=0.82	specular=0.04	shininess=10
+cy	-55,37.5,-60	0,1,0	8	75	166,160,150	ambient=0.12	diffuse=0.82	specular=0.04	shininess=10
+cy	-55,37.5,-90	0,1,0	8	75	166,160,150	ambient=0.12	diffuse=0.82	specular=0.04	shininess=10
+
+# ------------------------------------------------------------------
+# PILIERS PIERRE - rangée droite
+# 8 piliers
+# ------------------------------------------------------------------
+
+cy	55,37.5,120	0,1,0	8	75	166,160,150	ambient=0.12	diffuse=0.82	specular=0.04	shininess=10
+cy	55,37.5,90	0,1,0	8	75	166,160,150	ambient=0.12	diffuse=0.82	specular=0.04	shininess=10
+cy	55,37.5,60	0,1,0	8	75	166,160,150	ambient=0.12	diffuse=0.82	specular=0.04	shininess=10
+cy	55,37.5,30	0,1,0	8	75	166,160,150	ambient=0.12	diffuse=0.82	specular=0.04	shininess=10
+cy	55,37.5,0	0,1,0	8	75	166,160,150	ambient=0.12	diffuse=0.82	specular=0.04	shininess=10
+cy	55,37.5,-30	0,1,0	8	75	166,160,150	ambient=0.12	diffuse=0.82	specular=0.04	shininess=10
+cy	55,37.5,-60	0,1,0	8	75	166,160,150	ambient=0.12	diffuse=0.82	specular=0.04	shininess=10
+cy	55,37.5,-90	0,1,0	8	75	166,160,150	ambient=0.12	diffuse=0.82	specular=0.04	shininess=10
+
+# ------------------------------------------------------------------
+# ACCENTS ARCHI / MASSES AU FOND
+# pour casser un peu la monotonie et donner plus de matière à réfléchir
+# ------------------------------------------------------------------
+
+sp	0,18,-105	18	150,146,140	ambient=0.10	diffuse=0.75	specular=0.03	shininess=10
+sp	-28,12,-118	12	142,138,132	ambient=0.10	diffuse=0.75	specular=0.03	shininess=10
+sp	28,12,-118	12	142,138,132	ambient=0.10	diffuse=0.75	specular=0.03	shininess=10
+
+# petits socles latéraux
+cy	-26,5,20	0,1,0	16	10	155,150,142	ambient=0.12	diffuse=0.78	specular=0.04	shininess=12
+cy	26,5,20	0,1,0	16	10	155,150,142	ambient=0.12	diffuse=0.78	specular=0.04	shininess=12
+
+# ------------------------------------------------------------------
+# ZONE LIBRE AU CENTRE
+# ici tu poseras ensuite les objets réfléchissants
+# exemples commentés :
+# ------------------------------------------------------------------
+
+# cylindre métallisé rose
+# cy	-12,18,20	0,1,0	10	36	255,100,100	ambient=0.5	diffuse=0.3	specular=0.3	shininess=300	reflection=0.3	refraction=0.0
+
+# cylindre cuivre poli
+# cy	12,18,20	0,1,0	10	36	210,140,90	ambient=0.35	diffuse=0.25	specular=0.35	shininess=320	reflection=0.55	refraction=0.0
+
+# sphère miroir
+# sp	0,20,0	14	255,255,255	diffuse=0.0	ambient=0.0	specular=0.1	shininess=400	reflection=1.0	refraction=0.0
