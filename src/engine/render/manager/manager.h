@@ -18,9 +18,11 @@
 
 int		manager_collect_tiles(t_render *render);
 int		manager_assign_jobs(t_render *render);
-int		manager_convert_hdr_to_rgb(t_render *render);
+void	manager_convert_image(t_mgr *mgr, const t_vec3f *pixels,
+			int *dst, size_t count, float auto_exposure, int quality);
 int		manager_update_display(t_render *render);
 int		manager_read_mailbox(t_render *render);
-int		manager_run_tonemap(t_mgr *mgr, int width, int height);
+float	manager_auto_exposure(t_mgr *mgr, int width, int height);
+void	manager_cache_completed(t_render *render);
 
 #endif

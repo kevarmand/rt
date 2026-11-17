@@ -87,6 +87,10 @@ static void	display_reset_struct(t_display *display, int pixel_count)
 	display->user_render_mode = USER_RENDER_AUTO;
 	display->render_ssaa = 1;
 	display->render_tonemap = 1;
+	display->post_auto = 1;
+	display->post_gamma_step = POST_GAMMA_DEFAULT;
+	display->post_ev_step = 0;
+	display->post_word = post_default();
 	display->cam_ctrl.mode = CAM_MODE_LOCK;
 }
 

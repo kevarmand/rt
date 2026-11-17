@@ -17,6 +17,7 @@
 # include "cam_ctrl.h"
 # include "../src/app/UI/ui_int.h"
 # include "image.h"
+# include "postprocess.h"
 
 typedef struct s_data	t_data;
 
@@ -42,6 +43,8 @@ typedef struct s_frame
 	t_quality	quality;
 	int			tiles_received;
 	int			tiles_total;
+	int			requested_job_id;
+	int			rgb_job_id;
 }	t_frame;
 
 typedef struct s_ds_sync
@@ -155,6 +158,10 @@ typedef struct s_display
 	int				user_render_mode;
 	int				render_ssaa;
 	int				render_tonemap;
+	int				post_auto;
+	int				post_gamma_step;
+	int				post_ev_step;
+	unsigned int	post_word;
 	t_ds_sync		ds_sync;
 	t_mouse_state	mouse;
 	t_cam_ctrl		cam_ctrl;

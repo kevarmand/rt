@@ -17,7 +17,7 @@
 **  UI PANEL SIZE / POSITION
 ** ========================= */
 # define UI_W 200
-# define UI_H 180
+# define UI_H 252
 # define UI_POS_X_DEFAULT 50
 # define UI_POS_Y_DEFAULT 50
 # define UI_HEADER_H 30
@@ -87,56 +87,65 @@ typedef enum e_ui_color
 # define UI_TONEMAP_TOGGLE_X 96
 # define UI_TONEMAP_TOGGLE_Y UI_TONEMAP_LABEL_Y
 
+/* Live post-processing sliders */
+# define UI_POST_AUTO_X 142
+# define UI_POST_AUTO_W 52
+# define UI_SLIDER_X 10
+# define UI_SLIDER_W 180
+# define UI_SLIDER_H 26
+# define UI_GAMMA_Y 66
+# define UI_EXPOSURE_Y 100
+
 /* Render mode */
 # define UI_RENDER_AUTO_X 10
-# define UI_RENDER_AUTO_Y 70
+# define UI_RENDER_AUTO_Y 142
 # define UI_RENDER_AUTO_W 40
 # define UI_RENDER_AUTO_H 16
 
 # define UI_RENDER_FAST_X 55
-# define UI_RENDER_FAST_Y 70
+# define UI_RENDER_FAST_Y 142
 # define UI_RENDER_FAST_W 40
 # define UI_RENDER_FAST_H 16
 
 # define UI_RENDER_NORMAL_X 100
-# define UI_RENDER_NORMAL_Y 70
+# define UI_RENDER_NORMAL_Y 142
 # define UI_RENDER_NORMAL_W 50
 # define UI_RENDER_NORMAL_H 16
 
 # define UI_RENDER_SUPER_X 155
-# define UI_RENDER_SUPER_Y 70
+# define UI_RENDER_SUPER_Y 142
 # define UI_RENDER_SUPER_W 40
 # define UI_RENDER_SUPER_H 16
 
 /* SSAA */
 # define UI_SSAA_MINUS_X 10
-# define UI_SSAA_MINUS_Y 90
+# define UI_SSAA_MINUS_Y 162
 # define UI_SSAA_MINUS_W 16
 # define UI_SSAA_MINUS_H 16
 
 # define UI_SSAA_VALUE_X 30
-# define UI_SSAA_VALUE_Y 90
+# define UI_SSAA_VALUE_Y 162
 # define UI_SSAA_VALUE_W 40
 # define UI_SSAA_VALUE_H 16
 
 # define UI_SSAA_PLUS_X 75
-# define UI_SSAA_PLUS_Y 90
+# define UI_SSAA_PLUS_Y 162
 # define UI_SSAA_PLUS_W 16
 # define UI_SSAA_PLUS_H 16
 
 /* Camera mode */
 # define UI_MODE_LOCK_X 10
-# define UI_MODE_LOCK_Y 120
+# define UI_MODE_LOCK_Y 192
 # define UI_MODE_LOCK_W 50
 # define UI_MODE_LOCK_H 16
 
 # define UI_MODE_ROLL_X 65
-# define UI_MODE_ROLL_Y 120
+# define UI_MODE_ROLL_Y 192
 # define UI_MODE_ROLL_W 50
 # define UI_MODE_ROLL_H 16
 
 # define UI_MODE_FREE_X 120
-# define UI_MODE_FREE_Y 120
+# define UI_MODE_FREE_Y 192
 # define UI_MODE_FREE_W 50
 # define UI_MODE_FREE_H 16
 
@@ -144,7 +153,7 @@ typedef enum e_ui_color
 # define UI_APPLY_W 60
 # define UI_APPLY_H 18
 # define UI_APPLY_X 70
-# define UI_APPLY_Y 145
+# define UI_APPLY_Y 217
 # define UI_TXT_APPLY "APPLY"
 
 /* =========================

@@ -30,7 +30,8 @@ int	ui_is_clickable(t_button *btn)
 {
 	if (btn->label == UI_BTN_NONE)
 		return (0);
-	if (btn->label == UI_BTN_SSAA_VALUE)
+	if (btn->label == UI_BTN_SSAA_VALUE || btn->label == UI_BTN_GAMMA
+		|| btn->label == UI_BTN_EXPOSURE)
 		return (0);
 	return (1);
 }
@@ -65,6 +66,8 @@ void	ui_apply_event(t_ui *ui, int event_id)
 		ui->visible = 0;
 	else if (event_id == UI_BTN_TONEMAP)
 		ui->tonemap_enabled = !ui->tonemap_enabled;
+	else if (event_id == UI_BTN_POST_AUTO)
+		ui->post_auto = !ui->post_auto;
 	else if (event_id == UI_BTN_RENDER_AUTO)
 		ui->render_mode_selected = USER_RENDER_AUTO;
 	else if (event_id == UI_BTN_RENDER_FAST)
@@ -89,17 +92,17 @@ void	apply_event(t_display *display, t_ui *ui)
 {
 	int	i;
 
+	if (display->render_ssaa != ui->ssaa_idx + 1
+		|| display->user_render_mode != ui->render_mode_selected)
+	{
+		display->flag_camera_changed = 1;
+		i = 0;
+		while (i < display->total_cams)
+			display->frame[i++].quality = QUALITY_NONE;
+	}
 	display->render_ssaa = ui->ssaa_idx + 1;
-	display->render_tonemap = ui->tonemap_enabled;
-	display->flag_request_render = 1;
 	display->cam_ctrl.mode = ui->mode_selected;
 	display->user_render_mode = ui->render_mode_selected;
 	display->ui.visible = 0;
 	display->ui.was_visible = 0;
-	i = 0;
-	while (i < display->total_cams)
-	{
-		display->frame[i].quality = 0;
-		i++;
-	}
 }

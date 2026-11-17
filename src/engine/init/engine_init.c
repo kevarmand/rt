@@ -77,7 +77,8 @@ int	engine_init(t_engine *engine, t_scene *scene)
 	log_step(LOGSTEP_ENGINE_INIT_BVH, 0);
 	if (status != SUCCESS)
 		return (status);
-	status = render_init(&engine->render, engine->width, engine->height);
+	status = render_init(&engine->render, engine->width, engine->height,
+			scene->camera_count);
 	log_step(LOGSTEP_ENGINE_RENDER_INIT, status);
 	if (status != SUCCESS)
 		return (status);

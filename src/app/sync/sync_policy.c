@@ -50,6 +50,7 @@ static int	policy_on_camera_changed(t_display *display, t_ds_sync *sync)
 		return (0);
 	mode = display->user_render_mode;
 	display->flag_camera_changed = 0;
+	display->frame[display->current_cam].quality = QUALITY_NONE;
 	if (mode == USER_RENDER_AUTO)
 		target = QUALITY_FAST;
 	else

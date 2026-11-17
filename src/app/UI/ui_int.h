@@ -17,13 +17,16 @@
 typedef struct s_display	t_display;
 typedef struct s_data		t_data;
 
-# define MAX_UI_BUTTONS 20
+# define MAX_UI_BUTTONS 24
 
 typedef enum e_ui_btn
 {
 	UI_BTN_NONE = -1,
 	UI_BTN_CLOSE = 1,
 	UI_BTN_TONEMAP,
+	UI_BTN_POST_AUTO,
+	UI_BTN_GAMMA,
+	UI_BTN_EXPOSURE,
 	UI_BTN_RENDER_AUTO,
 	UI_BTN_RENDER_FAST,
 	UI_BTN_RENDER_NORMAL,
@@ -63,6 +66,12 @@ typedef struct s_ui
 	int			mouse_was_down;
 	int			ssaa_idx;
 	int			tonemap_enabled;
+	int			post_auto;
+	int			gamma_step;
+	int			ev_step;
+	int			slider_drag;
+	char		gamma_text[32];
+	char		ev_text[32];
 	int			mode_selected;
 	int			render_mode_selected;
 	int			was_visible;

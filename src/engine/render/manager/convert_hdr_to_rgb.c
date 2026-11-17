@@ -11,105 +11,88 @@
 /* ************************************************************************** */
 
 #include "manager.h"
-#include "color.h"
-#include "render.h"
-#include "bitmap.h"
+#include "display.h"
+#include "tonemap/tonemap_internal.h"
+#include <math.h>
 
-typedef struct s_tile_rect
+/* Quadratic-domain LUT: finer sampling in the dark range. */
+static void	build_gamma_lut(t_mgr *mgr, int gamma_step)
 {
-	int	x;
-	int	y;
-	int	width;
-	int	height;
-}	t_tile_rect;
+	int		i;
+	float	x;
+	float	y;
+	float	inv_gamma;
 
-static void	compute_tile_rect(t_render *render,
-			int tile_id, t_tile_rect *rect)
-{
-	t_mgr		*manager;
-	t_tileset	*tileset;
-	int			col;
-	int			row;
-
-	manager = &render->manager;
-	tileset = &manager->tileset;
-	col = tile_id % tileset->tiles_per_row;
-	row = tile_id / tileset->tiles_per_row;
-	rect->x = col * tileset->tile_width;
-	rect->y = row * tileset->tile_height;
-	rect->width = tileset->tile_width;
-	if (rect->x + rect->width > render->width)
-		rect->width = render->width - rect->x;
-	rect->height = tileset->tile_height;
-	if (rect->y + rect->height > render->height)
-		rect->height = render->height - rect->y;
+	inv_gamma = 20.0f / (float)gamma_step;
+	i = 0;
+	while (i < POST_LUT_SIZE)
+	{
+		x = (float)i / (float)(POST_LUT_SIZE - 1);
+		y = powf(x * x, inv_gamma);
+		if (y <= 0.0031308f)
+			y *= 12.92f;
+		else
+			y = 1.055f * powf(y, 1.0f / 2.4f) - 0.055f;
+		mgr->gamma_lut[i++] = y * 255.0f;
+	}
+	mgr->lut_gamma = gamma_step;
 }
 
-static void	convert_tile_row(t_mgr *manager,
-			int image_width, t_tile_rect *rect, int local_y)
+static int	encode_channel(const float *lut, float x)
 {
-	t_vec3f	color_lin;
-	int		rgb_value;
-	int		rgb[3];
-	int		local_x;
-	int		hdr_index;
+	float	pos;
+	float	value;
+	int		i;
 
-	local_x = 0;
-	while (local_x < rect->width)
-	{
-		hdr_index = (rect->y + local_y) * image_width
-			+ (rect->x + local_x);
-		color_lin = manager->hdr_buffer[hdr_index];
-		linear_to_rgb8_vec(&color_lin, rgb);
-		rgb_value = (rgb[0] << 16) | (rgb[1] << 8) | rgb[2];
-		manager->rgb_buffer[hdr_index] = rgb_value;
-		local_x++;
-	}
+	if (!(x > 0.0f))
+		return (0);
+	if (x >= 1.0f)
+		return (255);
+	pos = sqrtf(x) * (float)(POST_LUT_SIZE - 1);
+	i = (int)pos;
+	if (i >= POST_LUT_SIZE - 1)
+		return (255);
+	value = lut[i] + (lut[i + 1] - lut[i]) * (pos - (float)i);
+	return ((int)(value + 0.5f));
 }
 
-static void	convert_tile_hdr_to_rgb(t_render *render, int tile_id)
+static t_vec3f	map_color(t_vec3f color, float exposure, int enabled)
 {
-	t_mgr		*manager;
-	t_tile_rect	rect;
-	int			local_y;
+	float	lum;
+	float	scale;
 
-	manager = &render->manager;
-	compute_tile_rect(render, tile_id, &rect);
-	local_y = 0;
-	while (local_y < rect.height)
-	{
-		convert_tile_row(manager, render->width, &rect, local_y);
-		local_y++;
-	}
+	if (!enabled)
+		return (color * exposure);
+	lum = tm_luminance(&color);
+	scale = 0.0f;
+	if (lum > TM_EPS)
+		scale = tm_filmic_exp(lum, exposure) / lum;
+	return (color * scale);
 }
 
-static int	find_next_tile_to_convert(t_tileset *tileset)
+void	manager_convert_image(t_mgr *mgr, const t_vec3f *pixels,
+		int *dst, size_t count, float auto_exposure, int quality)
 {
-	int	tile_id;
+	float	exposure;
+	t_vec3f	color;
+	int		gamma_step;
+	int		enabled;
+	size_t	i;
 
-	tile_id = 0;
-	while (tile_id < tileset->tiles_total)
+	gamma_step = post_gamma(mgr->post_settings);
+	if (mgr->lut_gamma != gamma_step)
+		build_gamma_lut(mgr, gamma_step);
+	enabled = (mgr->post_settings & 1u) && quality != QUALITY_FAST;
+	exposure = exp2f((float)post_ev(mgr->post_settings) * 0.1f);
+	if (enabled && (mgr->post_settings & 2u))
+		exposure *= auto_exposure;
+	i = 0;
+	while (i < count)
 	{
-		if (bitmap_get(&tileset->tile_state, tile_id) != 0)
-			return (tile_id);
-		tile_id++;
+		color = map_color(pixels[i], exposure, enabled);
+		dst[i] = (encode_channel(mgr->gamma_lut, color[0]) << 16)
+			| (encode_channel(mgr->gamma_lut, color[1]) << 8)
+			| encode_channel(mgr->gamma_lut, color[2]);
+		i++;
 	}
-	return (-1);
-}
-
-int	manager_convert_hdr_to_rgb(t_render *render)
-{
-	int	tile_id;
-
-	while (1)
-	{
-		tile_id = find_next_tile_to_convert(&render->manager.tileset);
-		if (tile_id < 0)
-			return (0);
-		convert_tile_hdr_to_rgb(render, tile_id);
-		bitmap_clear(&render->manager.tileset.tile_state, tile_id);
-		render->manager.tileset.tiles_done++;
-		render->manager.tileset.tiles_ready--;
-	}
-	return (1);
 }

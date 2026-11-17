@@ -29,38 +29,23 @@ typedef struct s_manager_args
 	atomic_int	*cancel_flag;
 }	t_manager_args;
 
-static void	manager_idle(t_render *render)
-{
-	if (manager_read_mailbox(render))
-		return ;
-	usleep(200);
-}
-
 static void	manager_loop(t_render *render, atomic_int *cancel_flag,
 				t_mgr *manager)
 {
-	int		has_work;
+	int	has_work;
 
 	while (atomic_load(cancel_flag) == 0)
 	{
-		has_work = 0;
-		if (manager->render_in_progress == 0)
-		{
-			manager_idle(render);
-			continue ;
-		}
-		while (1)
-		{
-			has_work |= manager_collect_tiles(render);
-			has_work |= manager_assign_jobs(render);
-			has_work |= manager_convert_hdr_to_rgb(render);
-			if (!(manager->render_view.mode == QUALITY_FAST && manager
-					->tileset.tiles_done != manager->tileset.tiles_total))
-				break ;
-		}
-		has_work |= manager_run_tonemap(manager, render->width, render->height);
-		has_work |= manager_update_display(render);
+		manager->post_settings = atomic_load(&render->mailbox.post_settings);
+		manager->active_cam = atomic_load(&render->mailbox.active_cam);
+		has_work = manager_collect_tiles(render);
+		if (manager->render_in_progress
+			&& manager->tileset.tiles_done == manager->tileset.tiles_total)
+			manager_cache_completed(render);
 		has_work |= manager_read_mailbox(render);
+		if (manager->render_in_progress)
+			has_work |= manager_assign_jobs(render);
+		has_work |= manager_update_display(render);
 		if (has_work == 0)
 			usleep(100);
 	}

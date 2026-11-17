@@ -23,14 +23,21 @@ void	destroy_render(t_render *render)
 	int	i;
 
 	i = 0;
-	while (i < render->workers.count)
+	while (render->workers.array && i < render->workers.count)
 	{
 		free(render->workers.array[i].tile.hdr_pixels);
 		i++;
 	}
 	free(render->workers.array);
-	free(render->manager.rgb_buffer);
 	free(render->manager.hdr_buffer);
+	i = 0;
+	while (i < render->manager.camera_count)
+	{
+		free(render->manager.frames[i].pixels);
+		i++;
+	}
+	free(render->manager.frames);
+	free(render->manager.gamma_lut);
 	free(render->manager.tonemap_exposure);
 	bitmap_destroy(&render->manager.tileset.tile_state);
 	free(render->mailbox.rgb_pixels);

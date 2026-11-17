@@ -35,7 +35,5 @@ void	tm_build_hist_sampled(t_mgr *mgr, int width, int height);
 
 float	tm_exposure_from_lum(float lum_ref, float key);
 float	tm_filmic_exp(float lum, float exposure);
-void	tm_apply_pixel(t_mgr *mgr, int index, float exposure);
-void	tm_apply_full_image(t_mgr *mgr, int width, int height, float exposure);
 
 #endif

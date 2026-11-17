@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "draw_ui.h"
+#include "postprocess.h"
 
 void	ui_put_pixel(t_image *img, int x, int y, int color)
 {
@@ -68,6 +69,36 @@ void	ui_draw_icon_cross(t_image *img, t_button *btn)
 	}
 }
 
+static void	ui_draw_slider(t_ui *ui, t_button *btn)
+{
+	t_rect	rect;
+	int		pos;
+	int		range;
+
+	if (btn->label == UI_BTN_GAMMA)
+	{
+		pos = ui->gamma_step - POST_GAMMA_MIN;
+		range = POST_GAMMA_MAX - POST_GAMMA_MIN;
+	}
+	else
+	{
+		pos = ui->ev_step - POST_EV_MIN;
+		range = POST_EV_MAX - POST_EV_MIN;
+	}
+	rect.x = btn->x;
+	rect.y = btn->y + btn->height - 5;
+	rect.w = btn->width;
+	rect.h = 3;
+	rect.color = UI_COLOR_VALUE_BG;
+	ui_fill_rect(&ui->img, &rect);
+	rect.x = btn->x + pos * (btn->width - 5) / range;
+	rect.y -= 3;
+	rect.w = 5;
+	rect.h = 8;
+	rect.color = UI_COLOR_ACTIVE;
+	ui_fill_rect(&ui->img, &rect);
+}
+
 void	ui_draw_one_button(t_ui *ui, t_button *btn)
 {
 	t_rect	rect;
@@ -84,4 +115,6 @@ void	ui_draw_one_button(t_ui *ui, t_button *btn)
 		ui_draw_icon_minus(&ui->img, btn);
 	else if (btn->label == UI_BTN_CLOSE)
 		ui_draw_icon_cross(&ui->img, btn);
+	else if (btn->label == UI_BTN_GAMMA || btn->label == UI_BTN_EXPOSURE)
+		ui_draw_slider(ui, btn);
 }

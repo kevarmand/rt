@@ -37,28 +37,36 @@ static void	render_init_struct(t_render *render, int width, int height)
 
 /* ---------- Helper 2 : allocate HDR + RGB main buffers ---------- */
 
-static int	render_init_main_buffers(t_render *render)
+static int	render_init_main_buffers(t_render *render, int cameras)
 {
-	int		total_pixels;
-	size_t	bytes_hdr;
-	size_t	bytes_rgb;
+	t_mgr	*mgr;
+	size_t	pixels;
+	int		i;
 
-	total_pixels = render->width * render->height;
-	if (total_pixels <= 0)
+	mgr = &render->manager;
+	pixels = (size_t)render->width * render->height;
+	if (render->width <= 0 || render->height <= 0 || cameras <= 0
+		|| pixels > SIZE_MAX / sizeof(t_vec3f))
 		return (ERR_INTERNAL);
-	bytes_hdr = (size_t)total_pixels * sizeof(t_vec3f);
-	bytes_rgb = (size_t)total_pixels * sizeof(int);
-	render->manager.hdr_buffer = malloc(bytes_hdr);
-	if (!render->manager.hdr_buffer)
+	mgr->hdr_buffer = ft_calloc(pixels, sizeof(t_vec3f));
+	mgr->frames = ft_calloc((size_t)cameras, sizeof(t_hdr_frame));
+	mgr->tonemap_exposure = malloc(sizeof(float) * TONESIZE);
+	mgr->gamma_lut = malloc(sizeof(float) * POST_LUT_SIZE);
+	mgr->lut_gamma = -1;
+	mgr->post_settings = post_default();
+	if (!mgr->hdr_buffer || !mgr->frames || !mgr->tonemap_exposure
+		|| !mgr->gamma_lut)
 		return (ERR_MALLOC);
-	ft_memset(render->manager.hdr_buffer, 0, bytes_hdr);
-	render->manager.rgb_buffer = malloc(bytes_rgb);
-	if (!render->manager.rgb_buffer)
-		return (ERR_MALLOC);
-	ft_memset(render->manager.rgb_buffer, 0, bytes_rgb);
-	render->manager.tonemap_exposure = malloc(sizeof(float) * TONESIZE);
-	if (!render->manager.tonemap_exposure)
-		return (ERR_MALLOC);
+	mgr->camera_count = cameras;
+	i = 0;
+	while (i < cameras)
+	{
+		mgr->frames[i].pixels = ft_calloc(pixels, sizeof(t_vec3f));
+		if (!mgr->frames[i].pixels)
+			return (ERR_MALLOC);
+		mgr->frames[i].auto_exposure = 1.0f;
+		i++;
+	}
 	return (SUCCESS);
 }
 
@@ -77,15 +85,17 @@ static int	render_init_mailbox(t_render *render)
 	ft_memset(render->mailbox.rgb_pixels, 0, bytes_rgb);
 	atomic_store(&render->mailbox.snapshot_ready, 0);
 	atomic_store(&render->mailbox.request_ready, 0);
+	atomic_init(&render->mailbox.post_settings, post_default());
+	atomic_init(&render->mailbox.active_cam, 0);
 	return (SUCCESS);
 }
 
-int	render_init(t_render *render, int width, int height)
+int	render_init(t_render *render, int width, int height, int cameras)
 {
 	int	status;
 
 	render_init_struct(render, width, height);
-	status = render_init_main_buffers(render);
+	status = render_init_main_buffers(render, cameras);
 	if (status != SUCCESS)
 		return (perr(status, PERR_M_MAIN_BUFFERS));
 	status = render_init_mailbox(render);

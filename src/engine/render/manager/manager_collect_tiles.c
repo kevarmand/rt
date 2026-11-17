@@ -55,8 +55,7 @@ static void	manager_handle_completed_tile(t_render *render, t_worker *worker)
 	}
 	tile = &worker->tile;
 	manager_copy_tile_pixels(render, tile);
-	bitmap_set(&mgr->tileset.tile_state, tile->tile_id);
-	mgr->tileset.tiles_ready++;
+	mgr->tileset.tiles_done++;
 	atomic_store(&worker->worker_state, WORKER_IDLE);
 }
 

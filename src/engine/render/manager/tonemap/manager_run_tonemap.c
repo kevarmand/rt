@@ -13,23 +13,11 @@
 #include "render.h"
 #include "tonemap_internal.h"
 
-#define QUALITY_FAST 1
-
-int	manager_run_tonemap(t_mgr *mgr, int width, int height)
+float	manager_auto_exposure(t_mgr *mgr, int width, int height)
 {
-	float		lum95;
-	float		exposure;
-	t_tileset	*tileset;
+	float	lum95;
 
-	tileset = &mgr->tileset;
-	if (mgr->tonemap_enabled == 0)
-		return (0);
-	if (mgr->render_view.mode == QUALITY_FAST
-		|| !(tileset->tiles_done >= tileset->tiles_total))
-		return (0);
 	tm_build_hist_sampled(mgr, width, height);
 	lum95 = tm_percentile_lum(mgr->tonemap_exposure, TM_PERCENTILE);
-	exposure = tm_exposure_from_lum(lum95, TM_KEY);
-	tm_apply_full_image(mgr, width, height, exposure);
-	return (1);
+	return (tm_exposure_from_lum(lum95, TM_KEY));
 }

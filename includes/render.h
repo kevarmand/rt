@@ -20,6 +20,7 @@
 # include "vector.h"
 # include "scene.h"
 # include "bitmap.h"
+# include "postprocess.h"
 
 typedef struct s_data	t_data;
 
@@ -90,29 +91,49 @@ typedef struct s_display_mailbox
 	int			req_job_id;
 	int			request_render_mode;
 	int			request_ssaa;
-	int			request_tonemap;
 	atomic_int	request_ready;
 
+	atomic_uint	post_settings;
+	atomic_int	active_cam;
 	int			*rgb_pixels;
 	int			tile_count;
 	int			tiles_done;
 	int			snap_camera_id;
 	int			snap_job_id;
 	int			snapshot_render_mode;
-	atomic_int	snapshot_ready;
+	unsigned int	snap_post_settings;
+	int				snap_is_render;
+	atomic_int		snapshot_ready;
 }	t_display_mailbox;
+
+typedef struct s_hdr_frame
+{
+	t_vec3f			*pixels;
+	t_render_view	view;
+	float			auto_exposure;
+	unsigned int	published_settings;
+	int				completion_pending;
+}	t_hdr_frame;
 
 typedef struct s_mgr
 {
 	pthread_t		thread_id;
 	int				render_in_progress;
 	int				current_cam_id;
-	int				tonemap_enabled;
 	t_tileset		tileset;
-	int				*rgb_buffer;
 	t_vec3f			*hdr_buffer;
 	t_render_view	render_view;
 	float			*tonemap_exposure;
+	t_hdr_frame		*frames;
+	int				camera_count;
+	float			*gamma_lut;
+	int				lut_gamma;
+	unsigned int	post_settings;
+	int				active_cam;
+	int				preview_tiles;
+	unsigned int	preview_settings;
+	uint64_t		preview_time_ns;
+	float			preview_exposure;
 }	t_mgr;
 
 typedef struct s_render
@@ -137,7 +158,7 @@ typedef struct s_render
  * @param height height of the render
  * @return 0 on SUCCESS, error code otherwise
  */
-int		render_init(t_render *render, int width, int height);
+int		render_init(t_render *render, int width, int height, int cameras);
 
 /* ************************************************************************** */
 /*         					     RENDER FUNCTIONS                            */
@@ -196,6 +217,6 @@ int		render_tile_super(t_data *data, t_tile *tile,
 			const t_render_view *view);
 
 /* init */
-int		render_init(t_render *render, int width, int height);
+int		render_init(t_render *render, int width, int height, int cameras);
 
 #endif

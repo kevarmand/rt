@@ -30,8 +30,8 @@ void	display_engine_send(t_scene *scene, t_display *display,
 	mailbox->request_camera_id = camera_index;
 	mailbox->request_render_mode = sync->req_mode;
 	mailbox->req_job_id++;
+	display->frame[camera_index].requested_job_id = mailbox->req_job_id;
 	mailbox->request_ssaa = display->render_ssaa;
-	mailbox->request_tonemap = display->render_tonemap;
 	atomic_store(&mailbox->request_ready, 1);
 	sync->in_flight = 1;
 	sync->pending = 0;
