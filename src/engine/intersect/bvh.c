@@ -24,19 +24,25 @@ static inline void	bvh_inter1(t_bvh_inter_ctx *c, t_ray r, t_hit *out)
 	{
 		if (c->tnear < c->tnearr)
 		{
-			c->stack[c->sp++] = c->node->node.right;
-			c->stack[c->sp++] = c->node->node.left;
+			c->stack[c->sp++] = (t_bvh_stack_entry){c->node->node.right,
+				c->tnearr};
+			c->stack[c->sp++] = (t_bvh_stack_entry){c->node->node.left,
+				c->tnear};
 		}
 		else
 		{
-			c->stack[c->sp++] = c->node->node.left;
-			c->stack[c->sp++] = c->node->node.right;
+			c->stack[c->sp++] = (t_bvh_stack_entry){c->node->node.left,
+				c->tnear};
+			c->stack[c->sp++] = (t_bvh_stack_entry){c->node->node.right,
+				c->tnearr};
 		}
 	}
 	else if (c->valid_l)
-		c->stack[c->sp++] = c->node->node.left;
+		c->stack[c->sp++] = (t_bvh_stack_entry){c->node->node.left,
+				c->tnear};
 	else if (c->valid_r)
-		c->stack[c->sp++] = c->node->node.right;
+		c->stack[c->sp++] = (t_bvh_stack_entry){c->node->node.right,
+				c->tnearr};
 }
 
 __attribute__((always_inline))
@@ -71,12 +77,14 @@ int	bvh_inter(t_ray r, t_bvhnode *nodes, t_primitive *prims, t_hit *out)
 
 	c.hit_happened = 0;
 	c.sp = 0;
-	c.stack[c.sp++] = 0;
+	if (bound_intersect(r, nodes[0].bounds, &c.tnear, NULL) == 0)
+		return (0);
+	c.stack[c.sp++] = (t_bvh_stack_entry){0, c.tnear};
 	while (c.sp > 0)
 	{
-		c.node = &nodes[c.stack[--c.sp]];
-		if (bound_intersect(r, c.node->bounds, &c.tnear, NULL) == 0)
-			continue ;
+		c.sp--;
+		c.node = &nodes[c.stack[c.sp].node_id];
+		c.tnear = c.stack[c.sp].tnear;
 		if (c.tnear > out->t)
 			continue ;
 		if (c.node->is_leaf)
@@ -119,12 +127,14 @@ int	bvh_shadow(t_ray r, t_bvhnode *nodes, t_primitive *prims, t_hit *out)
 	t_bvh_inter_ctx	c;
 
 	c.sp = 0;
-	c.stack[c.sp++] = 0;
+	if (bound_intersect(r, nodes[0].bounds, &c.tnear, NULL) == 0)
+		return (0);
+	c.stack[c.sp++] = (t_bvh_stack_entry){0, c.tnear};
 	while (c.sp > 0)
 	{
-		c.node = &nodes[c.stack[--c.sp]];
-		if (bound_intersect(r, c.node->bounds, &c.tnear, NULL) == 0)
-			continue ;
+		c.sp--;
+		c.node = &nodes[c.stack[c.sp].node_id];
+		c.tnear = c.stack[c.sp].tnear;
 		if (c.tnear > out->t)
 			continue ;
 		if (c.node->is_leaf)

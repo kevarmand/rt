@@ -110,9 +110,15 @@ typedef struct s_torus_interf_ctx
 	int		nroots;
 }	t_torus_interf_ctx;
 
+typedef struct s_bvh_stack_entry
+{
+	uint32_t	node_id;
+	float		tnear;
+}	t_bvh_stack_entry;
+
 typedef struct s_bvh_inter_ctx
 {
-	uint32_t	stack[STACK_MAX_DEPTH];
+	t_bvh_stack_entry	stack[STACK_MAX_DEPTH];
 	int			sp;
 	t_bvhnode	*node;
 	t_aabb		*left_bounds;
