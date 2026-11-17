@@ -17,55 +17,53 @@
 #include <fcntl.h>
 #include "errors.h"
 #include "parsing_internal.h"
+#include "line_reader.h"
 
-static void	pars_state_init(t_pars_state *st)
+static int	pars_reader(t_line_reader *reader, t_scene_parsed *scene)
 {
-	st->line_no = 0;
-	st->line = NULL;
-	st->pos = 0;
-}
-
-/**
- * @brief Parse a scene from an open file descriptor into a temporary builder.
- * @param fd    Open file descriptor to the .rt scene (read-only). (no_null)
- * @param scene Builder receiving parsed elements (lists, presence mask).
- * (no_null)
- * @return SUCCESS on success, otherwise a parsing/I-O error code.
- * @note Does not close @fd. Preconditions are guaranteed by the caller.
- */
-static int	pars_scene_fd(int fd, t_scene_parsed *scene)
-{
-	char			*line;
-	int				err;
 	t_pars_state	state;
+	char			*line;
+	size_t			len;
+	int				status;
 
-	err = SUCCESS;
-	pars_state_init(&state);
-	while (!err)
+	state = (t_pars_state){0};
+	status = line_reader_next(reader, &line, &len);
+	while (status == 1)
 	{
-		line = get_next_line(fd);
-		if (!line)
-			break ;
 		state.line_no++;
-		err = pars_line(line, scene, &state);
-		if (err)
-			perr_line(err, line, state.line_no);
-		free(line);
-		if (err)
-			return (err);
+		if (ft_memchr(line, '\0', len))
+			status = perr(ERR_PARS, "Unexpected NUL byte in scene file.");
+		else
+			status = pars_line(line, scene, &state);
+		if (status != SUCCESS)
+			return (perr_line(status, line, state.line_no));
+		status = line_reader_next(reader, &line, &len);
 	}
-	return (SUCCESS);
+	if (status == ERR_READ)
+		return (perr(status, "Failed to read scene file."));
+	if (status == ERR_MALLOC)
+		return (perr(status, PERR_MALLOC));
+	if (status == ERR_PARS)
+		return (perr_line(status, "Line exceeds parser index range.",
+				state.line_no + 1));
+	return (status);
 }
 
 int	pars_scene(const char *filename, t_scene_parsed *scene)
 {
+	t_line_reader	reader;
 	int				fd;
 	int				err;
 
 	fd = open(filename, O_RDONLY);
 	if (fd == -1)
 		return (perr(ERR_OPEN, PERR_OPEN));
-	err = pars_scene_fd(fd, scene);
+	err = line_reader_init(&reader, fd);
+	if (err == SUCCESS)
+		err = pars_reader(&reader, scene);
+	else
+		perr(err, PERR_MALLOC);
+	line_reader_destroy(&reader);
 	close(fd);
 	return (err);
 }

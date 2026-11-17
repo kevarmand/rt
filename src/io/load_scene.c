@@ -36,8 +36,9 @@ int	load_scene(const char *path, t_scene *out_scene)
 	int				status;
 
 	log_step(LOGSTEP_PARSE_INIT_SCENE, 0);
-	init_parsed_scene(&parsed);
-	status = pars_scene(path, &parsed);
+	status = init_parsed_scene(&parsed);
+	if (status == SUCCESS)
+		status = pars_scene(path, &parsed);
 	if (status == SUCCESS)
 		status = check_minimum_requirements(&parsed);
 	log_step(LOGSTEP_PARSE_READ_FILE, status);

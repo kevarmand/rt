@@ -28,18 +28,18 @@ static void	cam_from_parsed(const t_parsed_element *src, t_camera *dst)
 
 int	conv_cameras(t_scene_parsed *parsed, t_conv_ctx *cx)
 {
-	t_list		*list_node;
+	size_t		i;
 	t_camera	camera_tmp;
 
 	if (vector_reserve(&cx->cam_v, cx->camera_count) != SUCCESS)
 		return (perr(ERR_MALLOC, PERR_M_VEC_CAM));
-	list_node = parsed->cameras;
-	while (list_node)
+	i = 0;
+	while (i < parsed->cameras.count)
 	{
-		cam_from_parsed(list_node->content, &camera_tmp);
+		cam_from_parsed(vector_at(&parsed->cameras, i), &camera_tmp);
 		if (vector_push_back(&cx->cam_v, &camera_tmp) != SUCCESS)
 			return (perr(ERR_MALLOC, PERR_M_VEC_PUSH));
-		list_node = list_node->next;
+		i++;
 	}
 	return (SUCCESS);
 }

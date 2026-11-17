@@ -20,13 +20,10 @@ void	parsed_textures_destroy(t_texture_parsed *parsed);
 
 void	free_parsed_scene(t_scene_parsed *parsed)
 {
-	ft_lstclear(&parsed->objects, free);
-	ft_lstclear(&parsed->cameras, free);
-	ft_lstclear(&parsed->lights, free);
+	vector_destroy(&parsed->objects);
+	vector_destroy(&parsed->cameras);
+	vector_destroy(&parsed->lights);
 	parsed_textures_destroy(&parsed->textures);
-	parsed->objects = NULL;
-	parsed->cameras = NULL;
-	parsed->lights = NULL;
 }
 
 int	init_heap_element(t_scene_parsed *parsed)
@@ -45,9 +42,9 @@ int	init_heap_element(t_scene_parsed *parsed)
 int	init_parsed_scene(t_scene_parsed *parsed)
 {
 	ft_memset(parsed, 0, sizeof(t_scene_parsed));
-	parsed->objects = NULL;
-	parsed->cameras = NULL;
-	parsed->lights = NULL;
+	vector_init(&parsed->objects, 0, sizeof(t_parsed_element));
+	vector_init(&parsed->cameras, 0, sizeof(t_parsed_element));
+	vector_init(&parsed->lights, 0, sizeof(t_parsed_element));
 	parsed->globals.res_height = 600;
 	parsed->globals.res_width = 800;
 	parsed->globals.brightness = 0.4f;
