@@ -72,6 +72,7 @@ typedef enum e_err
 	ERR_MLX = -4,
 	ERR_OPEN = -5,
 	ERR_PARS = -6,
+	ERR_READ = -7,
 }	t_err;
 
 # define PERR_MALLOC		"Memory allocation failed."

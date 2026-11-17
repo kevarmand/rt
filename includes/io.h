@@ -94,9 +94,9 @@ typedef struct s_skybox_parsed
 
 typedef struct s_scene_parsed
 {
-	t_list				*objects;
-	t_list				*cameras;
-	t_list				*lights;
+	t_vector			objects;
+	t_vector			cameras;
+	t_vector			lights;
 	t_param				globals;
 	t_pmask				presence_mask;
 	t_texture_parsed	textures;
@@ -189,7 +189,7 @@ typedef struct s_parsed_element
 /**
  * @brief Parse a scene from a file into a temporary builder.
  * @param filename The path to the scene file to be parsed. (no_null)
- * @param scene Builder receiving parsed elements (lists, presence mask).
+ * @param scene Builder receiving parsed elements (vectors, presence mask).
  * (no_null)
  * @return SUCCESS on success, otherwise a parsing/I-O error code.
  */
@@ -382,7 +382,7 @@ int	pars_default_option(t_pars_state *st, t_scene_parsed *scene);
  * @param elem  The parsed element to register. (no_null)
  * @param role  The role of the element (normal, primary, extra).
  * @return Returns 0 on success, or a non-zero error code on failure.
- * @note The function adds the element to the appropriate list in the scene
+ * @note The function adds the element to the appropriate vector in the scene
  * based on its type and role. It handles memory allocation and ensures
  * that required elements are present.
  */

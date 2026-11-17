@@ -33,19 +33,19 @@ static void	reset_light(t_light *light)
 
 int	conv_lights(t_scene_parsed *parsed, t_conv_ctx *cx)
 {
-	t_list		*list_node;
+	size_t		i;
 	t_light		light_tmp;
 
 	if (vector_reserve(&cx->light_v, cx->light_count) != SUCCESS)
-		return (ERR_MALLOC);
-	list_node = parsed->lights;
-	while (list_node)
+		return (perr(ERR_MALLOC, PERR_M_VEC_LIGHT));
+	i = 0;
+	while (i < parsed->lights.count)
 	{
 		reset_light(&light_tmp);
-		light_from_parsed(list_node->content, &light_tmp);
+		light_from_parsed(vector_at(&parsed->lights, i), &light_tmp);
 		if (vector_push_back(&cx->light_v, &light_tmp) != SUCCESS)
 			return (perr(ERR_MALLOC, PERR_M_VEC_PUSH));
-		list_node = list_node->next;
+		i++;
 	}
 	return (SUCCESS);
 }

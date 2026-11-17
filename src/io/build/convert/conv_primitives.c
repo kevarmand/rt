@@ -70,18 +70,18 @@ static int	push_elem_to_ctx(t_parsed_element *elem, t_conv_ctx *cx)
 
 int	conv_primitives(t_scene_parsed *parsed, t_conv_ctx *cx)
 {
-	t_list					*node;
-	t_parsed_element		*elem;
+	size_t				i;
+	t_parsed_element	*elem;
 
 	if (init_primitives(cx) != SUCCESS)
 		return (ERR_MALLOC);
-	node = parsed->objects;
-	while (node)
+	i = 0;
+	while (i < parsed->objects.count)
 	{
-		elem = node->content;
+		elem = vector_at(&parsed->objects, i);
 		if (push_elem_to_ctx(elem, cx) != SUCCESS)
 			return (ERR_MALLOC);
-		node = node->next;
+		i++;
 	}
 	return (SUCCESS);
 }

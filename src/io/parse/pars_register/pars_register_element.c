@@ -15,24 +15,15 @@
 #include "libft.h"
 #include "../parsing_internal.h"
 #include "scene.h"
+#include <limits.h>
 
-static int	push_copy_to_list(t_list **list_head,
+static int	push_copy_to_vector(t_vector *elements,
 				const t_parsed_element *element)
 {
-	t_parsed_element	*heap_copy;
-	t_list				*new_node;
-
-	heap_copy = (t_parsed_element *)malloc(sizeof(*heap_copy));
-	if (heap_copy == NULL)
-		return (perr(ERR_MALLOC, PERR_M_LIST_ELEM));
-	*heap_copy = *element;
-	new_node = ft_lstnew(heap_copy);
-	if (new_node == NULL)
-	{
-		free(heap_copy);
-		return (perr(ERR_MALLOC, PERR_M_LIST));
-	}
-	ft_lstadd_back(list_head, new_node);
+	if (elements->count >= INT_MAX)
+		return (perr(ERR_PARS, "Too many scene elements."));
+	if (vector_push_back(elements, element) != SUCCESS)
+		return (perr(ERR_MALLOC, PERR_M_VEC_PUSH));
 	return (SUCCESS);
 }
 
@@ -52,7 +43,7 @@ int	pars_register_element(t_scene_parsed *scene,
 	if (is_object_type(element->type))
 	{
 		scene->presence_mask |= PRESENCE_OBJECT;
-		return (push_copy_to_list(&scene->objects, element));
+		return (push_copy_to_vector(&scene->objects, element));
 	}
 	if (element->type == ELEM_CAMERA)
 	{
@@ -60,7 +51,7 @@ int	pars_register_element(t_scene_parsed *scene,
 			return (perr(ERR_PARS, PERR_CAM_REDEF));
 		if (role == ELEM_ROLE_PRIMARY)
 			scene->presence_mask |= PRESENCE_CAM;
-		return (push_copy_to_list(&scene->cameras, element));
+		return (push_copy_to_vector(&scene->cameras, element));
 	}
 	if (element->type == ELEM_LIGHT)
 	{
@@ -69,7 +60,7 @@ int	pars_register_element(t_scene_parsed *scene,
 			return (perr(ERR_PARS, PERR_LIGHT_REDEF));
 		if (role == ELEM_ROLE_PRIMARY)
 			scene->presence_mask |= PRESENCE_LIGHT;
-		return (push_copy_to_list(&scene->lights, element));
+		return (push_copy_to_vector(&scene->lights, element));
 	}
 	return (perr(ERR_PARS, "Unknown element type."));
 }
