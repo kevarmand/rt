@@ -37,106 +37,39 @@ typedef enum e_user_render_mode
 	USER_RENDER_LOCK_SUPER = 3
 }	t_user_render_mode;
 
+typedef enum e_frame_state
+{
+	FRAME_EMPTY = 0,
+	FRAME_DIRTY,
+	FRAME_RENDERING,
+	FRAME_READY
+}	t_frame_state;
+
 typedef struct s_frame
 {
 	int			*rgb_pixels;
 	t_quality	quality;
+	t_frame_state	state;
 	int			tiles_received;
 	int			tiles_total;
-	int			requested_job_id;
-	int			rgb_job_id;
 }	t_frame;
 
 typedef struct s_ds_sync
 {
 	int	in_flight;
+	int	running_cam;
 	int	pending;
 	int	req_mode;
 	int	req_cam;
 }	t_ds_sync;
 
-/**
- * @brief Display system state and communication flags.
- *
- * This structure contains all the state required by the MLX thread for:
- *  - camera handling,
- *  - progressive rendering,
- *  - UI refresh management,
- *  - communication with the render engine.
- *
- * The system follows a strict pipeline, executed once per frame:
- *    1. display_update_camera()
- *    3. sync_engine_tick()
- *    4. display_update_main_image()
- *    5. display_update_ui()
- *    6. display_draw_base()
- *    7. display_draw_ui()
- *
- * Each flag has a well-defined ownership. Only the designated module is
- * allowed to modify it. This keeps the system predictable and prevents
- * invalid states.
- *
- * --------------------------------------------------------------------------
- * Flag ownership and responsibilities
- * --------------------------------------------------------------------------
- *
- * flag_camera_changed
- * -------------------
- *  - Set to 1 by input hooks (mouse, keyboard) whenever the user changes the
- *    current camera's parameters (position, direction, FOV, index switch).
- *  - Consumed and reset to 0 by display_update_camera().
- *  - This flag never directly triggers rendering; it only signals that the
- *    camera parameters have changed.
- *
- *
- * flag_camera_level
- * -----------------
- *  - Set to 1 by input/UI when the rendering quality level is modified
- *    (FAST → NORMAL → SUPER).
- *  - Used to determine whether an existing cached image is sufficient or
- *    whether a new render must be launched.
- *
- *
- * flag_img
- * --------
- *  - Set to 1 exclusively by sync_engine_tick() when a new RGB buffer has
- *    been copied into display_pixels and must be presented on screen.
- *  - Consumed and reset to 0 by display_update_main_image() once the image
- *    has been uploaded to the MLX texture.
- *  - No other module is allowed to modify this flag.
- *
- *
- *
- * cam_to_render
- * -------------
- *  - Owned exclusively by sync_engine_tick().
- *  - Holds the index of the camera currently being rendered by the engine.
- *  - Set when a render request is sent; reset to -1 when a full frame is
- *    received and stored.
- *  - No other module must modify this value.
- *
- *
- * frame[i].is_dirty
- * -----------------
- *  - Indicates whether camera i requires a full rerender.
- *  - Reset only by sync_engine_tick() when the engine delivers a complete
- *    image for that camera.
- *  - This field is never written directly by UI or input hooks.
- *
- *
- * display_pixels
- * --------------
- *  - Temporary buffer used for progressive / partial updates.
- *  - Written by sync_engine_tick() whenever new tiles arrive.
- *  - Read by display_update_main_image().
- *
- *
- * frame[i].rgb_pixels
- * -------------------
- *  - Persistent “clean” image for camera i.
- *  - Written only when a full frame is completed.
- *  - Used for instant camera switching without rerendering.
- *
+/*
+ * MLX thread owns frame states, quality and RGB caches.
+ * sync_engine_tick consumes invalidation flags before accepting snapshots.
+ * The atomic mailbox array is the sole authority for expected frame_seq.
+ * A dirty frame may retain old pixels as a visual fallback, never as a
+ * valid result. READY means a complete matching snapshot was accepted.
+ * flag_img_buffer requests an MLX image upload; flag_img_window redraws it.
  */
 typedef struct s_display
 {
@@ -152,7 +85,7 @@ typedef struct s_display
 	int				current_cam;
 
 	int				flag_camera_changed;
-	int				flag_request_render;
+	int				flag_render_config_changed;
 	int				flag_img_buffer;
 	int				flag_img_window;
 	int				user_render_mode;

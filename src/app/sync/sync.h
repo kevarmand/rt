@@ -21,6 +21,8 @@
 # include <stdatomic.h>
 # include <stdio.h>
 
+void		display_invalidate_frame(t_display *display,
+				t_display_mailbox *mailbox, int cam);
 void		display_request_policy(const t_scene *scene, t_display *display);
 void		display_engine_send(t_scene *scene, t_display *display,
 				t_display_mailbox *mailbox);

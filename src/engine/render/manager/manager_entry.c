@@ -38,11 +38,14 @@ static void	manager_loop(t_render *render, atomic_int *cancel_flag,
 	{
 		manager->post_settings = atomic_load(&render->mailbox.post_settings);
 		manager->active_cam = atomic_load(&render->mailbox.active_cam);
-		has_work = manager_collect_tiles(render);
+		if (manager->render_in_progress && manager->render_view.frame_seq
+			!= atomic_load(&render->mailbox.expected_seq[manager->current_cam_id]))
+			manager->render_in_progress = 0;
+		has_work = manager_read_mailbox(render);
+		has_work |= manager_collect_tiles(render);
 		if (manager->render_in_progress
 			&& manager->tileset.tiles_done == manager->tileset.tiles_total)
 			manager_cache_completed(render);
-		has_work |= manager_read_mailbox(render);
 		if (manager->render_in_progress)
 			has_work |= manager_assign_jobs(render);
 		has_work |= manager_update_display(render);

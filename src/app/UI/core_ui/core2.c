@@ -90,16 +90,9 @@ void	ui_apply_event(t_ui *ui, int event_id)
 
 void	apply_event(t_display *display, t_ui *ui)
 {
-	int	i;
-
 	if (display->render_ssaa != ui->ssaa_idx + 1
 		|| display->user_render_mode != ui->render_mode_selected)
-	{
-		display->flag_camera_changed = 1;
-		i = 0;
-		while (i < display->total_cams)
-			display->frame[i++].quality = QUALITY_NONE;
-	}
+		display->flag_render_config_changed = 1;
 	display->render_ssaa = ui->ssaa_idx + 1;
 	display->cam_ctrl.mode = ui->mode_selected;
 	display->user_render_mode = ui->render_mode_selected;

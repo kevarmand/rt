@@ -48,7 +48,10 @@ static void	manager_handle_completed_tile(t_render *render, t_worker *worker)
 
 	mgr = &render->manager;
 	mgr->tileset.tiles_active--;
-	if (worker->local_view.frame_seq != mgr->render_view.frame_seq)
+	if (!mgr->render_in_progress
+		|| worker->local_view.frame_seq != mgr->render_view.frame_seq
+		|| worker->local_view.frame_seq != atomic_load(
+			&render->mailbox.expected_seq[mgr->current_cam_id]))
 	{
 		atomic_store(&worker->worker_state, WORKER_IDLE);
 		return ;

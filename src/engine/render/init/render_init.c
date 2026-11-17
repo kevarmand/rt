@@ -75,13 +75,22 @@ static int	render_init_main_buffers(t_render *render, int cameras)
 static int	render_init_mailbox(t_render *render)
 {
 	int		total_pixels;
+	int		i;
 	size_t	bytes_rgb;
 
 	total_pixels = render->width * render->height;
 	bytes_rgb = (size_t)total_pixels * sizeof(int);
 	render->mailbox.rgb_pixels = malloc(bytes_rgb);
-	if (!render->mailbox.rgb_pixels)
+	render->mailbox.expected_seq = malloc(sizeof(atomic_int)
+			* (size_t)render->manager.camera_count);
+	if (!render->mailbox.rgb_pixels || !render->mailbox.expected_seq)
 		return (ERR_MALLOC);
+	i = 0;
+	while (i < render->manager.camera_count)
+	{
+		atomic_init(&render->mailbox.expected_seq[i], 0);
+		i++;
+	}
 	ft_memset(render->mailbox.rgb_pixels, 0, bytes_rgb);
 	atomic_store(&render->mailbox.snapshot_ready, 0);
 	atomic_store(&render->mailbox.request_ready, 0);

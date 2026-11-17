@@ -41,6 +41,7 @@ void	destroy_render(t_render *render)
 	free(render->manager.tonemap_exposure);
 	bitmap_destroy(&render->manager.tileset.tile_state);
 	free(render->mailbox.rgb_pixels);
+	free(render->mailbox.expected_seq);
 }
 
 void	destroy_display(t_display *display)

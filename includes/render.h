@@ -91,10 +91,12 @@ typedef struct s_display_mailbox
 	int			req_job_id;
 	int			request_render_mode;
 	int			request_ssaa;
+	int			request_preview_seq;
 	atomic_int	request_ready;
 
 	atomic_uint	post_settings;
 	atomic_int	active_cam;
+	atomic_int	*expected_seq;
 	int			*rgb_pixels;
 	int			tile_count;
 	int			tiles_done;
@@ -102,7 +104,6 @@ typedef struct s_display_mailbox
 	int			snap_job_id;
 	int			snapshot_render_mode;
 	unsigned int	snap_post_settings;
-	int				snap_is_render;
 	atomic_int		snapshot_ready;
 }	t_display_mailbox;
 
@@ -112,7 +113,6 @@ typedef struct s_hdr_frame
 	t_render_view	view;
 	float			auto_exposure;
 	unsigned int	published_settings;
-	int				completion_pending;
 }	t_hdr_frame;
 
 typedef struct s_mgr
@@ -132,7 +132,6 @@ typedef struct s_mgr
 	int				active_cam;
 	int				preview_tiles;
 	unsigned int	preview_settings;
-	uint64_t		preview_time_ns;
 	float			preview_exposure;
 }	t_mgr;
 

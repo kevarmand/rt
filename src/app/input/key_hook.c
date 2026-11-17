@@ -26,25 +26,21 @@ int	display_exit(t_data *data)
 
 void	key_hook_qual(int keycode, t_data *data)
 {
+	int	mode;
+
+	mode = data->display.user_render_mode;
 	if (keycode == KEY_F1)
+		mode = USER_RENDER_LOCK_FAST;
+	else if (keycode == KEY_F2)
+		mode = USER_RENDER_LOCK_NORMAL;
+	else if (keycode == KEY_F3)
+		mode = USER_RENDER_LOCK_SUPER;
+	else if (keycode == KEY_F4)
+		mode = USER_RENDER_AUTO;
+	if (mode != data->display.user_render_mode)
 	{
-		data->display.user_render_mode = USER_RENDER_LOCK_FAST;
-		data->display.flag_camera_changed = 1;
-	}
-	if (keycode == KEY_F2)
-	{
-		data->display.user_render_mode = USER_RENDER_LOCK_NORMAL;
-		data->display.flag_camera_changed = 1;
-	}
-	if (keycode == KEY_F3)
-	{
-		data->display.user_render_mode = USER_RENDER_LOCK_SUPER;
-		data->display.flag_camera_changed = 1;
-	}
-	if (keycode == KEY_F4)
-	{
-		data->display.user_render_mode = USER_RENDER_AUTO;
-		data->display.flag_camera_changed = 1;
+		data->display.user_render_mode = mode;
+		data->display.flag_render_config_changed = 1;
 	}
 }
 
