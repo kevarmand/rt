@@ -23,7 +23,7 @@
 #include "logs.h"
 #include "cam_ctrl.h"
 
-int		display_init_frames(t_display *display, const t_scene *scene);
+int		display_init_frames(t_display *display, t_render *render);
 int		init_cam_ctrl(t_data *data);
 void	init_sky_texture(t_scene *scene);
 int		xpm_load(t_scene *scene, t_display *display);
@@ -40,20 +40,6 @@ static int	init_core(t_display *display, int width, int height)
 		free(display->mlx);
 		return (perr(ERR_MLX, PERR_MLX_WIN));
 	}
-	display->main_img.img_ptr = mlx_new_image(display->mlx, width, height);
-	if (!display->main_img.img_ptr)
-	{
-		mlx_destroy_window(display->mlx, display->win);
-		mlx_destroy_display(display->mlx);
-		free(display->mlx);
-		return (perr(ERR_MLX, PERR_MLX_IMG));
-	}
-	display->main_img.data = mlx_get_data_addr(display->main_img.img_ptr,
-			&display->main_img.bpp,
-			&display->main_img.size_l,
-			&display->main_img.endian);
-	display->main_img.width = width;
-	display->main_img.height = height;
 	return (SUCCESS);
 }
 
@@ -77,11 +63,11 @@ static int	init_loop(t_display *display, t_data *data)
 	return (SUCCESS);
 }
 
-static void	display_reset_struct(t_display *display, int pixel_count)
+static void	display_reset_struct(t_display *display, int width, int height)
 {
 	ft_memset(display, 0, sizeof(t_display));
-	display->pixel_count = pixel_count;
-	display->flag_img_buffer = 1;
+	display->width = width;
+	display->height = height;
 	display->flag_img_window = 1;
 	display->flag_camera_changed = 1;
 	display->user_render_mode = USER_RENDER_AUTO;
@@ -95,16 +81,14 @@ static void	display_reset_struct(t_display *display, int pixel_count)
 int	display_init(t_display *display, t_data *data)
 {
 	int	status;
-	int	pixel_count;
 
-	pixel_count = data->engine.width * data->engine.height;
-	display_reset_struct(display, pixel_count);
+	display_reset_struct(display, data->engine.width, data->engine.height);
 	status = init_core(display, data->engine.width, data->engine.height);
 	if (status != SUCCESS)
 		display->mlx = NULL;
 	log_step(LOGSTEP_DISPLAY_INIT_CORE, status);
 	if (status == SUCCESS)
-		status = display_init_frames(display, &data->scene);
+		status = display_init_frames(display, &data->engine.render);
 	log_step(LOGSTEP_DISPLAY_INIT_FRAMES, status);
 	if (status == SUCCESS)
 		status = init_loop(display, data);

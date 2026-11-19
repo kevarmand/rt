@@ -11,31 +11,21 @@
 /* ************************************************************************** */
 
 #include "manager.h"
-#include <stdatomic.h>
 #include <string.h>
-#include <stdatomic.h>
-#include "vector.h"
-#include "bitmap.h"
-#include "libft.h"
-#include <stdio.h>
 
-static void	manager_copy_tile_pixels(t_render *render, t_tile *tile)
+static void	manager_copy_tile_pixels(t_hdr_frame *frame, int img_width, t_tile *tile)
 {
-	t_mgr		*mgr;
 	int			row;
-	int			img_width;
 	t_vec3f		*dst;
 	t_vec3f		*src;
 
-	mgr = &render->manager;
-	img_width = render->width;
 	row = 0;
 	while (row < tile->pixel_height)
 	{
-		dst = mgr->hdr_buffer
+		dst = frame->pixels
 			+ (tile->pixel_y + row) * img_width + tile->pixel_x;
 		src = tile->hdr_pixels + row * tile->pixel_width;
-		ft_memcpy(dst, src,
+		memcpy(dst, src,
 			(size_t)tile->pixel_width * sizeof(t_vec3f));
 		row++;
 	}
@@ -43,22 +33,21 @@ static void	manager_copy_tile_pixels(t_render *render, t_tile *tile)
 
 static void	manager_handle_completed_tile(t_render *render, t_worker *worker)
 {
-	t_mgr	*mgr;
-	t_tile	*tile;
+	t_hdr_frame	*frame;
+	int			seq;
+	int			id;
 
-	mgr = &render->manager;
-	mgr->tileset.tiles_active--;
-	if (!mgr->render_in_progress
-		|| worker->local_view.frame_seq != mgr->render_view.frame_seq
-		|| worker->local_view.frame_seq != atomic_load(
-			&render->mailbox.expected_seq[mgr->current_cam_id]))
+	frame = &render->manager.frames[worker->camera_id];
+	seq = worker->local_view.frame_seq;
+	id = worker->tile.tile_id;
+	if (seq > frame->tile_seq[id])
 	{
-		atomic_store(&worker->worker_state, WORKER_IDLE);
-		return ;
+		manager_copy_tile_pixels(frame, render->width, &worker->tile);
+		frame->tile_seq[id] = seq;
+		frame->revision++;
+		if (seq == frame->job_id)
+			frame->done++;
 	}
-	tile = &worker->tile;
-	manager_copy_tile_pixels(render, tile);
-	mgr->tileset.tiles_done++;
 	atomic_store(&worker->worker_state, WORKER_IDLE);
 }
 

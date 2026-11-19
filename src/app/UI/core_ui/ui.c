@@ -63,7 +63,7 @@ static void	ui_rebuild_if_needed(t_display *display)
 	ui_build_buttons(ui);
 	draw_ui(ui);
 	ui->dirty = 0;
-	display->flag_img_buffer = 1;
+	display->flag_img_window = 1;
 }
 
 static void	ui_load_from_display(t_display *display)

@@ -51,7 +51,7 @@ void	key_hook_2(int keycode, t_data *data)
 	if (keycode == KEY_I)
 	{
 		data->display.ui.cam_info = !data->display.ui.cam_info;
-		data->display.flag_img_buffer = 1;
+		data->display.flag_img_window = 1;
 	}
 	if (keycode == KEY_ENTER)
 	{
@@ -75,7 +75,7 @@ int	key_hook(int keycode, t_data *data)
 	if (keycode == KEY_TAB)
 	{
 		data->display.ui.visible = !data->display.ui.visible;
-		data->display.flag_img_buffer = 1;
+		data->display.flag_img_window = 1;
 	}
 	if (keycode == KEY_PLUS)
 		data->display.cam_ctrl.nav_mul *= 1.2f;
@@ -88,7 +88,7 @@ int	key_hook(int keycode, t_data *data)
 		data->display.current_cam++;
 		if (data->display.current_cam >= data->display.total_cams)
 			data->display.current_cam = 0;
-		data->display.flag_img_buffer = 1;
+		data->display.flag_img_window = 1;
 	}
 	key_hook_2(keycode, data);
 	key_hook_qual(keycode, data);

@@ -25,8 +25,6 @@ static int	snapshot_matches(const t_display *display,
 static void	accept_snapshot(t_display *display,
 		t_display_mailbox *mailbox, t_frame *frame)
 {
-	ft_memcpy(frame->rgb_pixels, mailbox->rgb_pixels,
-		(size_t)display->pixel_count * sizeof(int));
 	frame->tiles_received = mailbox->tiles_done;
 	frame->tiles_total = mailbox->tile_count;
 	if (frame->tiles_received == frame->tiles_total)
@@ -37,20 +35,24 @@ static void	accept_snapshot(t_display *display,
 		if (display->ds_sync.in_flight == mailbox->snap_job_id)
 			display->ds_sync.in_flight = 0;
 	}
-	if (display->current_cam == mailbox->snap_camera_id)
-		display->flag_img_buffer = 1;
-	if (display->ui.cam_info)
-		display->flag_img_window = 1;
 }
 
 void	display_engine_receive(t_display *display,
 				t_display_mailbox *mailbox)
 {
 	t_frame	*frame;
+	int		returned;
 
 	if (!atomic_load(&mailbox->snapshot_ready))
 		return ;
 	frame = &display->frame[mailbox->snap_camera_id];
+	/* MLX calls XSync before frame_tick. Return the displaced image only
+	 * after changing the reference used by all future window redraws. */
+	returned = frame->image_id;
+	frame->image_id = mailbox->image_id;
+	mailbox->image_id = returned;
+	if (display->current_cam == mailbox->snap_camera_id || display->ui.cam_info)
+		display->flag_img_window = 1;
 	if (snapshot_matches(display, mailbox, frame)
 		&& (frame->state != FRAME_READY
 			|| mailbox->tiles_done == mailbox->tile_count))

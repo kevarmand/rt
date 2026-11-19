@@ -10,17 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <pthread.h>
-#include "render.h"
-#include "engine.h"
-#include <stdatomic.h>
-#include <unistd.h>
-#include "engine.h"
 #include "manager.h"
-#include "errors.h"
 #include "new_rt.h"
 #include <stdlib.h>
-#include <stdio.h>
 
 typedef struct s_manager_args
 {
@@ -32,7 +24,8 @@ typedef struct s_manager_args
 static void	manager_loop(t_render *render, atomic_int *cancel_flag,
 				t_mgr *manager)
 {
-	int	has_work;
+	t_hdr_frame	*active;
+	int			has_work;
 
 	while (atomic_load(cancel_flag) == 0)
 	{
@@ -42,10 +35,17 @@ static void	manager_loop(t_render *render, atomic_int *cancel_flag,
 			!= atomic_load(&render->mailbox.expected_seq[manager->current_cam_id]))
 			manager->render_in_progress = 0;
 		has_work = manager_read_mailbox(render);
+		/* Give active slider feedback the spare before collecting more HDR. */
+		active = &manager->frames[manager->active_cam];
+		if (active->published_settings
+			&& active->published_settings != manager->post_settings
+			&& manager_update_display(render))
+			continue ;
 		has_work |= manager_collect_tiles(render);
 		if (manager->render_in_progress
-			&& manager->tileset.tiles_done == manager->tileset.tiles_total)
-			manager_cache_completed(render);
+			&& manager->frames[manager->current_cam_id].done
+			== manager->tileset.tiles_total)
+			manager_finish_render(render);
 		if (manager->render_in_progress)
 			has_work |= manager_assign_jobs(render);
 		has_work |= manager_update_display(render);

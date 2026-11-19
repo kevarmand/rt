@@ -23,7 +23,7 @@ static int	dispatch_next_tile(t_render *render, t_worker *worker)
 			render->width, render->height) == 0)
 		return (0);
 	worker->local_view = mgr->render_view;
-	mgr->tileset.tiles_active++;
+	worker->camera_id = mgr->current_cam_id;
 	atomic_store(&worker->worker_state, WORKER_BUSY);
 	return (1);
 }

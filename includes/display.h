@@ -47,7 +47,7 @@ typedef enum e_frame_state
 
 typedef struct s_frame
 {
-	int			*rgb_pixels;
+	int			image_id;
 	t_quality	quality;
 	t_frame_state	state;
 	int			tiles_received;
@@ -64,30 +64,24 @@ typedef struct s_ds_sync
 	int	req_cam;
 }	t_ds_sync;
 
-/*
- * MLX thread owns frame states, quality and RGB caches.
- * sync_engine_tick consumes invalidation flags before accepting snapshots.
- * The atomic mailbox array is the sole authority for expected frame_seq.
- * A dirty frame may retain old pixels as a visual fallback, never as a
- * valid result. READY means a complete matching snapshot was accepted.
- * flag_img_buffer requests an MLX image upload; flag_img_window redraws it.
- */
+/* The display owns one image per frame. The mailbox exchanges the spare
+ * with a frame at the loop hook, after MLX has synchronized with X11. */
 typedef struct s_display
 {
 	void			*mlx;
 	void			*win;
-	t_image			main_img;
+	t_image			*images;
 	t_ui			ui;
 
 	t_frame			*frame;
 	int				total_cams;
-	int				pixel_count;
+	int				width;
+	int				height;
 
 	int				current_cam;
 
 	int				flag_camera_changed;
 	int				flag_render_config_changed;
-	int				flag_img_buffer;
 	int				flag_img_window;
 	int				user_render_mode;
 	int				render_ssaa;

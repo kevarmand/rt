@@ -36,7 +36,7 @@ static t_vec3f	trace_sample_fast(t_data *data, const t_render_view *view,
 }
 
 static void	fast_sample_tile(t_data *data,
-			const t_render_view *view, t_tile *tile)
+			const t_render_view *view, t_tile *tile, int stride)
 {
 	t_vec3f	color;
 	int		local_y;
@@ -54,9 +54,9 @@ static void	fast_sample_tile(t_data *data,
 					(float)(tile->pixel_y + local_y));
 			index = local_y * tile->pixel_width + local_x;
 			tile->hdr_pixels[index] = color;
-			local_x += 3;
+			local_x += stride;
 		}
-		local_y += 3;
+		local_y += stride;
 	}
 }
 
@@ -117,7 +117,14 @@ int	render_tile_fast(t_data *data, t_tile *tile, const t_render_view *view)
 	int	last_row;
 	int	last_col;
 
-	fast_sample_tile(data, view, tile);
+	/* A clipped edge narrower than one interpolation block has no four
+	 * corners. Sample its pixels directly so all worker output is defined. */
+	if (tile->pixel_width < 4 || tile->pixel_height < 4)
+	{
+		fast_sample_tile(data, view, tile, 1);
+		return (SUCCESS);
+	}
+	fast_sample_tile(data, view, tile, 3);
 	interpolate_tile_blocks(tile, &last_row, &last_col);
 	replicate_rows_from(last_row, tile);
 	replicate_cols_from(last_col, tile);

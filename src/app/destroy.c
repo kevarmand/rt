@@ -13,7 +13,6 @@
 #include <stdlib.h>
 #include "render.h"
 #include "engine.h"
-#include "bitmap.h"
 #include "display.h"
 #include "mlx.h"
 #include "scene.h"
@@ -29,18 +28,20 @@ void	destroy_render(t_render *render)
 		i++;
 	}
 	free(render->workers.array);
-	free(render->manager.hdr_buffer);
 	i = 0;
 	while (i < render->manager.camera_count)
 	{
 		free(render->manager.frames[i].pixels);
+		free(render->manager.frames[i].tile_seq);
 		i++;
 	}
 	free(render->manager.frames);
 	free(render->manager.gamma_lut);
 	free(render->manager.tonemap_exposure);
-	bitmap_destroy(&render->manager.tileset.tile_state);
-	free(render->mailbox.rgb_pixels);
+	i = 0;
+	while (render->manager.images && i <= render->manager.camera_count)
+		free(render->manager.images[i++].tile_seq);
+	free(render->manager.images);
 	free(render->mailbox.expected_seq);
 }
 
@@ -51,17 +52,18 @@ void	destroy_display(t_display *display)
 	if (!display)
 		return ;
 	i = 0;
-	while (i < display->total_cams)
+	while (display->images && i <= display->total_cams)
 	{
-		free(display->frame[i].rgb_pixels);
+		if (display->images[i].img_ptr)
+			mlx_destroy_image(display->mlx, display->images[i].img_ptr);
 		i++;
 	}
+	free(display->images);
 	free(display->frame);
 	if (!display->mlx)
 		return ;
 	if (display->ui.img.img_ptr)
 		mlx_destroy_image(display->mlx, display->ui.img.img_ptr);
-	mlx_destroy_image(display->mlx, display->main_img.img_ptr);
 	mlx_destroy_window(display->mlx, display->win);
 	mlx_destroy_display(display->mlx);
 	free(display->mlx);

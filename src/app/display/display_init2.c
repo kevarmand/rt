@@ -17,32 +17,36 @@
 #include "vector.h"
 #include <math.h>
 
-int	display_init_frames(t_display *display, const t_scene *scene)
-{
-	int		index;
-	int		camera_count;
-	size_t	bytes;
+#include "mlx.h"
 
-	camera_count = scene->camera_count;
-	display->total_cams = camera_count;
-	display->frame = malloc(sizeof(t_frame) * (size_t)camera_count);
-	if (!display->frame)
-		return (perr(ERR_MALLOC, PERR_M_DISPLAY_FRAME));
-	display->pixel_count = scene->resolution_width * scene->resolution_height;
-	bytes = sizeof(int) * (size_t)display->pixel_count;
-	ft_memset(display->frame, 0, sizeof(t_frame) * (size_t)camera_count);
-	index = 0;
-	while (index < camera_count)
+int	display_init_frames(t_display *display, t_render *render)
+{
+	int		i;
+	t_image	*img;
+
+	display->total_cams = render->manager.camera_count;
+	display->frame = ft_calloc(display->total_cams, sizeof(t_frame));
+	display->images = ft_calloc(display->total_cams + 1, sizeof(t_image));
+	if (!display->frame || !display->images)
+		return (ERR_MALLOC);
+	i = 0;
+	while (i <= display->total_cams)
 	{
-		display->frame[index].rgb_pixels = malloc(bytes);
-		if (!display->frame[index].rgb_pixels)
-			return (perr(ERR_MALLOC, PERR_M_DISPLAY_FRAME_PIX));
-		ft_memset(display->frame[index].rgb_pixels, 0, bytes);
-		display->frame[index].quality = QUALITY_NONE;
-		index++;
+		img = &display->images[i];
+		img->img_ptr = mlx_new_image(display->mlx, display->width, display->height);
+		if (!img->img_ptr)
+			return (ERR_MLX);
+		img->data = mlx_get_data_addr(img->img_ptr, &img->bpp,
+				&img->size_l, &img->endian);
+		if (!img->data || img->bpp != 32 || img->size_l != display->width * 4)
+			return (ERR_MLX);
+		ft_memset(img->data, 0, (size_t)img->size_l * display->height);
+		render->manager.images[i].pixels = (int *)img->data;
+		if (i < display->total_cams)
+			display->frame[i].image_id = i;
+		i++;
 	}
-	display->current_cam = 0;
-	display->flag_camera_changed = 1;
+	render->mailbox.image_id = display->total_cams;
 	return (SUCCESS);
 }
 

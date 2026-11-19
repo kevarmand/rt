@@ -68,25 +68,88 @@ static t_vec3f	map_color(t_vec3f color, float exposure)
 	return (color * scale);
 }
 
-void	manager_convert_image(t_mgr *mgr, const t_vec3f *pixels,
-		int *dst, size_t count)
+static int	pack_color(t_mgr *mgr, t_vec3f hdr, float exposure)
 {
-	float	exposure;
 	t_vec3f	color;
-	int		gamma_step;
-	size_t	i;
 
-	gamma_step = post_gamma(mgr->post_settings);
-	if (mgr->lut_gamma != gamma_step)
-		build_gamma_lut(mgr, gamma_step);
-	exposure = exp2f((float)post_ev(mgr->post_settings) * 0.1f);
+	color = map_color(hdr, exposure);
+	return ((encode_channel(mgr->gamma_lut, color[0]) << 16)
+		| (encode_channel(mgr->gamma_lut, color[1]) << 8)
+		| encode_channel(mgr->gamma_lut, color[2]));
+}
+
+/* A flat run (sky, an unlit surface, or an untouched tile) needs just
+ * one filmic mapping. Compare linear RGB exactly, before quantization. */
+static void	convert_row(t_mgr *mgr, const t_vec3f *src, int *dst,
+				int width, float exposure)
+{
+	t_vec3f	sample;
+	int		rgb;
+	int		i;
+
 	i = 0;
-	while (i < count)
+	while (i < width)
 	{
-		color = map_color(pixels[i], exposure);
-		dst[i] = (encode_channel(mgr->gamma_lut, color[0]) << 16)
-			| (encode_channel(mgr->gamma_lut, color[1]) << 8)
-			| encode_channel(mgr->gamma_lut, color[2]);
-		i++;
+		sample = src[i];
+		rgb = pack_color(mgr, sample, exposure);
+		dst[i++] = rgb;
+		while (i < width && sample[0] == src[i][0]
+			&& sample[1] == src[i][1] && sample[2] == src[i][2])
+			dst[i++] = rgb;
 	}
+}
+
+static void	convert_tile(t_render *r, t_rgb_image *image, int id, float exposure)
+{
+	t_mgr			*mgr;
+	const t_vec3f	*hdr;
+	int				x;
+	int				y;
+	int				width;
+	int				end_y;
+	int				i;
+
+	mgr = &r->manager;
+	hdr = mgr->frames[image->camera_id].pixels;
+	x = id % mgr->tileset.tiles_per_row * TILE_SIZE;
+	y = id / mgr->tileset.tiles_per_row * TILE_SIZE;
+	width = r->width - x;
+	if (width > TILE_SIZE)
+		width = TILE_SIZE;
+	end_y = y + TILE_SIZE;
+	while (y < end_y && y < r->height)
+	{
+		i = y * r->width + x;
+		convert_row(mgr, hdr + i, image->pixels + i, width, exposure);
+		y++;
+	}
+}
+
+/* Yield to dispatch after four changed tiles. Unchanged tiles cost only
+ * a sequence comparison. A running pass keeps its original settings. */
+int	manager_convert_tiles(t_render *r, t_rgb_image *image)
+{
+	t_mgr		*mgr;
+	t_hdr_frame	*frame;
+	float		exposure;
+	int			budget;
+	int			id;
+
+	mgr = &r->manager;
+	frame = &mgr->frames[image->camera_id];
+	if (mgr->lut_gamma != post_gamma(image->settings))
+		build_gamma_lut(mgr, post_gamma(image->settings));
+	exposure = exp2f((float)post_ev(image->settings) * 0.1f);
+	budget = 4;
+	while (budget && mgr->pass.next_tile < mgr->tileset.tiles_total)
+	{
+		id = mgr->pass.next_tile++;
+		if (image->tile_seq[id] != frame->tile_seq[id])
+		{
+			convert_tile(r, image, id, exposure);
+			image->tile_seq[id] = frame->tile_seq[id];
+			budget--;
+		}
+	}
+	return (mgr->pass.next_tile == mgr->tileset.tiles_total);
 }

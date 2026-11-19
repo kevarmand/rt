@@ -120,9 +120,9 @@ void	ui_print_cam_status(t_data *data)
 	ui_cam_window_range(display, &start, &end);
 	if (end - start + 1 <= 0)
 		return ;
-	if (display->main_img.height < end - start + 1 * 12 + 8)
+	if (display->height < end - start + 1 * 12 + 8)
 		return ;
-	y = display->main_img.height - 12 - (end - start) * 12;
+	y = display->height - 12 - (end - start) * 12;
 	index = start;
 	while (index <= end)
 	{

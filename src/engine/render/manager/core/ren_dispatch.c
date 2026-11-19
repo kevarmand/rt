@@ -39,36 +39,26 @@ static uint32_t	rng_xorshift(uint32_t *s)
 	return (x);
 }
 
-static int	dispatch(int tile_count)
+int	tile_permutation_step(int tile_count)
 {
-	static int			k = 0;
-	static int			step = -1;
-	static uint32_t		rng = 0xCAFEBABE;
+	uint32_t	seed;
+	int			step;
 
-	if (tile_count <= 0)
-	{
-		k = 0;
-		step = -1;
-		return (0);
-	}
-	if (step < 0)
-	{
-		step = (int)(rng_xorshift(&rng) % tile_count);
-		if ((step & 1) == 0)
-			step++;
-		while (gcd_int(step, tile_count) != 1)
-			step += 2;
-	}
-	if (k >= tile_count)
-		k = 0;
-	return (((k++) * step) % tile_count);
+	seed = 0xCAFEBABE;
+	step = (rng_xorshift(&seed) % tile_count) | 1;
+	while (gcd_int(step, tile_count) != 1)
+		step += 2;
+	return (step % tile_count);
 }
 
 int	manager_dispatch_tile(t_tileset *tileset)
 {
-	if (tileset->tiles_done + tileset->tiles_active
-		+ tileset->tiles_ready >= tileset->tiles_total)
+	int	id;
+
+	if (tileset->assigned == tileset->tiles_total)
 		return (-1);
-	else
-		return (dispatch(tileset->tiles_total));
+	id = *tileset->cursor;
+	*tileset->cursor = (id + tileset->step) % tileset->tiles_total;
+	tileset->assigned++;
+	return (id);
 }

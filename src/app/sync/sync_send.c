@@ -21,10 +21,6 @@ static void	prepare_request(t_display *display, t_display_mailbox *mailbox)
 	if (sync->in_flight)
 		display_invalidate_frame(display, mailbox, sync->running_cam);
 	frame = &display->frame[sync->req_cam];
-	mailbox->request_preview_seq = 0;
-	if (frame->state == FRAME_READY)
-		mailbox->request_preview_seq = atomic_load(
-				&mailbox->expected_seq[sync->req_cam]);
 	mailbox->req_job_id++;
 	frame->state = FRAME_RENDERING;
 	frame->tiles_received = 0;

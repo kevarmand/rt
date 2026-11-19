@@ -41,23 +41,22 @@ void	tm_build_hist_sampled(t_mgr *mgr, int width, int height)
 	float	lum;
 	float	log_min;
 	float	inv_log_range;
+	const t_vec3f	*pixels;
 
+	pixels = mgr->frames[mgr->current_cam_id].pixels;
 	log_min = logf(TM_LUM_MIN);
 	inv_log_range = 1.0f / (logf(TM_LUM_MAX) - log_min);
 	tm_hist_clear(mgr->tonemap_exposure);
 	y = 0;
 	while (y < height)
 	{
-		x = 0;
+		x = y & 1;
 		while (x < width)
 		{
-			if (((x + y) & 1) == 0)
-			{
-				lum = tm_luminance(&mgr->hdr_buffer[y * width + x]);
-				mgr->tonemap_exposure[tm_bin_from_lum(lum, log_min,
-						inv_log_range)] += 1.0f;
-			}
-			x++;
+			lum = tm_luminance(&pixels[y * width + x]);
+			mgr->tonemap_exposure[tm_bin_from_lum(lum, log_min,
+					inv_log_range)] += 1.0f;
+			x += 2;
 		}
 		y++;
 	}

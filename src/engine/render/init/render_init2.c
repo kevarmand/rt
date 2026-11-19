@@ -16,7 +16,6 @@
 #include "engine.h"
 #include "vector.h"
 #include "rt_config.h"
-#include "bitmap.h"
 #include "libft.h"
 
 /* ---------- Helper 4 : allocate worker array ---------- */
@@ -77,14 +76,11 @@ int	render_init_tileset(t_render *render)
 	tileset = &render->manager.tileset;
 	tileset->tile_width = TILE_SIZE;
 	tileset->tile_height = TILE_SIZE;
-	tileset->tiles_per_row = (render->width + TILE_SIZE - 1) / TILE_SIZE;
-	tileset->tiles_per_col = (render->height + TILE_SIZE - 1) / TILE_SIZE;
+	tileset->tiles_per_row = 1 + (render->width - 1) / TILE_SIZE;
+	tileset->tiles_per_col = 1 + (render->height - 1) / TILE_SIZE;
 	tileset->tiles_total = tileset->tiles_per_row * tileset->tiles_per_col;
 	if (tileset->tiles_total <= 0)
 		return (ERR_INTERNAL);
-	if (bitmap_init(&tileset->tile_state, tileset->tiles_total) != SUCCESS)
-		return (ERR_MALLOC);
-	tileset->tiles_active = 0;
-	tileset->tiles_done = 0;
+	tileset->step = tile_permutation_step(tileset->tiles_total);
 	return (SUCCESS);
 }

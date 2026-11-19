@@ -19,7 +19,6 @@
 # include "rt_config.h"
 # include "vector.h"
 # include "scene.h"
-# include "bitmap.h"
 # include "postprocess.h"
 
 typedef struct s_data	t_data;
@@ -60,6 +59,7 @@ typedef struct s_worker
 {
 	pthread_t		thread_id;
 	t_tile			tile;
+	int				camera_id;
 	t_render_view	local_view;
 	atomic_int		worker_state;
 }	t_worker;
@@ -77,11 +77,9 @@ typedef struct s_tileset
 	int			tiles_per_row;
 	int			tiles_per_col;
 	int			tiles_total;
-	int			tiles_active;
-	int			tiles_ready;
-	int			tiles_done;
-
-	t_bitmap	tile_state;	
+	int			assigned;
+	int			step;
+	int			*cursor;
 }	t_tileset;
 
 typedef struct s_display_mailbox
@@ -91,13 +89,13 @@ typedef struct s_display_mailbox
 	int			req_job_id;
 	int			request_render_mode;
 	int			request_ssaa;
-	int			request_preview_seq;
 	atomic_int	request_ready;
 
 	atomic_uint	post_settings;
 	atomic_int	active_cam;
 	atomic_int	*expected_seq;
-	int			*rgb_pixels;
+	/* Writable spare when snapshot_ready == 0, offered image when 1. */
+	int			image_id;
 	int			tile_count;
 	int			tiles_done;
 	int			snap_camera_id;
@@ -111,10 +109,36 @@ typedef struct s_display_mailbox
 typedef struct s_hdr_frame
 {
 	t_vec3f			*pixels;
-	t_render_view	view;
+	int				*tile_seq;
+	int				cursor;
+	int				job_id;
+	int				mode;
+	int				done;
 	int				auto_ev;
+	uint64_t		revision;
+	uint64_t		published_revision;
 	unsigned int	published_settings;
 }	t_hdr_frame;
+
+typedef struct s_rgb_image
+{
+	int				*pixels;
+	int				*tile_seq;
+	int				camera_id;
+	unsigned int	settings;
+}	t_rgb_image;
+
+/* Metadata is frozen at pass start. Later HDR writes schedule another pass. */
+typedef struct s_rgb_pass
+{
+	int				camera_id;
+	int				next_tile;
+	int				job_id;
+	int				mode;
+	int				done;
+	int				auto_ev;
+	uint64_t		revision;
+}	t_rgb_pass;
 
 typedef struct s_mgr
 {
@@ -122,7 +146,6 @@ typedef struct s_mgr
 	int				render_in_progress;
 	int				current_cam_id;
 	t_tileset		tileset;
-	t_vec3f			*hdr_buffer;
 	t_render_view	render_view;
 	float			*tonemap_exposure;
 	t_hdr_frame		*frames;
@@ -131,8 +154,8 @@ typedef struct s_mgr
 	int				lut_gamma;
 	unsigned int	post_settings;
 	int				active_cam;
-	int				preview_tiles;
-	unsigned int	preview_settings;
+	t_rgb_image		*images;
+	t_rgb_pass		pass;
 }	t_mgr;
 
 typedef struct s_render
@@ -191,16 +214,7 @@ int		manager_dispatch_tile(t_tileset *tileset);
 int		init_worker_tile(t_tileset *tileset, t_tile *tile,
 			int image_width, int image_height);
 
-/* dispatch */
-int		manager_dispatch_tile(t_tileset *tileset);
-
-/* worker tile */
-int		init_worker_tile(t_tileset *tileset, t_tile *tile,
-			int image_width, int image_height);
-
-/* threads */
-void	*worker_entry(void *arg);
-void	*manager_entry(void *arg);
+int		tile_permutation_step(int tile_count);
 
 /* view */
 void	view_setup(t_render_view *view, int width, int height);
@@ -214,8 +228,5 @@ int		render_tile_fast(t_data *data, t_tile *tile,
 
 int		render_tile_super(t_data *data, t_tile *tile,
 			const t_render_view *view);
-
-/* init */
-int		render_init(t_render *render, int width, int height, int cameras);
 
 #endif
