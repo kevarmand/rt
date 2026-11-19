@@ -46,9 +46,6 @@ static void	prepare_preview(t_render *render, int preview_seq)
 	frame = &mgr->frames[mgr->current_cam_id];
 	bytes = (size_t)render->width * render->height * sizeof(t_vec3f);
 	mgr->preview_tiles = -1;
-	mgr->preview_exposure = 1.0f;
-	if (frame->view.mode && same_view(&frame->view, &mgr->render_view))
-		mgr->preview_exposure = frame->auto_exposure;
 	if (preview_seq && frame->view.frame_seq == preview_seq
 		&& same_view(&frame->view, &mgr->render_view)
 		&& frame->view.ssaa == mgr->render_view.ssaa)

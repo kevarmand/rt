@@ -26,8 +26,7 @@ static void	ui_init_state(t_ui *ui)
 	ui->button_count = 0;
 	ui->mouse_was_down = 0;
 	ui->ssaa_idx = 0;
-	ui->tonemap_enabled = 1;
-	ui->post_auto = 1;
+	ui->auto_available = 0;
 	ui->gamma_step = POST_GAMMA_DEFAULT;
 	ui->ev_step = 0;
 	ui->slider_drag = 0;

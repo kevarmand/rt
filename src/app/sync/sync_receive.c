@@ -32,6 +32,7 @@ static void	accept_snapshot(t_display *display,
 	if (frame->tiles_received == frame->tiles_total)
 	{
 		frame->quality = mailbox->snapshot_render_mode;
+		frame->auto_ev = mailbox->snap_auto_ev;
 		frame->state = FRAME_READY;
 		if (display->ds_sync.in_flight == mailbox->snap_job_id)
 			display->ds_sync.in_flight = 0;

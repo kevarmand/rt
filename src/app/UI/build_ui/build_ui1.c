@@ -25,13 +25,6 @@ char	*ui_ssaa_txt(int idx)
 	return ("25");
 }
 
-char	*ui_onoff_txt(int enabled)
-{
-	if (enabled)
-		return (UI_TXT_ON);
-	return (UI_TXT_OFF);
-}
-
 int	ui_is_mode_selected(t_ui *ui, int mode_idx)
 {
 	if (ui->mode_selected == mode_idx)

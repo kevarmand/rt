@@ -12,6 +12,32 @@
 
 #include "core.h"
 
+static void	ui_apply_post_action(t_display *display, t_ui *ui)
+{
+	if (ui->event == UI_BTN_AUTO_EXPOSURE
+		&& display->frame[display->current_cam].state == FRAME_READY)
+		display->post_ev_step = display->frame[display->current_cam].auto_ev;
+	else if (ui->event == UI_BTN_POST_RESET)
+	{
+		display->post_ev_step = 0;
+		display->post_gamma_step = POST_GAMMA_DEFAULT;
+	}
+	ui->ev_step = display->post_ev_step;
+	ui->gamma_step = display->post_gamma_step;
+}
+
+static void	ui_update_auto_available(t_display *display, t_ui *ui)
+{
+	int	available;
+
+	available = (display->frame[display->current_cam].state == FRAME_READY);
+	if (ui->auto_available != available)
+	{
+		ui->auto_available = available;
+		ui->dirty = 1;
+	}
+}
+
 static void	ui_commit_event(t_display *display)
 {
 	t_ui	*ui;
@@ -20,8 +46,7 @@ static void	ui_commit_event(t_display *display)
 	if (ui->event == -1)
 		return ;
 	ui_apply_event(ui, ui->event);
-	display->render_tonemap = ui->tonemap_enabled;
-	display->post_auto = ui->post_auto;
+	ui_apply_post_action(display, ui);
 	if (ui->event == UI_BTN_APPLY)
 		apply_event(display, ui);
 	ui->event = -1;
@@ -48,8 +73,6 @@ static void	ui_load_from_display(t_display *display)
 	ui = &display->ui;
 	ui->render_mode_selected = display->user_render_mode;
 	ui->ssaa_idx = display->render_ssaa - 1;
-	ui->tonemap_enabled = display->render_tonemap;
-	ui->post_auto = display->post_auto;
 	ui->gamma_step = display->post_gamma_step;
 	ui->ev_step = display->post_ev_step;
 	ui->slider_drag = 0;
@@ -129,6 +152,7 @@ void	display_update_ui(t_display *display)
 		return ;
 	}
 	ui_on_open_if_needed(display);
+	ui_update_auto_available(display, ui);
 	if (!ui_update_slider(display, ui, mouse))
 	{
 		ui_try_click_button(ui, mouse);

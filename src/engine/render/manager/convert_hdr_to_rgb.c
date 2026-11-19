@@ -11,11 +11,10 @@
 /* ************************************************************************** */
 
 #include "manager.h"
-#include "display.h"
 #include "tonemap/tonemap_internal.h"
 #include <math.h>
 
-/* Quadratic-domain LUT: finer sampling in the dark range. */
+/* Quartic-domain LUT retains precision near black at high gamma. */
 static void	build_gamma_lut(t_mgr *mgr, int gamma_step)
 {
 	int		i;
@@ -28,6 +27,7 @@ static void	build_gamma_lut(t_mgr *mgr, int gamma_step)
 	while (i < POST_LUT_SIZE)
 	{
 		x = (float)i / (float)(POST_LUT_SIZE - 1);
+		x *= x;
 		y = powf(x * x, inv_gamma);
 		if (y <= 0.0031308f)
 			y *= 12.92f;
@@ -48,7 +48,7 @@ static int	encode_channel(const float *lut, float x)
 		return (0);
 	if (x >= 1.0f)
 		return (255);
-	pos = sqrtf(x) * (float)(POST_LUT_SIZE - 1);
+	pos = sqrtf(sqrtf(x)) * (float)(POST_LUT_SIZE - 1);
 	i = (int)pos;
 	if (i >= POST_LUT_SIZE - 1)
 		return (255);
@@ -56,40 +56,34 @@ static int	encode_channel(const float *lut, float x)
 	return ((int)(value + 0.5f));
 }
 
-static t_vec3f	map_color(t_vec3f color, float exposure, int enabled)
+static t_vec3f	map_color(t_vec3f color, float exposure)
 {
 	float	lum;
 	float	scale;
 
-	if (!enabled)
-		return (color * exposure);
 	lum = tm_luminance(&color);
 	scale = 0.0f;
-	if (lum > TM_EPS)
+	if (lum > 0.0f)
 		scale = tm_filmic_exp(lum, exposure) / lum;
 	return (color * scale);
 }
 
 void	manager_convert_image(t_mgr *mgr, const t_vec3f *pixels,
-		int *dst, size_t count, float auto_exposure, int quality)
+		int *dst, size_t count)
 {
 	float	exposure;
 	t_vec3f	color;
 	int		gamma_step;
-	int		enabled;
 	size_t	i;
 
 	gamma_step = post_gamma(mgr->post_settings);
 	if (mgr->lut_gamma != gamma_step)
 		build_gamma_lut(mgr, gamma_step);
-	enabled = (mgr->post_settings & 1u) && quality != QUALITY_FAST;
 	exposure = exp2f((float)post_ev(mgr->post_settings) * 0.1f);
-	if (enabled && (mgr->post_settings & 2u))
-		exposure *= auto_exposure;
 	i = 0;
 	while (i < count)
 	{
-		color = map_color(pixels[i], exposure, enabled);
+		color = map_color(pixels[i], exposure);
 		dst[i] = (encode_channel(mgr->gamma_lut, color[0]) << 16)
 			| (encode_channel(mgr->gamma_lut, color[1]) << 8)
 			| encode_channel(mgr->gamma_lut, color[2]);

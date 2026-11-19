@@ -48,6 +48,8 @@ int	ui_try_click_button(t_ui *ui, t_mouse_state *mouse)
 	while (index < ui->button_count)
 	{
 		if (ui_is_clickable(&ui->buttons[index])
+			&& (ui->buttons[index].label != UI_BTN_AUTO_EXPOSURE
+				|| ui->auto_available)
 			&& ui_mouse_in_button(ui, mouse, &ui->buttons[index]))
 		{
 			ui->event = ui->buttons[index].label;
@@ -64,10 +66,6 @@ void	ui_apply_event(t_ui *ui, int event_id)
 {
 	if (event_id == UI_BTN_CLOSE)
 		ui->visible = 0;
-	else if (event_id == UI_BTN_TONEMAP)
-		ui->tonemap_enabled = !ui->tonemap_enabled;
-	else if (event_id == UI_BTN_POST_AUTO)
-		ui->post_auto = !ui->post_auto;
 	else if (event_id == UI_BTN_RENDER_AUTO)
 		ui->render_mode_selected = USER_RENDER_AUTO;
 	else if (event_id == UI_BTN_RENDER_FAST)

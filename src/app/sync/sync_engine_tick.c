@@ -49,8 +49,7 @@ static void	publish_post_settings(t_display *display, t_display_mailbox *mailbox
 {
 	unsigned int	settings;
 
-	settings = post_pack(display->render_tonemap, display->post_auto,
-			display->post_gamma_step, display->post_ev_step);
+	settings = post_pack(display->post_gamma_step, display->post_ev_step);
 	if ((display->post_word & POST_SETTINGS_MASK) != settings)
 		display->post_word = ((display->post_word + POST_GENERATION_STEP)
 				& ~POST_SETTINGS_MASK) | settings;

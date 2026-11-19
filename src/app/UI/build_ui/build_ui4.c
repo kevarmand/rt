@@ -27,34 +27,6 @@ void	ui_add_mode_free(t_ui *ui)
 	ui_push_button(ui, &btn);
 }
 
-void	ui_add_tonemap_label(t_ui *ui)
-{
-	t_button	btn;
-
-	ui_btn_set_rect(&btn, UI_TONEMAP_LABEL_X, UI_TONEMAP_LABEL_Y,
-		UI_TONEMAP_LABEL_W);
-	ui_btn_set_height(&btn, UI_TONEMAP_LABEL_H);
-	ui_btn_set_style(&btn, UI_BTN_NONE, UI_TXT_TONEMAP, UI_COLOR_INACTIVE);
-	ui_btn_set_txt_color(&btn, UI_COLOR_TEXT);
-	ui_push_button(ui, &btn);
-}
-
-void	ui_add_tonemap_toggle(t_ui *ui)
-{
-	t_button	btn;
-	int			color_bg;
-	int			color_txt;
-
-	ui_colors_from_enabled(ui->tonemap_enabled, &color_bg, &color_txt);
-	ui_btn_set_rect(&btn, UI_TONEMAP_TOGGLE_X, UI_TONEMAP_TOGGLE_Y,
-		UI_TONEMAP_TOGGLE_W);
-	ui_btn_set_height(&btn, UI_TONEMAP_TOGGLE_H);
-	ui_btn_set_style(&btn, UI_BTN_TONEMAP, ui_onoff_txt(ui->tonemap_enabled),
-		color_bg);
-	ui_btn_set_txt_color(&btn, color_txt);
-	ui_push_button(ui, &btn);
-}
-
 void	ui_add_apply(t_ui *ui)
 {
 	t_button	btn;

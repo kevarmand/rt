@@ -23,8 +23,8 @@ typedef enum e_ui_btn
 {
 	UI_BTN_NONE = -1,
 	UI_BTN_CLOSE = 1,
-	UI_BTN_TONEMAP,
-	UI_BTN_POST_AUTO,
+	UI_BTN_AUTO_EXPOSURE,
+	UI_BTN_POST_RESET,
 	UI_BTN_GAMMA,
 	UI_BTN_EXPOSURE,
 	UI_BTN_RENDER_AUTO,
@@ -65,8 +65,7 @@ typedef struct s_ui
 	int			button_count;
 	int			mouse_was_down;
 	int			ssaa_idx;
-	int			tonemap_enabled;
-	int			post_auto;
+	int			auto_available;
 	int			gamma_step;
 	int			ev_step;
 	int			slider_drag;

@@ -40,6 +40,6 @@ float	tm_filmic_exp(float lum, float exposure)
 	x = lum * exposure;
 	if (x <= 0.0f)
 		return (0.0f);
-	return (1.0f - expf(-x));
+	return (-expm1f(-x));
 }
 

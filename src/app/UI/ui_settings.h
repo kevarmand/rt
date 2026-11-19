@@ -52,14 +52,11 @@ typedef enum e_ui_color
 **  TEXTS
 ** ========================= */
 # define UI_TXT_CLOSE ""
-# define UI_TXT_TONEMAP "Tonemap"
 # define UI_TXT_SSAA_MINUS ""
 # define UI_TXT_SSAA_PLUS ""
 # define UI_TXT_LOCK "LOCK"
 # define UI_TXT_ROLL "ROLL"
 # define UI_TXT_FREE "FREE"
-# define UI_TXT_ON "ON"
-# define UI_TXT_OFF "OFF"
 # define UI_TXT_AUTO "AUTO"
 # define UI_TXT_FAST "FAST"
 # define UI_TXT_NORMAL "NORM"
@@ -75,21 +72,13 @@ typedef enum e_ui_color
 # define UI_EXIT_W 20
 # define UI_EXIT_H 20
 
-/* Tonemap : label + toggle */
-# define UI_TONEMAP_LABEL_X 10
-# define UI_TONEMAP_LABEL_Y 40
-# define UI_TONEMAP_LABEL_W 80
-# define UI_TONEMAP_LABEL_H 16
-
-# define UI_TONEMAP_GAP 6
-# define UI_TONEMAP_TOGGLE_W 40
-# define UI_TONEMAP_TOGGLE_H UI_TONEMAP_LABEL_H
-# define UI_TONEMAP_TOGGLE_X 96
-# define UI_TONEMAP_TOGGLE_Y UI_TONEMAP_LABEL_Y
-
-/* Live post-processing sliders */
-# define UI_POST_AUTO_X 142
-# define UI_POST_AUTO_W 52
+/* Live post-processing actions and sliders */
+# define UI_POST_AUTO_X 10
+# define UI_POST_AUTO_W 106
+# define UI_POST_RESET_X 122
+# define UI_POST_RESET_W 68
+# define UI_POST_ACTION_Y 40
+# define UI_POST_ACTION_H 16
 # define UI_SLIDER_X 10
 # define UI_SLIDER_W 180
 # define UI_SLIDER_H 26

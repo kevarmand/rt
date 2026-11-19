@@ -52,6 +52,7 @@ typedef struct s_frame
 	t_frame_state	state;
 	int			tiles_received;
 	int			tiles_total;
+	int			auto_ev;
 }	t_frame;
 
 typedef struct s_ds_sync
@@ -90,8 +91,6 @@ typedef struct s_display
 	int				flag_img_window;
 	int				user_render_mode;
 	int				render_ssaa;
-	int				render_tonemap;
-	int				post_auto;
 	int				post_gamma_step;
 	int				post_ev_step;
 	unsigned int	post_word;

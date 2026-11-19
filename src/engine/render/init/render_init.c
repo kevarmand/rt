@@ -64,7 +64,6 @@ static int	render_init_main_buffers(t_render *render, int cameras)
 		mgr->frames[i].pixels = ft_calloc(pixels, sizeof(t_vec3f));
 		if (!mgr->frames[i].pixels)
 			return (ERR_MALLOC);
-		mgr->frames[i].auto_exposure = 1.0f;
 		i++;
 	}
 	return (SUCCESS);
